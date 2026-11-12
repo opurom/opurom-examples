@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Cross-project verification: every repo's tests + the IR contract between layers.
-import { spawnSync } from 'node:child_process';
+import { spawnSync, spawn } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
@@ -376,6 +376,28 @@ try {
   check('PostgreSQL wire protocol has a mock-server conformance test', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'), '--', '--list']), 'db test list');
     assert.match(out, /postgres|pg_/i, 'no PostgreSQL conformance test registered');
+  });
+  check('opt-in HTTP features keep defaults byte-identical', () => {
+    const demo = ensureBin('opurom-server', 'opurom-server');
+    const port = 8974;
+    const env = { ...ENV, OPR_AUTH_TOKEN: 'devtoken', OPR_CORS: 'https://app.example', OPR_PORT: String(port) };
+    const child = spawn(demo, [], { env, stdio: 'ignore' });
+    try {
+      let ready = false;
+      for (let i = 0; i < 30; i++) {
+        const r = run('curl', ['-s', '--max-time', '2', '-o', '/dev/null', '-w', '%{http_code}',
+          `http://127.0.0.1:${port}/health`]);
+        if (r.stdout.trim() === '401') { ready = true; break; }
+        spawnSync('sleep', ['0.2']);
+      }
+      assert.ok(ready, 'auth-enabled server did not become ready');
+      const authorized = run('curl', ['-s', '--max-time', '3', '-H', 'Authorization: Bearer devtoken',
+        '-D', '-', `http://127.0.0.1:${port}/health`]);
+      assert.match(authorized.stdout, /200/, 'authorized request failed');
+      assert.match(authorized.stdout, /etag/i, 'ETag header missing');
+    } finally {
+      child.kill('SIGTERM');
+    }
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
