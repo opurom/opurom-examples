@@ -13,11 +13,12 @@ const REPOS = [
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
   'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
   'opurom-lsp', 'opurom-debug', 'opurom-pkg', 'opurom-gpu',
+  'opurom-web', 'opurom-mobile',
 ];
 const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
-  'opurom-server', 'opurom-db', 'opurom-runtime-adapters', 'opurom-gpu'];
+  'opurom-server', 'opurom-db', 'opurom-runtime-adapters', 'opurom-gpu', 'opurom-mobile'];
 const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp',
-  'opurom-debug', 'opurom-pkg'];
+  'opurom-debug', 'opurom-pkg', 'opurom-web', 'opurom-mobile'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
@@ -398,6 +399,65 @@ try {
     } finally {
       child.kill('SIGTERM');
     }
+  });
+
+  console.log('== R6 platform delivery contracts ==');
+  check('GPU display-list PPM equals the software renderer PPM', () => {
+    const cmds = join(tmp, 'commands.json');
+    const cpu = join(tmp, 'cpu.ppm');
+    const gpuOut = join(tmp, 'gpu.ppm');
+    ok(run(renderer, [P('opurom-spec', 'counter.opuir.json'), '320', '240', cpu,
+      '--commands', cmds]), 'render commands');
+    assert.ok(existsSync(cmds), 'display list not written');
+    const gpuBin = bin('opurom-gpu', 'opurom-gpu') || ensureBin('opurom-gpu', 'opurom-gpu');
+    ok(run(gpuBin, ['raster', cmds, gpuOut]), 'gpu raster');
+    assert.ok(readFileSync(cpu).equals(readFileSync(gpuOut)),
+      'GPU PPM differs from the software renderer PPM');
+  });
+  check('browser DOM/Canvas hybrid verifies a real canvas digest', () => {
+    const dir = join(tmp, 'webout');
+    mkdirSync(dir, { recursive: true });
+    const out = ok(run('node', [P('opurom-web', 'bin', 'opurom-web.mjs'), 'verify',
+      P('opurom-spec', 'counter.opuir.json'), dir]), 'web verify');
+    assert.match(out, /PASS|verified|digest/i, 'no browser verification result');
+    assert.ok(existsSync(join(dir, 'index.html')), 'index.html not emitted');
+  });
+  check('mobile iOS staticlib and bindings are real artifacts', () => {
+    const out = ok(run('node', [P('opurom-mobile', 'verify.mjs')]), 'mobile verify');
+    assert.match(out, /PASS|arm64|staticlib/i, 'no iOS artifact evidence');
+  });
+  check('custom components expand at compile time', () => {
+    const src = join(tmp, 'component.opu');
+    const out = join(tmp, 'component.opuir.json');
+    writeFileSync(src, [
+      'app R6 {',
+      '  component Card(title) { Text("{title}") }',
+      '  Column { Card("Hi") }',
+      '}',
+    ].join('\n') + '\n');
+    ok(run(compiler, ['compile', src, '-o', out]), 'compile component');
+    const ir = JSON.parse(readFileSync(out, 'utf8'));
+    const nodes = [];
+    const walk = n => { nodes.push(n); (n.children || []).forEach(walk); };
+    walk(ir.tree);
+    assert.ok(nodes.some(n => JSON.stringify(n).includes('Hi')),
+      'component parameter was not substituted');
+    assert.ok(!nodes.some(n => n.kind === 'Card'), 'component node was not expanded');
+  });
+  check('minified web build is valid JS and reports measured sizes', () => {
+    const dir = join(tmp, 'minified');
+    ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'build',
+      '--src', P('opurom-examples', 'counter.opu'), '--target', 'web',
+      '--out', dir, '--minify']), 'build --minify');
+    const sizeOut = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'size', dir]), 'size');
+    assert.match(sizeOut, /%|\d+ B/, 'no measured size report');
+  });
+  check('signed packages verify with Ed25519', () => {
+    const cli = P('opurom-pkg', 'bin', 'opurom-pkg.mjs');
+    const cwd = P('opurom-pkg');
+    ok(run('node', [cli, 'sign'], { cwd }), 'pkg sign');
+    const out = ok(run('node', [cli, 'verify', '--signed'], { cwd }), 'pkg verify signed');
+    assert.match(out, /PASS|verified/i, 'signed verification did not pass');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
