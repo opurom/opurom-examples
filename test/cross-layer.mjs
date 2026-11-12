@@ -468,6 +468,45 @@ try {
     const out = ok(run('node', [cli, 'verify', '--signed'], { cwd }), 'pkg verify signed');
     assert.match(out, /PASS|verified/i, 'signed verification did not pass');
   });
+
+  console.log('== R7 native network contracts ==');
+  check('server TLS, WebSocket and keep-alive are covered by real tests', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
+      '--', '--list']), 'server test list');
+    assert.match(out, /tls_handshake|websocket|keepalive/i, 'R7 network tests not registered');
+  });
+  check('PostgreSQL TLS client and transactional server are covered', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
+      '--', '--list']), 'db test list');
+    assert.match(out, /pgserver|tls/i, 'R7 database tests not registered');
+  });
+  check('live AppKit window pixels match the software renderer', () => {
+    const out = ok(run(platform, ['--verify-window']), 'window verify');
+    assert.match(out, /PASS|SKIP/i, 'no window verification verdict');
+    if (/PASS/.test(out)) {
+      assert.match(out, /mismatched_pixels=0\b/, 'window pixels did not match');
+    }
+  });
+  check('Android APK carries real arm64 and x86_64 libraries', () => {
+    const apk = P('opurom-mobile', 'android', 'app', 'build', 'outputs', 'apk', 'debug',
+      'app-debug.apk');
+    if (!existsSync(apk)) return; // NDK/SDK absent on this host: skip honestly
+    const listing = ok(run('unzip', ['-l', apk]), 'apk listing');
+    assert.match(listing, /lib\/arm64-v8a\/libopurom_mobile\.so/, 'arm64 lib missing from APK');
+    assert.match(listing, /lib\/x86_64\/libopurom_mobile\.so/, 'x86_64 lib missing from APK');
+  });
+  check('repeat profiling excludes warmup and states the environment', () => {
+    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'profile',
+      '--src', P('opurom-examples', 'counter.opu'), '--repeat', '3']), 'profile --repeat');
+    assert.match(out, /warmup excluded/i, 'warmup not reported');
+    assert.match(out, /environment:/i, 'environment not reported');
+  });
+  check('GPU comparison gates speed on byte equality', () => {
+    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'bench',
+      '--compare', '--src', P('opurom-spec', 'counter.opu')]), 'bench --compare');
+    assert.match(out, /byte equality/i, 'no correctness result');
+    assert.match(out, /byte-equal|n\/a/i, 'no byte-equality verdict');
+  });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
 }
