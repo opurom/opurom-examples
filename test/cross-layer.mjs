@@ -254,7 +254,8 @@ try {
     ok(run('node', ['--test'], { cwd: P('opurom-debug') }), 'dap tests');
   });
   check('CLI reports measured benchmark numbers', () => {
-    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'bench', '--full']), 'bench --full');
+    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'bench', '--full',
+      '--src', P('opurom-examples', 'counter.opu')]), 'bench --full');
     assert.match(out, /\|/m, 'no markdown table');
     assert.match(out, /\d/, 'no measured numbers');
   });

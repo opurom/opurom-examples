@@ -10,7 +10,7 @@ app Showcase {
     Heading("OPUROM Components", size: 26)
     Paragraph("One catalog, 24 primitives", size: 14)
     DividerSpace()
-    CardGrid(columns: 2, gap: 12) {
+    CardGrid(columns: 2) {
       Tile(p: 12, radius: 8, shadow: 2) {
         Label("Counter", size: 16)
         Gap(height: 8)
