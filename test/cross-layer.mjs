@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Cross-project verification: every repo's tests + the IR contract between layers.
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import assert from 'node:assert/strict';
@@ -11,7 +11,12 @@ const P = (...p) => join(ROOT, ...p);
 const REPOS = [
   'opurom-spec', 'opurom-core', 'opurom-lang', 'opurom-render',
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
+  'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
+  'opurom-lsp',
 ];
+const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
+  'opurom-server', 'opurom-db', 'opurom-runtime-adapters'];
+const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
@@ -26,9 +31,9 @@ function ok(r, label) {
   assert.equal(r.status, 0, `${label} exited ${r.status}: ${(r.stderr || r.stdout || '').trim().slice(0, 400)}`);
   return r.stdout || '';
 }
-function bin(name, sub) {
+function bin(repo, sub) {
   for (const profile of ['release', 'debug']) {
-    const p = P(name, 'target', profile, sub);
+    const p = P(repo, 'target', profile, sub);
     if (existsSync(p)) return p;
   }
   return null;
@@ -54,24 +59,70 @@ for (const repo of REPOS) {
     assert.ok(existsSync(join(d, '.git')), 'missing .git');
     assert.equal(ok(run('git', ['status', '--porcelain'], { cwd: d }), 'git status').trim(), '', 'uncommitted files');
     assert.match(ok(run('git', ['log', '-1', '--oneline'], { cwd: d }), 'git log'), /\S/, 'no commits');
+    const author = ok(run('git', ['log', '-1', '--format=%an <%ae>'], { cwd: d }), 'git author').trim();
+    assert.ok(!/OPUROM Team/.test(author), `wrong author: ${author}`);
+    const tags = ok(run('git', ['tag', '--list', 'v*'], { cwd: d }), 'git tags').trim();
+    assert.match(tags, /v0\.0\.0001/, 'version tags missing');
   });
 }
 
+console.log('== English-only published artifacts ==');
+check('no CJK characters in tracked text files', () => {
+  const cjk = /[\u3400-\u9FFF\uF900-\uFAFF\u3000-\u303F\uFF00-\uFFEF]/;
+  const bad = [];
+  const roots = [ROOT, ...REPOS.map(r => P(r))];
+  for (const root of roots) {
+    const files = ok(run('git', ['ls-files'], { cwd: root }), 'git ls-files').split('\n').filter(Boolean);
+    for (const f of files) {
+      if (/\.(png|jpg|jpeg|gif|ico|wasm|ppm|vsix|pdf|zip|lock)$/.test(f)) continue;
+      const p = join(root, f);
+      if (!existsSync(p)) continue;
+      try { if (cjk.test(readFileSync(p, 'utf8'))) bad.push(`${root}/${f}`); } catch { /* binary */ }
+    }
+  }
+  assert.deepEqual(bad, [], `non-English content: ${bad.join(', ')}`);
+});
+
 console.log('== per-project test suites ==');
-for (const repo of ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform']) {
+for (const repo of RUST_REPOS) {
   check(`${repo}: cargo test`, () => ok(run('cargo', ['test', '--manifest-path', P(repo, 'Cargo.toml')]), `cargo test ${repo}`));
 }
-check('opurom-cli: node --test', () => ok(run('node', ['--test'], { cwd: P('opurom-cli') }), 'node --test'));
+for (const repo of NODE_REPOS) {
+  const pkg = P(repo, 'package.json');
+  check(`${repo}: node test suite`, () => {
+    if (existsSync(pkg) && JSON.parse(readFileSync(pkg, 'utf8')).scripts?.test) {
+      ok(run('npm', ['test'], { cwd: P(repo) }), `npm test ${repo}`);
+    } else {
+      ok(run('node', ['--test'], { cwd: P(repo) }), `node --test ${repo}`);
+    }
+  });
+}
 check('opurom-ide-plugins: validate', () => ok(run('node', ['scripts/validate.mjs'], { cwd: P('opurom-ide-plugins') }), 'validate'));
 check('opurom-cli: opurom doctor', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'doctor']), 'doctor'));
-check('opurom-cli: opurom test (end-to-end)', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'test']), 'opurom test'));
+check('opurom-cli: opurom test (full-stack end-to-end)', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'test']), 'opurom test'));
 
-console.log('== cross-layer IR contract ==');
+console.log('== cross-layer IR and full-stack contract ==');
 const tmp = mkdtempSync(join(tmpdir(), 'opurom-cross-'));
 try {
   const compiler = ensureBin('opurom-lang', 'opuromc');
-  const profileIr = join(tmp, 'profile.opuir.json');
+  check('counter.opu still lowers to the R1 golden IR', () => {
+    const out = join(tmp, 'counter.opuir.json');
+    ok(run(compiler, ['compile', P('opurom-spec', 'counter.opu'), '-o', out]), 'compile counter');
+    assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-spec', 'counter.opuir.json'), 'utf8')));
+  });
+  check('todo.opu lowers UI + models + api into one IR', () => {
+    const out = join(tmp, 'todo.opuir.json');
+    ok(run(compiler, ['compile', P('opurom-examples', 'todo.opu'), '-o', out]), 'compile todo');
+    const ir = JSON.parse(readFileSync(out, 'utf8'));
+    assert.equal(ir.app, 'TodoApp');
+    assert.equal(ir.models?.[0]?.name, 'Todo', 'missing model');
+    assert.deepEqual(ir.models[0].fields.map(f => f.name), ['id', 'title', 'done']);
+    assert.equal(ir.api?.length, 2, 'missing api routes');
+    assert.ok(ir.api.some(a => a.path === '/todos' && a.handlers.includes('create')), 'missing create route');
+    assert.equal(ir.tree.kind, 'Column', 'frontend tree missing');
+  });
   check('profile.opu compiles and lowers set/toggle/input correctly', () => {
+    const profileIr = join(tmp, 'profile.opuir.json');
     ok(run(compiler, ['compile', P('opurom-examples', 'profile.opu'), '-o', profileIr]), 'compile profile');
     const ir = JSON.parse(readFileSync(profileIr, 'utf8'));
     assert.equal(ir.ir, '0.1');
@@ -84,13 +135,14 @@ try {
     assert.ok(actions.some(a => a.op === 'set' && a.target === 'name' && a.value === undefined), 'missing input binding');
   });
   const renderer = ensureBin('opurom-render', 'opurom-render');
-  check('renderer produces a stable digest for the golden IR', () => {
+  check('renderer digest is stable and unchanged from R1', () => {
     const golden = P('opurom-spec', 'counter.opuir.json');
-    const a = ok(run(renderer, [golden, '480', '320', join(tmp, 'a.ppm')]), 'render a');
-    const b = ok(run(renderer, [golden, '480', '320', join(tmp, 'b.ppm')]), 'render b');
+    const a = ok(run(renderer, [golden, '320', '240', join(tmp, 'a.ppm')]), 'render a');
+    const b = ok(run(renderer, [golden, '320', '240', join(tmp, 'b.ppm')]), 'render b');
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
+    assert.equal(da[1], 'c87bf023a6c01f9d', 'R1 golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -103,6 +155,27 @@ try {
     for (const name of ['android', 'ios', 'harmony-mobile', 'windows', 'macos', 'linux', 'web', 'wechat', 'kuaishou']) {
       assert.match(out, new RegExp(name), `missing ${name}`);
     }
+  });
+  const migrate = ensureBin('opurom-db', 'opurom-migrate');
+  check('IR models lower to SQL migrations', () => {
+    const dir = join(tmp, 'migrations');
+    ok(run(migrate, [P('opurom-examples', 'todo.opuir.json'), '-o', dir]), 'migrate');
+    const sql = readFileSync(join(dir, 'migrations', '001_create_todo.sql'), 'utf8');
+    assert.match(sql, /CREATE TABLE IF NOT EXISTS Todo/i);
+    assert.match(sql, /title/i);
+  });
+  const serverc = ensureBin('opurom-server', 'opurom-serverc');
+  check('IR lowers to a standalone Rust service', () => {
+    const dir = join(tmp, 'service');
+    ok(run(serverc, [P('opurom-examples', 'todo.opuir.json'), '-o', dir, '--dep-root', ROOT]), 'serverc');
+    assert.ok(existsSync(join(dir, 'Cargo.toml')) && existsSync(join(dir, 'src', 'main.rs')));
+    ok(run('cargo', ['build', '--release', '--manifest-path', join(dir, 'Cargo.toml')]), 'build service');
+  });
+  const runtime = ensureBin('opurom-runtime-adapters', 'opurom-runtime-adapters');
+  check('backend runtime conformance report is honest', () => {
+    const out = ok(run(runtime, [P('opurom-examples', 'todo.opuir.json')]), 'runtime report');
+    assert.match(out, /native/i);
+    assert.match(out, /planned/i, 'no honest Planned status');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
