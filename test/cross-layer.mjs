@@ -278,7 +278,8 @@ try {
     writeFileSync(src, 'app AsyncDemo {\n  state count = 0\n  state payload = "idle"\n  Button("Load") async {\n    await delay(50)\n    await fetch("/todos", payload)\n    count += 1\n  }\n}\n');
     ok(run(compiler, ['compile', src, '-o', out]), 'compile async');
     const ir = JSON.parse(readFileSync(out, 'utf8'));
-    const tap = ir.tree.children[0].events.tap;
+    const tap = ir.tree.events?.tap || ir.tree.children?.[0]?.events?.tap;
+    assert.ok(tap, 'tap event missing');
     assert.equal(tap.async, true, 'async flag missing');
     assert.equal(tap.effects.length, 2, 'effects missing');
     assert.equal(tap.effects[0].kind, 'delay');
