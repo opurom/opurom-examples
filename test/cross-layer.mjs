@@ -160,9 +160,12 @@ try {
   check('IR models lower to SQL migrations', () => {
     const dir = join(tmp, 'migrations');
     ok(run(migrate, [P('opurom-examples', 'todo.opuir.json'), '-o', dir]), 'migrate');
-    const sql = readFileSync(join(dir, 'migrations', '001_create_todo.sql'), 'utf8');
+    // The generator normalises a "migrations" suffix to the base directory.
+    const base = existsSync(join(dir, 'migrations', '001_create_todo.sql')) ? join(dir, 'migrations') : dir;
+    const sql = readFileSync(join(base, '001_create_todo.sql'), 'utf8');
     assert.match(sql, /CREATE TABLE IF NOT EXISTS Todo/i);
     assert.match(sql, /title/i);
+    assert.ok(existsSync(join(dir, 'schema.sql')), 'combined schema.sql missing');
   });
   const serverc = ensureBin('opurom-server', 'opurom-serverc');
   check('IR lowers to a standalone Rust service', () => {
