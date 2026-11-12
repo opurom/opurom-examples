@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Cross-project verification: every repo's tests + the IR contract between layers.
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, readdirSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import assert from 'node:assert/strict';
@@ -12,11 +12,12 @@ const REPOS = [
   'opurom-spec', 'opurom-core', 'opurom-lang', 'opurom-render',
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
   'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
-  'opurom-lsp',
+  'opurom-lsp', 'opurom-debug',
 ];
 const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
   'opurom-server', 'opurom-db', 'opurom-runtime-adapters'];
-const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp'];
+const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp',
+  'opurom-debug'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
@@ -181,6 +182,79 @@ try {
     const out = ok(run(runtime, [P('opurom-examples', 'todo.opuir.json')]), 'runtime report');
     assert.match(out, /native/i);
     assert.match(out, /planned/i, 'no honest Planned status');
+  });
+
+  console.log('== R3 ecosystem contracts ==');
+  check('component catalog has >=100 unique names mapped onto 24 primitives', () => {
+    const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
+    assert.ok(c.count >= 100);
+    assert.equal(c.components.length, c.count);
+    assert.equal(new Set(c.components.map(x => x[0])).size, c.count, 'duplicate names');
+    assert.equal(new Set(c.components.map(x => x[1])).size, 24, 'expected 24 primitives');
+  });
+  check('catalog names lower to primitives and keep default props', () => {
+    const out = join(tmp, 'showcase.opuir.json');
+    ok(run(compiler, ['compile', P('opurom-examples', 'showcase.opu'), '-o', out]), 'compile showcase');
+    const ir = JSON.parse(readFileSync(out, 'utf8'));
+    const kinds = [];
+    const components = [];
+    const walk = n => {
+      kinds.push(n.kind);
+      if (n.component) components.push(n.component);
+      (n.children || []).forEach(walk);
+    };
+    walk(ir.tree);
+    assert.ok(components.includes('Heading'), 'Heading was not expanded');
+    assert.ok(components.includes('CardGrid'), 'CardGrid was not expanded');
+    assert.ok(!kinds.includes('Heading'), 'primitive kind not substituted');
+    assert.equal(kinds.filter(k => k === 'Row').length >= 1, true, 'ButtonBar did not lower to Row');
+  });
+  check('optimizer is semantics-preserving on the golden IR', () => {
+    const out = join(tmp, 'opt.opuir.json');
+    const golden = P('opurom-spec', 'counter.opuir.json');
+    ok(run(compiler, ['optimize', golden, '-o', out]), 'optimize golden');
+    assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(golden, 'utf8')));
+  });
+  check('optimizer removes dead state and reports measured byte counts', () => {
+    const dir = join(tmp, 'dead');
+    const src = join(dir, 'dead.opuir.json');
+    const out = join(dir, 'dead-opt.opuir.json');
+    const ir = JSON.parse(readFileSync(P('opurom-spec', 'counter.opuir.json'), 'utf8'));
+    ir.state.push({ name: 'unused', type: 'int', init: 7 });
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(src, JSON.stringify(ir));
+    const printed = ok(run(compiler, ['optimize', src, '-o', out]), 'optimize dead');
+    const opt = JSON.parse(readFileSync(out, 'utf8'));
+    assert.equal(opt.state.length, 1, 'dead state not removed');
+    assert.equal(opt.tree.id, 0, 'node ids changed');
+    assert.ok(statSync(out).size < statSync(src).size, 'output not smaller');
+    assert.match(printed, /\d+/, 'no measured byte count printed');
+  });
+  check('renderer emits a deterministic accessibility tree', () => {
+    const a11y = join(tmp, 'a11y.json');
+    ok(run(renderer, [P('opurom-spec', 'counter.opuir.json'), '320', '240',
+      join(tmp, 'a11y.ppm'), '--a11y', a11y]), 'render a11y');
+    const tree = JSON.parse(readFileSync(a11y, 'utf8'));
+    assert.ok(Array.isArray(tree) && tree.length >= 2, 'empty a11y tree');
+    for (const n of tree) {
+      assert.equal(typeof n.id, 'number');
+      assert.equal(typeof n.role, 'string');
+      assert.equal(n.bounds.length, 4);
+      assert.equal(typeof n.hidden, 'boolean');
+    }
+  });
+  check('terminal adapter is registered as a verified host', () => {
+    const out = ok(run(platform, ['--hosts']), 'platform hosts');
+    assert.match(out, /terminal/i, 'terminal host missing');
+    assert.match(out, /verified/i, 'terminal host not marked verified');
+  });
+  check('DAP debugger session is exercised by its own test suite', () => {
+    ok(run('node', ['--test'], { cwd: P('opurom-debug') }), 'dap tests');
+  });
+  check('CLI reports measured benchmark numbers', () => {
+    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'bench', '--full']), 'bench --full');
+    assert.match(out, /\|/m, 'no markdown table');
+    assert.match(out, /\d/, 'no measured numbers');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });

@@ -1,0 +1,37 @@
+// R3 showcase: one source file uses catalog components, a11y props and effects.
+// All 108 catalog names lower onto the 24 R2 primitives at compile time.
+app Showcase {
+  state count = 0
+  state dark = false
+
+  theme { mode: light, accent: "#4F46E5", radius: 12 }
+
+  ScrollView(height: 480, p: 16) {
+    Heading("OPUROM Components", size: 26)
+    Paragraph("One catalog, 24 primitives", size: 14)
+    DividerSpace()
+    CardGrid(columns: 2, gap: 12) {
+      Tile(p: 12, radius: 8, shadow: 2) {
+        Label("Counter", size: 16)
+        Gap(height: 8)
+        CountBadge(label: "{count}", radius: 8)
+      }
+      ElevationCard(p: 12) {
+        Label("Actions", size: 16)
+        ButtonBar(gap: 8) {
+          PrimaryButton("+") { count += 1 }
+          DangerButton("Reset") { count = 0 }
+        }
+      }
+    }
+    if (dark) {
+      InfoCard(p: 12, highContrast: true, label: "Dark mode details", role: "text") {
+        Caption("High contrast is active", fontScale: 1.25)
+      }
+    }
+    ToggleSwitch(bind: dark, label: "Dark mode", role: "checkbox")
+    LinearProgress(value: 40)
+    UserAvatar(label: "OP", size: 40)
+    Spinner(size: 24)
+  }
+}
