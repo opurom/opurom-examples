@@ -3,7 +3,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import assert from 'node:assert/strict';
 
 const ROOT = resolve(import.meta.dirname, '../..');
@@ -160,12 +160,14 @@ try {
   check('IR models lower to SQL migrations', () => {
     const dir = join(tmp, 'migrations');
     ok(run(migrate, [P('opurom-examples', 'todo.opuir.json'), '-o', dir]), 'migrate');
-    // The generator writes <base>/migrations/NNN_*.sql plus <base>/schema.sql.
-    const base = existsSync(join(dir, 'migrations', '001_create_todo.sql')) ? join(dir, 'migrations') : dir;
-    const sql = readFileSync(join(base, '001_create_todo.sql'), 'utf8');
+    // The generator normalises the output base: a directory called
+    // "migrations" is replaced by its parent. SQL lands in <base>/migrations/,
+    // the combined schema in <base>/schema.sql.
+    const base = dir.endsWith('migrations') ? dirname(dir) : dir;
+    const sql = readFileSync(join(base, 'migrations', '001_create_todo.sql'), 'utf8');
     assert.match(sql, /CREATE TABLE IF NOT EXISTS Todo/i);
     assert.match(sql, /title/i);
-    assert.ok(existsSync(join(dir, 'schema.sql')), 'combined schema.sql missing');
+    assert.ok(existsSync(join(base, 'schema.sql')), 'combined schema.sql missing');
   });
   const serverc = ensureBin('opurom-server', 'opurom-serverc');
   check('IR lowers to a standalone Rust service', () => {
