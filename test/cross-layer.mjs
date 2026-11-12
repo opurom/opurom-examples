@@ -222,7 +222,9 @@ try {
     const ir = JSON.parse(readFileSync(P('opurom-spec', 'counter.opuir.json'), 'utf8'));
     ir.state.push({ name: 'unused', type: 'int', init: 7 });
     mkdirSync(dir, { recursive: true });
-    writeFileSync(src, JSON.stringify(ir));
+    // The optimizer pretty-prints its output; use the same indentation for the
+    // input so the byte comparison measures the dead state, not the format.
+    writeFileSync(src, JSON.stringify(ir, null, 2));
     const printed = ok(run(compiler, ['optimize', src, '-o', out]), 'optimize dead');
     const opt = JSON.parse(readFileSync(out, 'utf8'));
     assert.equal(opt.state.length, 1, 'dead state not removed');
