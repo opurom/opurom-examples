@@ -12,10 +12,10 @@ const REPOS = [
   'opurom-spec', 'opurom-core', 'opurom-lang', 'opurom-render',
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
   'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
-  'opurom-lsp', 'opurom-debug', 'opurom-pkg',
+  'opurom-lsp', 'opurom-debug', 'opurom-pkg', 'opurom-gpu',
 ];
 const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
-  'opurom-server', 'opurom-db', 'opurom-runtime-adapters'];
+  'opurom-server', 'opurom-db', 'opurom-runtime-adapters', 'opurom-gpu'];
 const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp',
   'opurom-debug', 'opurom-pkg'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
@@ -322,6 +322,60 @@ try {
     const out = ok(run('node', [P('opurom-pkg', 'bin', 'opurom-pkg.mjs'), 'verify'],
       { cwd: P('opurom-pkg') }), 'pkg verify');
     assert.match(out, /pass|ok|verified/i, 'verify did not report success');
+  });
+
+  console.log('== R5 hardware and protocol contracts ==');
+  const gpu = bin('opurom-gpu', 'opurom-gpu') ||
+    (existsSync(P('opurom-gpu', 'Cargo.toml')) ? ensureBin('opurom-gpu', 'opurom-gpu') : null);
+  check('Metal GPU readback equals the CPU reference', () => {
+    assert.ok(gpu, 'opurom-gpu binary missing');
+    const out = ok(run(gpu, ['self-test']), 'gpu self-test');
+    assert.match(out, /PASS/i, 'GPU self-test did not pass');
+    assert.match(out, /Apple|Metal|GPU/i, 'no real device name reported');
+  });
+  check('AppKit host is verified and writes a real PNG', () => {
+    const hosts = ok(run(platform, ['--hosts']), 'platform hosts');
+    assert.match(hosts, /appkit/i, 'AppKit host missing');
+    const png = join(tmp, 'appkit.png');
+    ok(run(platform, ['--png', png]), 'platform png');
+    const b = readFileSync(png);
+    assert.equal(b.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', 'not a PNG');
+    assert.equal(b.subarray(12, 16).toString(), 'IHDR', 'IHDR missing');
+  });
+  check('page transitions are deterministic at a fixed tick', () => {
+    const args = t => [P('opurom-spec', 'counter.opuir.json'), '320', '240',
+      join(tmp, `t-${t}.ppm`), '--transition', 'slide', '--tick', '16'];
+    const a = ok(run(renderer, args('a')), 'transition a');
+    const b = ok(run(renderer, args('b')), 'transition b');
+    assert.equal(a.match(/digest=([0-9a-f]+)/i)?.[1], b.match(/digest=([0-9a-f]+)/i)?.[1]);
+  });
+  check('computed/else/list-state lower into one IR', () => {
+    const src = join(tmp, 'r5.opu');
+    const out = join(tmp, 'r5.opuir.json');
+    writeFileSync(src, [
+      'app R5 {',
+      '  state count = 2',
+      '  state dark = false',
+      '  state items = ["a","b"]',
+      '  computed doubled = count * 2',
+      '  Column {',
+      '    if (dark) { Text("on") } else { Text("off") }',
+      '    for (item in items) { Text("{item}") }',
+      '  }',
+      '}',
+    ].join('\n') + '\n');
+    ok(run(compiler, ['compile', src, '-o', out]), 'compile r5');
+    const ir = JSON.parse(readFileSync(out, 'utf8'));
+    assert.equal(ir.computed?.[0]?.name, 'doubled', 'computed missing');
+    assert.equal(ir.state.find(s => s.name === 'items')?.type, 'list', 'list state missing');
+    const nodes = [];
+    const walk = n => { nodes.push(n); (n.children || []).forEach(walk); };
+    walk(ir.tree);
+    assert.ok(nodes.some(n => n.unless === 'dark'), 'else/unless missing');
+  });
+  check('PostgreSQL wire protocol has a mock-server conformance test', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'), '--', '--list']), 'db test list');
+    assert.match(out, /postgres|pg_/i, 'no PostgreSQL conformance test registered');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
