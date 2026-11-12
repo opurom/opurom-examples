@@ -632,7 +632,8 @@ try {
     assert.equal(JSON.stringify(lang), JSON.stringify(c), 'catalog not synced to compiler');
   });
   check('GPU presentation verifies on-screen pixels', () => {
-    const out = ok(run(platform, ['--verify-gpu-presentation']), 'gpu presentation');
+    const out = ok(run(platform, ['--verify-gpu-presentation',
+      '--out', join(tmp, 'r10-gpu.png')]), 'gpu presentation');
     assert.match(out, /PASS|SKIP/i, 'no GPU presentation verdict');
     if (/PASS/.test(out)) assert.match(out, /mismatch/i, 'no pixel comparison result');
   });
