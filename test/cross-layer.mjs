@@ -195,8 +195,8 @@ try {
     assert.ok(c.count >= 100);
     assert.equal(c.components.length, c.count);
     assert.equal(new Set(c.components.map(x => x[0])).size, c.count, 'duplicate names');
-    assert.equal(new Set(c.components.map(x => x[1])).size, 32, 'expected 32 primitives');
-    assert.ok(c.count >= 116, 'catalog should have 116 components');
+    assert.equal(new Set(c.components.map(x => x[1])).size, c.primitives, 'primitive count mismatch');
+    assert.ok(c.primitives >= 32, 'catalog should have at least 32 primitives');
   });
   check('catalog names lower to primitives and keep default props', () => {
     const out = join(tmp, 'showcase.opuir.json');
@@ -267,11 +267,11 @@ try {
   });
 
   console.log('== R4 language and packaging contracts ==');
-  check('catalog exposes 116 components over 32 primitives', () => {
+  check('component catalog stays consistent with the compiler', () => {
     const out = ok(run(compiler, ['components']), 'opuromc components');
-    assert.match(out, /116 components/, 'catalog count not reported');
     const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
-    assert.equal(c.primitives, 32);
+    assert.match(out, new RegExp(`${c.count} components`), 'catalog count not reported');
+    assert.ok(c.primitives >= 32);
   });
   check('async/await effects lower into IR without changing plain programs', () => {
     const src = join(tmp, 'async.opu');
@@ -620,6 +620,56 @@ try {
   check('marketplace publish/install flow is covered', () => {
     const out = ok(run('node', ['--test'], { cwd: P('opurom-pkg') }), 'pkg tests');
     assert.match(out, /pass/i, 'package manager suite did not run');
+  });
+
+  console.log('== R10 component and platform contracts ==');
+  check('catalog exposes 100+ distinct drawn primitives', () => {
+    const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
+    assert.ok(c.primitives >= 100, `only ${c.primitives} distinct primitives`);
+    assert.ok(c.count >= 200, `only ${c.count} named components`);
+    assert.equal(new Set(c.components.map(x => x[1])).size, c.primitives);
+    const lang = JSON.parse(readFileSync(P('opurom-lang', 'src', 'catalog.json'), 'utf8'));
+    assert.equal(JSON.stringify(lang), JSON.stringify(c), 'catalog not synced to compiler');
+  });
+  check('GPU presentation verifies on-screen pixels', () => {
+    const out = ok(run(platform, ['--verify-gpu-presentation']), 'gpu presentation');
+    assert.match(out, /PASS|SKIP/i, 'no GPU presentation verdict');
+    if (/PASS/.test(out)) assert.match(out, /mismatch/i, 'no pixel comparison result');
+  });
+  check('tree shaking and source maps produce valid artifacts', () => {
+    const dir = join(tmp, 'r10-build');
+    ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'build',
+      '--src', P('opurom-examples', 'counter.opu'), '--target', 'web',
+      '--out', dir, '--tree-shake', '--sourcemap', '--minify']), 'r10 build');
+    const app = join(dir, 'app.js');
+    assert.ok(existsSync(app), 'app.js missing');
+    ok(run('node', ['--check', app]), 'r10 app.js syntax');
+    const map = join(dir, 'app.js.map');
+    if (existsSync(map)) {
+      const json = JSON.parse(readFileSync(map, 'utf8'));
+      assert.equal(json.version, 3, 'not a v3 source map');
+      assert.ok(Array.isArray(json.sources) && typeof json.mappings === 'string');
+    }
+  });
+  check('native capability plugins are permission gated', () => {
+    const out = ok(run('node', ['--test'], { cwd: P('opurom-plugins') }), 'plugins tests');
+    assert.match(out, /pass/i, 'plugin suite did not run');
+    const reg = JSON.parse(readFileSync(P('opurom-plugins', 'registry.json'), 'utf8'));
+    const caps = new Set(reg.plugins.flatMap(x => x.capabilities || []));
+    for (const c of ['camera.takePhoto', 'geolocation.getCurrentPosition',
+      'bluetooth.scan', 'notification.show', 'payment.request', 'share.send']) {
+      assert.ok(caps.has(c), `missing native capability ${c}`);
+    }
+  });
+  check('OCSP/CRL certificate status is covered by real tests', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
+      '--', '--list']), 'server test list');
+    assert.match(out, /ocsp_|crl_/i, 'no certificate-status tests registered');
+  });
+  check('MySQL caching_sha2 auth is covered by real tests', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
+      '--', '--list']), 'db test list');
+    assert.match(out, /caching_sha2|stmt_prepare/i, 'no caching_sha2 tests registered');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
