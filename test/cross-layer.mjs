@@ -583,6 +583,16 @@ try {
     if (!existsSync(verify)) return; // not landed yet: skip honestly
     const out = ok(run('node', [verify]), 'jetbrains plugin verify');
     assert.match(out, /PASS|SKIP/i, 'no plugin archive verdict');
+    const zip = P('opurom-ide-plugins', 'jetbrains-runtime', 'build', 'distributions',
+      'opurom-jetbrains-0.1.0.zip');
+    const fallback = P('opurom-ide-plugins', 'jetbrains-runtime', 'build', 'fallback',
+      'opurom-jetbrains-0.1.0.zip');
+    const artifact = existsSync(zip) ? zip : fallback;
+    if (existsSync(artifact)) {
+      const listing = ok(run('unzip', ['-l', artifact]), 'plugin zip listing');
+      assert.match(listing, /plugin\.xml/, 'plugin.xml missing from archive');
+      assert.match(listing, /\.class|\.jar/, 'no compiled classes in archive');
+    }
   });
   check('parallel scheduler is isolated and measured', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-core', 'Cargo.toml'),
