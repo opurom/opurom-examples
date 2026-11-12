@@ -608,6 +608,14 @@ try {
   check('full DAP debugger capabilities are advertised', () => {
     const out = ok(run('node', ['--test'], { cwd: P('opurom-debug') }), 'dap tests');
     assert.match(out, /pass/i, 'DAP suite did not run');
+    const capsFile = P('opurom-debug', 'bin', 'capabilities.mjs');
+    if (!existsSync(capsFile)) return; // not landed yet: skip honestly
+    const caps = JSON.parse(ok(run('node', [capsFile], { cwd: P('opurom-debug') }),
+      'dap capabilities').trim());
+    for (const key of ['supportsSetVariable', 'supportsVariablePaging',
+      'supportsStepInOutRequests', 'supportsVerifiedSourceBreakpoints']) {
+      assert.equal(caps[key], true, `missing DAP capability ${key}`);
+    }
   });
   check('marketplace publish/install flow is covered', () => {
     const out = ok(run('node', ['--test'], { cwd: P('opurom-pkg') }), 'pkg tests');
