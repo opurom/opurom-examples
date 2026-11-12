@@ -446,8 +446,8 @@ try {
     const nodes = [];
     const walk = n => { nodes.push(n); (n.children || []).forEach(walk); };
     walk(ir.tree);
-    assert.ok(nodes.some(n => JSON.stringify(n).includes('Hi')),
-      'component parameter was not substituted');
+    assert.ok(nodes.some(n => n.kind === 'Text' && n.props?.value === 'Hi'),
+      'component parameter was not substituted into props.value');
     assert.ok(!nodes.some(n => n.kind === 'Card'), 'component node was not expanded');
   });
   check('minified web build is valid JS and reports measured sizes', () => {
