@@ -598,6 +598,12 @@ try {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-core', 'Cargo.toml'),
       '--', '--list']), 'core test list');
     assert.match(out, /scheduler|circuit|panic/i, 'no scheduler/fault-isolation tests registered');
+    const example = P('opurom-core', 'examples', 'parallel_speedup.rs');
+    if (existsSync(example)) {
+      const measured = ok(run('cargo', ['run', '--offline', '--quiet', '--example',
+        'parallel_speedup'], { cwd: P('opurom-core') }), 'parallel speedup');
+      assert.match(measured, /\d/, 'no measured timing reported');
+    }
   });
   check('full DAP debugger capabilities are advertised', () => {
     const out = ok(run('node', ['--test'], { cwd: P('opurom-debug') }), 'dap tests');
