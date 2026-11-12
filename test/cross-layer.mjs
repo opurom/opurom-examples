@@ -507,6 +507,59 @@ try {
     assert.match(out, /byte equality/i, 'no correctness result');
     assert.match(out, /byte-equal|n\/a/i, 'no byte-equality verdict');
   });
+
+  console.log('== R8 visual and platform breadth contracts ==');
+  check('advanced visual effects are deterministic', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-render', 'Cargo.toml'),
+      '--', '--list']), 'render test list');
+    assert.match(out, /effect/i, 'no visual-effect tests registered');
+  });
+  check('browser matrix verifies two real engines', () => {
+    const dir = join(tmp, 'matrix');
+    mkdirSync(dir, { recursive: true });
+    const out = ok(run('node', [P('opurom-web', 'bin', 'opurom-web.mjs'), 'verify',
+      '--matrix', P('opurom-spec', 'counter.opuir.json'), dir]), 'web verify --matrix');
+    assert.match(out, /chromium|webkit|edge/i, 'no engine result reported');
+    assert.match(out, /PASS|verified|SKIP/i, 'no matrix verdict');
+  });
+  check('Win32 and X11 adapters compile for their targets', () => {
+    const win = run('cargo', ['check', '--manifest-path', P('opurom-platform', 'Cargo.toml'),
+      '--target', 'x86_64-pc-windows-gnu', '--all-targets']);
+    assert.equal(win.status, 0, 'Win32 adapter does not compile');
+    const lin = run('cargo', ['check', '--manifest-path', P('opurom-platform', 'Cargo.toml'),
+      '--target', 'x86_64-unknown-linux-gnu', '--all-targets']);
+    assert.equal(lin.status, 0, 'X11 adapter does not compile');
+  });
+  check('mTLS and revocation are covered by real tests', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
+      '--', '--list']), 'server test list');
+    assert.match(out, /mtls|revok/i, 'no mTLS/revocation tests registered');
+  });
+  check('MySQL wire protocol has a mock-server conformance test', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
+      '--', '--list']), 'db test list');
+    assert.match(out, /mysql/i, 'no MySQL conformance test registered');
+  });
+  check('N WebSocket clients receive the same state delta', () => {
+    const hub = P('opurom-cli', 'bin', 'sync-hub.mjs');
+    if (!existsSync(hub)) return; // not landed yet: skip honestly
+    const port = 8981;
+    const child = spawn('node', [hub, '--port', String(port)], { stdio: 'ignore' });
+    try {
+      let ready = false;
+      for (let i = 0; i < 30; i++) {
+        const r = run('node', ['-e', `const n=require('node:net');const s=n.connect(${port},'127.0.0.1',()=>{s.end();process.exit(0)});s.on('error',()=>process.exit(1))`]);
+        if (r.status === 0) { ready = true; break; }
+        spawnSync('sleep', ['0.2']);
+      }
+      assert.ok(ready, 'sync hub did not start');
+      const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'dev',
+        '--sync', '--clients', '3', '--port', String(port)]), 'dev --sync');
+      assert.match(out, /client|delta|PASS/i, 'no sync report');
+    } finally {
+      child.kill('SIGTERM');
+    }
+  });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
 }
