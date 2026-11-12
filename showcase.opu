@@ -31,7 +31,7 @@ app Showcase {
     }
     ToggleSwitch(bind: dark, label: "Dark mode", role: "checkbox")
     LinearProgress(value: 40)
-    UserAvatar(label: "OP", size: 40)
-    Spinner(size: 24)
+    UserAvatar(label: "OP")
+    Spinner()
   }
 }
