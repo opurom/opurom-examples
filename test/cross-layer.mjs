@@ -12,12 +12,12 @@ const REPOS = [
   'opurom-spec', 'opurom-core', 'opurom-lang', 'opurom-render',
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
   'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
-  'opurom-lsp', 'opurom-debug',
+  'opurom-lsp', 'opurom-debug', 'opurom-pkg',
 ];
 const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
   'opurom-server', 'opurom-db', 'opurom-runtime-adapters'];
 const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp',
-  'opurom-debug'];
+  'opurom-debug', 'opurom-pkg'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
@@ -194,7 +194,8 @@ try {
     assert.ok(c.count >= 100);
     assert.equal(c.components.length, c.count);
     assert.equal(new Set(c.components.map(x => x[0])).size, c.count, 'duplicate names');
-    assert.equal(new Set(c.components.map(x => x[1])).size, 24, 'expected 24 primitives');
+    assert.equal(new Set(c.components.map(x => x[1])).size, 32, 'expected 32 primitives');
+    assert.ok(c.count >= 116, 'catalog should have 116 components');
   });
   check('catalog names lower to primitives and keep default props', () => {
     const out = join(tmp, 'showcase.opuir.json');
@@ -262,6 +263,64 @@ try {
       '--src', P('opurom-examples', 'counter.opu')]), 'bench --full');
     assert.match(out, /\|/m, 'no markdown table');
     assert.match(out, /\d/, 'no measured numbers');
+  });
+
+  console.log('== R4 language and packaging contracts ==');
+  check('catalog exposes 116 components over 32 primitives', () => {
+    const out = ok(run(compiler, ['components']), 'opuromc components');
+    assert.match(out, /116 components/, 'catalog count not reported');
+    const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
+    assert.equal(c.primitives, 32);
+  });
+  check('async/await effects lower into IR without changing plain programs', () => {
+    const src = join(tmp, 'async.opu');
+    const out = join(tmp, 'async.opuir.json');
+    writeFileSync(src, 'app AsyncDemo {\n  state count = 0\n  state payload = "idle"\n  Button("Load") async {\n    await delay(50)\n    await fetch("/todos", payload)\n    count += 1\n  }\n}\n');
+    ok(run(compiler, ['compile', src, '-o', out]), 'compile async');
+    const ir = JSON.parse(readFileSync(out, 'utf8'));
+    const tap = ir.tree.children[0].events.tap;
+    assert.equal(tap.async, true, 'async flag missing');
+    assert.equal(tap.effects.length, 2, 'effects missing');
+    assert.equal(tap.effects[0].kind, 'delay');
+    assert.equal(tap.effects[1].into, 'payload');
+    const plain = join(tmp, 'plain.opuir.json');
+    ok(run(compiler, ['compile', P('opurom-spec', 'counter.opu'), '-o', plain]), 'compile plain');
+    assert.equal(JSON.parse(readFileSync(plain, 'utf8')).tree.events.async, undefined);
+  });
+  check('module imports merge declarations and reject traversal', () => {
+    const dir = join(tmp, 'mods');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'todo.opu'), 'app M {\n  model Todo { id: int primary }\n}\n');
+    const okOut = join(tmp, 'import-ok.opuir.json');
+    writeFileSync(join(dir, 'main.opu'), 'import "todo.opu"\napp Main {\n  state n = 0\n  Column { Text("{n}") }\n}\n');
+    ok(run(compiler, ['compile', join(dir, 'main.opu'), '-o', okOut]), 'compile import');
+    const ir = JSON.parse(readFileSync(okOut, 'utf8'));
+    assert.equal(ir.models?.[0]?.name, 'Todo', 'imported model missing');
+    assert.deepEqual(ir.imports, ['todo.opu']);
+    writeFileSync(join(dir, 'bad.opu'), 'import "../escape.opu"\napp Bad { state n = 0 }\n');
+    const bad = run(compiler, ['compile', join(dir, 'bad.opu'), '-o', join(tmp, 'bad.json')]);
+    assert.notEqual(bad.status, 0, 'traversal import was accepted');
+  });
+  check('SVG vector backend is byte-deterministic', () => {
+    const a = join(tmp, 'a.svg'), b = join(tmp, 'b.svg');
+    const args = ir => [P('opurom-spec', 'counter.opuir.json'), '320', '240', join(tmp, 'svg.ppm'), '--svg', ir];
+    ok(run(renderer, args(a)), 'render svg a');
+    ok(run(renderer, args(b)), 'render svg b');
+    const sa = readFileSync(a, 'utf8'), sb = readFileSync(b, 'utf8');
+    assert.equal(sa, sb, 'SVG output differs between identical renders');
+    assert.match(sa, /<svg/);
+    assert.match(sa, /<text/);
+  });
+  check('CLI profile reports measured frame timings', () => {
+    const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'profile',
+      '--src', P('opurom-examples', 'counter.opu'), '--frames', '5']), 'profile');
+    assert.match(out, /p50|p95/i, 'no percentile report');
+    assert.match(out, /\d/, 'no measured numbers');
+  });
+  check('package manager verifies its lockfile', () => {
+    const out = ok(run('node', [P('opurom-pkg', 'bin', 'opurom-pkg.mjs'), 'verify'],
+      { cwd: P('opurom-pkg') }), 'pkg verify');
+    assert.match(out, /pass|ok|verified/i, 'verify did not report success');
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
