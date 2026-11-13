@@ -25,43 +25,50 @@ app FieldService {
 
   computed remaining = open * 2
 
-  theme { accent: "#097FEB", radius: 12, fontScale: 1.0 }
+  theme { accent: "#097FEB", radius: 14, fontScale: 1.0 }
 
-  Column(p: 20, gap: 14) {
-    Row(gap: 12, align: center) {
-      Avatar(label: "R")
-      Column(gap: 2) {
-        Text("Field Service", size: 26)
-        Text("Crew {crew} - open cases: {open}", size: 14)
+  Column(p: 20, gap: 16) {
+    Container(p: 18, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Row(gap: 12, align: center) {
+        Avatar(label: "R")
+        Column(gap: 2) {
+          Text("Field Service", size: 26, color: "#FFFFFF")
+          Text("Crew {crew} - open cases: {open}", size: 13, color: "#D6E8FF")
+        }
+        Spacer(width: 12)
+        Badge(label: "{remaining} due")
+        Switch(bind: dark)
       }
-      Spacer(width: 12)
-      Badge(label: "{remaining} due")
-      Switch(bind: dark)
     }
 
-    Progress(value: 3)
+    Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+      Progress(value: 3)
+    }
 
     Grid(columns: 2) {
-      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
-        Text("triage", size: 16)
+      Card(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Text("triage", size: 16, color: "#101828")
       }
-      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
-        Text("dispatch", size: 16)
+      Card(p: 14, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+        Text("dispatch", size: 16, color: "#101828")
       }
-      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
-        Text("close", size: 16)
+      Card(p: 14, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+        Text("close", size: 16, color: "#101828")
       }
-      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
-        Text("review", size: 16)
+      Card(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Text("review", size: 16, color: "#101828")
       }
     }
 
-    Button("Dispatch crew", rounded: 10, animate: spring) {
-      open += 1
+    Container(p: 14, rounded: 16, shadow: 3, bg: "#F4F7FB") {
+      Button("Dispatch crew", p: 14, rounded: 14, shadow: 2, bg: "#097FEB",
+             fontScale: 1.1, animate: spring) {
+        open += 1
+      }
     }
 
     if (dark) {
-      Container(p: 14, rounded: 12, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 16, rounded: 14, shadow: 3, gradient: "#101828,#043B70", animate: ease) {
         Text("Night shift active for {crew}", size: 16, color: "#FFFFFF")
       }
     }

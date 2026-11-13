@@ -1,15 +1,18 @@
 // Seeded particle field: a gradient panel scattered with deterministic dots.
 app Particles {
-  theme { accent: "#097FEB", radius: 12 }
+  theme { mode: light, accent: "#097FEB", radius: 14 }
 
-  Column(p: 24, gap: 16, align: center) {
-    Text("Particle field", size: 28)
-    Text("64 seeded dots over a two-stop gradient", size: 14)
-
-    Container(width: 320, height: 200, p: 16, rounded: 12, shadow: 2,
+  Column(p: 24, gap: 20) {
+    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Text("Particle field", size: 26, color: "#FFFFFF")
+      Text("64 seeded dots over a two-stop gradient", size: 12, color: "#D6E8FF")
+    }
+    Container(width: 340, height: 220, p: 16, rounded: 16, shadow: 3,
               gradient: "#097FEB,#101828",
               particles: "count=64,seed=7,radius=3,alpha=1024,color=#F2F6FF") {
-      Text("seed = 7", size: 18)
+      Column(gap: 4, align: center) {
+        Text("seed = 7", size: 18, color: "#FFFFFF")
+      }
     }
   }
 }
