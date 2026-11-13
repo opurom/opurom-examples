@@ -754,6 +754,14 @@ try {
       .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
     assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
     const cli = P('opurom-cli', 'bin', 'opurom.mjs');
+    const ir = JSON.parse(readFileSync(galleryIr, 'utf8'));
+    const ids = [];
+    const collectIds = n => { ids.push(n.id); for (const c of n.children || []) collectIds(c); };
+    collectIds(ir.tree);
+    const markupExt = {
+      wechat: 'index.wxml', alipay: 'index.axml', qq: 'index.qml',
+      douyin: 'index.ttml', baidu: 'index.swan', kuaishou: 'index.ksml',
+    };
     for (const { name, files } of targets) {
       const dir = join(tmp, `gallery-${name}`);
       ok(run('node', [cli, 'build', '--src', gallerySrc, '--target', name, '--out', dir]),
@@ -763,6 +771,15 @@ try {
         assert.ok(existsSync(path) && statSync(path).size > 0, `${name}: missing or empty ${f}`);
         if (f.endsWith('.js')) ok(run('node', ['--check', path]), `${name}: ${f} syntax`);
         if (f.endsWith('.json')) JSON.parse(readFileSync(path, 'utf8'));
+      }
+      if (markupExt[name]) {
+        const markup = readFileSync(join(dir, markupExt[name]), 'utf8');
+        for (const id of ids) {
+          assert.ok(new RegExp(`class="[^"]*\\bn${id}\\b[^"]*"`).test(markup),
+            `${name}: node ${id} is missing from the rendered page`);
+        }
+        assert.ok(!markup.includes('__stateKeys'),
+          `${name}: internal state names leak into the rendered page`);
       }
     }
   });
