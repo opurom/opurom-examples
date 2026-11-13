@@ -1,0 +1,17 @@
+// Board data: the task model, its HTTP route and the counters the shell reads.
+// Declared here so views and entry points share one data contract.
+model WorkTask {
+  id: int primary
+  title: string
+  owner: string
+  done: bool = false
+}
+
+api "/workbench/tasks" {
+  list WorkTask
+  create WorkTask
+}
+
+state openTasks = 12
+state doneTasks = 34
+state crew = "North"

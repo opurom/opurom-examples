@@ -1,0 +1,3 @@
+// Shared palette for the workbench. A module accepts only state, model, api,
+// theme and imports, so the single theme declaration lives here.
+theme { mode: light, accent: "#2A5BD7", radius: 16, fontScale: 1.0 }

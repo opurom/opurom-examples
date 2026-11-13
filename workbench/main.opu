@@ -1,0 +1,161 @@
+import "models/tasks.opu";
+import "views/panels.opu";
+
+// Reusable nodes stay in the entry file: imported modules accept only state,
+// model, api, theme and imports, so a component declaration there is rejected.
+component StatCard(label: string, metric: string) {
+  Card(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+    Text("{label}", size: 11, color: "#5A6B8C")
+    Text("{metric}", size: 24, color: "#101828")
+  }
+}
+
+component PanelCard(title: string, detail: string) {
+  Card(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+    Text("{title}", size: 14, color: "#101828")
+    Text("{detail}", size: 11, color: "#5A6B8C")
+  }
+}
+
+component ViewButton(label: string, first: bool, second: bool, third: bool, title: string) {
+  Button("{label}", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
+    showOverview = first
+    showActivity = second
+    showStatus = third
+    activeView = title
+  }
+}
+
+app Workbench {
+  state showOverview = true
+  state showActivity = false
+  state showStatus = false
+  state activeView = "Overview"
+  state dark = false
+  state focus = "Build pipeline"
+  state progress = 68
+
+  computed backlog = openTasks + queueDepth
+
+  // One shell for every width: the outer Row lays out three columns on a wide
+  // viewport and collapses to a vertical stack on a compact one.
+  Column(p: 0, gap: 0) {
+    Container(p: 20, shadow: 4, gradient: "#123C8C,#0B1F4B",
+              particles: "count=48,seed=21,radius=2,alpha=800,color=#C9DCFF") {
+      Column(gap: 2, bg: "#123C8C") {
+        Text("Workbench", size: 26, color: "#FFFFFF")
+        Text("{activeView} - {stream}", size: 12, color: "#C9DCFF")
+      }
+    }
+
+    Row(gap: 16, p: 16) {
+      // Navigation rail: fixed width on desktop, a stacked section on phones.
+      Column(width: 210, gap: 10, p: 14) {
+        Container(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C") {
+          Column(gap: 4, bg: "#2A5BD7") {
+            Text("Navigation", size: 16, color: "#FFFFFF")
+            Text("one source tree", size: 11, color: "#C9DCFF")
+          }
+        }
+        ViewButton("Overview", true, false, false, "Overview")
+        ViewButton("Activity", false, true, false, "Activity")
+        ViewButton("Status", false, false, true, "Status")
+        Switch(bind: dark)
+        Container(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
+          Column(gap: 6) {
+            Text("Focus", size: 12, color: "#5A6B8C")
+            Text("{focus}", size: 14, color: "#101828")
+          }
+        }
+        Button("Next focus", p: 12, rounded: 12, shadow: 2, bg: "#123C8C", animate: spring) {
+          focus = "Release train"
+          progress += 4
+        }
+      }
+
+      // Main content: heading, stat cards and a panel grid. The body scrolls so
+      // the grid keeps its natural row heights in the compact stack.
+      Column(width: 820, gap: 14) {
+        Text("{activeView}", size: 24, color: "#101828")
+        Scroll(height: 760, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+          Column(width: 788, gap: 14) {
+            Badge(label: "{backlog} pending")
+            Grid(columns: 3) {
+              StatCard("Open", "{openTasks}")
+              StatCard("Done", "{doneTasks}")
+              StatCard("Queue", "{queueDepth}")
+            }
+            if (showOverview) {
+              Grid(columns: 2) {
+                PanelCard("Build", "live")
+                PanelCard("Release", "review")
+                PanelCard("Edge", "18 nodes")
+                PanelCard("Sync", "live")
+              }
+            }
+            if (showActivity) {
+              Grid(columns: 2) {
+                PanelCard("Builds", "done")
+                PanelCard("Review", "open")
+                PanelCard("Crew", "{crew}")
+                PanelCard("Focus", "{focus}")
+              }
+            }
+            if (showStatus) {
+              Grid(columns: 2) {
+                PanelCard("Health", "nominal")
+                PanelCard("Stream", "{stream}")
+                PanelCard("Load", "{progress}%")
+                PanelCard("Backlog", "{backlog}")
+              }
+            }
+            Container(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C",
+                      particles: "count=32,seed=9,radius=2,alpha=900,color=#FFFFFF") {
+              Column(gap: 6, bg: "#2A5BD7") {
+                Text("Pipeline load", size: 16, color: "#FFFFFF")
+                Progress(value: 68)
+              }
+            }
+            if (dark) {
+              Container(p: 16, rounded: 14, shadow: 3, gradient: "#101828,#2A5BD7") {
+                Text("Dark session active for {crew}", size: 14, color: "#FFFFFF")
+              }
+            }
+          }
+        }
+      }
+
+      // Detail and status column: a third pane beside the content on wide
+      // viewports, stacked underneath it on compact ones.
+      Column(width: 300, gap: 12, p: 14) {
+        Container(p: 16, rounded: 16, shadow: 3, gradient: "#123C8C,#2A5BD7") {
+          Column(gap: 4, bg: "#123C8C") {
+            Text("Session detail", size: 16, color: "#FFFFFF")
+            Text("wide layout pane", size: 11, color: "#C9DCFF")
+          }
+        }
+        Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+          Column(gap: 6) {
+            Text("Selected view", size: 12, color: "#5A6B8C")
+            Text("{activeView}", size: 18, color: "#101828")
+            Text("Focus: {focus}", size: 12, color: "#5A6B8C")
+          }
+        }
+        Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+          Column(gap: 8) {
+            Text("Completion", size: 12, color: "#5A6B8C")
+            Progress(value: 72)
+            Text("{doneTasks} tasks resolved", size: 12, color: "#5A6B8C")
+          }
+        }
+        Container(p: 16, rounded: 16, shadow: 2, bg: "#EEF3FC") {
+          Column(gap: 6) {
+            Text("Connections", size: 12, color: "#5A6B8C")
+            Text("/workbench/tasks", size: 12, color: "#101828")
+            Text("/workbench/status", size: 12, color: "#101828")
+          }
+        }
+      }
+    }
+  }
+}
