@@ -2,37 +2,34 @@
 
 Example applications for the OPUROM framework, a registry that describes them to the toolchain,
 and the cross-project verification harness. Each `.opu` file is a complete program that compiles
-to IR and renders through the framework's own pipeline.
+to IR and renders through the framework's own pipeline, so every example is a runnable instance of
+the framework rather than a sketch.
 
-<div align="center">
+## Applications
 
-![OPUROM full-stack Todo application](./assets/example-full-stack-todo.png)
+Each entry names the example and the one thing it is built to show. The examples are ordered from
+the smallest program to the richest multi-device application.
 
-</div>
-
-## Contents
-
-| File | Purpose |
+| Application | What it builds and shows |
 | --- | --- |
-| [counter.opu](counter.opu) | Canonical frontend program: integer state, `add`, nested layout, interpolation |
-| [profile.opu](profile.opu) | String state, `bool`, input binding, `set` and `toggle` |
-| [todo.opu](todo.opu) | Full-stack application: UI, `model` and `api` in one source file |
-| [todo.opuir.json](todo.opuir.json) | Reference full-stack IR for the Todo application |
-| [showcase.opu](showcase.opu) | Catalog components, accessibility properties and visual effects |
-| [gallery.opu](gallery.opu) | One instance of each of the 100 distinct primitive kinds, grouped by family |
-| [calculator.opu](calculator.opu) | State-driven arithmetic with computed expressions and themed controls |
-| [photos.opu](photos.opu) | State-driven selection across a responsive image gallery |
-| [animation.opu](animation.opu) | Deterministic entry animation with spring and easing curves |
-| [form.opu](form.opu) | Input binding, computed values and conditional rendering |
-| [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override |
-| [particles.opu](particles.opu) | Two-stop gradient panel scattered with seeded particles |
-| [field-service.opu](field-service.opu) | Full-stack multi-device app: `model`, `api`, computed values, adaptive Grid and device breakpoints |
-| [examples.json](examples.json) | Application registry consumed by the CLI |
-| [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
+| [counter.opu](counter.opu) | The canonical frontend program: one integer state, `+`/`-` buttons wired through `add`, a nested layout and `{count}` interpolation. |
+| [profile.opu](profile.opu) | String and `bool` state with input binding, `set` and `toggle`, showing how a single input drives both text and a switch. |
+| [todo.opu](todo.opu) | The full-stack application: a UI, a `model` and two HTTP API routes in one source file, plus its reference [IR](todo.opuir.json). |
+| [showcase.opu](showcase.opu) | The component catalog in one screen: accessibility properties, visual effects and a dark-mode panel, all driven by catalog components. |
+| [gallery.opu](gallery.opu) | Every distinct primitive kind the renderer supports, one instance per kind and grouped by family, as a completeness map of the rendering surface. |
+| [calculator.opu](calculator.opu) | Positional digit entry and integer arithmetic: computed expressions supply `+`, `-` and `x`, and a `=` branch applies the pending operator. |
+| [photos.opu](photos.opu) | A responsive image gallery where `Next`/`Prev` change the selected image through string and int state plus mutually exclusive bool gates. |
+| [animation.opu](animation.opu) | Deterministic entry animation: spring, ease and a static panel share one fixed-timestep clock, so the same tick always yields the same frame. |
+| [form.opu](form.opu) | Input binding, computed values and conditional rendering in one program: bound inputs update state on every edit and a panel appears on toggle. |
+| [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override, showing how one scale rule and one local exception coexist. |
+| [particles.opu](particles.opu) | A seeded particle field: a two-stop gradient panel scattered with deterministic dots, no wall clock and no randomness. |
+| [field-service.opu](field-service.opu) | The multi-device full-stack board: `model`, `api`, computed values, an adaptive `Grid` and device breakpoints, so one IR reflows between phone and tablet. |
 
 The canonical frontend IR lives in
 [counter.opuir.json](https://github.com/opurom/opurom-spec/blob/main/counter.opuir.json); the
-compiler lowers `counter.opu` to a JSON representation equal to it.
+compiler lowers `counter.opu` to a JSON representation equal to it. `todo.opuir.json` is the
+checked-in reference IR for the full-stack application and is recompiled from `todo.opu` during
+verification.
 
 ## Running the examples
 
@@ -72,19 +69,20 @@ rejected.
 
 ## Application previews
 
-<div align="center">
+Each preview is the deterministic frame the renderer produces for that example at the registered
+viewport, produced by the same pipeline that runs in the browser and on the native targets.
 
-![OPUROM Calculator with themed controls](./assets/example-calculator.png)
+![OPUROM Todo, a full-stack application with a refresh counter](./assets/example-full-stack-todo.png)
 
-![OPUROM Photo Wall with a selected gradient](./assets/example-photo-wall.png)
+![OPUROM Calculator, a themed arithmetic board](./assets/example-calculator.png)
 
-![OPUROM component gallery](./assets/example-component-gallery.png)
+![OPUROM Photo Wall, a responsive gallery with one image enlarged](./assets/example-photo-wall.png)
 
-![OPUROM Form with input binding](./assets/example-form.png)
+![OPUROM component gallery, one instance per primitive kind](./assets/example-component-gallery.png)
+
+![OPUROM Form, bound inputs with a conditional subscription panel](./assets/example-form.png)
 
 ![OPUROM Form with the subscription panel visible](./assets/example-form-subscribed.png)
-
-</div>
 
 ## Registry format
 
