@@ -22,6 +22,7 @@ to IR and renders through the framework's own pipeline.
 | [gallery.opu](gallery.opu) | One instance of each of the 100 distinct primitive kinds, grouped by family |
 | [calculator.opu](calculator.opu) | State-driven arithmetic with computed expressions and themed controls |
 | [photos.opu](photos.opu) | State-driven selection across a responsive image gallery |
+| [animation.opu](animation.opu) | Deterministic entry animation with spring and easing curves |
 | [examples.json](examples.json) | Application registry consumed by the CLI |
 | [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
 

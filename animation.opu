@@ -1,0 +1,22 @@
+// Deterministic entry animation: the same tick always yields the same frame.
+app Animation {
+  theme { accent: "#097FEB", radius: 12 }
+
+  Column(p: 24, gap: 16, align: center) {
+    Text("Animation", size: 28)
+    Text("spring and ease share one fixed-timestep clock", size: 14)
+
+    Container(width: 220, height: 64, bg: "#097FEB", rounded: 12,
+              shadow: 3, animate: spring) {
+      Text("spring", size: 18)
+    }
+    Container(width: 220, height: 64, bg: "#04509B", rounded: 12,
+              shadow: 3, animate: ease) {
+      Text("ease", size: 18)
+    }
+    Container(width: 220, height: 64, bg: "#101828", rounded: 12,
+              shadow: 3, animate: none) {
+      Text("static", size: 18)
+    }
+  }
+}
