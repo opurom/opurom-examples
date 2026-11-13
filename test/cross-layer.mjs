@@ -160,7 +160,7 @@ try {
   check('IR models lower to SQL migrations', () => {
     const dir = join(tmp, 'migrations');
     ok(run(migrate, [P('opurom-examples', 'todo.opuir.json'), '-o', dir]), 'migrate');
-    // The generator normalises a "migrations" suffix to the base directory.
+    // The generator writes <base>/migrations/NNN_*.sql plus <base>/schema.sql.
     const base = existsSync(join(dir, 'migrations', '001_create_todo.sql')) ? join(dir, 'migrations') : dir;
     const sql = readFileSync(join(base, '001_create_todo.sql'), 'utf8');
     assert.match(sql, /CREATE TABLE IF NOT EXISTS Todo/i);
