@@ -500,6 +500,60 @@
           "description": "render the seeded particle panel to a PPM frame"
         }
       ]
+    },
+    {
+      "name": "field-service",
+      "source": "field-service.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native",
+        "full"
+      ],
+      "tests": [
+        {
+          "id": "field-service.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the full-stack field-service source"
+        },
+        {
+          "id": "field-service.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the model, api and UI into one IR"
+        },
+        {
+          "id": "field-service.phone",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "360",
+            "740",
+            "{tmp}/phone.ppm"
+          ],
+          "description": "render the compact phone breakpoint"
+        },
+        {
+          "id": "field-service.tablet",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "820",
+            "600",
+            "{tmp}/tablet.ppm"
+          ],
+          "description": "render the wide tablet breakpoint"
+        }
+      ]
     }
   ]
 }
