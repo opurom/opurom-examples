@@ -585,7 +585,7 @@ try {
 
   console.log('== production breadth contracts ==');
   check('GPU effect kernels produce a byte-identical PPM', () => {
-    const fixture = P('opurom-render', 'tests', 'fixtures', 'r9_effect.opuir.json');
+    const fixture = P('opurom-render', 'tests', 'fixtures', 'effects.opuir.json');
     if (!existsSync(fixture)) return; // not landed yet: skip honestly
     const cmds = join(tmp, 'effect-commands.json');
     const cpu = join(tmp, 'effect-cpu.ppm');
