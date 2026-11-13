@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "apps": [
+    {
+      "name": "counter",
+      "source": "counter.opu",
+      "required": true,
+      "targets": ["web", "native"],
+      "tests": [
+        {
+          "id": "counter.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "counter.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "counter.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "source": "profile.opu",
+      "required": true,
+      "targets": ["web", "native"],
+      "tests": [
+        {
+          "id": "profile.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "profile.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "profile.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "todo",
+      "source": "todo.opu",
+      "required": true,
+      "targets": ["web", "native", "full"],
+      "tests": [
+        {
+          "id": "todo.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "todo.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "todo.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "showcase",
+      "source": "showcase.opu",
+      "required": true,
+      "targets": ["web", "native"],
+      "tests": [
+        {
+          "id": "showcase.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "showcase.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "showcase.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "gallery",
+      "source": "gallery.opu",
+      "required": true,
+      "targets": ["web", "native"],
+      "tests": [
+        {
+          "id": "gallery.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "gallery.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "gallery.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "calculator",
+      "source": "calculator.opu",
+      "required": true,
+      "targets": ["web"],
+      "tests": [
+        {
+          "id": "calculator.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "calculator.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "calculator.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "photos",
+      "source": "photos.opu",
+      "required": true,
+      "targets": ["web"],
+      "tests": [
+        {
+          "id": "photos.check",
+          "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc"
+        },
+        {
+          "id": "photos.compile",
+          "cmd": ["opuromc", "compile", "{source}", "-o", "{tmp}/app.opuir.json"],
+          "description": "compile the source to IR in a temp dir"
+        },
+        {
+          "id": "photos.render",
+          "cmd": ["opurom-render", "{tmp}/app.opuir.json", "320", "240", "{tmp}/frame.ppm"],
+          "description": "render the compiled IR to a PPM frame"
+        }
+      ]
+    }
+  ]
+}

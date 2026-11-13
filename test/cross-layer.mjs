@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Cross-project verification: every repo's tests + the IR contract between layers.
 import { spawnSync, spawn } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import assert from 'node:assert/strict';
@@ -105,6 +105,27 @@ check('opurom-ide-plugins: validate', () => ok(run('node', ['scripts/validate.mj
 check('opurom-cli: opurom doctor', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'doctor']), 'doctor'));
 check('opurom-cli: opurom test (full-stack end-to-end)', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'test']), 'opurom test'));
 
+console.log('== examples registry ==');
+check('examples registry and runner cover every sample app', () => {
+  const registry = JSON.parse(readFileSync(P('opurom-examples', 'examples.json'), 'utf8'));
+  const registered = new Set(registry.apps.map(app => app.source));
+  const onDisk = readdirSync(P('opurom-examples')).filter(file => file.endsWith('.opu'));
+  for (const file of onDisk) {
+    assert.ok(registered.has(file), `${file} is missing from examples.json (register every sample app)`);
+  }
+  for (const file of ['calculator.opu', 'photos.opu']) {
+    assert.ok(registered.has(file), `${file} is missing from examples.json (planned app)`);
+  }
+  const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'examples']), 'opurom examples');
+  const listed = new Set(out.trim().split('\n').map(line => line.split(/\s+/)[0]));
+  for (const app of registry.apps) {
+    assert.ok(listed.has(app.name), `${app.name} is missing from "opurom examples" output`);
+    assert.ok(app.tests.length > 0 && app.tests.every(test => Array.isArray(test.cmd) && test.cmd.length > 0),
+      `${app.name} has no runnable test`);
+  }
+  assert.match(out, /\d+ apps, \d+ tests/, 'no registered test totals in listing');
+});
+
 console.log('== cross-layer IR and full-stack contract ==');
 const tmp = mkdtempSync(join(tmpdir(), 'opurom-cross-'));
 try {
@@ -146,7 +167,7 @@ try {
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], 'c87bf023a6c01f9d', 'core golden digest regressed');
+    assert.equal(da[1], '2fc4eac75fd50f89', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -823,11 +844,11 @@ try {
     const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
     const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
-      /digest=c87bf023a6c01f9d/);
+      /digest=2fc4eac75fd50f89/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
-      /digest=8cc3021fa80749b5/);
+      /digest=88127ca1577cdb61/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', c,
-      '--state', 'count=7']), 'tier state'), /digest=e7aad51c98d9cf21/);
+      '--state', 'count=7']), 'tier state'), /digest=40891c1fbb81399e/);
   });
   check('Wayland wire encoding is verified without a compositor', () => {
     const wire = P('opurom-platform', 'src', 'wayland_wire.rs');

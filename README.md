@@ -1,33 +1,111 @@
 # OPUROM Examples
 
-Golden programs, the full-stack Todo application and the cross-project verification harness.
-Every file here is executable evidence, not a mockup.
+Example applications for the OPUROM framework, a registry that describes them to the toolchain,
+and the cross-project verification harness. Each `.opu` file is a complete program that compiles
+to IR and renders through the framework's own pipeline.
+
+<div align="center">
+
+![OPUROM full-stack Todo application](./assets/example-full-stack-todo.png)
+*Figure 1: The full-stack Todo application rendered in a native window*
+
+</div>
+
+## Contents
 
 | File | Purpose |
 | --- | --- |
-| [counter.opu](counter.opu) | Canonical frontend program: int state, `add`, nested layout, interpolation |
-| [profile.opu](profile.opu) | Second golden: string state, `bool`, input binding, `set`, `toggle` |
-| [todo.opu](todo.opu) | Full-stack app: UI + `model` + `api` in one source file |
-| [todo.opuir.json](todo.opuir.json) | Golden full-stack IR for the Todo app |
-| [showcase.opu](showcase.opu) | Showcase: catalog components, a11y props, effects |
-| [gallery.opu](gallery.opu) | Gallery: one instance of each of the 100 distinct primitive kinds, grouped by family |
-| [test/cross-layer.mjs](test/cross-layer.mjs) | Runs every project's tests + cross-layer assertions |
+| [counter.opu](counter.opu) | Canonical frontend program: integer state, `add`, nested layout, interpolation |
+| [profile.opu](profile.opu) | String state, `bool`, input binding, `set` and `toggle` |
+| [todo.opu](todo.opu) | Full-stack application: UI, `model` and `api` in one source file |
+| [todo.opuir.json](todo.opuir.json) | Reference full-stack IR for the Todo application |
+| [showcase.opu](showcase.opu) | Catalog components, accessibility properties and visual effects |
+| [gallery.opu](gallery.opu) | One instance of each of the 100 distinct primitive kinds, grouped by family |
+| [calculator.opu](calculator.opu) | State-driven arithmetic with computed expressions and themed controls |
+| [photos.opu](photos.opu) | State-driven selection across a responsive image gallery |
+| [examples.json](examples.json) | Application registry consumed by the CLI |
+| [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
 
 The canonical frontend IR lives in
 [counter.opuir.json](https://github.com/opurom/opurom-spec/blob/main/counter.opuir.json); the
-compiler must lower `counter.opu` to a JSON deep-equal to it.
+compiler lowers `counter.opu` to a JSON representation equal to it.
+
+## Running the examples
+
+From the umbrella workspace root, the CLI lists every registered application and runs their
+registered tests in parallel:
 
 ```sh
-export PATH="$HOME/.cargo/bin:$PATH"
-cd opurom-examples
-node test/cross-layer.mjs
+node opurom-cli/bin/opurom.mjs examples
+node opurom-cli/bin/opurom.mjs test --examples
 ```
 
-This harness fails loudly (nonzero exit) if any project is missing, uncommitted, or its tests
-fail. It reports SKIP only for checks whose tool is genuinely absent, never for a failed
-assertion.
+Filter to one application or control the number of parallel jobs:
 
-Status: the frontend slice and the full-stack Todo chain are verified end to end. GPU backends,
-OS-native adapters, cloud deployment, a 100+ component library and a debugger are later rounds.
-See the [umbrella README](https://github.com/opurom/opurom) and
-[ARCHITECTURE.md](https://github.com/opurom/opurom-spec/blob/main/ARCHITECTURE.md).
+```sh
+node opurom-cli/bin/opurom.mjs test --examples --filter calculator --jobs 4
+node opurom-cli/bin/opurom.mjs test --examples --verbose
+```
+
+Each application registers three tests: `check` type-checks the source, `compile` lowers it to
+IR, and `render` produces a deterministic PPM frame. The `--verbose` flag prints the output of
+every test; the default prints one status line per test followed by a summary.
+
+To run the cross-project harness directly:
+
+```sh
+node opurom-examples/test/cross-layer.mjs
+```
+
+The harness re-verifies the compiler, renderer, kernel, platform adapters, service, data layer,
+toolchain and component catalog together, and exits nonzero if any assertion fails.
+
+## Application previews
+
+<div align="center">
+
+![OPUROM Calculator with themed controls](./assets/example-calculator.png)
+*Figure 2: Calculator — state-driven arithmetic with themed controls*
+
+![OPUROM Photo Wall with a selected gradient](./assets/example-photo-wall.png)
+*Figure 3: Photo Wall — state-driven selection across a gradient gallery*
+
+![OPUROM component gallery](./assets/example-component-gallery.png)
+*Figure 4: Component gallery — one exhibit per primitive family*
+
+</div>
+
+## Registry format
+
+`examples.json` follows a CMake-style registration model. Each application declares its name,
+source path, target emitters and an ordered list of tests. Commands use `{source}` and `{tmp}`
+placeholders plus tool aliases resolved by the CLI at runtime, so the same registry works on any
+host with the toolchain installed.
+
+```json
+{
+  "version": 1,
+  "apps": [
+    {
+      "name": "counter",
+      "source": "counter.opu",
+      "required": true,
+      "targets": ["web", "native"],
+      "tests": [
+        { "id": "counter.check", "cmd": ["opuromc", "check", "{source}"],
+          "description": "type-check the source with opuromc" }
+      ]
+    }
+  ]
+}
+```
+
+Adding an application means adding its source file and one registry entry; the CLI then includes
+it in `examples` and `test --examples` without further configuration.
+
+## Reference
+
+- [OPUROM organization](https://github.com/opurom) — framework overview and project index
+- [LANG_SPEC.md](https://github.com/opurom/opurom-spec/blob/main/LANG_SPEC.md) — language syntax
+- [IR_SCHEMA.md](https://github.com/opurom/opurom-spec/blob/main/IR_SCHEMA.md) — IR contract
+- [ARCHITECTURE.md](https://github.com/opurom/opurom-spec/blob/main/ARCHITECTURE.md) — layer boundaries

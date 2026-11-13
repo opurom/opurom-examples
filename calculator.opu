@@ -1,0 +1,134 @@
+// Calculator: positional digit entry and integer arithmetic in state and computed.
+// OPUROM actions are only set/add-literal/toggle; computed supplies +, - and *.
+// One int selector per pending op turns "applied" into one branch-free formula.
+// shortcut: division is one subtraction per "=" press; stop when remainder is below the divisor.
+component Digit(d: int) {
+  Button("{d}", p: 18, rounded: 10, shadow: 2, fontScale: 1.25, animate: spring) {
+    digit = d
+    cur = next
+    out = cur
+  }
+}
+
+component OpKey(sym: string, sa: int, ss: int, sm: int, sd: int, dm: bool, nm: bool) {
+  Button(sym, p: 18, rounded: 10, shadow: 3, bg: "#04509B", fontScale: 1.25, animate: spring) {
+    acc = applied
+    rest = acc
+    q = 0
+    cur = 0
+    digit = 0
+    out = acc
+    opLabel = sym
+    sNone = 0
+    sAdd = sa
+    sSub = ss
+    sMul = sm
+    sDiv = sd
+    divMode = dm
+    normalMode = nm
+  }
+}
+
+app Calculator {
+  theme { accent: "#097FEB", radius: 10 }
+
+  state cur = 0
+  state digit = 0
+  state acc = 0
+  state rest = 0
+  state q = 0
+  state out = 0
+  state res = 0
+  state sNone = 1
+  state sAdd = 0
+  state sSub = 0
+  state sMul = 0
+  state sDiv = 0
+  state divMode = false
+  state normalMode = true
+  state opLabel = ""
+
+  computed next = cur * 10 + digit
+  computed nextRest = rest - cur
+  computed applied = acc * sAdd + acc * sSub + cur * sNone + cur * sAdd - cur * sSub + acc * cur * sMul + q * sDiv
+
+  // Scroll keeps children at natural size and clips, so compact frames
+  // show a clean top slice instead of squeezing the whole layout.
+  Scroll(height: 600, bg: "#F7F8FA", border: "#F7F8FA", rounded: 10, animate: ease) {
+  Column(p: 28, gap: 30, width: 800) {
+    Text("OPUROM Calculator", size: 32)
+    Container(p: 30, rounded: 14, shadow: 3, gradient: "#097FEB,#043B70", bg: "#043B70", animate: ease) {
+      Text("{out}", size: 44, color: "#FFFFFF")
+      Text("Pending {opLabel}   |   Quotient {q}   |   Remainder {rest}", size: 14, color: "#D6E8FF")
+    }
+    if (divMode) {
+      Text("Divide: = subtracts once; stop when remainder < divisor", size: 12, color: "#097FEB")
+    }
+    Row(gap: 10) {
+      Digit(7)
+      Digit(8)
+      Digit(9)
+      OpKey("/", 0, 0, 0, 1, true, false)
+    }
+    Row(gap: 10) {
+      Digit(4)
+      Digit(5)
+      Digit(6)
+      OpKey("x", 0, 0, 1, 0, false, true)
+    }
+    Row(gap: 10) {
+      Digit(1)
+      Digit(2)
+      Digit(3)
+      OpKey("-", 0, 1, 0, 0, false, true)
+    }
+    Row(gap: 10) {
+      Button("C", p: 18, rounded: 10, shadow: 2, bg: "#04509B", fontScale: 1.25, animate: spring) {
+        cur = 0
+        digit = 0
+        acc = 0
+        rest = 0
+        q = 0
+        res = 0
+        out = 0
+        opLabel = ""
+        sNone = 1
+        sAdd = 0
+        sSub = 0
+        sMul = 0
+        sDiv = 0
+        divMode = false
+        normalMode = true
+      }
+      Digit(0)
+      if (divMode) {
+        Button("=", p: 18, rounded: 10, shadow: 3, bg: "#04509B", fontScale: 1.25, animate: spring) {
+          rest = nextRest
+          q += 1
+          out = q
+        }
+      }
+      if (normalMode) {
+        Button("=", p: 18, rounded: 10, shadow: 3, bg: "#04509B", fontScale: 1.25, animate: spring) {
+          acc = applied
+          res = acc
+          out = res
+          cur = 0
+          digit = 0
+          rest = 0
+          q = 0
+          opLabel = "="
+          sNone = 1
+          sAdd = 0
+          sSub = 0
+          sMul = 0
+          sDiv = 0
+          divMode = false
+        }
+      }
+      OpKey("+", 1, 0, 0, 0, false, true)
+    }
+    Spacer(height: 20)
+  }
+  }
+}
