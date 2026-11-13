@@ -175,7 +175,11 @@ try {
     const dir = join(tmp, 'service');
     ok(run(serverc, [P('opurom-examples', 'todo.opuir.json'), '-o', dir, '--dep-root', ROOT]), 'serverc');
     assert.ok(existsSync(join(dir, 'Cargo.toml')) && existsSync(join(dir, 'src', 'main.rs')));
-    ok(run('cargo', ['build', '--release', '--manifest-path', join(dir, 'Cargo.toml')]), 'build service');
+    // Prefer the local crate cache; only fall back to the registry when the
+    // cache is genuinely cold, so an offline host never fails the harness.
+    let built = run('cargo', ['build', '--release', '--offline', '--manifest-path', join(dir, 'Cargo.toml')]);
+    if (built.status !== 0) built = run('cargo', ['build', '--release', '--manifest-path', join(dir, 'Cargo.toml')]);
+    ok(built, 'build service');
   });
   const runtime = ensureBin('opurom-runtime-adapters', 'opurom-runtime-adapters');
   check('backend runtime conformance report is honest', () => {
