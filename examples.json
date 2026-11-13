@@ -403,6 +403,61 @@
           "description": "render the conditional subscription panel"
         }
       ]
+    },
+    {
+      "name": "typography",
+      "source": "typography.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "typography.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the typography source"
+        },
+        {
+          "id": "typography.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the typography source to IR"
+        },
+        {
+          "id": "typography.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "420",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the globally scaled typography frame"
+        },
+        {
+          "id": "typography.state",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "420",
+            "{tmp}/next.ppm",
+            "--state",
+            "count=3"
+          ],
+          "description": "render the scaled state interpolation"
+        }
+      ]
     }
   ]
 }

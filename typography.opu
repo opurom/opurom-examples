@@ -1,0 +1,18 @@
+// Global theme fontScale with a per-node override.
+app Typography {
+  state count = 0
+
+  theme { accent: "#097FEB", radius: 12, fontScale: 1.5 }
+
+  Column(p: 24, gap: 16, align: center) {
+    Text("Typography", size: 24)
+    Text("Global 1.5x scale", size: 14)
+    Text("Scaled: {count}", size: 18)
+
+    Container(width: 420, p: 20, rounded: 12, bg: "#F7F8FA") {
+      Text("Local 0.75x override", size: 18, fontScale: 0.75)
+    }
+
+    Button("Increment", rounded: 10, animate: spring) { count += 1 }
+  }
+}
