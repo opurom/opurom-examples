@@ -7,7 +7,6 @@ to IR and renders through the framework's own pipeline.
 <div align="center">
 
 ![OPUROM full-stack Todo application](./assets/example-full-stack-todo.png)
-*Figure 1: The full-stack Todo application rendered by the OPUROM renderer*
 
 </div>
 
@@ -65,13 +64,10 @@ toolchain and component catalog together, and exits nonzero if any assertion fai
 <div align="center">
 
 ![OPUROM Calculator with themed controls](./assets/example-calculator.png)
-*Figure 2: Calculator — state-driven arithmetic with themed controls*
 
 ![OPUROM Photo Wall with a selected gradient](./assets/example-photo-wall.png)
-*Figure 3: Photo Wall — state-driven selection across a gradient gallery*
 
 ![OPUROM component gallery](./assets/example-component-gallery.png)
-*Figure 4: Component gallery — one exhibit per primitive family*
 
 </div>
 

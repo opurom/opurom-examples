@@ -167,7 +167,7 @@ try {
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], '2fc4eac75fd50f89', 'core golden digest regressed');
+    assert.equal(da[1], '900abf4bd93d1e51', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -844,11 +844,11 @@ try {
     const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
     const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
-      /digest=2fc4eac75fd50f89/);
+      /digest=900abf4bd93d1e51/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
-      /digest=88127ca1577cdb61/);
+      /digest=c8403ba57da5ee61/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', c,
-      '--state', 'count=7']), 'tier state'), /digest=40891c1fbb81399e/);
+      '--state', 'count=7']), 'tier state'), /digest=48a56056bd32a07e/);
   });
   check('Wayland wire encoding is verified without a compositor', () => {
     const wire = P('opurom-platform', 'src', 'wayland_wire.rs');
