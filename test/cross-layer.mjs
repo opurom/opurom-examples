@@ -897,6 +897,18 @@ try {
     assert.match(out, /wayland/i, 'no Wayland wire tests registered');
   });
 
+  console.log('== responsive web build ==');
+  check('responsive web page and multi-file project are verified end to end', () => {
+    const r = run('node', [P('opurom-examples', 'test', 'responsive-web-build.test.mjs')]);
+    const out = `${r.stdout || ''}${r.stderr || ''}`;
+    // Surface the child verdict so a skip is visible in the umbrella report.
+    for (const line of out.split('\n')) {
+      if (/^(PASS|SKIP)\s/.test(line)) console.log(`      ${line}`);
+    }
+    assert.match(out, /^(PASS|SKIP)\s/m, 'no responsive web build verdict');
+    ok(r, 'responsive web build test');
+  });
+
 } finally {
   rmSync(tmp, { recursive: true, force: true });
 }
