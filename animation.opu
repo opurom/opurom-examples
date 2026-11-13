@@ -2,24 +2,24 @@
 app Animation {
   theme { accent: "#097FEB", radius: 14 }
 
-  Column(p: 24, gap: 20, align: center) {
-    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
-      Column(gap: 4, align: center) {
-        Text("Animation", size: 26, color: "#FFFFFF")
-        Text("Spring, ease and static share one fixed-timestep clock", size: 12, color: "#D6E8FF")
+  ScrollView(p: 16) {
+    Column(gap: 14, align: center) {
+      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+        Text("Animation", size: 22, color: "#FFFFFF")
+        Text("Spring, ease and static share one fixed-timestep clock", size: 11, color: "#D6E8FF")
       }
-    }
-    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
-              gradient: "#097FEB,#043B70", bg: "#043B70", animate: spring) {
-      Text("spring", size: 18, color: "#FFFFFF")
-    }
-    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
-              gradient: "#4FA8FF,#097FEB", bg: "#097FEB", animate: ease) {
-      Text("ease", size: 18, color: "#FFFFFF")
-    }
-    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
-              gradient: "#101828,#101828", bg: "#101828", animate: none) {
-      Text("static", size: 18, color: "#FFFFFF")
+      Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
+                gradient: "#097FEB,#043B70", bg: "#043B70", animate: spring) {
+        Text("spring", size: 18, color: "#FFFFFF")
+      }
+      Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
+                gradient: "#4FA8FF,#097FEB", bg: "#097FEB", animate: ease) {
+        Text("ease", size: 18, color: "#FFFFFF")
+      }
+      Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
+                gradient: "#101828,#101828", bg: "#101828", animate: none) {
+        Text("static", size: 18, color: "#FFFFFF")
+      }
     }
   }
 }
