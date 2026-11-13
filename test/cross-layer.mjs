@@ -672,6 +672,98 @@ try {
       '--', '--list']), 'db test list');
     assert.match(out, /caching_sha2|stmt_prepare/i, 'no caching_sha2 tests registered');
   });
+
+  console.log('== sample app gallery ==');
+  const gallerySrc = P('opurom-examples', 'gallery.opu');
+  const galleryIr = join(tmp, 'gallery.opuir.json');
+  const galleryCatalog = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
+  const catalogKinds = new Set(galleryCatalog.components.map(x => x[1]));
+  const familyOf = new Map(galleryCatalog.components.map(x => [x[1], x[2]]));
+  const walkGallery = n => {
+    const out = [n];
+    for (const c of n.children || []) out.push(...walkGallery(c));
+    return out;
+  };
+  const galleryItems = ir => walkGallery(ir.tree)
+    .filter(n => /^[a-z]+\/[A-Z]/.test(n.props?.label || ''));
+
+  check('showcase states the current catalog size in comment and UI text', () => {
+    const src = readFileSync(P('opurom-examples', 'showcase.opu'), 'utf8');
+    assert.match(src, /\/\/ All 216 named components lower onto 100 distinct primitive kinds/,
+      'stale source comment');
+    assert.match(src, /Paragraph\("One catalog, 216 named components, 100 distinct primitive kinds"/,
+      'stale UI text');
+    assert.ok(!/108 catalog|24 primitives|One catalog, 24/.test(src), 'stale catalog numbers remain');
+    assert.ok(!/\bR[0-9]+\b|\bRound [0-9]+\b/.test(src), 'internal codename in showcase');
+  });
+
+  check('gallery IR lowers with one instance of each of the 100 distinct primitive kinds', () => {
+    ok(run(compiler, ['compile', gallerySrc, '-o', galleryIr]), 'compile gallery');
+    const ir = JSON.parse(readFileSync(galleryIr, 'utf8'));
+    assert.equal(ir.ir, '0.1');
+    assert.equal(ir.app, 'Gallery');
+    assert.equal(catalogKinds.size, 100, 'catalog no longer has 100 distinct kinds');
+    const nodes = walkGallery(ir.tree);
+    assert.deepEqual([...new Set(nodes.map(n => n.kind))].sort(), [...catalogKinds].sort(),
+      'gallery primitive kinds differ from the catalog');
+    const items = galleryItems(ir);
+    assert.equal(items.length, 100, `expected 100 exhibits, found ${items.length}`);
+    assert.equal(new Set(items.map(n => n.props.label)).size, 100, 'duplicate exhibit label');
+    for (const n of items) {
+      const [family, kind] = n.props.label.split('/');
+      assert.equal(n.kind, kind, `label/kind mismatch on ${n.props.label}`);
+      assert.equal(familyOf.get(kind), family, `wrong family group for ${kind}`);
+    }
+  });
+
+  check('gallery render digest is stable across two runs', () => {
+    const a = join(tmp, 'gallery-a.ppm'), b = join(tmp, 'gallery-b.ppm');
+    const da = ok(run(renderer, [galleryIr, '800', '600', a]), 'render gallery a')
+      .match(/digest=([0-9a-f]+)/i);
+    const db = ok(run(renderer, [galleryIr, '800', '600', b]), 'render gallery b')
+      .match(/digest=([0-9a-f]+)/i);
+    assert.ok(da && db, 'no digest in gallery render output');
+    assert.equal(da[1], db[1], 'gallery digest differs between identical renders');
+    assert.ok(readFileSync(a).equals(readFileSync(b)), 'gallery pixels differ between identical renders');
+  });
+
+  check('gallery a11y tree assigns a role and bounds to every exhibit', () => {
+    const a11y = join(tmp, 'gallery-a11y.json');
+    ok(run(renderer, [galleryIr, '800', '600', join(tmp, 'gallery-a11y.ppm'),
+      '--a11y', a11y]), 'render gallery a11y');
+    const tree = JSON.parse(readFileSync(a11y, 'utf8'));
+    const byId = new Map(tree.map(n => [n.id, n]));
+    const items = galleryItems(JSON.parse(readFileSync(galleryIr, 'utf8')));
+    assert.equal(items.length, 100, 'expected 100 labelled exhibits');
+    for (const n of items) {
+      const a = byId.get(n.id);
+      assert.ok(a, `no a11y node for ${n.props.label}`);
+      assert.equal(a.label, n.props.label);
+      assert.equal(typeof a.role, 'string');
+      assert.equal(a.bounds.length, 4);
+      assert.equal(typeof a.hidden, 'boolean');
+    }
+    assert.ok(new Set(items.map(n => byId.get(n.id).role)).size >= 4,
+      'a11y roles are not kind-specific');
+  });
+
+  check('gallery lowers to all nine emitters with valid artifacts', () => {
+    const targets = ok(run(compiler, ['targets']), 'opuromc targets').trim().split('\n')
+      .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
+    assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
+    const cli = P('opurom-cli', 'bin', 'opurom.mjs');
+    for (const { name, files } of targets) {
+      const dir = join(tmp, `gallery-${name}`);
+      ok(run('node', [cli, 'build', '--src', gallerySrc, '--target', name, '--out', dir]),
+        `build gallery ${name}`);
+      for (const f of files) {
+        const path = join(dir, f);
+        assert.ok(existsSync(path) && statSync(path).size > 0, `${name}: missing or empty ${f}`);
+        if (f.endsWith('.js')) ok(run('node', ['--check', path]), `${name}: ${f} syntax`);
+        if (f.endsWith('.json')) JSON.parse(readFileSync(path, 'utf8'));
+      }
+    }
+  });
 } finally {
   rmSync(tmp, { recursive: true, force: true });
 }
