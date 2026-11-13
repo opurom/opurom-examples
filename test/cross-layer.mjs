@@ -33,6 +33,14 @@ function ok(r, label) {
   assert.equal(r.status, 0, `${label} exited ${r.status}: ${(r.stderr || r.stdout || '').trim().slice(0, 400)}`);
   return r.stdout || '';
 }
+function assertArtifacts(dir, files, label) {
+  for (const f of files) {
+    const p = join(dir, f);
+    assert.ok(existsSync(p) && statSync(p).size > 0, `${label}: missing or empty ${f}`);
+    if (f.endsWith('.js')) ok(run('node', ['--check', p]), `${label}: ${f} syntax`);
+    if (f.endsWith('.json')) JSON.parse(readFileSync(p, 'utf8'));
+  }
+}
 function bin(repo, sub) {
   for (const profile of ['release', 'debug']) {
     const p = P(repo, 'target', profile, sub);
@@ -823,6 +831,37 @@ try {
         `${name}: missing or empty ${markupPath}`);
     }
   });
+
+  console.log('== registered apps across the emitter matrix ==');
+  const emitterTargets = () => ok(run(compiler, ['targets']), 'opuromc targets').trim().split('\n')
+    .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
+  const lowerRegistry = (registry, targets) => {
+    for (const app of registry.apps) {
+      const ir = join(tmp, `matrix-${app.name}.opuir.json`);
+      ok(run(compiler, ['compile', P('opurom-examples', app.source), '-o', ir]), `compile ${app.name}`);
+      for (const { name, files } of targets) {
+        const dir = join(tmp, `matrix-${app.name}-${name}`);
+        ok(run(compiler, ['target', ir, '--target', name, '-o', dir]), `lower ${app.name} to ${name}`);
+        assertArtifacts(dir, files, `${app.name}/${name}`);
+      }
+    }
+  };
+  check('every registered app compiles and lowers to all nine emitters', () => {
+    const registry = JSON.parse(readFileSync(P('opurom-examples', 'examples.json'), 'utf8'));
+    const targets = emitterTargets();
+    assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
+    lowerRegistry(registry, targets);
+  });
+  check('emitter matrix rejects broken registry entries and artifacts', () => {
+    // Synthetic inputs keep the negative case independent of the sibling repos.
+    const ghost = { apps: [{ name: 'ghost', source: 'ghost.opu' }] };
+    assert.throws(() => lowerRegistry(ghost, emitterTargets()), /compile ghost/);
+    const dir = join(tmp, 'matrix-negative');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'app.js'), '// present\n');
+    assert.throws(() => assertArtifacts(dir, ['app.js', 'ir.json'], 'negative'), /missing or empty ir\.json/);
+  });
+
   console.log('== transport and language additions ==');
   check('HTTP/3 over QUIC is covered by real server tests', () => {
     const src = P('opurom-server', 'src', 'http3.rs');

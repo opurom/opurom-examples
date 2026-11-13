@@ -61,6 +61,12 @@ node opurom-examples/test/cross-layer.mjs
 The harness re-verifies the compiler, renderer, kernel, platform adapters, service, data layer,
 toolchain and component catalog together, and exits nonzero if any assertion fails.
 
+The harness compiles every registered application, lowers each IR to every emitter reported by the
+compiler, and checks that each emitted artifact is present and non-empty; emitted JavaScript is
+syntax-checked and emitted JSON is parsed. A companion check passes a registry entry whose source
+file does not exist and an incomplete artifact list to the same code path, asserting that both are
+rejected.
+
 ## Application previews
 
 <div align="center">
