@@ -142,7 +142,9 @@ if (cliError) {
       if (!built) continue;
       const html = readFileSync(join(out, 'index.html'), 'utf8');
       if (!hasDomUiNodes(html)) {
-        skip(`${target}: responsive DOM page`, `${target} emits a fixed canvas page with DOM UI nodes`);
+        const domTarget = webDomTarget ? 'web-dom target' : 'responsive DOM lowering';
+        skip(`${target}: responsive DOM page`,
+          `${target} still lowers to a fixed canvas page with no DOM UI nodes; not wired to the ${domTarget}`);
         continue;
       }
       const css = cssText(out, html);
@@ -197,7 +199,11 @@ if (cliError) {
       assert.match(ir, /moduleLabel/, 'imported state missing from emitted IR');
     });
     verify('multi-file project: emitted page carries imported state content', () => {
-      assert.ok(pageBundle(out).includes(MODULE_MARKER), 'imported module state content missing from the page');
+      const bundle = pageBundle(out);
+      assert.ok(bundle.includes(MODULE_MARKER), 'imported module state content missing from the page');
+      // The marker must reach the page as live state, not as dead source text.
+      assert.match(bundle, new RegExp(`"moduleLabel"\\s*:\\s*"${MODULE_MARKER}"`),
+        'imported state is not bound into the emitted state map');
     });
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
