@@ -348,6 +348,61 @@
           "description": "render the entrance frame at tick zero"
         }
       ]
+    },
+    {
+      "name": "form",
+      "source": "form.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "form.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the form source"
+        },
+        {
+          "id": "form.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the form source to IR"
+        },
+        {
+          "id": "form.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "560",
+            "480",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the form to a PPM frame"
+        },
+        {
+          "id": "form.state",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "560",
+            "480",
+            "{tmp}/on.ppm",
+            "--state",
+            "subscribed=true"
+          ],
+          "description": "render the conditional subscription panel"
+        }
+      ]
     }
   ]
 }

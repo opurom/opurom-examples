@@ -23,6 +23,7 @@ to IR and renders through the framework's own pipeline.
 | [calculator.opu](calculator.opu) | State-driven arithmetic with computed expressions and themed controls |
 | [photos.opu](photos.opu) | State-driven selection across a responsive image gallery |
 | [animation.opu](animation.opu) | Deterministic entry animation with spring and easing curves |
+| [form.opu](form.opu) | Input binding, computed values and conditional rendering |
 | [examples.json](examples.json) | Application registry consumed by the CLI |
 | [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
 

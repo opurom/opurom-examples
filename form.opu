@@ -1,0 +1,31 @@
+// Input binding, computed values and conditional rendering in one program.
+app Form {
+  state name = "Ada"
+  state age = 36
+  state subscribed = false
+
+  theme { accent: "#097FEB", radius: 12 }
+
+  Column(p: 24, gap: 14, align: center) {
+    Text("Account setup", size: 28)
+    Text("Bound inputs update state on every edit", size: 14)
+
+    Column(width: 420, p: 20, gap: 10, rounded: 12, bg: "#F7F8FA") {
+      Input(placeholder: "Display name", bind: name)
+      Slider(min: 0, max: 100, bind: age)
+      Text("Name: {name}", size: 18)
+      Text("Years: {age}", size: 18)
+    }
+
+    Button("Toggle subscription", rounded: 10, animate: spring) {
+      subscribed.toggle()
+    }
+
+    if (subscribed) {
+      Container(width: 420, p: 18, rounded: 12,
+                gradient: "#097FEB,#043B70", bg: "#097FEB", animate: ease) {
+        Text("Subscribed as {name}", size: 18, color: "#FFFFFF")
+      }
+    }
+  }
+}
