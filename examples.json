@@ -677,6 +677,48 @@
           "description": "render the sidebar plus content wide layout"
         }
       ]
+    },
+    {
+      "name": "icons",
+      "source": "icons.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "icons.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the icon gallery"
+        },
+        {
+          "id": "icons.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the icon gallery to IR in a temp dir"
+        },
+        {
+          "id": "icons.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "800",
+            "600",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the icon grid at 800x600"
+        }
+      ]
     }
   ]
 }

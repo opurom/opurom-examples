@@ -1,0 +1,132 @@
+// Icon system showcase: the canonical named icons rendered in a labelled grid,
+// plus IconButton examples that drive state. Every value is a literal, so the
+// frame is deterministic (no clock, no randomness).
+
+component IconTile(name: string, label: string) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+    Column(gap: 8, bg: "#FFFFFF", align: center) {
+      Container(width: 28, height: 28, rounded: 8, bg: "#EEF3FC") {
+        Icon(name: "{name}")
+      }
+      Text("{label}", size: 11, color: "#4B5563")
+    }
+  }
+}
+
+app Icons {
+  state count = 0
+  state selected = true
+
+  // One source for every width: the outer Row lays the gallery beside a control
+  // rail on a wide viewport and stacks them on a compact one.
+  Column(p: 0, gap: 0) {
+    Container(p: 22, shadow: 4, gradient: "#1D4ED8,#0B1F4B",
+              particles: "count=36,seed=11,radius=2,alpha=720,color=#DBE6FF") {
+      Column(gap: 4, bg: "#1D4ED8") {
+        Text("Icon System", size: 26, color: "#FFFFFF")
+        Text("31 canonical names on 100 drawn primitives", size: 12, color: "#DBE6FF")
+      }
+    }
+
+    Row(gap: 16, p: 16) {
+      // Control rail: icon buttons that change state, only useful beside the grid.
+      Column(width: 240, gap: 12, p: 14) {
+        Card(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+          Column(gap: 10, bg: "#FFFFFF") {
+            Text("Actions", size: 16, color: "#111827")
+            Row(gap: 8, align: center) {
+              IconButton(label: "plus", bg: "#1D4ED8", rounded: 10) { count += 1 }
+              IconButton(label: "minus", bg: "#1D4ED8", rounded: 10) { count -= 1 }
+              IconButton(label: "refresh", bg: "#0F766E", rounded: 10) { count = 0 }
+            }
+            Text("count {count}", size: 13, color: "#4B5563")
+          }
+        }
+        Card(p: 16, rounded: 14, shadow: 2, bg: "#EEF3FC") {
+          Column(gap: 8, bg: "#EEF3FC") {
+            Text("Selection", size: 13, color: "#4B5563")
+            Row(gap: 8, align: center) {
+              IconButton(label: "check", bg: "#0F766E", rounded: 10) { selected = true }
+              IconButton(label: "close", bg: "#B91C1C", rounded: 10) { selected = false }
+            }
+            if (selected) {
+              Text("marked done", size: 12, color: "#0F766E")
+            } else {
+              Text("marked off", size: 12, color: "#B91C1C")
+            }
+          }
+        }
+      }
+
+      // Gallery: the canonical icons in a reflowing labelled grid.
+      Column(width: 1000, gap: 14) {
+        Text("Navigation", size: 16, color: "#111827")
+        Grid(columns: 6) {
+          IconTile("home", "home")
+          IconTile("settings", "setup")
+          IconTile("star", "star")
+          IconTile("search", "search")
+          IconTile("plus", "plus")
+          IconTile("minus", "minus")
+        }
+
+        Text("State and media", size: 16, color: "#111827")
+        Grid(columns: 6) {
+          IconTile("check", "check")
+          IconTile("close", "close")
+          IconTile("refresh", "sync")
+          IconTile("lock", "lock")
+          IconTile("user", "user")
+          IconTile("bell", "bell")
+        }
+
+        Text("Signals", size: 16, color: "#111827")
+        Grid(columns: 6) {
+          IconTile("heart", "heart")
+          IconTile("info", "info")
+          IconTile("warning", "alert")
+          IconTile("play", "play")
+          IconTile("pause", "pause")
+          IconTile("edit", "edit")
+        }
+
+        Text("Files and places", size: 16, color: "#111827")
+        Grid(columns: 6) {
+          IconTile("delete", "delete")
+          IconTile("eye", "eye")
+          IconTile("calendar", "date")
+          IconTile("location", "place")
+          IconTile("folder", "folder")
+          IconTile("mail", "mail")
+        }
+
+        Text("Direction", size: 16, color: "#111827")
+        Grid(columns: 6) {
+          IconTile("arrow_back", "back")
+          IconTile("arrow_forward", "forward")
+          IconTile("chevron_right", "right")
+          IconTile("chevron_down", "down")
+          IconTile("download", "save")
+          IconTile("upload", "upload")
+        }
+
+        Grid(columns: 1) {
+          IconTile("chat", "chat")
+        }
+
+        Container(p: 16, rounded: 16, shadow: 3, gradient: "#1D4ED8,#0B1F4B",
+                  particles: "count=20,seed=3,radius=2,alpha=880,color=#FFFFFF") {
+          Row(gap: 10, align: center, bg: "#1D4ED8") {
+            Container(width: 26, height: 26, rounded: 8, bg: "#FFFFFF") {
+              Icon(name: "star", color: "#1D4ED8")
+            }
+            Column(gap: 2, bg: "#1D4ED8") {
+              Text("Every icon is a named primitive", size: 14, color: "#FFFFFF")
+              Text("count {count} / {selected}", size: 11, color: "#DBE6FF")
+            }
+          }
+        }
+      }
+    }
+  }
+}

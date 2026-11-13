@@ -66,7 +66,12 @@ app Dashboard {
       Column(width: 240, gap: 12, p: 14) {
         Card(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#D7E3E0") {
           Column(gap: 10, bg: "#FFFFFF") {
-            Text("Filters", size: 16, color: "#0B2E2A")
+            Row(gap: 8, align: center) {
+              Container(width: 22, height: 22, rounded: 6, bg: "#EAF6F4") {
+                Icon(name: "settings", color: "#0F766E")
+              }
+              Text("Filters", size: 16, color: "#0B2E2A")
+            }
             Input(bind: window, placeholder: "time window")
             Slider(bind: load, min: 0, max: 100)
             Text("load {load}%", size: 12, color: "#4B6B67")
@@ -96,16 +101,27 @@ app Dashboard {
 
         Card(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#D7E3E0") {
           Column(gap: 12, bg: "#FFFFFF") {
-            SectionTitle("Service status", "{liveFeed}")
+            Row(gap: 8, align: center) {
+              Container(width: 22, height: 22, rounded: 6, bg: "#EAF6F4") {
+                Icon(name: "info", color: "#0F766E")
+              }
+              SectionTitle("Service status", "{liveFeed}")
+            }
             Row(gap: 12, align: center) {
               Progress(value: 64)
               Text("{load}% capacity - {incidents} incidents", size: 12, color: "#4B6B67")
             }
             Divider()
             Row(gap: 10, align: center) {
-              Badge(label: "{openTasks} open")
+              Row(gap: 4, align: center) {
+                Icon(name: "check", color: "#0F766E")
+                Badge(label: "{openTasks} open")
+              }
               Badge(label: "{doneTasks} done")
-              Badge(label: "{errorRate}% errors")
+              Row(gap: 4, align: center) {
+                Icon(name: "warning", color: "#B45309")
+                Badge(label: "{errorRate}% errors")
+              }
             }
           }
         }
@@ -117,7 +133,10 @@ app Dashboard {
 
         Card(p: 18, rounded: 16, shadow: 3, gradient: "#0F766E,#053D38",
               particles: "count=24,seed=5,radius=2,alpha=880,color=#FFFFFF") {
-          Row(gap: 12, align: center) {
+          Row(gap: 12, align: center, bg: "#0F766E") {
+            Container(width: 26, height: 26, rounded: 8, bg: "#053D38") {
+              Icon(name: "upload", color: "#FFFFFF")
+            }
             Column(gap: 4, bg: "#0F766E") {
               Text("Run a deploy", size: 16, color: "#FFFFFF")
               Text("{refreshed} cycles elapsed", size: 11, color: "#CFF3EE")

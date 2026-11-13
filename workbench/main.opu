@@ -135,8 +135,13 @@ app Workbench {
           }
         }
         Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
-          Column(gap: 6) {
-            Text("Selected view", size: 12, color: "#5A6B8C")
+          Column(gap: 6, bg: "#FFFFFF") {
+            Row(gap: 8, align: center, bg: "#FFFFFF") {
+              Container(width: 20, height: 20, rounded: 6, bg: "#EEF3FC") {
+                Icon(name: "eye", color: "#2A5BD7")
+              }
+              Text("Selected view", size: 12, color: "#5A6B8C")
+            }
             Text("{activeView}", size: 18, color: "#101828")
             Text("Focus: {focus}", size: 12, color: "#5A6B8C")
           }
