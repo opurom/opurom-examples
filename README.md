@@ -72,19 +72,14 @@ rejected.
 <div align="center">
 
 ![OPUROM Calculator with themed controls](./assets/example-calculator.png)
-*Figure 1: Calculator — state-driven arithmetic with themed controls*
 
 ![OPUROM Photo Wall with a selected gradient](./assets/example-photo-wall.png)
-*Figure 2: Photo Wall — state-driven selection across a gradient gallery*
 
 ![OPUROM component gallery](./assets/example-component-gallery.png)
-*Figure 3: Component gallery — one exhibit per primitive family*
 
 ![OPUROM Form with input binding](./assets/example-form.png)
-*Figure 4: Form — input binding and computed values*
 
 ![OPUROM Form with the subscription panel visible](./assets/example-form-subscribed.png)
-*Figure 5: Form — conditional rendering after the subscription toggle*
 
 </div>
 
