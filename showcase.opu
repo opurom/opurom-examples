@@ -1,5 +1,5 @@
-// R3 showcase: one source file uses catalog components, a11y props and effects.
-// All 108 catalog names lower onto the 24 R2 primitives at compile time.
+// Showcase: one source file uses catalog components, a11y props and effects.
+// All 216 catalog names lower onto 100 distinct primitive kinds at compile time.
 app Showcase {
   state count = 0
   state dark = false
@@ -8,7 +8,7 @@ app Showcase {
 
   ScrollView(height: 480, p: 16) {
     Heading("OPUROM Components", size: 26)
-    Paragraph("One catalog, 24 primitives", size: 14)
+    Paragraph("One catalog, 216 components, 100 primitives", size: 14)
     DividerSpace()
     CardGrid(columns: 2) {
       Tile(p: 12, radius: 8, shadow: 2) {

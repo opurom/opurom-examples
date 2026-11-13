@@ -107,7 +107,7 @@ console.log('== cross-layer IR and full-stack contract ==');
 const tmp = mkdtempSync(join(tmpdir(), 'opurom-cross-'));
 try {
   const compiler = ensureBin('opurom-lang', 'opuromc');
-  check('counter.opu still lowers to the R1 golden IR', () => {
+  check('counter.opu still lowers to the core golden IR', () => {
     const out = join(tmp, 'counter.opuir.json');
     ok(run(compiler, ['compile', P('opurom-spec', 'counter.opu'), '-o', out]), 'compile counter');
     assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-spec', 'counter.opuir.json'), 'utf8')));
@@ -137,14 +137,14 @@ try {
     assert.ok(actions.some(a => a.op === 'set' && a.target === 'name' && a.value === undefined), 'missing input binding');
   });
   const renderer = ensureBin('opurom-render', 'opurom-render');
-  check('renderer digest is stable and unchanged from R1', () => {
+  check('renderer digest is stable and unchanged from the core release', () => {
     const golden = P('opurom-spec', 'counter.opuir.json');
     const a = ok(run(renderer, [golden, '320', '240', join(tmp, 'a.ppm')]), 'render a');
     const b = ok(run(renderer, [golden, '320', '240', join(tmp, 'b.ppm')]), 'render b');
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], 'c87bf023a6c01f9d', 'R1 golden digest regressed');
+    assert.equal(da[1], 'c87bf023a6c01f9d', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -189,8 +189,8 @@ try {
     assert.match(out, /planned/i, 'no honest Planned status');
   });
 
-  console.log('== R3 ecosystem contracts ==');
-  check('component catalog has >=100 unique names mapped onto 24 primitives', () => {
+  console.log('== component catalog and ecosystem contracts ==');
+  check('component catalog has >=100 unique names mapped onto distinct primitives', () => {
     const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
     assert.ok(c.count >= 100);
     assert.equal(c.components.length, c.count);
@@ -266,7 +266,7 @@ try {
     assert.match(out, /\d/, 'no measured numbers');
   });
 
-  console.log('== R4 language and packaging contracts ==');
+  console.log('== language and packaging contracts ==');
   check('component catalog stays consistent with the compiler', () => {
     const out = ok(run(compiler, ['components']), 'opuromc components');
     const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
@@ -325,7 +325,7 @@ try {
     assert.match(out, /pass|ok|verified/i, 'verify did not report success');
   });
 
-  console.log('== R5 hardware and protocol contracts ==');
+  console.log('== hardware and protocol contracts ==');
   const gpu = bin('opurom-gpu', 'opurom-gpu') ||
     (existsSync(P('opurom-gpu', 'Cargo.toml')) ? ensureBin('opurom-gpu', 'opurom-gpu') : null);
   check('Metal GPU readback equals the CPU reference', () => {
@@ -351,10 +351,10 @@ try {
     assert.equal(a.match(/digest=([0-9a-f]+)/i)?.[1], b.match(/digest=([0-9a-f]+)/i)?.[1]);
   });
   check('computed/else/list-state lower into one IR', () => {
-    const src = join(tmp, 'r5.opu');
-    const out = join(tmp, 'r5.opuir.json');
+    const src = join(tmp, 'language.opu');
+    const out = join(tmp, 'language.opuir.json');
     writeFileSync(src, [
-      'app R5 {',
+      'app LanguageDemo {',
       '  state count = 2',
       '  state dark = false',
       '  state items = ["a","b"]',
@@ -365,7 +365,7 @@ try {
       '  }',
       '}',
     ].join('\n') + '\n');
-    ok(run(compiler, ['compile', src, '-o', out]), 'compile r5');
+    ok(run(compiler, ['compile', src, '-o', out]), 'compile language demo');
     const ir = JSON.parse(readFileSync(out, 'utf8'));
     assert.equal(ir.computed?.[0]?.name, 'doubled', 'computed missing');
     assert.equal(ir.state.find(s => s.name === 'items')?.type, 'list', 'list state missing');
@@ -401,7 +401,7 @@ try {
     }
   });
 
-  console.log('== R6 platform delivery contracts ==');
+  console.log('== platform delivery contracts ==');
   check('GPU display-list PPM equals the software renderer PPM', () => {
     const cmds = join(tmp, 'commands.json');
     const cpu = join(tmp, 'cpu.ppm');
@@ -436,7 +436,7 @@ try {
     const src = join(tmp, 'component.opu');
     const out = join(tmp, 'component.opuir.json');
     writeFileSync(src, [
-      'app R6 {',
+      'app ComponentDemo {',
       '  component Card(title) { Text("{title}") }',
       '  Column { Card("Hi") }',
       '}',
@@ -469,16 +469,16 @@ try {
     assert.match(out, /PASS|verified/i, 'signed verification did not pass');
   });
 
-  console.log('== R7 native network contracts ==');
+  console.log('== native network contracts ==');
   check('server TLS, WebSocket and keep-alive are covered by real tests', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
       '--', '--list']), 'server test list');
-    assert.match(out, /tls_handshake|websocket|keepalive/i, 'R7 network tests not registered');
+    assert.match(out, /tls_handshake|websocket|keepalive/i, 'network tests not registered');
   });
   check('PostgreSQL TLS client and transactional server are covered', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
       '--', '--list']), 'db test list');
-    assert.match(out, /pgserver|tls/i, 'R7 database tests not registered');
+    assert.match(out, /pgserver|tls/i, 'database tests not registered');
   });
   check('live AppKit window pixels match the software renderer', () => {
     const out = ok(run(platform, ['--verify-window']), 'window verify');
@@ -508,7 +508,7 @@ try {
     assert.match(out, /byte-equal|n\/a/i, 'no byte-equality verdict');
   });
 
-  console.log('== R8 visual and platform breadth contracts ==');
+  console.log('== visual and platform breadth contracts ==');
   check('advanced visual effects are deterministic', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-render', 'Cargo.toml'),
       '--', '--list']), 'render test list');
@@ -560,13 +560,13 @@ try {
     }
   });
 
-  console.log('== R9 production breadth contracts ==');
+  console.log('== production breadth contracts ==');
   check('GPU effect kernels produce a byte-identical PPM', () => {
     const fixture = P('opurom-render', 'tests', 'fixtures', 'r9_effect.opuir.json');
     if (!existsSync(fixture)) return; // not landed yet: skip honestly
-    const cmds = join(tmp, 'r9-commands.json');
-    const cpu = join(tmp, 'r9-cpu.ppm');
-    const gpuOut = join(tmp, 'r9-gpu.ppm');
+    const cmds = join(tmp, 'effect-commands.json');
+    const cpu = join(tmp, 'effect-cpu.ppm');
+    const gpuOut = join(tmp, 'effect-gpu.ppm');
     ok(run(renderer, [fixture, '96', '64', cpu, '--commands', cmds]), 'render effect commands');
     const gpuBin = bin('opurom-gpu', 'opurom-gpu') || ensureBin('opurom-gpu', 'opurom-gpu');
     ok(run(gpuBin, ['raster', cmds, gpuOut]), 'gpu effect raster');
@@ -622,7 +622,7 @@ try {
     assert.match(out, /pass/i, 'package manager suite did not run');
   });
 
-  console.log('== R10 component and platform contracts ==');
+  console.log('== component library and platform contracts ==');
   check('catalog exposes 100+ distinct drawn primitives', () => {
     const c = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
     assert.ok(c.primitives >= 100, `only ${c.primitives} distinct primitives`);
@@ -633,18 +633,18 @@ try {
   });
   check('GPU presentation verifies on-screen pixels', () => {
     const out = ok(run(platform, ['--verify-gpu-presentation',
-      '--out', join(tmp, 'r10-gpu.png')]), 'gpu presentation');
+      '--out', join(tmp, 'gpu-presentation.png')]), 'gpu presentation');
     assert.match(out, /PASS|SKIP/i, 'no GPU presentation verdict');
     if (/PASS/.test(out)) assert.match(out, /mismatch/i, 'no pixel comparison result');
   });
   check('tree shaking and source maps produce valid artifacts', () => {
-    const dir = join(tmp, 'r10-build');
+    const dir = join(tmp, 'shaken-build');
     ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'build',
       '--src', P('opurom-examples', 'counter.opu'), '--target', 'web',
-      '--out', dir, '--tree-shake', '--sourcemap', '--minify']), 'r10 build');
+      '--out', dir, '--tree-shake', '--sourcemap', '--minify']), 'shaken build');
     const app = join(dir, 'app.js');
     assert.ok(existsSync(app), 'app.js missing');
-    ok(run('node', ['--check', app]), 'r10 app.js syntax');
+    ok(run('node', ['--check', app]), 'shaken app.js syntax');
     const map = join(dir, 'app.js.map');
     if (existsSync(map)) {
       const json = JSON.parse(readFileSync(map, 'utf8'));
