@@ -59,16 +59,12 @@ app Calculator {
   Scroll(height: 640, bg: "#EDF2FA", border: "#EDF2FA", rounded: 14, animate: ease) {
   Column(p: 28, gap: 28, width: 800) {
     Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
-      Column(gap: 4) {
-        Text("OPUROM Calculator", size: 24, color: "#FFFFFF")
-        Text("Integer arithmetic with computed state", size: 12, color: "#D6E8FF")
-      }
+      Text("OPUROM Calculator", size: 24, color: "#FFFFFF")
+      Text("Integer arithmetic with computed state", size: 12, color: "#D6E8FF")
     }
     Container(p: 30, rounded: 18, shadow: 3, gradient: "#043B70,#097FEB", bg: "#043B70", animate: ease) {
-      Column(gap: 6) {
-        Text("{out}", size: 44, color: "#FFFFFF")
-        Text("Pending {opLabel}   |   Quotient {q}   |   Remainder {rest}", size: 14, color: "#D6E8FF")
-      }
+      Text("{out}", size: 44, color: "#FFFFFF")
+      Text("Pending {opLabel}   |   Quotient {q}   |   Remainder {rest}", size: 14, color: "#D6E8FF")
     }
     if (divMode) {
       Text("Divide: = subtracts once; stop when remainder < divisor", size: 12, color: "#097FEB")
