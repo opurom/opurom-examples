@@ -749,6 +749,11 @@ try {
       'a11y roles are not kind-specific');
   });
 
+  const markupExt = {
+    wechat: 'pages/index/index.wxml', alipay: 'pages/index/index.axml',
+    qq: 'pages/index/index.qml', douyin: 'pages/index/index.ttml',
+    baidu: 'pages/index/index.swan', kuaishou: 'pages/index/index.ksml',
+  };
   check('gallery lowers to all nine emitters with valid artifacts', () => {
     const targets = ok(run(compiler, ['targets']), 'opuromc targets').trim().split('\n')
       .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
@@ -758,10 +763,6 @@ try {
     const ids = [];
     const collectIds = n => { ids.push(n.id); for (const c of n.children || []) collectIds(c); };
     collectIds(ir.tree);
-    const markupExt = {
-      wechat: 'index.wxml', alipay: 'index.axml', qq: 'index.qml',
-      douyin: 'index.ttml', baidu: 'index.swan', kuaishou: 'index.ksml',
-    };
     for (const { name, files } of targets) {
       const dir = join(tmp, `gallery-${name}`);
       ok(run('node', [cli, 'build', '--src', gallerySrc, '--target', name, '--out', dir]),
@@ -781,6 +782,24 @@ try {
         assert.ok(!markup.includes('__stateKeys'),
           `${name}: internal state names leak into the rendered page`);
       }
+    }
+  });
+  check('mini packages emit a root app entry and resolved page files', () => {
+    for (const [name, markupPath] of Object.entries(markupExt)) {
+      const dir = join(tmp, `gallery-${name}`);
+      const app = join(dir, 'app.js');
+      assert.ok(existsSync(app) && statSync(app).size > 0,
+        `${name}: missing or empty root app.js`);
+      assert.ok(readFileSync(app, 'utf8').includes('App('),
+        `${name}: root app.js does not call App(`);
+      const manifest = JSON.parse(readFileSync(join(dir, 'app.json'), 'utf8'));
+      const entry = Array.isArray(manifest.pages) ? manifest.pages[0] : null;
+      assert.equal(entry, 'pages/index/index', `${name}: unexpected first app.json page`);
+      const page = join(dir, `${entry}.js`), markup = join(dir, markupPath);
+      assert.ok(existsSync(page) && statSync(page).size > 0,
+        `${name}: missing or empty ${entry}.js`);
+      assert.ok(existsSync(markup) && statSync(markup).size > 0,
+        `${name}: missing or empty ${markupPath}`);
     }
   });
   console.log('== transport and language additions ==');
