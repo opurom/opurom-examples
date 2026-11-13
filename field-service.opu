@@ -1,0 +1,69 @@
+// Full-stack field-service board: UI, data model and HTTP API in one source file.
+// The same IR adapts to phone and tablet widths: the header Row collapses to a
+// column on compact viewports and the task Grid reflows its fluid columns.
+app FieldService {
+  model Task {
+    id: int primary
+    title: string
+    done: bool = false
+  }
+
+  api "/tasks" {
+    list Task
+    create Task
+  }
+
+  api "/tasks/:id" {
+    get Task
+    update Task
+    delete Task
+  }
+
+  state open = 3
+  state crew = "Rivera"
+  state dark = false
+
+  computed remaining = open * 2
+
+  theme { accent: "#097FEB", radius: 12, fontScale: 1.0 }
+
+  Column(p: 20, gap: 14) {
+    Row(gap: 12, align: center) {
+      Avatar(label: "R")
+      Column(gap: 2) {
+        Text("Field Service", size: 26)
+        Text("Crew {crew} - open cases: {open}", size: 14)
+      }
+      Spacer(width: 12)
+      Badge(label: "{remaining} due")
+      Switch(bind: dark)
+    }
+
+    Progress(value: 3)
+
+    Grid(columns: 2) {
+      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
+        Text("triage", size: 16)
+      }
+      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
+        Text("dispatch", size: 16)
+      }
+      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
+        Text("close", size: 16)
+      }
+      Card(p: 14, rounded: 12, bg: "#F7F8FA") {
+        Text("review", size: 16)
+      }
+    }
+
+    Button("Dispatch crew", rounded: 10, animate: spring) {
+      open += 1
+    }
+
+    if (dark) {
+      Container(p: 14, rounded: 12, gradient: "#097FEB,#043B70", animate: ease) {
+        Text("Night shift active for {crew}", size: 16, color: "#FFFFFF")
+      }
+    }
+  }
+}

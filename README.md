@@ -26,6 +26,7 @@ to IR and renders through the framework's own pipeline.
 | [form.opu](form.opu) | Input binding, computed values and conditional rendering |
 | [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override |
 | [particles.opu](particles.opu) | Two-stop gradient panel scattered with seeded particles |
+| [field-service.opu](field-service.opu) | Full-stack multi-device app: `model`, `api`, computed values, adaptive Grid and device breakpoints |
 | [examples.json](examples.json) | Application registry consumed by the CLI |
 | [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
 
