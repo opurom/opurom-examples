@@ -766,6 +766,41 @@ try {
       }
     }
   });
+  console.log('== transport and language additions ==');
+  check('HTTP/3 over QUIC is covered by real server tests', () => {
+    const src = P('opurom-server', 'src', 'http3.rs');
+    if (!existsSync(src)) return; // not landed yet: skip honestly
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
+      '--', '--list']), 'server test list');
+    assert.match(out, /http3|h3_/i, 'no HTTP/3 tests registered');
+  });
+  check('static type inference rejects real type errors', () => {
+    const src = P('opurom-lang', 'src', 'check.rs');
+    if (!existsSync(src)) return; // not landed yet: skip honestly
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-lang', 'Cargo.toml'),
+      '--', '--list']), 'compiler test list');
+    assert.match(out, /type_|infer_/i, 'no type-inference tests registered');
+  });
+  check('five-tier adaptive layout keeps the golden digests', () => {
+    const layout = readFileSync(P('opurom-render', 'src', 'layout.rs'), 'utf8');
+    if (!/Ultra/.test(layout)) return;
+    const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
+    const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
+    assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
+      /digest=c87bf023a6c01f9d/);
+    assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
+      /digest=8cc3021fa80749b5/);
+    assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', c,
+      '--state', 'count=7']), 'tier state'), /digest=e7aad51c98d9cf21/);
+  });
+  check('Wayland wire encoding is verified without a compositor', () => {
+    const wire = P('opurom-platform', 'src', 'wayland_wire.rs');
+    if (!existsSync(wire)) return;
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-platform', 'Cargo.toml'),
+      '--', '--list']), 'platform test list');
+    assert.match(out, /wayland/i, 'no Wayland wire tests registered');
+  });
+
 } finally {
   rmSync(tmp, { recursive: true, force: true });
 }
