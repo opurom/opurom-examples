@@ -107,7 +107,7 @@ console.log('== cross-layer IR and full-stack contract ==');
 const tmp = mkdtempSync(join(tmpdir(), 'opurom-cross-'));
 try {
   const compiler = ensureBin('opurom-lang', 'opuromc');
-  check('counter.opu still lowers to the capability golden IR', () => {
+  check('counter.opu still lowers to the core golden IR', () => {
     const out = join(tmp, 'counter.opuir.json');
     ok(run(compiler, ['compile', P('opurom-examples', 'counter.opu'), '-o', out]), 'compile counter');
     assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-examples', 'counter.opuir.json'), 'utf8')));
@@ -137,14 +137,14 @@ try {
     assert.ok(actions.some(a => a.op === 'set' && a.target === 'name' && a.value === undefined), 'missing input binding');
   });
   const renderer = ensureBin('opurom-render', 'opurom-render');
-  check('renderer digest is stable and unchanged from capability', () => {
+  check('renderer digest is stable and unchanged from the core release', () => {
     const golden = P('opurom-examples', 'counter.opuir.json');
     const a = ok(run(renderer, [golden, '320', '240', join(tmp, 'a.ppm')]), 'render a');
     const b = ok(run(renderer, [golden, '320', '240', join(tmp, 'b.ppm')]), 'render b');
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], 'c87bf023a6c01f9d', 'capability golden digest regressed');
+    assert.equal(da[1], 'c87bf023a6c01f9d', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -189,8 +189,8 @@ try {
     assert.match(out, /planned/i, 'no honest Planned status');
   });
 
-  console.log('== capability ecosystem contracts ==');
-  check('component catalog has >=100 unique names mapped onto 24 primitives', () => {
+  console.log('== component catalog and ecosystem contracts ==');
+  check('component catalog has >=100 unique names mapped onto distinct primitives', () => {
     const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
     assert.ok(c.count >= 100);
     assert.equal(c.components.length, c.count);
@@ -266,7 +266,7 @@ try {
     assert.match(out, /\d/, 'no measured numbers');
   });
 
-  console.log('== capability language and packaging contracts ==');
+  console.log('== language and packaging contracts ==');
   check('component catalog stays consistent with the compiler', () => {
     const out = ok(run(compiler, ['components']), 'opuromc components');
     const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
@@ -325,7 +325,7 @@ try {
     assert.match(out, /pass|ok|verified/i, 'verify did not report success');
   });
 
-  console.log('== capability hardware and protocol contracts ==');
+  console.log('== hardware and protocol contracts ==');
   const gpu = bin('opurom-gpu', 'opurom-gpu') ||
     (existsSync(P('opurom-gpu', 'Cargo.toml')) ? ensureBin('opurom-gpu', 'opurom-gpu') : null);
   check('Metal GPU readback equals the CPU reference', () => {
@@ -351,10 +351,10 @@ try {
     assert.equal(a.match(/digest=([0-9a-f]+)/i)?.[1], b.match(/digest=([0-9a-f]+)/i)?.[1]);
   });
   check('computed/else/list-state lower into one IR', () => {
-    const src = join(tmp, 'capability.opu');
-    const out = join(tmp, 'capability.opuir.json');
+    const src = join(tmp, 'language.opu');
+    const out = join(tmp, 'language.opuir.json');
     writeFileSync(src, [
-      'app capability {',
+      'app LanguageDemo {',
       '  state count = 2',
       '  state dark = false',
       '  state items = ["a","b"]',
@@ -365,7 +365,7 @@ try {
       '  }',
       '}',
     ].join('\n') + '\n');
-    ok(run(compiler, ['compile', src, '-o', out]), 'compile capability');
+    ok(run(compiler, ['compile', src, '-o', out]), 'compile language demo');
     const ir = JSON.parse(readFileSync(out, 'utf8'));
     assert.equal(ir.computed?.[0]?.name, 'doubled', 'computed missing');
     assert.equal(ir.state.find(s => s.name === 'items')?.type, 'list', 'list state missing');
@@ -401,7 +401,7 @@ try {
     }
   });
 
-  console.log('== capability platform delivery contracts ==');
+  console.log('== platform delivery contracts ==');
   check('GPU display-list PPM equals the software renderer PPM', () => {
     const cmds = join(tmp, 'commands.json');
     const cpu = join(tmp, 'cpu.ppm');
@@ -436,7 +436,7 @@ try {
     const src = join(tmp, 'component.opu');
     const out = join(tmp, 'component.opuir.json');
     writeFileSync(src, [
-      'app capability {',
+      'app ComponentDemo {',
       '  component Card(title) { Text("{title}") }',
       '  Column { Card("Hi") }',
       '}',
@@ -469,16 +469,16 @@ try {
     assert.match(out, /PASS|verified/i, 'signed verification did not pass');
   });
 
-  console.log('== capability native network contracts ==');
+  console.log('== native network contracts ==');
   check('server TLS, WebSocket and keep-alive are covered by real tests', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-server', 'Cargo.toml'),
       '--', '--list']), 'server test list');
-    assert.match(out, /tls_handshake|websocket|keepalive/i, 'capability network tests not registered');
+    assert.match(out, /tls_handshake|websocket|keepalive/i, 'network tests not registered');
   });
   check('PostgreSQL TLS client and transactional server are covered', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
       '--', '--list']), 'db test list');
-    assert.match(out, /pgserver|tls/i, 'capability database tests not registered');
+    assert.match(out, /pgserver|tls/i, 'database tests not registered');
   });
   check('live AppKit window pixels match the software renderer', () => {
     const out = ok(run(platform, ['--verify-window']), 'window verify');
@@ -508,7 +508,7 @@ try {
     assert.match(out, /byte-equal|n\/a/i, 'no byte-equality verdict');
   });
 
-  console.log('== capability visual and platform breadth contracts ==');
+  console.log('== visual and platform breadth contracts ==');
   check('advanced visual effects are deterministic', () => {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-render', 'Cargo.toml'),
       '--', '--list']), 'render test list');
@@ -560,13 +560,13 @@ try {
     }
   });
 
-  console.log('== capability production breadth contracts ==');
+  console.log('== production breadth contracts ==');
   check('GPU effect kernels produce a byte-identical PPM', () => {
     const fixture = P('opurom-render', 'tests', 'fixtures', 'capability_effect.opuir.json');
     if (!existsSync(fixture)) return; // not landed yet: skip honestly
-    const cmds = join(tmp, 'capability-commands.json');
-    const cpu = join(tmp, 'capability-cpu.ppm');
-    const gpuOut = join(tmp, 'capability-gpu.ppm');
+    const cmds = join(tmp, 'effect-commands.json');
+    const cpu = join(tmp, 'effect-cpu.ppm');
+    const gpuOut = join(tmp, 'effect-gpu.ppm');
     ok(run(renderer, [fixture, '96', '64', cpu, '--commands', cmds]), 'render effect commands');
     const gpuBin = bin('opurom-gpu', 'opurom-gpu') || ensureBin('opurom-gpu', 'opurom-gpu');
     ok(run(gpuBin, ['raster', cmds, gpuOut]), 'gpu effect raster');
@@ -622,7 +622,7 @@ try {
     assert.match(out, /pass/i, 'package manager suite did not run');
   });
 
-  console.log('== capability component and platform contracts ==');
+  console.log('== component library and platform contracts ==');
   check('catalog exposes 100+ distinct drawn primitives', () => {
     const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
     assert.ok(c.primitives >= 100, `only ${c.primitives} distinct primitives`);
@@ -633,18 +633,18 @@ try {
   });
   check('GPU presentation verifies on-screen pixels', () => {
     const out = ok(run(platform, ['--verify-gpu-presentation',
-      '--out', join(tmp, 'capability-gpu.png')]), 'gpu presentation');
+      '--out', join(tmp, 'gpu-presentation.png')]), 'gpu presentation');
     assert.match(out, /PASS|SKIP/i, 'no GPU presentation verdict');
     if (/PASS/.test(out)) assert.match(out, /mismatch/i, 'no pixel comparison result');
   });
   check('tree shaking and source maps produce valid artifacts', () => {
-    const dir = join(tmp, 'capability-build');
+    const dir = join(tmp, 'shaken-build');
     ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'build',
       '--src', P('opurom-examples', 'counter.opu'), '--target', 'web',
-      '--out', dir, '--tree-shake', '--sourcemap', '--minify']), 'capability build');
+      '--out', dir, '--tree-shake', '--sourcemap', '--minify']), 'shaken build');
     const app = join(dir, 'app.js');
     assert.ok(existsSync(app), 'app.js missing');
-    ok(run('node', ['--check', app]), 'capability app.js syntax');
+    ok(run('node', ['--check', app]), 'shaken app.js syntax');
     const map = join(dir, 'app.js.map');
     if (existsSync(map)) {
       const json = JSON.parse(readFileSync(map, 'utf8'));
@@ -671,6 +671,98 @@ try {
     const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-db', 'Cargo.toml'),
       '--', '--list']), 'db test list');
     assert.match(out, /caching_sha2|stmt_prepare/i, 'no caching_sha2 tests registered');
+  });
+
+  console.log('== sample app gallery ==');
+  const gallerySrc = P('opurom-examples', 'gallery.opu');
+  const galleryIr = join(tmp, 'gallery.opuir.json');
+  const galleryCatalog = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
+  const catalogKinds = new Set(galleryCatalog.components.map(x => x[1]));
+  const familyOf = new Map(galleryCatalog.components.map(x => [x[1], x[2]]));
+  const walkGallery = n => {
+    const out = [n];
+    for (const c of n.children || []) out.push(...walkGallery(c));
+    return out;
+  };
+  const galleryItems = ir => walkGallery(ir.tree)
+    .filter(n => /^[a-z]+\/[A-Z]/.test(n.props?.label || ''));
+
+  check('showcase states the current catalog size in comment and UI text', () => {
+    const src = readFileSync(P('opurom-examples', 'showcase.opu'), 'utf8');
+    assert.match(src, /\/\/ All 216 named components lower onto 100 distinct primitive kinds/,
+      'stale source comment');
+    assert.match(src, /Paragraph\("One catalog, 216 named components, 100 distinct primitive kinds"/,
+      'stale UI text');
+    assert.ok(!/108 catalog|24 primitives|One catalog, 24/.test(src), 'stale catalog numbers remain');
+    assert.ok(!/\bR[0-9]+\b|\bRound [0-9]+\b/.test(src), 'internal codename in showcase');
+  });
+
+  check('gallery IR lowers with one instance of each of the 100 distinct primitive kinds', () => {
+    ok(run(compiler, ['compile', gallerySrc, '-o', galleryIr]), 'compile gallery');
+    const ir = JSON.parse(readFileSync(galleryIr, 'utf8'));
+    assert.equal(ir.ir, '0.1.0');
+    assert.equal(ir.app, 'Gallery');
+    assert.equal(catalogKinds.size, 100, 'catalog no longer has 100 distinct kinds');
+    const nodes = walkGallery(ir.tree);
+    assert.deepEqual([...new Set(nodes.map(n => n.kind))].sort(), [...catalogKinds].sort(),
+      'gallery primitive kinds differ from the catalog');
+    const items = galleryItems(ir);
+    assert.equal(items.length, 100, `expected 100 exhibits, found ${items.length}`);
+    assert.equal(new Set(items.map(n => n.props.label)).size, 100, 'duplicate exhibit label');
+    for (const n of items) {
+      const [family, kind] = n.props.label.split('/');
+      assert.equal(n.kind, kind, `label/kind mismatch on ${n.props.label}`);
+      assert.equal(familyOf.get(kind), family, `wrong family group for ${kind}`);
+    }
+  });
+
+  check('gallery render digest is stable across two runs', () => {
+    const a = join(tmp, 'gallery-a.ppm'), b = join(tmp, 'gallery-b.ppm');
+    const da = ok(run(renderer, [galleryIr, '800', '600', a]), 'render gallery a')
+      .match(/digest=([0-9a-f]+)/i);
+    const db = ok(run(renderer, [galleryIr, '800', '600', b]), 'render gallery b')
+      .match(/digest=([0-9a-f]+)/i);
+    assert.ok(da && db, 'no digest in gallery render output');
+    assert.equal(da[1], db[1], 'gallery digest differs between identical renders');
+    assert.ok(readFileSync(a).equals(readFileSync(b)), 'gallery pixels differ between identical renders');
+  });
+
+  check('gallery a11y tree assigns a role and bounds to every exhibit', () => {
+    const a11y = join(tmp, 'gallery-a11y.json');
+    ok(run(renderer, [galleryIr, '800', '600', join(tmp, 'gallery-a11y.ppm'),
+      '--a11y', a11y]), 'render gallery a11y');
+    const tree = JSON.parse(readFileSync(a11y, 'utf8'));
+    const byId = new Map(tree.map(n => [n.id, n]));
+    const items = galleryItems(JSON.parse(readFileSync(galleryIr, 'utf8')));
+    assert.equal(items.length, 100, 'expected 100 labelled exhibits');
+    for (const n of items) {
+      const a = byId.get(n.id);
+      assert.ok(a, `no a11y node for ${n.props.label}`);
+      assert.equal(a.label, n.props.label);
+      assert.equal(typeof a.role, 'string');
+      assert.equal(a.bounds.length, 4);
+      assert.equal(typeof a.hidden, 'boolean');
+    }
+    assert.ok(new Set(items.map(n => byId.get(n.id).role)).size >= 4,
+      'a11y roles are not kind-specific');
+  });
+
+  check('gallery lowers to all nine emitters with valid artifacts', () => {
+    const targets = ok(run(compiler, ['targets']), 'opuromc targets').trim().split('\n')
+      .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
+    assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
+    const cli = P('opurom-cli', 'bin', 'opurom.mjs');
+    for (const { name, files } of targets) {
+      const dir = join(tmp, `gallery-${name}`);
+      ok(run('node', [cli, 'build', '--src', gallerySrc, '--target', name, '--out', dir]),
+        `build gallery ${name}`);
+      for (const f of files) {
+        const path = join(dir, f);
+        assert.ok(existsSync(path) && statSync(path).size > 0, `${name}: missing or empty ${f}`);
+        if (f.endsWith('.js')) ok(run('node', ['--check', path]), `${name}: ${f} syntax`);
+        if (f.endsWith('.json')) JSON.parse(readFileSync(path, 'utf8'));
+      }
+    }
   });
 } finally {
   rmSync(tmp, { recursive: true, force: true });

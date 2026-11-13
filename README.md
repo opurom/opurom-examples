@@ -9,7 +9,8 @@ Every file here is executable evidence, not a mockup.
 | [profile.opu](profile.opu) | Second golden: string state, `bool`, input binding, `set`, `toggle` |
 | [todo.opu](todo.opu) | Full-stack app: UI + `model` + `api` in one source file |
 | [todo.opuir.json](todo.opuir.json) | Golden full-stack IR for the Todo app |
-| [showcase.opu](showcase.opu) | capability showcase: catalog components, a11y props, effects |
+| [showcase.opu](showcase.opu) | Showcase: catalog components, a11y props, effects |
+| [gallery.opu](gallery.opu) | Gallery: one instance of each of the 100 distinct primitive kinds, grouped by family |
 | [test/cross-layer.mjs](test/cross-layer.mjs) | Runs every project's tests + cross-layer assertions |
 
 The canonical frontend IR lives in
@@ -18,7 +19,7 @@ compiler must lower `counter.opu` to a JSON deep-equal to it.
 
 ```sh
 export PATH="$HOME/.cargo/bin:$PATH"
-cd the framework workspace/opurom-examples
+cd opurom-examples
 node test/cross-layer.mjs
 ```
 
