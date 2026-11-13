@@ -4,26 +4,31 @@ app Form {
   state age = 36
   state subscribed = false
 
-  theme { accent: "#097FEB", radius: 12 }
+  theme { accent: "#097FEB", radius: 14 }
 
-  Column(p: 24, gap: 14, align: center) {
-    Text("Account setup", size: 28)
-    Text("Bound inputs update state on every edit", size: 14)
-
-    Column(width: 420, p: 20, gap: 10, rounded: 12, bg: "#F7F8FA") {
-      Input(placeholder: "Display name", bind: name)
-      Slider(min: 0, max: 100, bind: age)
-      Text("Name: {name}", size: 18)
-      Text("Years: {age}", size: 18)
+  Column(p: 24, gap: 20) {
+    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Text("OPUROM Form", size: 26, color: "#FFFFFF")
+      Text("Bound inputs update state on every edit", size: 12, color: "#D6E8FF")
     }
-
-    Button("Toggle subscription", rounded: 10, animate: spring) {
-      subscribed.toggle()
+    Container(width: 420, p: 22, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+      Column(gap: 12) {
+        Text("Account setup", size: 16, color: "#101828")
+        Input(placeholder: "Display name", bind: name)
+        Slider(min: 0, max: 100, bind: age)
+        Text("Name: {name}", size: 18, color: "#101828")
+        Text("Years: {age}", size: 18, color: "#101828")
+      }
     }
-
+    Container(p: 14, rounded: 16, shadow: 3, bg: "#F4F7FB") {
+      Button("Toggle subscription", p: 14, rounded: 14, shadow: 2, bg: "#097FEB",
+             fontScale: 1.1, animate: spring) {
+        subscribed.toggle()
+      }
+    }
     if (subscribed) {
-      Container(width: 420, p: 18, rounded: 12,
-                gradient: "#097FEB,#043B70", bg: "#097FEB", animate: ease) {
+      Container(width: 420, p: 22, rounded: 16, shadow: 3,
+                gradient: "#097FEB,#043B70", bg: "#043B70", animate: ease) {
         Text("Subscribed as {name}", size: 18, color: "#FFFFFF")
       }
     }

@@ -2,17 +2,22 @@
 app Typography {
   state count = 0
 
-  theme { accent: "#097FEB", radius: 12, fontScale: 1.5 }
+  theme { accent: "#097FEB", radius: 14, fontScale: 1.5 }
 
-  Column(p: 24, gap: 16, align: center) {
-    Text("Typography", size: 24)
-    Text("Global 1.5x scale", size: 14)
-    Text("Scaled: {count}", size: 18)
-
-    Container(width: 420, p: 20, rounded: 12, bg: "#F7F8FA") {
-      Text("Local 0.75x override", size: 18, fontScale: 0.75)
+  Column(p: 24, gap: 20) {
+    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Text("Typography", size: 24, color: "#FFFFFF")
+      Text("Global 1.5x scale, local 0.75x override", size: 13, color: "#D6E8FF")
     }
-
-    Button("Increment", rounded: 10, animate: spring) { count += 1 }
+    Container(width: 420, p: 22, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+      Column(gap: 10) {
+        Text("Scaled: {count}", size: 18, color: "#101828")
+        Text("Local 0.75x override", size: 18, color: "#667085", fontScale: 0.75)
+      }
+    }
+    Container(p: 14, rounded: 16, shadow: 3, bg: "#F4F7FB") {
+      Button("Increment", p: 14, rounded: 14, shadow: 2, bg: "#097FEB",
+             fontScale: 1.1, animate: spring) { count += 1 }
+    }
   }
 }

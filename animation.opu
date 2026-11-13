@@ -1,22 +1,25 @@
 // Deterministic entry animation: the same tick always yields the same frame.
 app Animation {
-  theme { accent: "#097FEB", radius: 12 }
+  theme { accent: "#097FEB", radius: 14 }
 
-  Column(p: 24, gap: 16, align: center) {
-    Text("Animation", size: 28)
-    Text("spring and ease share one fixed-timestep clock", size: 14)
-
-    Container(width: 220, height: 64, bg: "#097FEB", rounded: 12,
-              shadow: 3, animate: spring) {
-      Text("spring", size: 18)
+  Column(p: 24, gap: 20, align: center) {
+    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Column(gap: 4, align: center) {
+        Text("Animation", size: 26, color: "#FFFFFF")
+        Text("Spring, ease and static share one fixed-timestep clock", size: 12, color: "#D6E8FF")
+      }
     }
-    Container(width: 220, height: 64, bg: "#04509B", rounded: 12,
-              shadow: 3, animate: ease) {
-      Text("ease", size: 18)
+    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
+              gradient: "#097FEB,#043B70", bg: "#043B70", animate: spring) {
+      Text("spring", size: 18, color: "#FFFFFF")
     }
-    Container(width: 220, height: 64, bg: "#101828", rounded: 12,
-              shadow: 3, animate: none) {
-      Text("static", size: 18)
+    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
+              gradient: "#4FA8FF,#097FEB", bg: "#097FEB", animate: ease) {
+      Text("ease", size: 18, color: "#FFFFFF")
+    }
+    Container(width: 260, height: 72, p: 16, rounded: 14, shadow: 3,
+              gradient: "#101828,#101828", bg: "#101828", animate: none) {
+      Text("static", size: 18, color: "#FFFFFF")
     }
   }
 }

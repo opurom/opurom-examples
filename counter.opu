@@ -2,11 +2,28 @@
 app Counter {
   state count = 0
 
-  Column(gap: 8, padding: 16, align: center) {
-    Text("Count: {count}", size: 24)
-    Row(gap: 8) {
-      Button("-") { count -= 1 }
-      Button("+") { count += 1 }
+  theme { mode: light, accent: "#097FEB", radius: 14 }
+
+  Column(p: 24, gap: 20) {
+    Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Text("OPUROM Counter", size: 28, color: "#FFFFFF")
+      Text("Deterministic integer state, tap to change", size: 13, color: "#D6E8FF")
+    }
+    Container(p: 26, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+      Column(gap: 6, align: center) {
+        Text("Count", size: 13, color: "#667085")
+        Text("{count}", size: 44, color: "#101828")
+      }
+    }
+    Container(p: 16, rounded: 16, shadow: 3, bg: "#F4F7FB") {
+      Row(gap: 14, align: center) {
+        Button("-", p: 14, rounded: 14, shadow: 2, bg: "#097FEB", fontScale: 1.25, animate: spring) {
+          count -= 1
+        }
+        Button("+", p: 14, rounded: 14, shadow: 2, bg: "#097FEB", fontScale: 1.25, animate: spring) {
+          count += 1
+        }
+      }
     }
   }
 }

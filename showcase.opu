@@ -4,34 +4,39 @@ app Showcase {
   state count = 0
   state dark = false
 
-  theme { mode: light, accent: "#097FEB", radius: 12 }
+  theme { mode: light, accent: "#097FEB", radius: 14 }
 
-  ScrollView(height: 480, p: 16) {
-    Heading("OPUROM Components", size: 26)
-    Paragraph("One catalog, 216 named components, 100 distinct primitive kinds", size: 14)
-    DividerSpace()
-    CardGrid(columns: 2) {
-      Tile(p: 12, radius: 8, shadow: 2) {
-        Label("Counter", size: 16)
-        Gap(height: 8)
-        CountBadge(label: "{count}", radius: 8)
-      }
-      ElevationCard(p: 12) {
-        Label("Actions", size: 16)
-        ButtonBar(gap: 8) {
-          PrimaryButton("+") { count += 1 }
-          DangerButton("Reset") { count = 0 }
+  ScrollView(height: 520, p: 20) {
+    Column(gap: 18) {
+      Container(p: 26, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+        Column(gap: 4) {
+          Heading("OPUROM Components", size: 26, color: "#FFFFFF")
+          Paragraph("One catalog, 216 named components, 100 distinct primitive kinds", size: 14, color: "#D6E8FF")
         }
       }
-    }
-    if (dark) {
-      InfoCard(p: 12, highContrast: true, label: "Dark mode details", role: "text") {
-        Caption("High contrast is active", fontScale: 1.25)
+      CardGrid(columns: 2) {
+        Tile(p: 14, radius: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+          Label("Counter", size: 16, color: "#101828")
+          Gap(height: 8)
+          CountBadge(label: "{count}", radius: 12)
+        }
+        ElevationCard(p: 14, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+          Label("Actions", size: 16, color: "#101828")
+          ButtonBar(gap: 8) {
+            PrimaryButton("+", p: 12, rounded: 12, shadow: 2, animate: spring) { count += 1 }
+            DangerButton("Reset", p: 12, rounded: 12, shadow: 2, animate: spring) { count = 0 }
+          }
+        }
       }
+      if (dark) {
+        InfoCard(p: 14, rounded: 14, shadow: 3, gradient: "#101828,#043B70", highContrast: true, label: "Dark mode details", role: "text") {
+          Caption("High contrast is active", fontScale: 1.25, color: "#D6E8FF")
+        }
+      }
+      ToggleSwitch(bind: dark, label: "Dark mode", role: "checkbox")
+      LinearProgress(value: 40)
+      UserAvatar(label: "OP")
+      Spinner()
     }
-    ToggleSwitch(bind: dark, label: "Dark mode", role: "checkbox")
-    LinearProgress(value: 40)
-    UserAvatar(label: "OP")
-    Spinner()
   }
 }
