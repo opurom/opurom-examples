@@ -108,8 +108,10 @@ if (cliReady) {
     registered = cliText(['targets']).trim().split(/\s+/).filter(Boolean);
   } catch (error) { cliError = error; }
 }
+// `web-dom` is a build target, not a v0.1 IR emitter, so `opurom targets`
+// does not list it; the CLI help documents it instead.
 const webTarget = registered.includes('web');
-const webDomTarget = registered.includes('web-dom');
+const webDomTarget = registered.includes('web-dom') || /--target web-dom/.test(help);
 const projectFlag = /--project/.test(help);
 let breakpointsLanded = false;
 try { breakpointsLanded = responsiveCssLanded(); }
