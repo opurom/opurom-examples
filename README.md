@@ -7,7 +7,7 @@ to IR and renders through the framework's own pipeline.
 <div align="center">
 
 ![OPUROM full-stack Todo application](./assets/example-full-stack-todo.png)
-*Figure 1: The full-stack Todo application rendered in a native window*
+*Figure 1: The full-stack Todo application rendered by the OPUROM renderer*
 
 </div>
 
