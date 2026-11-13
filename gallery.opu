@@ -7,7 +7,7 @@ app Gallery {
   state level = 40
   state choice = "a"
 
-  theme { mode: light, accent: "#4F46E5", radius: 8 }
+  theme { mode: light, accent: "#097FEB", radius: 8 }
 
   Scroll(height: 7200, p: 12) {
     Column(gap: 8) {
