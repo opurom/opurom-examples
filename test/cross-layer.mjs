@@ -43,6 +43,11 @@ function ensureBin(repo, sub) {
 }
 
 console.log('== repo hygiene ==');
+check('umbrella docs: isolated git repo, clean tree, >=1 commit', () => {
+  assert.ok(existsSync(join(ROOT, '.git')), 'missing umbrella .git');
+  assert.equal(ok(run('git', ['status', '--porcelain'], { cwd: ROOT }), 'git status').trim(), '', 'uncommitted umbrella docs');
+  assert.match(ok(run('git', ['log', '-1', '--oneline'], { cwd: ROOT }), 'git log'), /\S/, 'no commits');
+});
 for (const repo of REPOS) {
   check(`${repo}: independent git repo, clean tree, >=1 commit`, () => {
     const d = P(repo);
