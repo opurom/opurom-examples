@@ -425,6 +425,12 @@ try {
   check('mobile iOS staticlib and bindings are real artifacts', () => {
     const out = ok(run('node', [P('opurom-mobile', 'verify.mjs')]), 'mobile verify');
     assert.match(out, /PASS|arm64|staticlib/i, 'no iOS artifact evidence');
+    const archive = P('opurom-mobile', 'target', 'aarch64-apple-ios', 'release',
+      'libopurom_mobile.a');
+    if (existsSync(archive)) {
+      const b = readFileSync(archive).subarray(0, 8).toString();
+      assert.equal(b, '!<arch>\n', 'iOS artifact is not an ar archive');
+    }
   });
   check('custom components expand at compile time', () => {
     const src = join(tmp, 'component.opu');
