@@ -24,6 +24,7 @@ to IR and renders through the framework's own pipeline.
 | [photos.opu](photos.opu) | State-driven selection across a responsive image gallery |
 | [animation.opu](animation.opu) | Deterministic entry animation with spring and easing curves |
 | [form.opu](form.opu) | Input binding, computed values and conditional rendering |
+| [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override |
 | [examples.json](examples.json) | Application registry consumed by the CLI |
 | [test/cross-layer.mjs](test/cross-layer.mjs) | Cross-project verification harness |
 
