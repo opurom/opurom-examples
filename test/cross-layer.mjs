@@ -64,7 +64,9 @@ for (const repo of REPOS) {
     const author = ok(run('git', ['log', '-1', '--format=%an <%ae>'], { cwd: d }), 'git author').trim();
     assert.ok(!/Opurom Team/.test(author), `wrong author: ${author}`);
     const tags = ok(run('git', ['tag', '--list', 'v*'], { cwd: d }), 'git tags').trim();
-    assert.match(tags, /v0\.0\.0001/, 'version tags missing');
+    // Prerelease iterations start at 1; numeric fields carry no leading zeros.
+    assert.match(tags, /^v0\.1\.0-dev\.1$/m, 'SemVer version tags missing');
+    assert.ok(!/^v\d+\.\d+\.\d{4}$/m.test(tags), 'legacy zero-padded version tags remain');
   });
 }
 
