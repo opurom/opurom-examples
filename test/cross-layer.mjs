@@ -455,6 +455,9 @@ try {
     ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'build',
       '--src', P('opurom-examples', 'counter.opu'), '--target', 'web',
       '--out', dir, '--minify']), 'build --minify');
+    const app = join(dir, 'app.js');
+    assert.ok(existsSync(app), 'minified app.js missing');
+    ok(run('node', ['--check', app]), 'minified app.js syntax');
     const sizeOut = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'size', dir]), 'size');
     assert.match(sizeOut, /%|\d+ B/, 'no measured size report');
   });
