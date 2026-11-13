@@ -26,7 +26,7 @@ the smallest program to the richest multi-device application.
 | [field-service.opu](field-service.opu) | The multi-device full-stack board: `model`, `api`, computed values, an adaptive `Grid` and device breakpoints, so one IR reflows between phone and tablet. |
 
 The canonical frontend IR lives in
-[counter.opuir.json](counter.opuir.json); the
+[counter.opuir.json](golden/counter.opuir.json); the
 compiler lowers `counter.opu` to a JSON representation equal to it. `todo.opuir.json` is the
 checked-in reference IR for the full-stack application and is recompiled from `todo.opu` during
 verification.
@@ -115,6 +115,3 @@ it in `examples` and `test --examples` without further configuration.
 ## Reference
 
 - [Opurom organization](https://github.com/opurom) — framework overview and project index
-- [the language syntax](the language syntax) — language syntax
-- [the IR format](the IR format) — IR contract
-- [the framework implementation](the framework implementation) — layer boundaries

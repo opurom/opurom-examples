@@ -623,6 +623,60 @@
           "description": "render the activity view after a state switch"
         }
       ]
+    },
+    {
+      "name": "dashboard",
+      "source": "dashboard/main.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native",
+        "full"
+      ],
+      "tests": [
+        {
+          "id": "dashboard.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the imported dashboard source"
+        },
+        {
+          "id": "dashboard.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the imported modules and UI into one IR"
+        },
+        {
+          "id": "dashboard.phone",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "360",
+            "740",
+            "{tmp}/phone.ppm"
+          ],
+          "description": "render the collapsed compact stack"
+        },
+        {
+          "id": "dashboard.desktop",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1440",
+            "900",
+            "{tmp}/desktop.ppm"
+          ],
+          "description": "render the sidebar plus content wide layout"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,19 @@
+// Dashboard data: the operational model, its HTTP route and the KPI counters
+// the shell reads. Declared here so every view shares one data contract.
+model DeployRecord {
+  id: int primary
+  name: string
+  owner: string
+  done: bool = false
+}
+
+api "/dashboard/deploys" {
+  list DeployRecord
+  create DeployRecord
+}
+
+state openTasks = 128
+state doneTasks = 964
+state deployRate = 72
+state errorRate = 3
+state crew = "Atlas"

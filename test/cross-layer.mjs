@@ -141,7 +141,7 @@ try {
   check('counter.opu still lowers to the core golden IR', () => {
     const out = join(tmp, 'counter.opuir.json');
     ok(run(compiler, ['compile', P('opurom-examples', 'counter.opu'), '-o', out]), 'compile counter');
-    assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-examples', 'counter.opuir.json'), 'utf8')));
+    assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-examples', 'golden', 'counter.opuir.json'), 'utf8')));
   });
   check('todo.opu lowers UI + models + api into one IR', () => {
     const out = join(tmp, 'todo.opuir.json');
@@ -169,7 +169,7 @@ try {
   });
   const renderer = ensureBin('opurom-render', 'opurom-render');
   check('renderer digest is stable and unchanged from the core release', () => {
-    const golden = P('opurom-examples', 'counter.opuir.json');
+    const golden = P('opurom-examples', 'golden', 'counter.opuir.json');
     const a = ok(run(renderer, [golden, '320', '240', join(tmp, 'a.ppm')]), 'render a');
     const b = ok(run(renderer, [golden, '320', '240', join(tmp, 'b.ppm')]), 'render b');
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
@@ -179,7 +179,7 @@ try {
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
-    const out = ok(run(core, [P('opurom-examples', 'counter.opuir.json')], { input: 'tap 4\nstate\nquit\n' }), 'core run');
+    const out = ok(run(core, [P('opurom-examples', 'golden', 'counter.opuir.json')], { input: 'tap 4\nstate\nquit\n' }), 'core run');
     assert.match(out, /count/i, 'no state in output');
   });
   const platform = ensureBin('opurom-platform', 'opurom-platform');
@@ -222,7 +222,7 @@ try {
 
   console.log('== component catalog and ecosystem contracts ==');
   check('component catalog has >=100 unique names mapped onto distinct primitives', () => {
-    const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
+    const c = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'components.json'), 'utf8'));
     assert.ok(c.count >= 100);
     assert.equal(c.components.length, c.count);
     assert.equal(new Set(c.components.map(x => x[0])).size, c.count, 'duplicate names');
@@ -248,7 +248,7 @@ try {
   });
   check('optimizer is semantics-preserving on the golden IR', () => {
     const out = join(tmp, 'opt.opuir.json');
-    const golden = P('opurom-examples', 'counter.opuir.json');
+    const golden = P('opurom-examples', 'golden', 'counter.opuir.json');
     ok(run(compiler, ['optimize', golden, '-o', out]), 'optimize golden');
     assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(golden, 'utf8')));
   });
@@ -256,7 +256,7 @@ try {
     const dir = join(tmp, 'dead');
     const src = join(dir, 'dead.opuir.json');
     const out = join(dir, 'dead-opt.opuir.json');
-    const ir = JSON.parse(readFileSync(P('opurom-examples', 'counter.opuir.json'), 'utf8'));
+    const ir = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'counter.opuir.json'), 'utf8'));
     ir.state.push({ name: 'unused', type: 'int', init: 7 });
     mkdirSync(dir, { recursive: true });
     // The optimizer pretty-prints its output; use the same indentation for the
@@ -271,7 +271,7 @@ try {
   });
   check('renderer emits a deterministic accessibility tree', () => {
     const a11y = join(tmp, 'a11y.json');
-    ok(run(renderer, [P('opurom-examples', 'counter.opuir.json'), '320', '240',
+    ok(run(renderer, [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240',
       join(tmp, 'a11y.ppm'), '--a11y', a11y]), 'render a11y');
     const tree = JSON.parse(readFileSync(a11y, 'utf8'));
     assert.ok(Array.isArray(tree) && tree.length >= 2, 'empty a11y tree');
@@ -300,7 +300,7 @@ try {
   console.log('== language and packaging contracts ==');
   check('component catalog stays consistent with the compiler', () => {
     const out = ok(run(compiler, ['components']), 'opuromc components');
-    const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
+    const c = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'components.json'), 'utf8'));
     assert.match(out, new RegExp(`${c.count} components`), 'catalog count not reported');
     assert.ok(c.primitives >= 32);
   });
@@ -336,7 +336,7 @@ try {
   });
   check('SVG vector backend is byte-deterministic', () => {
     const a = join(tmp, 'a.svg'), b = join(tmp, 'b.svg');
-    const args = ir => [P('opurom-examples', 'counter.opuir.json'), '320', '240', join(tmp, 'svg.ppm'), '--svg', ir];
+    const args = ir => [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240', join(tmp, 'svg.ppm'), '--svg', ir];
     ok(run(renderer, args(a)), 'render svg a');
     ok(run(renderer, args(b)), 'render svg b');
     const sa = readFileSync(a, 'utf8'), sb = readFileSync(b, 'utf8');
@@ -375,7 +375,7 @@ try {
     assert.equal(b.subarray(12, 16).toString(), 'IHDR', 'IHDR missing');
   });
   check('page transitions are deterministic at a fixed tick', () => {
-    const args = t => [P('opurom-examples', 'counter.opuir.json'), '320', '240',
+    const args = t => [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240',
       join(tmp, `t-${t}.ppm`), '--transition', 'slide', '--tick', '16'];
     const a = ok(run(renderer, args('a')), 'transition a');
     const b = ok(run(renderer, args('b')), 'transition b');
@@ -437,7 +437,7 @@ try {
     const cmds = join(tmp, 'commands.json');
     const cpu = join(tmp, 'cpu.ppm');
     const gpuOut = join(tmp, 'gpu.ppm');
-    ok(run(renderer, [P('opurom-examples', 'counter.opuir.json'), '320', '240', cpu,
+    ok(run(renderer, [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240', cpu,
       '--commands', cmds]), 'render commands');
     assert.ok(existsSync(cmds), 'display list not written');
     const gpuBin = bin('opurom-gpu', 'opurom-gpu') || ensureBin('opurom-gpu', 'opurom-gpu');
@@ -449,7 +449,7 @@ try {
     const dir = join(tmp, 'webout');
     mkdirSync(dir, { recursive: true });
     const out = ok(run('node', [P('opurom-web', 'bin', 'opurom-web.mjs'), 'verify',
-      P('opurom-examples', 'counter.opuir.json'), dir]), 'web verify');
+      P('opurom-examples', 'golden', 'counter.opuir.json'), dir]), 'web verify');
     assert.match(out, /PASS|verified|digest/i, 'no browser verification result');
     assert.ok(existsSync(join(dir, 'index.html')), 'index.html not emitted');
   });
@@ -549,7 +549,7 @@ try {
     const dir = join(tmp, 'matrix');
     mkdirSync(dir, { recursive: true });
     const out = ok(run('node', [P('opurom-web', 'bin', 'opurom-web.mjs'), 'verify',
-      '--matrix', P('opurom-examples', 'counter.opuir.json'), dir]), 'web verify --matrix');
+      '--matrix', P('opurom-examples', 'golden', 'counter.opuir.json'), dir]), 'web verify --matrix');
     assert.match(out, /chromium|webkit|edge/i, 'no engine result reported');
     assert.match(out, /PASS|verified|SKIP/i, 'no matrix verdict');
   });
@@ -655,7 +655,7 @@ try {
 
   console.log('== component library and platform contracts ==');
   check('catalog exposes 100+ distinct drawn primitives', () => {
-    const c = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
+    const c = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'components.json'), 'utf8'));
     assert.ok(c.primitives >= 100, `only ${c.primitives} distinct primitives`);
     assert.ok(c.count >= 200, `only ${c.count} named components`);
     assert.equal(new Set(c.components.map(x => x[1])).size, c.primitives);
@@ -707,7 +707,7 @@ try {
   console.log('== sample app gallery ==');
   const gallerySrc = P('opurom-examples', 'gallery.opu');
   const galleryIr = join(tmp, 'gallery.opuir.json');
-  const galleryCatalog = JSON.parse(readFileSync(P('opurom-examples', 'components.json'), 'utf8'));
+  const galleryCatalog = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'components.json'), 'utf8'));
   const catalogKinds = new Set(galleryCatalog.components.map(x => x[1]));
   const familyOf = new Map(galleryCatalog.components.map(x => [x[1], x[2]]));
   const walkGallery = n => {
@@ -882,11 +882,11 @@ try {
     if (!/Ultra/.test(layout)) return;
     const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
     const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
-    assert.match(ok(run(r, [P('opurom-examples', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
+    assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
       /digest=900abf4bd93d1e51/);
-    assert.match(ok(run(r, [P('opurom-examples', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
+    assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
       /digest=c8403ba57da5ee61/);
-    assert.match(ok(run(r, [P('opurom-examples', 'counter.opuir.json'), '800', '600', c,
+    assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '800', '600', c,
       '--state', 'count=7']), 'tier state'), /digest=48a56056bd32a07e/);
   });
   check('Wayland wire encoding is verified without a compositor', () => {
