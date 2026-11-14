@@ -1,3 +1,4 @@
+import "theme/palette.opu";
 import "models/tasks.opu";
 import "views/panels.opu";
 

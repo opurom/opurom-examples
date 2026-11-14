@@ -1016,6 +1016,74 @@
           "description": "render the rich form at 420x900"
         }
       ]
+    },
+    {
+      "name": "tasks",
+      "source": "apps/tasks/main.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "tasks.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the multi-page tasks app"
+        },
+        {
+          "id": "tasks.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile to multi-page IR (per-route trees)"
+        },
+        {
+          "id": "tasks.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "420",
+            "760",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the initial route to a PPM frame"
+        },
+        {
+          "id": "tasks.web",
+          "cmd": [
+            "opuromc",
+            "target",
+            "{tmp}/app.opuir.json",
+            "--target",
+            "web",
+            "-o",
+            "{tmp}/web"
+          ],
+          "description": "emit the web target with per-route sections"
+        },
+        {
+          "id": "tasks.wechat",
+          "cmd": [
+            "opuromc",
+            "target",
+            "{tmp}/app.opuir.json",
+            "--target",
+            "wechat",
+            "-o",
+            "{tmp}/wechat"
+          ],
+          "description": "emit the wechat target with per-route pages"
+        }
+      ]
     }
   ]
 }

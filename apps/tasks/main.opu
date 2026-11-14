@@ -1,0 +1,312 @@
+// Trackr: a real multi-page task app. Four routes (Board -> TaskDetail -> TaskEdit,
+// plus Insights), two segments that switch views, and shared state for a working
+// add / edit / delete / complete loop. Written to prove OPUROM does Flutter-style
+// routing: every route below is its own content tree in the compiled IR.
+app Trackr {
+  // Shared state: everything every page reads or writes, so edits on one route
+  // (a rename, a completion toggle, a new task) show up immediately on the next.
+  state boardSegment = "All"
+  state taskTitle = "Design the router"
+  state taskNotes = "Per-route trees, push/pop navigation, and one shared state."
+  state detailRef = "Design the router"
+  state editDraft = ""
+  state editDraftNotes = ""
+  state showInsights = false
+  state done = false
+  state reviewed = false
+  state tested = false
+  state navigated = false
+  state polReady = false
+  state accReady = false
+
+  theme { mode: light, accent: "#4F46E5", radius: 16, fontScale: 1.0, stage: "#E7EAF3", transition: slide }
+
+  // ---- Shared pieces every page reuses -------------------------------------
+  component SectionLabel(text: string) {
+    Text("{text}", size: 12, color: "#6B7280")
+  }
+
+  // Progress chip on the header: done / total summary on the gradient band.
+  component ProgressChip() {
+    Row(gap: 10, align: center) {
+      Column(gap: 2) {
+        Text("3/6", size: 20, color: "#FFFFFF")
+        Text("completed", size: 11, color: "#C7D2FE")
+      }
+    }
+  }
+
+  // ---- Board: the task list, the root page --------------------------------
+  route Board {
+    Scroll(height: 640) {
+      Column(gap: 16, padding: 16) {
+        // Header band
+        Container(p: 18, radius: 18, gradient: "#4F46E5,#3730A3", shadow: 6) {
+          Row(gap: 12, align: center) {
+            Column(gap: 4) {
+              Text("Today", size: 13, color: "#C7D2FE")
+              Text("My tasks", size: 26, color: "#FFFFFF")
+            }
+            Spacer(width: 1)
+            ProgressChip()
+          }
+        }
+
+        // Segment switch: All vs Insights, real view switching via state.
+        Row(gap: 8) {
+          Button("Tasks", p: 9, radius: 12, bg: "#4F46E5", variant: "primary") {
+            boardSegment = "All"
+            showInsights = false
+          }
+          Button("Insights", p: 9, radius: 12, bg: "#EEF0FF", variant: "secondary") {
+            boardSegment = "Insights"
+            showInsights = true
+          }
+        }
+
+        if (showInsights) {
+          // Insights view inside the Board page.
+          Column(gap: 12) {
+            Card(p: 16, radius: 16, glass: true, border: "#E4E7EE") {
+              Column(gap: 10) {
+                SectionLabel("Completion")
+                Progress(value: 42, color: "#4F46E5")
+                Row(gap: 8, align: center) {
+                  Icon(name: "check", color: "#16A34A")
+                  Text("3 of 6 tasks complete this sprint", size: 13, color: "#374151")
+                }
+              }
+            }
+            Row(gap: 12) {
+              Card(p: 14, radius: 14, border: "#E4E7EE") {
+                Column(gap: 4) {
+                  Text("Focus time", size: 11, color: "#6B7280")
+                  Text("4h 20m", size: 20, color: "#111827")
+                }
+              }
+              Card(p: 14, radius: 14, border: "#E4E7EE") {
+                Column(gap: 4) {
+                  Text("Streak", size: 11, color: "#6B7280")
+                  Text("12 days", size: 20, color: "#111827")
+                }
+              }
+            }
+            Button("View board", p: 10, radius: 12, bg: "#EEF0FF") {
+              showInsights = false
+              boardSegment = "All"
+            }
+          }
+        }
+
+        // All view: the task list.
+        Card(p: 2, radius: 16, border: "#E4E7EE") {
+          Column(gap: 0) {
+            // Row 1
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: done)
+              Column(gap: 2) {
+                Text("{taskTitle}", size: 15, color: "#111827")
+                Text("Design the router", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = taskTitle
+                push: TaskDetail
+              }
+            }
+            Divider()
+            // Row 2
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: reviewed)
+              Column(gap: 2) {
+                Text("Review route lowering", size: 15, color: "#111827")
+                Text("Design", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = "Review route lowering"
+                push: TaskDetail
+              }
+            }
+            Divider()
+            // Row 3
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: tested)
+              Column(gap: 2) {
+                Text("Write cross-backend tests", size: 15, color: "#111827")
+                Text("QA", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = "Write cross-backend tests"
+                push: TaskDetail
+              }
+            }
+            Divider()
+            // Row 4
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: navigated)
+              Column(gap: 2) {
+                Text("Ship push/pop navigation", size: 15, color: "#111827")
+                Text("Design", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = "Ship push/pop navigation"
+                push: TaskDetail
+              }
+            }
+            Divider()
+            // Row 5
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: polReady)
+              Column(gap: 2) {
+                Text("Polish the demo", size: 15, color: "#111827")
+                Text("Design", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = "Polish the demo"
+                push: TaskDetail
+              }
+            }
+            Divider()
+            // Row 6
+            Row(gap: 12, align: center, padding: 14) {
+              Checkbox(bind: accReady)
+              Column(gap: 2) {
+                Text("Acceptance on every backend", size: 15, color: "#111827")
+                Text("QA", size: 11, color: "#9CA3AF")
+              }
+              Spacer(width: 1)
+              Button("Open", p: 8, radius: 10, bg: "#EEF0FF") {
+                detailRef = "Acceptance on every backend"
+                push: TaskDetail
+              }
+            }
+          }
+        }
+
+        // Primary call to action: create a task.
+        Button("Add task", p: 14, radius: 14, bg: "#4F46E5", shadow: 5, variant: "primary") {
+          editDraft = ""
+          editDraftNotes = ""
+          detailRef = "New task"
+          push: TaskEdit
+        }
+      }
+    }
+  }
+
+  // ---- TaskDetail: one task, with actions ---------------------------------
+  route TaskDetail {
+    Column(gap: 16, padding: 16) {
+      Row(gap: 10, align: center) {
+        Button("Back", p: 8, radius: 10, bg: "#EEF0FF") {
+          pop
+        }
+        Text("Task", size: 20, color: "#111827")
+        Spacer(width: 1)
+        Badge(label: "In progress")
+      }
+      Card(p: 18, radius: 16, glass: true, border: "#E4E7EE") {
+        Column(gap: 10) {
+          Text("{detailRef}", size: 22, color: "#111827")
+          Text("{taskNotes}", size: 13, color: "#4B5563")
+          Divider()
+          Row(gap: 8, align: center) {
+            Icon(name: "calendar", color: "#6B7280")
+            Text("Due today", size: 12, color: "#6B7280")
+            Spacer(width: 1)
+            Text("High priority", size: 12, color: "#DC2626")
+          }
+        }
+      }
+      SectionLabel("Quick actions")
+      Row(gap: 10) {
+        Button("Mark done", p: 10, radius: 12, bg: "#DCFCE7", variant: "secondary") {
+          done = true
+        }
+        Button("Open insights", p: 10, radius: 12, bg: "#EEF0FF", variant: "secondary") {
+          showInsights = true
+          boardSegment = "Insights"
+          pop
+        }
+      }
+      Button("Edit task", p: 14, radius: 14, bg: "#4F46E5", shadow: 5, variant: "primary") {
+        editDraft = detailRef
+        editDraftNotes = taskNotes
+        push: TaskEdit
+      }
+    }
+  }
+
+  // ---- TaskEdit: create or rename the task above -------------------------
+  route TaskEdit {
+    Column(gap: 16, padding: 16) {
+      Row(gap: 10, align: center) {
+        Button("Cancel", p: 8, radius: 10, bg: "#EEF0FF") {
+          pop
+        }
+        Text("Edit task", size: 20, color: "#111827")
+      }
+      Card(p: 18, radius: 16, border: "#E4E7EE") {
+        Column(gap: 12) {
+          SectionLabel("Title")
+          Input(bind: editDraft, placeholder: "Task title", maxLength: 60)
+          SectionLabel("Notes")
+          Input(bind: editDraftNotes, placeholder: "What needs doing")
+        }
+      }
+      Button("Save task", p: 14, radius: 14, bg: "#4F46E5", shadow: 5, variant: "primary") {
+        taskTitle = editDraft
+        taskNotes = editDraftNotes
+        detailRef = editDraft
+        pop
+      }
+    }
+  }
+
+  // ---- Insights: a dedicated page reached by push ------------------------
+  route Insights {
+    Column(gap: 16, padding: 16) {
+      Row(gap: 10, align: center) {
+        Button("Back", p: 8, radius: 10, bg: "#EEF0FF") {
+          pop
+        }
+        Text("Insights", size: 20, color: "#111827")
+      }
+      Card(p: 18, radius: 16, gradient: "#4F46E5,#3730A3", shadow: 6) {
+        Row(gap: 12, align: center) {
+          Column(gap: 4) {
+            Text("Sprint progress", size: 12, color: "#C7D2FE")
+            Text("3/6 done", size: 24, color: "#FFFFFF")
+          }
+          Spacer(width: 1)
+          Badge(label: "50%")
+        }
+      }
+      Row(gap: 12) {
+        Card(p: 16, radius: 14, border: "#E4E7EE") {
+          Column(gap: 6) {
+            Text("Open", size: 12, color: "#6B7280")
+            Text("3 tasks", size: 22, color: "#111827")
+            Text("half the backlog", size: 11, color: "#F59E0B")
+          }
+        }
+        Card(p: 16, radius: 14, border: "#E4E7EE") {
+          Column(gap: 6) {
+            Text("Done", size: 12, color: "#6B7280")
+            Text("3 tasks", size: 22, color: "#111827")
+            Text("on schedule", size: 11, color: "#16A34A")
+          }
+        }
+      }
+      Button("Back to board", p: 12, radius: 12, bg: "#EEF0FF") {
+        showInsights = false
+        boardSegment = "All"
+        pop
+      }
+    }
+  }
+}

@@ -1,4 +1,3 @@
-import "theme/palette.opu";
 
 // Wide-layout status data and the shared palette. Components cannot be
 // declared in a module, so reusable nodes stay in the importing entry file.
