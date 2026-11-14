@@ -761,6 +761,87 @@
           "description": "render the icon grid at 800x600"
         }
       ]
+    },
+    {
+      "name": "motion",
+      "source": "motion.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "motion.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the motion source"
+        },
+        {
+          "id": "motion.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the motion source to IR"
+        },
+        {
+          "id": "motion.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "480",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the settled 640x480 frame"
+        },
+        {
+          "id": "motion.tick",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "480",
+            "{tmp}/tick0.ppm",
+            "--tick",
+            "0"
+          ],
+          "description": "render the entrance frame at tick zero"
+        },
+        {
+          "id": "motion.midspring",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "480",
+            "{tmp}/tick160.ppm",
+            "--tick",
+            "160"
+          ],
+          "description": "render the mid-spring frame at tick 160"
+        },
+        {
+          "id": "motion.expanded",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "480",
+            "{tmp}/expanded.ppm",
+            "--state",
+            "open=true"
+          ],
+          "description": "render the expanded panel with the open state"
+        }
+      ]
     }
   ]
 }

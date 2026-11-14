@@ -20,6 +20,7 @@ the smallest program to the richest multi-device application.
 | [calculator.opu](calculator.opu) | Positional digit entry and integer arithmetic: computed expressions supply `+`, `-` and `x`, and a `=` branch applies the pending operator. |
 | [photos.opu](photos.opu) | A responsive image gallery where `Next`/`Prev` change the selected image through string and int state plus mutually exclusive bool gates. |
 | [animation.opu](animation.opu) | Deterministic entry animation: spring, ease and a static panel share one fixed-timestep clock, so the same tick always yields the same frame. |
+| [motion.opu](motion.opu) | A flagship interaction sample: cards spring in on load, a bound slider scrolls a value with an eased readout, and a tap springs an expanding panel open. |
 | [form.opu](form.opu) | Input binding, computed values and conditional rendering in one program: bound inputs update state on every edit and a panel appears on toggle. |
 | [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override, showing how one scale rule and one local exception coexist. |
 | [particles.opu](particles.opu) | A seeded particle field: a two-stop gradient panel scattered with deterministic dots, no wall clock and no randomness. |

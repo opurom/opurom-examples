@@ -1,0 +1,64 @@
+// Motion: a flagship interactive sample.
+// Cards spring in on load, a slider scrolls a value with an eased readout, and
+// a tap toggles an expanding panel that springs open. Every move rides the
+// renderer's fixed-timestep clock: the same --tick always yields the same frame.
+
+component Feature(label: string, detail: string, tint: string) {
+  Container(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2", animate: spring) {
+    Row(gap: 10, align: center) {
+      Badge(label: "{label}", bg: "{tint}")
+      Text("{detail}", size: 12, color: "#101828")
+    }
+  }
+}
+
+app Motion {
+  state open = false
+  state level = 60
+
+  theme { mode: light, accent: "#097FEB", radius: 14 }
+
+  Column(p: 16, gap: 12) {
+    // Hero
+    Container(p: 16, rounded: 16, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Text("Motion Studio", size: 20, color: "#FFFFFF")
+      Text("Springs, eased values and a tap-to-expand panel", size: 11, color: "#D6E8FF")
+    }
+
+    // 1. Card list that springs in on load.
+    Column(gap: 8) {
+      Feature("Spring", "Cards settle from the centre on load", "#097FEB")
+      Feature("Eased", "The slider readout fades in smoothly", "#12B76A")
+      Feature("Inertia", "Discrete steps under one shared clock", "#F79009")
+    }
+
+    // 2. Draggable slider with a live value readout.
+    Container(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+      Row(gap: 10, align: center) {
+        Text("Delivery speed", size: 13, color: "#101828")
+        Spacer(width: 40)
+        Container(p: 6, rounded: 8, bg: "#EAF3FF", border: "#EAF3FF", animate: ease) {
+          Text("{level}", size: 13, color: "#097FEB")
+        }
+      }
+      Spacer(height: 8)
+      Slider(bind: level, min: 0, max: 100, label: "Delivery speed")
+    }
+
+    // 3. Tap-driven expanding panel with smooth height and opacity.
+    Container(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+      Row(gap: 10, align: center) {
+        Text("Order details", size: 13, color: "#101828")
+        Spacer(width: 40)
+        Button("Toggle", p: 8, rounded: 8, shadow: 2, animate: spring) { open.toggle() }
+      }
+      if (open) {
+        Spacer(height: 8)
+        Container(p: 12, rounded: 10, bg: "#F4F7FB", border: "#E4E9F2", animate: spring) {
+          Text("Express shipping", size: 12, color: "#101828")
+          Text("Dispatched in 24 hours", size: 11, color: "#667085")
+        }
+      }
+    }
+  }
+}
