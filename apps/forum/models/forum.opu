@@ -1,90 +1,176 @@
-// Forum entities: the canonical data contract shared by the screens, the HTTP
-// routes and the generated migrations. Written in the bare declaration form so
-// it can be checked on its own; the root node below only satisfies the checker,
-// while an importing app merges these declarations and supplies its own tree.
+// Relay forum data contracts: one model per entity so every screen, route and
+// migration reads the same field set. Modeled-only module; checked via the entry.
+
 model User {
   id: int primary
   handle: string
   displayName: string
   role: string
   bio: string
+  joined: string
+  postCount: int = 0
+  replyCount: int = 0
+  likeCount: int = 0
+  followed: bool = false
+  blocked: bool = false
+  muted: bool = false
 }
 
-model Board {
+model Tag {
   id: int primary
   slug: string
-  title: string
-  description: string
+  label: string
+  color: string
+  discussionCount: int = 0
 }
 
-model Post {
+model Discussion {
   id: int primary
-  boardId: int
+  tagId: int
   author: string
   title: string
   body: string
   likes: int = 0
   replies: int = 0
+  views: int = 0
   pinned: bool = false
+  locked: bool = false
+  flagged: bool = false
+  createdAt: string
 }
 
-model Comment {
+model Reply {
   id: int primary
-  postId: int
+  discussionId: int
+  parentId: int = 0
   author: string
   body: string
   likes: int = 0
+  edited: bool = false
+  flagged: bool = false
+  createdAt: string
+}
+
+model Reaction {
+  id: int primary
+  targetType: string
+  targetId: int
+  owner: string
 }
 
 model Bookmark {
   id: int primary
-  postId: int
+  discussionId: int
   owner: string
 }
 
-api "/forum/users" {
+model Follow {
+  id: int primary
+  follower: string
+  following: string
+}
+
+model Notification {
+  id: int primary
+  owner: string
+  kind: string
+  actor: string
+  subject: string
+  read: bool = false
+  createdAt: string
+}
+
+model Flag {
+  id: int primary
+  targetType: string
+  targetId: int
+  reporter: string
+  reason: string
+  resolved: bool = false
+}
+
+model Session {
+  id: int primary
+  handle: string
+  token: string
+  issuedAt: string
+}
+
+api "/relay/users" {
   list User
   create User
 }
 
-api "/forum/users/:id" {
+api "/relay/users/:id" {
   get User
   update User
 }
 
-api "/forum/boards" {
-  list Board
-  create Board
+api "/relay/tags" {
+  list Tag
+  create Tag
 }
 
-api "/forum/posts" {
-  list Post
-  create Post
+api "/relay/discussions" {
+  list Discussion
+  create Discussion
 }
 
-api "/forum/posts/:id" {
-  get Post
-  update Post
-  delete Post
+api "/relay/discussions/:id" {
+  get Discussion
+  update Discussion
+  delete Discussion
 }
 
-api "/forum/posts/:id/comments" {
-  list Comment
-  create Comment
+api "/relay/discussions/:id/replies" {
+  list Reply
+  create Reply
 }
 
-api "/forum/comments/:id" {
-  update Comment
-  delete Comment
+api "/relay/replies/:id" {
+  update Reply
+  delete Reply
 }
 
-api "/forum/bookmarks" {
+api "/relay/reactions" {
+  create Reaction
+}
+
+api "/relay/bookmarks" {
   list Bookmark
   create Bookmark
 }
 
-api "/forum/bookmarks/:id" {
+api "/relay/bookmarks/:id" {
   delete Bookmark
 }
 
+api "/relay/follows" {
+  create Follow
+}
 
+api "/relay/notifications" {
+  list Notification
+  create Notification
+}
+
+api "/relay/notifications/:id" {
+  update Notification
+}
+
+api "/relay/flags" {
+  list Flag
+  create Flag
+}
+
+api "/relay/flags/:id" {
+  update Flag
+}
+
+api "/relay/session" {
+  create Session
+}
+
+api "/relay/session/:id" {
+  delete Session
+}

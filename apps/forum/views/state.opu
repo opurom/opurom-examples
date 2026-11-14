@@ -1,33 +1,132 @@
-// Forum view state: the values every screen reads. A module declares only
-// state, model, api, theme and imports, so the entry file owns all components
-// and the app tree. Flags model navigation because `if` guards one bool state.
-state sessionActive = false
-state role = "member"
-state page = 1
-state pageSize = 10
+// Relay view state: every value the screens read, plus the compile-time lists that
+// stand in for the seeded records. A module declares only state, model, api, theme
+// and imports, so the entry file owns all components and the app tree.
 
-state boardFilter = "general"
-state searchText = ""
-state draftTitle = ""
-state draftBody = ""
-state commentDraft = ""
-
-state selectedPost = "1"
-state selectedAuthor = "ada"
-state selectedBody = "Welcome to the OPUROM community forum."
-state selectedLikes = 0
-
-state profileHandle = "ada"
-state profileName = "Ada Lovelace"
-state profileBio = "Building declarative full-stack apps."
-
-state viewList = true
-state viewDetail = false
-state viewCompose = false
-state viewProfile = false
+// Navigation: one bool per screen, all false on the feed, so a single tree serves
+// every screen and the header can wake any surface from anywhere.
+state view = "feed"
+state showFeed = true
+state showLogin = false
+state showRegister = false
+state showProfile = false
+state showNotifications = false
+state showSearch = false
+state showCompose = false
 state showModeration = false
 
-state showComposer = false
-state showCommentBox = false
-state bookmarked = false
-state liked = false
+// Session and identity of the reader.
+state sessionActive = true
+state role = "member"
+// A bool mirrors the moderator tier because `if` guards read only bool state.
+state isModerator = true
+// The detail surface shows when no other main screen owns the column.
+state viewFeedDetail = true
+state meHandle = "ada"
+state meName = "Ada Renn"
+state meBio = "Maintainer of the Relay community. Loves clean layout and slow coffee."
+state meJoined = "Joined March 2024"
+
+// Feed controls: sort, tag filter, search and paging.
+state sortBy = "latest"
+state tagFilter = "all"
+state searchText = ""
+state searchQuery = ""
+state page = 1
+state hasMore = true
+
+// Selected discussion and its detail controls.
+state selectedTitle = "Welcome to Relay"
+state selectedAuthor = "ada"
+state selectedBody = "Start here: how this community works, what belongs in each tag, and how to post well."
+state selectedTag = "Announcements"
+state selectedLikes = 42
+state selectedReplies = 12
+state selectedViews = 480
+state selectedPinned = true
+state selectedLocked = false
+state replying = false
+state replyDraft = ""
+state editingReply = false
+
+// Composer fields and validation.
+state draftTitle = ""
+state draftBody = ""
+state draftTag = "General"
+state draftError = ""
+state draftInvalid = false
+state composing = false
+
+// Auth form fields.
+state loginHandle = ""
+state loginPassword = ""
+state registerHandle = ""
+state registerName = ""
+state registerEmail = ""
+state registerPassword = ""
+state authError = ""
+state authInvalid = false
+
+// Profile surface.
+state profileHandle = "ada"
+state profileName = "Ada Renn"
+state profileBio = "Maintainer of the Relay community. Loves clean layout and slow coffee."
+state profileRole = "moderator"
+state profilePosts = 24
+state profileReplies = 138
+state profileLikes = 512
+state following = false
+state blocked = false
+
+// Notifications.
+state notificationsOpen = true
+state unreadCount = 3
+
+// Moderation.
+state flaggedCount = 2
+state mutedCount = 0
+state moderatorNote = "Review the queue and clear items as they are handled."
+
+// Identity for the conversation threads.
+state ownHandle = "ada"
+
+// Seeded feed records as parallel lists, unrolled at compile time.
+state feedTitles = ["Welcome to Relay", "Show your Relay setup", "How do tags work here?", "Design feedback: card spacing", "Weekly build thread", "Moderation guidelines v2", "Ask: modelling relations", "Introduce yourself"]
+state feedAuthors = ["ada", "linus", "grace", "alan", "ada", "mira", "grace", "theo"]
+state feedTags = ["Announcements", "Showcase", "Help", "Design", "Build", "Announcements", "Help", "General"]
+state feedLikes = ["42", "18", "9", "27", "31", "6", "14", "22"]
+state feedReplies = ["12", "7", "5", "15", "24", "3", "8", "9"]
+state feedViews = ["480", "312", "205", "540", "690", "140", "288", "410"]
+state feedTimes = ["2h ago", "5h ago", "1d ago", "1d ago", "2d ago", "3d ago", "4d ago", "5d ago"]
+
+// Tag catalogue with color accents.
+state tagLabels = ["All", "Announcements", "General", "Help", "Showcase", "Design", "Build"]
+state tagSlugs = ["all", "announcements", "general", "help", "showcase", "design", "build"]
+state tagCounts = ["128", "9", "41", "22", "18", "14", "24"]
+
+// Reply thread for the open discussion, plus one nested reply.
+state replyAuthors = ["grace", "linus", "alan"]
+state replyBodies = ["This is exactly the kind of start I hoped for.", "The tag colors read well at a glance.", "Agreed, the layout stays calm while scrolling."]
+state replyLikes = ["6", "4", "9", "2"]
+
+// Live search results across discussions and members.
+state resultTitles = ["Welcome to Relay", "How do tags work here?", "Ada Renn", "Grace Hopper"]
+state resultKinds = ["Discussion", "Discussion", "Member", "Member"]
+state resultMeta = ["Announcements", "Help", "12 posts", "8 posts"]
+
+// Notification records.
+state notificationKinds = ["Reply", "Mention", "Follow"]
+state notificationActors = ["grace", "linus", "theo"]
+state notificationTexts = ["replied to Welcome to Relay", "mentioned you in Weekly build thread", "started following you"]
+state notificationTimes = ["2h ago", "6h ago", "1d ago"]
+
+// Activity feed on the profile surface.
+state activityTexts = ["replied to How do tags work here?", "liked Design feedback: card spacing", "started Weekly build thread"]
+state activityTimes = ["2h ago", "1d ago", "2d ago"]
+
+// Moderation queue records.
+state flagAuthors = ["spam_bot", "angry_user"]
+state flagTitles = ["Buy followers cheap", "Rude reply in Weekly build thread"]
+state flagReasons = ["Spam link", "Harassment"]
+
+// Suggested tags and active members for the side panel.
+state activeMembers = ["grace", "linus", "alan", "mira", "theo"]
