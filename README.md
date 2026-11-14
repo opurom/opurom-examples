@@ -18,6 +18,7 @@ the smallest program to the richest multi-device application.
 | [showcase.opu](showcase.opu) | The component catalog in one screen: accessibility properties, visual effects and a dark-mode panel, all driven by catalog components. |
 | [gallery.opu](gallery.opu) | Every distinct primitive kind the renderer supports, one instance per kind and grouped by family, as a completeness map of the rendering surface. |
 | [design-system.opu](design-system.opu) | The flagship default-UI component gallery: buttons, inputs, selection states, display primitives and semantic feedback in a responsive card layout. |
+| [rich-form.opu](rich-form.opu) | The flagship data-entry screen: proportional typography, semantic color tokens, a validated multi-field form with a `textBuffer` email and `secure` password, and a `tone` success/warning/error/info feedback row. |
 | [calculator.opu](calculator.opu) | Positional digit entry and integer arithmetic: computed expressions supply `+`, `-` and `x`, and a `=` branch applies the pending operator. |
 | [photos.opu](photos.opu) | A responsive image gallery where `Next`/`Prev` change the selected image through string and int state plus mutually exclusive bool gates. |
 | [animation.opu](animation.opu) | Deterministic entry animation: spring, ease and a static panel share one fixed-timestep clock, so the same tick always yields the same frame. |

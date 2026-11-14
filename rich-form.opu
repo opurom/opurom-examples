@@ -1,0 +1,120 @@
+// Flagship data-entry screen: proportional typography, semantic tokens and a
+// validated, kernel-backed form. One screen exercises the whole design chain.
+app RichForm {
+  state fullName = "Ada Lovelace"
+  state email = "ada@northwind.io"
+  state password = ""
+  state bio = "Building design tools"
+  state submitted = false
+
+  theme {
+    mode: light
+    accent: "#0A71FC"
+    radius: 14
+    stage: "#EEF1F6"
+    surface: "#FFFFFF"
+    onSurface: "#132C5A"
+    fontMetrics: proportional
+    tokens: {
+      success: "#1FB14C"
+      warning: "#FD960E"
+      error: "#F62B35"
+      info: "#0A71FC"
+    }
+  }
+
+  ScrollView(p: 0, height: 2000) {
+    Column(width: 720, gap: 0, bg: "#EEF1F6", border: "#EEF1F6") {
+      // Header band, full bleed
+      Container(p: 24, rounded: 0, shadow: 0, bg: "#0A71FC", border: "#0A71FC", animate: ease) {
+        Column(gap: 6, bg: "#0A71FC", border: "#0A71FC") {
+          Text("NORTHWIND WORKSPACE", size: 10, color: "#BBD4FF")
+          Text("Create your account", size: 24, color: "#FFFFFF", role: "heading")
+          Text("Set up a secure profile to start collaborating.", size: 11, color: "#DCE9FF")
+        }
+      }
+
+      // Form card
+      Container(p: 22, m: 20, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4EF") {
+        Column(gap: 16, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("Profile details", size: 15, color: "#132C5A", role: "heading")
+
+          Column(gap: 6, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Text("Full name", size: 10, color: "#5A6478")
+            Input(placeholder: "Ada Lovelace", bind: fullName, maxLength: 40, width: 636,
+                  p: 10, rounded: 10, bg: "#F7F9FC", border: "#D8E0EA", fontScale: 0.62,
+                  label: "Full name")
+            Text("At least 3 characters", size: 9, color: "#8A94A6")
+          }
+
+          Column(gap: 6, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Text("Work email", size: 10, color: "#5A6478")
+            Input(placeholder: "you@company.com", bind: email, textBuffer: true, maxLength: 64, width: 636,
+                  required: true, pattern: "^[A-Za-z0-9_.]+@[A-Za-z0-9_.]+$",
+                  p: 10, rounded: 10, bg: "#F7F9FC", border: "#D8E0EA", fontScale: 0.62,
+                  label: "Work email")
+            Text("We never share your address", size: 9, color: "#8A94A6")
+          }
+
+          Column(gap: 6, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Text("Password", size: 10, color: "#5A6478")
+            Input(placeholder: "Enter password", bind: password, secure: true, width: 636,
+                  required: true, minLength: 8,
+                  p: 10, rounded: 10, bg: "#F7F9FC", border: "#D8E0EA", fontScale: 0.62,
+                  label: "Password")
+            Text("At least 8 characters", size: 9, color: "#8A94A6")
+          }
+
+          Column(gap: 6, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Text("Short bio", size: 10, color: "#5A6478")
+            Input(placeholder: "What do you build?", bind: bio, maxLength: 120, width: 636,
+                  p: 10, rounded: 10, bg: "#F7F9FC", border: "#D8E0EA", fontScale: 0.62,
+                  label: "Short bio")
+          }
+
+          // Submit row: primary + success tone, disabled until valid
+          Row(gap: 14, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Button("Create account", width: 176, p: 12, rounded: 10, shadow: 2, fontScale: 0.7,
+                   variant: "primary", tone: "success", state: "disabled") {
+              submitted = true
+            }
+            Text("By continuing you accept the terms of service.", size: 9, color: "#8A94A6")
+          }
+        }
+      }
+
+      // Semantic feedback rows
+      Container(p: 20, m: 20, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4EF") {
+        Column(gap: 12, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("Account checks", size: 13, color: "#132C5A", role: "heading")
+          Row(gap: 12, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Badge(label: "Success", tone: "success", bg: "#1FB14C", border: "#1FB14C",
+                  width: 92, p: 6, rounded: 8, fontScale: 0.6)
+            Text("Email format verified", size: 10, color: "#33415C")
+          }
+          Row(gap: 12, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Badge(label: "Warning", tone: "warning", bg: "#FD960E", border: "#FD960E",
+                  width: 92, p: 6, rounded: 8, fontScale: 0.6)
+            Text("Password strength is low", size: 10, color: "#33415C")
+          }
+          Row(gap: 12, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Badge(label: "Error", tone: "error", bg: "#F62B35", border: "#F62B35",
+                  width: 92, p: 6, rounded: 8, fontScale: 0.6)
+            Text("Full name cannot be empty", size: 10, color: "#33415C")
+          }
+          Row(gap: 12, align: start, bg: "#FFFFFF", border: "#FFFFFF") {
+            Badge(label: "Info", tone: "info", bg: "#0A71FC", border: "#0A71FC",
+                  width: 92, p: 6, rounded: 8, fontScale: 0.6)
+            Text("Changes save automatically", size: 10, color: "#33415C")
+          }
+        }
+      }
+
+      Container(p: 16, bg: "#EEF1F6", border: "#EEF1F6") {
+        Column(align: center, bg: "#EEF1F6", border: "#EEF1F6") {
+          Text("OPUROM / Rich form", size: 9, color: "#8A94A6")
+        }
+      }
+    }
+  }
+}

@@ -963,6 +963,59 @@
           "description": "render the responsive gallery at 560x900"
         }
       ]
+    },
+    {
+      "name": "rich-form",
+      "source": "rich-form.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "rich-form.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the rich form screen"
+        },
+        {
+          "id": "rich-form.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the rich form screen to IR"
+        },
+        {
+          "id": "rich-form.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "720",
+            "1000",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the rich form at 720x1000"
+        },
+        {
+          "id": "rich-form.responsive",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "420",
+            "900",
+            "{tmp}/compact.ppm"
+          ],
+          "description": "render the rich form at 420x900"
+        }
+      ]
     }
   ]
 }
