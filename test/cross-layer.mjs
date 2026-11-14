@@ -317,6 +317,19 @@ try {
       doc.styles.some((style) => !Array.isArray(icon.styles?.[style]) || icon.styles[style].length === 0));
     assert.equal(offenders.length, 0, `${offenders.length} icons are missing a style`);
   });
+  check('every repository ships the same release-tag scripts', () => {
+    // The workflows share one implementation; a single drifting copy breaks
+    // the release numbering of that repository only.
+    const scripts = ['version.mjs', 'next-version.mjs'];
+    for (const script of scripts) {
+      const reference = readFileSync(P('opurom-spec', '.github', 'scripts', script));
+      for (const repo of REPOS) {
+        const file = P(repo, '.github', 'scripts', script);
+        assert.ok(existsSync(file), `${repo}: missing ${script}`);
+        assert.ok(readFileSync(file).equals(reference), `${repo}: ${script} drifted`);
+      }
+    }
+  });
   check('async/await effects lower into IR without changing plain programs', () => {
     const src = join(tmp, 'async.opu');
     const out = join(tmp, 'async.opuir.json');
