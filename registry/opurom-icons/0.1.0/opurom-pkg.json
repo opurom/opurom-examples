@@ -3,13 +3,21 @@
   "version": "0.1.0",
   "kind": "icons",
   "entry": "icons/icons.json",
-  "license": "MIT",
-  "attribution": "Phosphor Icons (c) 2023 Phosphor Icons (MIT), phosphoricons.com; full text in LICENSE",
-  "iconSource": { "package": "@phosphor-icons/core", "version": "2.1.1", "redistributed": true },
-  "viewBox": "0 0 256 256",
-  "weights": ["regular"],
+  "license": "Apache-2.0",
+  "attribution": "QingIcon (https://qingicon.com), Apache-2.0. Full text in LICENSE and NOTICE.",
+  "iconSource": {
+    "site": "https://qingicon.com",
+    "repository": "https://github.com/asorn/qingicon-open",
+    "version": "2.0.5",
+    "redistributed": true
+  },
+  "viewBox": "0 0 24 24",
+  "styles": ["line", "fill-small", "fill-regular", "fill-large"],
+  "sketch": "runtime",
+  "count": 3907,
   "files": [
     "LICENSE",
+    "NOTICE",
     "icons/icons.json",
     "opurom-pkg.json"
   ]

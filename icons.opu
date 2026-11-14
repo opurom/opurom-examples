@@ -1,6 +1,6 @@
 import "theme/default.opu";
 
-// Icon system showcase: the opurom-icons package (Phosphor geometry) rendered
+// Icon system showcase: the opurom-icons package (QingIcon geometry) rendered
 // in a labelled grid, plus IconButton examples that drive state. Every value is
 // a literal, so the frame is deterministic (no clock, no randomness).
 //
@@ -65,61 +65,61 @@ app Icons {
 
       // Gallery: the package icons in a reflowing labelled grid. Every name
       // resolves from opurom-icons at compile time and renders the vendored
-      // Phosphor geometry.
+      // QingIcon geometry.
       Column(width: 1000, gap: 14) {
         Text("Navigation", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("house", "home")
-          IconTile("magnifying-glass", "search")
-          IconTile("gear", "settings")
-          IconTile("plus", "add")
-          IconTile("minus", "remove")
-          IconTile("star", "star")
+          IconTile("home", "home")
+          IconTile("search", "search")
+          IconTile("settings", "settings")
+          IconTile("hexagon-plus", "add")
+          IconTile("hexagon-minus", "remove")
+          IconTile("star-sparkles", "star")
         }
 
         Text("State and media", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("check", "done")
-          IconTile("x", "close")
-          IconTile("arrow-clockwise", "sync")
-          IconTile("lock-key", "lock")
+          IconTile("char-check", "done")
+          IconTile("hexagon-close", "close")
+          IconTile("refresh", "sync")
+          IconTile("lock", "lock")
           IconTile("user", "user")
           IconTile("bell", "bell")
         }
 
         Text("Signals", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("heart", "heart")
-          IconTile("info", "info")
-          IconTile("warning", "alert")
+          IconTile("square-heart", "heart")
+          IconTile("information", "info")
+          IconTile("warning-alert", "alert")
           IconTile("play", "play")
           IconTile("pause", "pause")
-          IconTile("pencil-simple", "edit")
+          IconTile("pencil", "edit")
         }
 
         Text("Files and places", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("trash", "delete")
+          IconTile("delete-trash", "delete")
           IconTile("eye", "eye")
           IconTile("calendar", "date")
           IconTile("map-pin", "place")
           IconTile("folder", "folder")
-          IconTile("envelope", "mail")
+          IconTile("mail", "mail")
         }
 
         Text("Direction", size: 16, color: "#111827")
         Grid(columns: 6) {
           IconTile("arrow-left", "back")
           IconTile("arrow-right", "forward")
-          IconTile("caret-right", "right")
-          IconTile("caret-down", "down")
-          IconTile("download-simple", "save")
-          IconTile("upload-simple", "upload")
+          IconTile("chevron-right", "right")
+          IconTile("chevron-down", "down")
+          IconTile("square-download", "save")
+          IconTile("model-upload", "upload")
         }
 
         Grid(columns: 2) {
-          IconTile("chat-circle", "chat")
-          IconTile("list", "list")
+          IconTile("message-square-ai", "chat")
+          IconTile("list-check", "list")
         }
 
         Container(p: 16, rounded: 16, shadow: 3, gradient: "#1D4ED8,#0B1F4B",

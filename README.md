@@ -41,7 +41,7 @@ verification.
 
 The workspace declares its external packages in `opurom.json` and installs them under `registry/`:
 `opurom-ui` provides the default UI system as an importable theme, and `opurom-icons` vendors the
-Phosphor icon set. The compiler resolves each locked dependency as a module root, so
+complete QingIcon set. The compiler resolves each locked dependency as a module root, so
 `import "theme/default.opu";` loads the packaged theme exactly like a local module. Applications
 that declare their own `theme` keep it; a program admits at most one theme declaration.
 
