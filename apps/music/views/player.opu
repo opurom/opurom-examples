@@ -11,6 +11,9 @@ state position = 42
 state duration = 214
 state volume = 45
 state mode = "sequence"
+state modeSeq = true
+state modeLoop = false
+state modeShuffle = false
 state repeatOne = false
 
 // Direct record fields let any play action update the bar in one tap.

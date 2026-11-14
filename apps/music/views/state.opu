@@ -64,11 +64,11 @@ state newPlaylistName = ""
 state addPick = "Aurora Lights"
 
 // Per-row flags let the header select or clear the whole list.
-state sel0 = false
+state sel0 = true
 state sel1 = false
 state sel2 = false
 state sel3 = false
-state sel4 = false
+state sel4 = true
 state sel5 = false
 
 // Presence flags make clearing each view a single state change.
@@ -87,7 +87,7 @@ state hist4 = true
 state hist5 = false
 
 // Defaults stay in state so toggles and sliders bind directly.
-state darkTheme = false
+state darkTheme = true
 state settingVolume = 45
 state settingMode = "sequence"
 state settingShuffle = false
