@@ -1,7 +1,7 @@
-// Photo wall: five generated gradient images, one enlarged at a time.
+// Photo wall: five calm scene thumbnails, one enlarged at a time.
 // Next/Prev switch the selected image by setting string/int state and
-// mutually exclusive bool gates; the software raster draws Image as a
-// gradient placeholder (it does not decode PNG resources).
+// mutually exclusive bool gates; backends that decode PNG paint the resource,
+// while Canvas targets keep the deterministic gradient placeholder.
 component Nav(label: string, t: string, src: string, n: int, b1: bool, b2: bool, b3: bool, b4: bool, b5: bool) {
   Button(label, p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
          fontScale: 1.1, animate: spring) {
