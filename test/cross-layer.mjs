@@ -730,7 +730,7 @@ try {
       'stale source comment');
     assert.match(src, /Paragraph\("One catalog, 240 named components, 100 distinct primitive kinds"/,
       'stale UI text');
-    assert.ok(!/108 catalog|24 primitives|One catalog, 24/.test(src), 'stale catalog numbers remain');
+    assert.ok(!/108 catalog|24 primitives|One catalog, 24(?!\d)/.test(src), 'stale catalog numbers remain');
     assert.ok(!/\bR[0-9]+\b|\bRound [0-9]+\b/.test(src), 'internal codename in showcase');
   });
 
