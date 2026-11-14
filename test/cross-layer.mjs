@@ -304,6 +304,19 @@ try {
     assert.match(out, new RegExp(`${c.count} components`), 'catalog count not reported');
     assert.ok(c.primitives >= 32);
   });
+  check('the icon package ships the full QingIcon set in every style', () => {
+    // Guards against silent shrinkage of the 3907-icon, four-style set.
+    const pack = JSON.parse(readFileSync(P('opurom-icons', 'opurom-pkg.json'), 'utf8'));
+    assert.equal(pack.kind, 'icons');
+    assert.equal(pack.license, 'Apache-2.0');
+    const doc = JSON.parse(readFileSync(P('opurom-icons', pack.entry), 'utf8'));
+    assert.equal(doc.count, 3907, `expected the full 3907-icon set, got ${doc.count}`);
+    assert.equal(doc.count, doc.icons.length, 'count must match the icon list');
+    assert.deepEqual(doc.styles, ['line', 'fill-small', 'fill-regular', 'fill-large']);
+    const offenders = doc.icons.filter((icon) =>
+      doc.styles.some((style) => !Array.isArray(icon.styles?.[style]) || icon.styles[style].length === 0));
+    assert.equal(offenders.length, 0, `${offenders.length} icons are missing a style`);
+  });
   check('async/await effects lower into IR without changing plain programs', () => {
     const src = join(tmp, 'async.opu');
     const out = join(tmp, 'async.opuir.json');
