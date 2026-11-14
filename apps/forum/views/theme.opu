@@ -1,8 +1,9 @@
 // Relay theme block: one place defines the demo's own palette, radius and type
 // scale so every screen shares a cohesive identity independent of any reference.
-theme { mode: light, accent: "#E4572E", radius: 16, fontScale: 1.0 }
+// One restrained indigo accent carries the active state; every other surface stays calm.
+theme { mode: light, accent: "#4F46E5", radius: 16, fontScale: 1.0 }
 
 // Surface and ink tokens the screens reuse as literal colors.
-// Ink #1B1F2A, muted #6B7280, line #E6E4EF, surface #FFFFFF,
-// wash #F6F4FB, accent #E4572E, accent-soft #FDEAE2, accent-deep #B83E1C,
-// plum #5B3FD1, plum-soft #EDE8FF.
+// Ink #111827, muted #6B7280, faint #9CA3AF, hairline #ECEEF2, surface #FFFFFF,
+// wash #F5F6F8, wash-2 #F3F4F8, accent #4F46E5, accent-soft #EEF0FF,
+// success #22C55E, danger-soft #FEF2F2, danger #B91C1C.

@@ -1,5 +1,5 @@
 // The single theme block lives here because an imported module may declare only state, model, api, theme and imports.
-theme { mode: light, accent: "#4F46E5", radius: 16, fontScale: 1.0 }
+theme { mode: light, accent: "#4F46E5", radius: 16, fontScale: 1.0, stage: "#EDF0F7" }
 
 // Topic, sort and paging state is grouped so the feed controls read one shared selection.
 state feedTopic = "All"

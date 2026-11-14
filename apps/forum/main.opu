@@ -5,30 +5,31 @@ import "views/state.opu";
 import "views/theme.opu";
 
 // Brand mark shared by the header and footer so the identity stays one glyph.
-component BrandMark(size: int, ink: string, accent: string) {
-  Row(gap: 8, align: center) {
-    Container(width: 30, height: 30, rounded: 9, bg: "{accent}") {
-      Icon(name: "chat", color: "#FFFFFF")
+component BrandMark(size: int, ink: string, accent: string, tile: string) {
+  Row(gap: 10, align: center) {
+    Container(width: 34, height: 34, rounded: 10, bg: "{accent}") {
+      Icon(name: "chat", color: "{tile}")
     }
     Text("Relay", size: size, color: "{ink}")
   }
 }
 
-// Section heading used above every grouped surface keeps type scale consistent.
+// Section heading closes every grouped surface with one type scale.
 component SectionHead(title: string, detail: string) {
-  Row(gap: 8, align: center) {
-    Container(height: 40, color: "#FFFFFF") {
-      Text("{title}", size: 20, color: "#1B1F2A")
-      Spacer(height: 2)
-      Text("{detail}", size: 12, color: "#6B7280")
-    }
-    Spacer(width: 8)
+  Column(gap: 4) {
+    Text("{title}", size: 26, color: "#111827")
+    Text("{detail}", size: 13, color: "#6B7280")
   }
 }
 
-// Tag chip sets the feed filter and returns to the top of the paged feed.
-component TagChip(label: string, slug: string, accent: string) {
-  Button("{label}", p: 8, rounded: 14, shadow: 1, bg: "{accent}") {
+// Small running dot marks the active presence list without a heavy fill.
+component Dot(color: string) {
+  Container(width: 8, height: 8, rounded: 4, bg: "{color}") {}
+}
+
+// Sidebar tag line sets the feed filter and returns to the top of the paged feed.
+component SideTag(label: string, slug: string, count: string) {
+  Button("{label}   {count}", p: 10, rounded: 10, bg: "#F5F6F8") {
     tagFilter = slug
     page = 1
     hasMore = true
@@ -45,43 +46,49 @@ component TagChip(label: string, slug: string, accent: string) {
   }
 }
 
-// Soft chip for static metadata (tag accents, counts, roles) without a tap action.
-component MetaChip(label: string, accent: string) {
-  Container(p: 8, rounded: 12, bg: "{accent}") {
-    Text("{label}", size: 11, color: "#FFFFFF")
+// Feed tag row switches the filter; the accent already names the active tag.
+component FilterTag(label: string, slug: string) {
+  Button("{label}", p: 8, rounded: 10, bg: "#FFFFFF") {
+    tagFilter = slug
+    page = 1
+    hasMore = true
   }
 }
 
-// One discussion card: identity row, title, tag, engagement counts and open action.
-component DiscussionCard(title: string, author: string, tag: string, tagAccent: string, likes: string, replies: string, views: string, when: string) {
-  Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-    Column(gap: 10, bg: "#FFFFFF") {
+// Soft tag pill: a light wash with an explicitly dark label, never a full fill.
+component TagPill(label: string) {
+  Container(p: 6, rounded: 10, bg: "#EEF0FF") {
+    Text("{label}", size: 11, color: "#4F46E5")
+  }
+}
+
+// Stat unit inside the footer strip of a discussion card.
+component StatUnit(icon: string, label: string) {
+  Row(gap: 5, align: center) {
+    Icon(name: "{icon}", color: "#9CA3AF")
+    Text("{label}", size: 12, color: "#6B7280")
+  }
+}
+
+// One discussion card: identity row, tag pill, title, engagement counts and open action.
+component DiscussionCard(title: string, author: string, tag: string, likes: string, replies: string, views: string, when: string) {
+  Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+    Column(gap: 10) {
       Row(gap: 10, align: center) {
         Avatar(label: "{author}")
-        Container(height: 32, color: "#FFFFFF") {
-          Text("{author}", size: 12, color: "#1B1F2A")
-          Spacer(height: 2)
-          Text("{when}", size: 11, color: "#6B7280")
-        }
-        Spacer(width: 8)
-        MetaChip("{tag}", "{tagAccent}")
+        Text("{author}", size: 13, color: "#111827")
+        Text("{when}", size: 12, color: "#9CA3AF")
+        Spacer(width: 1)
+        TagPill("{tag}")
       }
-      Text("{title}", size: 16, color: "#1B1F2A")
-      Row(gap: 14, align: center) {
-        Row(gap: 4, align: center) {
-          Icon(name: "heart", color: "#E4572E")
-          Text("{likes}", size: 11, color: "#6B7280")
-        }
-        Row(gap: 4, align: center) {
-          Icon(name: "chat", color: "#5B3FD1")
-          Text("{replies} replies", size: 11, color: "#6B7280")
-        }
-        Row(gap: 4, align: center) {
-          Icon(name: "eye", color: "#6B7280")
-          Text("{views}", size: 11, color: "#6B7280")
-        }
-        Spacer(width: 8)
-        Button("Open", p: 8, rounded: 12, shadow: 2, bg: "#E4572E", animate: spring) {
+      Text("{title}", size: 17, color: "#111827")
+      Divider()
+      Row(gap: 18, align: center) {
+        StatUnit("heart", "{likes}")
+        StatUnit("chat", "{replies} replies")
+        StatUnit("eye", "{views} views")
+        Spacer(width: 1)
+        Button("Open", p: 8, rounded: 10, bg: "#EEF0FF") {
           selectedTitle = title
           selectedAuthor = author
           selectedTag = tag
@@ -104,24 +111,22 @@ component DiscussionCard(title: string, author: string, tag: string, tagAccent: 
   }
 }
 
-// Reply row renders author, body and a like control; nested replies reuse it.
+// Reply row renders author, body and a compact like control.
 component ReplyRow(author: string, body: string, likes: string) {
-  Card(p: 12, rounded: 14, shadow: 1, bg: "#F6F4FB", border: "#E6E4EF") {
-    Row(gap: 10, align: center) {
+  Card(p: 14, rounded: 14, shadow: 1, bg: "#FAFBFC", border: "#ECEEF2") {
+    Row(gap: 12, align: start) {
       Avatar(label: "{author}")
-      Container(height: 64, color: "#F6F4FB") {
+      Column(gap: 6) {
         Row(gap: 8, align: center) {
-          Text("{author}", size: 12, color: "#1B1F2A")
-          Text("{likes} likes", size: 11, color: "#6B7280")
+          Text("{author}", size: 13, color: "#111827")
+          Text("{likes} likes", size: 12, color: "#9CA3AF")
         }
-        Spacer(height: 4)
-        Text("{body}", size: 13, color: "#3A3F4B")
-        Spacer(height: 4)
+        Text("{body}", size: 14, color: "#374151")
         Row(gap: 8, align: center) {
-          Button("Like", p: 6, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+          Button("Like", p: 6, rounded: 8, bg: "#F5F6F8") {
             selectedLikes += 1
           }
-          Button("Reply", p: 6, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+          Button("Reply", p: 6, rounded: 8, bg: "#F5F6F8") {
             replying = true
           }
         }
@@ -130,13 +135,12 @@ component ReplyRow(author: string, body: string, likes: string) {
   }
 }
 
-// Stat tile gives the side panel and profile a shared metric treatment.
+// Stat tile gives the feed and profile a shared metric treatment.
 component StatTile(label: string, metric: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-    Container(height: 42, color: "#FFFFFF") {
-      Text("{label}", size: 11, color: "#6B7280")
-      Spacer(height: 4)
-      Text("{metric}", size: 22, color: "#1B1F2A")
+  Card(p: 16, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+    Column(gap: 4) {
+      Text("{label}", size: 12, color: "#6B7280")
+      Text("{metric}", size: 24, color: "#111827")
     }
   }
 }
@@ -145,9 +149,10 @@ component StatTile(label: string, metric: string) {
 component MemberRow(handle: string) {
   Row(gap: 10, align: center) {
     Avatar(label: "{handle}")
-    Text("{handle}", size: 12, color: "#1B1F2A")
-    Spacer(width: 8)
-    Button("View", p: 6, rounded: 10, shadow: 1, bg: "#F6F4FB") {
+    Text("{handle}", size: 13, color: "#111827")
+    Dot("#22C55E")
+    Spacer(width: 1)
+    Button("View", p: 6, rounded: 8, bg: "#F5F6F8") {
       profileHandle = handle
       profileName = handle
       view = "profile"
@@ -162,9 +167,9 @@ component MemberRow(handle: string) {
   }
 }
 
-// Left navigation button switches the main surface through one state.
-component NavButton(label: string, icon: string, surface: string) {
-  Button("{label}", p: 10, rounded: 12, shadow: 1, bg: "#FFFFFF") {
+// Sidebar quick link switches the main surface through one state.
+component NavButton(label: string, surface: string) {
+  Button("{label}", p: 10, rounded: 10, bg: "#F5F6F8") {
     view = surface
     viewFeedDetail = false
     showFeed = false
@@ -180,23 +185,21 @@ component NavButton(label: string, icon: string, surface: string) {
 
 // Notification line with kind chip, actor and mark-read action.
 component NotificationRow(kind: string, actor: string, text: string, when: string) {
-  Card(p: 12, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E6E4EF") {
-    Row(gap: 10, align: center) {
-      Container(width: 34, height: 34, rounded: 11, bg: "#FDEAE2") {
-        Icon(name: "bell", color: "#E4572E")
+  Card(p: 14, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+    Row(gap: 12, align: center) {
+      Container(width: 36, height: 36, rounded: 10, bg: "#EEF0FF") {
+        Icon(name: "bell", color: "#4F46E5")
       }
-      Container(height: 40, color: "#FFFFFF") {
+      Column(gap: 2) {
         Row(gap: 6, align: center) {
-          Text("{actor}", size: 12, color: "#1B1F2A")
-          Text("{kind}", size: 11, color: "#5B3FD1")
+          Text("{actor}", size: 13, color: "#111827")
+          TagPill("{kind}")
         }
-        Spacer(height: 2)
-        Text("{text}", size: 12, color: "#6B7280")
-        Spacer(height: 2)
-        Text("{when}", size: 10, color: "#9AA0AC")
+        Text("{text}", size: 13, color: "#4B5563")
+        Text("{when}", size: 11, color: "#9CA3AF")
       }
-      Spacer(width: 8)
-      Button("Mark read", p: 6, rounded: 10, shadow: 1, bg: "#F6F4FB") {
+      Spacer(width: 1)
+      Button("Mark read", p: 6, rounded: 8, bg: "#F5F6F8") {
         unreadCount -= 1
       }
     }
@@ -205,15 +208,14 @@ component NotificationRow(kind: string, actor: string, text: string, when: strin
 
 // Search result line routes a discussion result to its detail composition.
 component ResultRow(title: string, kind: string, meta: string) {
-  Card(p: 12, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E6E4EF") {
-    Row(gap: 10, align: center) {
-      Container(width: 30, height: 30, rounded: 10, bg: "#EDE8FF") {
-        Icon(name: "search", color: "#5B3FD1")
+  Card(p: 14, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+    Row(gap: 12, align: center) {
+      Container(width: 32, height: 32, rounded: 10, bg: "#EEF0FF") {
+        Icon(name: "search", color: "#4F46E5")
       }
-      Container(height: 32, color: "#FFFFFF") {
-        Text("{title}", size: 13, color: "#1B1F2A")
-        Spacer(height: 2)
-        Text("{kind} - {meta}", size: 11, color: "#6B7280")
+      Column(gap: 2) {
+        Text("{title}", size: 14, color: "#111827")
+        Text("{kind} - {meta}", size: 12, color: "#6B7280")
       }
     }
   }
@@ -222,34 +224,34 @@ component ResultRow(title: string, kind: string, meta: string) {
 // Activity line for the profile feed keeps the timeline scannable.
 component ActivityRow(text: string, when: string) {
   Row(gap: 10, align: center) {
-    Container(width: 8, height: 8, rounded: 4, bg: "#E4572E")
-    Text("{text}", size: 12, color: "#3A3F4B")
-    Spacer(width: 8)
-    Text("{when}", size: 11, color: "#6B7280")
+    Dot("#4F46E5")
+    Text("{text}", size: 13, color: "#374151")
+    Spacer(width: 1)
+    Text("{when}", size: 12, color: "#9CA3AF")
   }
 }
 
 // Flag row in the moderation panel exposes the delete and dismiss actions.
 component FlagRow(author: string, title: string, reason: string) {
-  Card(p: 12, rounded: 14, shadow: 1, bg: "#FEF2F2", border: "#FBD5D5") {
-    Column(gap: 6, bg: "#FEF2F2") {
+  Card(p: 14, rounded: 14, shadow: 1, bg: "#FEF2F2", border: "#FBD5D5") {
+    Column(gap: 8) {
       Row(gap: 8, align: center) {
         Avatar(label: "{author}")
-        Text("{title}", size: 13, color: "#7F1D1D")
-        Spacer(width: 8)
+        Text("{title}", size: 14, color: "#7F1D1D")
+        Spacer(width: 1)
         Icon(name: "warning", color: "#B91C1C")
       }
-      Text("reason: {reason}", size: 11, color: "#9A3412")
+      Text("reason: {reason}", size: 12, color: "#9A3412")
       Row(gap: 8, align: center) {
-        Button("Delete", p: 6, rounded: 10, shadow: 1, bg: "#B91C1C") {
+        Button("Delete", p: 6, rounded: 8, bg: "#B91C1C") {
           flaggedCount -= 1
           moderatorNote = "Item removed from the queue."
         }
-        Button("Dismiss", p: 6, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+        Button("Dismiss", p: 6, rounded: 8, bg: "#F5F6F8") {
           flaggedCount -= 1
           moderatorNote = "Flag dismissed as unfounded."
         }
-        Button("Mute user", p: 6, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+        Button("Mute user", p: 6, rounded: 8, bg: "#F5F6F8") {
           mutedCount += 1
           moderatorNote = "Author muted for 24 hours."
         }
@@ -258,11 +260,11 @@ component FlagRow(author: string, title: string, reason: string) {
   }
 }
 
-// Feature line inside the composer validation summary.
+// Inline validation note for the composer and auth forms.
 component FormNote(text: string) {
   Row(gap: 6, align: center) {
     Icon(name: "info", color: "#B83E1C")
-    Text("{text}", size: 11, color: "#B83E1C")
+    Text("{text}", size: 12, color: "#B83E1C")
   }
 }
 
@@ -272,28 +274,15 @@ app Relay {
   computed engagement = selectedLikes + selectedReplies + selectedViews
 
   // One shell for every width: the outer Row lays the side panel beside the main
-  // column on a wide viewport and stacks them on a compact one.
-  Column(p: 0, gap: 0) {
+  // column. A start alignment keeps the sidebar pinned to the top beside the tall feed.
+  Column(p: 0, gap: 0, bg: "#F5F6F8") {
     // Persistent header: brand, search box, notification bell and user menu.
-    Container(p: 14, shadow: 4, gradient: "#E4572E,#B83E1C",
-              particles: "count=36,seed=23,radius=2,alpha=780,color=#FFE7DC") {
-      Row(gap: 12, align: center, bg: "#E4572E") {
-        BrandMark(22, "#FFFFFF", "#B83E1C")
-        Spacer(width: 8)
-        Button("Home", p: 8, rounded: 10, shadow: 1, bg: "#B83E1C") {
-          view = "feed"
-          viewFeedDetail = false
-          showFeed = true
-          showLogin = false
-          showRegister = false
-          showProfile = false
-          showNotifications = false
-          showSearch = false
-          showCompose = false
-          showModeration = false
-        }
+    Container(p: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+      Row(gap: 12, align: center) {
+        BrandMark(19, "#111827", "#4F46E5", "#FFFFFF")
+        Spacer(width: 1)
         Input(bind: searchText, placeholder: "Search discussions and members")
-        Button("Search", p: 8, rounded: 10, shadow: 1, bg: "#B83E1C") {
+        Button("Search", p: 8, rounded: 10, bg: "#F5F6F8") {
           searchQuery = searchText
           view = "search"
           viewFeedDetail = false
@@ -306,7 +295,7 @@ app Relay {
           showCompose = false
           showModeration = false
         }
-        Button("Bell {unreadCount}", p: 8, rounded: 10, shadow: 1, bg: "#B83E1C") {
+        Button("Bell {unreadCount}", p: 8, rounded: 10, bg: "#F5F6F8") {
           view = "notifications"
           viewFeedDetail = false
           showFeed = false
@@ -318,7 +307,7 @@ app Relay {
           showCompose = false
           showModeration = false
         }
-        Button("New", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+        Button("New discussion", p: 10, rounded: 10, bg: "#4F46E5") {
           view = "compose"
           viewFeedDetail = false
           showFeed = false
@@ -331,7 +320,7 @@ app Relay {
           showModeration = false
         }
         if (sessionActive) {
-          Button("@{meHandle}", p: 8, rounded: 10, shadow: 1, bg: "#B83E1C") {
+          Button("@{meHandle}", p: 8, rounded: 10, bg: "#F5F6F8") {
             view = "profile"
             viewFeedDetail = false
             showFeed = false
@@ -343,7 +332,7 @@ app Relay {
             showCompose = false
             showModeration = false
           }
-          Button("Sign out", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+          Button("Sign out", p: 8, rounded: 10, bg: "#F5F6F8") {
             sessionActive = false
             role = "guest"
             isModerator = false
@@ -362,103 +351,91 @@ app Relay {
       }
     }
 
-    Row(gap: 16, p: 16) {
-      // Side panel: tag catalogue, community stats, active members, quick links.
-      Column(width: 260, gap: 12, p: 6) {
-        Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-          Column(gap: 10, bg: "#FFFFFF") {
-            Text("Tags", size: 14, color: "#1B1F2A")
-            TagChip("All", "all", "#5B3FD1")
-            TagChip("Announcements", "announcements", "#E4572E")
-            TagChip("General", "general", "#2F7D5B")
-            TagChip("Help", "help", "#B83E1C")
-            TagChip("Showcase", "showcase", "#7A5AF8")
-            TagChip("Design", "design", "#E4572E")
-            TagChip("Build", "build", "#1F6FB2")
+    Row(gap: 16, p: 24, align: start) {
+      // Side panel: community stats, tags, active members, quick links.
+      // Width caps at 260px on wide screens; at narrow the Row stacks it full-width.
+      Column(width: 260, gap: 14) {
+        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+          Column(gap: 8) {
+            Text("Community", size: 13, color: "#6B7280")
+            Row(gap: 8, align: center) {
+              Dot("#22C55E")
+              Text("5 active members", size: 17, color: "#111827")
+            }
+            Text("128 discussions - 317 replies", size: 12, color: "#6B7280")
           }
         }
 
-        Card(p: 14, rounded: 16, shadow: 2, gradient: "#5B3FD1,#3A2A8C") {
-          Column(gap: 6, bg: "#5B3FD1") {
-            Text("Community", size: 12, color: "#D9D0FF")
-            Text("5 active members", size: 14, color: "#FFFFFF")
-            Text("128 discussions - 317 replies", size: 11, color: "#D9D0FF")
+        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+          Column(gap: 8) {
+            Text("Tags", size: 13, color: "#111827")
+            SideTag("Announcements", "announcements", "9")
+            SideTag("General", "general", "41")
+            SideTag("Help", "help", "22")
+            SideTag("Showcase", "showcase", "18")
+            SideTag("Design", "design", "14")
+            SideTag("Build", "build", "24")
           }
         }
 
-        Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-          Column(gap: 8, bg: "#FFFFFF") {
-            Text("Active now", size: 13, color: "#1B1F2A")
+        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+          Column(gap: 10) {
+            Text("Active now", size: 13, color: "#111827")
             for (m in activeMembers) {
               MemberRow("{m}")
             }
           }
         }
 
-        Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-          Column(gap: 6, bg: "#FFFFFF") {
-            Text("Quick links", size: 13, color: "#1B1F2A")
-            NavButton("Feed", "home", "feed")
-            NavButton("Notifications", "bell", "notifications")
-            NavButton("My profile", "user", "profile")
-            NavButton("Moderation", "warning", "moderation")
+        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+          Column(gap: 8) {
+            Text("Quick links", size: 13, color: "#111827")
+            NavButton("Feed", "feed")
+            NavButton("Notifications", "notifications")
+            NavButton("My profile", "profile")
+            NavButton("Moderation", "moderation")
           }
         }
       }
 
       // Main column: one screen at a time driven by the view flag.
-      Column(width: 860, gap: 14) {
-        // Feed: section head, sort, tag strip, discussion cards, load-more.
+      // Width caps at 880px on wide screens so the shell reads as a centred two-column page.
+      Column(width: 880, gap: 16) {
+        // Feed: section head, sort, tag strip, stats, discussion cards, load-more.
         if (showFeed) {
-          Column(gap: 12) {
-            SectionHead("Discussions", "sort {sortBy} - tag {tagFilter} - page {page}")
+          Column(gap: 14) {
+            SectionHead("Discussions", "for a calm, thoughtful community")
             Row(gap: 10, align: center) {
-              Text("Sort", size: 12, color: "#6B7280")
-              Radio(bind: sortBy, value: "latest")
-              Text("latest", size: 12, color: "#6B7280")
-              Radio(bind: sortBy, value: "top")
-              Text("top", size: 12, color: "#6B7280")
-              Radio(bind: sortBy, value: "unanswered")
-              Text("unanswered", size: 12, color: "#6B7280")
-              Spacer(width: 8)
-              Button("New discussion", p: 10, rounded: 12, shadow: 2, bg: "#E4572E", animate: spring) {
-                view = "compose"
-                viewFeedDetail = false
-                showFeed = false
-                showCompose = true
-              }
-            }
-            Row(gap: 8, align: center) {
-              Text("Tags", size: 12, color: "#6B7280")
-              TagChip("All", "all", "#5B3FD1")
-              TagChip("Announcements", "announcements", "#E4572E")
-              TagChip("General", "general", "#2F7D5B")
-              TagChip("Help", "help", "#B83E1C")
-              TagChip("Showcase", "showcase", "#7A5AF8")
+              Text("Sort by", size: 13, color: "#6B7280")
+              FilterTag("Latest", "all")
+              FilterTag("Announcements", "announcements")
+              FilterTag("General", "general")
+              FilterTag("Help", "help")
+              FilterTag("Showcase", "showcase")
+              Spacer(width: 1)
+              Text("Showing: {tagFilter}", size: 12, color: "#4F46E5")
             }
             Grid(columns: 3) {
               StatTile("Discussions", "128")
               StatTile("Members", "42")
               StatTile("Replies", "317")
             }
-            Scroll(height: 560, bg: "#F6F4FB", border: "#E6E4EF", rounded: 16) {
-              Column(width: 828, gap: 12) {
-                for (i in 8) {
-                  DiscussionCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedTags[i]}", "#E4572E", "{feedLikes[i]}", "{feedReplies[i]}", "{feedViews[i]}", "{feedTimes[i]}")
+            Column(gap: 12) {
+              for (i in 8) {
+                DiscussionCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedTags[i]}", "{feedLikes[i]}", "{feedReplies[i]}", "{feedViews[i]}", "{feedTimes[i]}")
+              }
+            }
+            Row(gap: 10, align: center) {
+              if (hasMore) {
+                Button("Load more discussions", p: 10, rounded: 10, bg: "#FFFFFF") {
+                  page += 1
+                  hasMore = false
                 }
-                if (hasMore) {
-                  Button("Load more", p: 10, rounded: 12, shadow: 2, bg: "#FFFFFF") {
-                    page += 1
-                    hasMore = false
-                  }
-                } else {
-                  Row(gap: 8, align: center) {
-                    Text("Page {page} - end of feed", size: 12, color: "#6B7280")
-                    Button("Back to start", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
-                      page = 1
-                      hasMore = true
-                    }
-                  }
+              } else {
+                Text("Page {page} - end of feed", size: 12, color: "#6B7280")
+                Button("Back to start", p: 8, rounded: 10, bg: "#FFFFFF") {
+                  page = 1
+                  hasMore = true
                 }
               }
             }
@@ -467,66 +444,65 @@ app Relay {
 
         // Discussion detail: post body, reactions, reply composer, nested replies.
         if (viewFeedDetail) {
-          Column(gap: 12) {
+          Column(gap: 14) {
             Row(gap: 8, align: center) {
-              Button("Back to feed", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+              Button("Back to feed", p: 8, rounded: 10, bg: "#FFFFFF") {
                 view = "feed"
                 viewFeedDetail = false
                 showFeed = true
               }
             }
-            Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E6E4EF") {
-              Column(gap: 10, bg: "#FFFFFF") {
+            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+              Column(gap: 12) {
                 Row(gap: 8, align: center) {
-                  MetaChip("{selectedTag}", "#E4572E")
+                  TagPill("{selectedTag}")
                   if (selectedPinned) {
-                    MetaChip("Pinned", "#5B3FD1")
+                    TagPill("Pinned")
                   }
                   if (selectedLocked) {
-                    MetaChip("Locked", "#B91C1C")
+                    TagPill("Locked")
                   }
                 }
-                Text("{selectedTitle}", size: 22, color: "#1B1F2A")
+                Text("{selectedTitle}", size: 28, color: "#111827")
                 Row(gap: 10, align: center) {
                   Avatar(label: "{selectedAuthor}")
-                  Container(height: 34, color: "#FFFFFF") {
-                    Text("by {selectedAuthor}", size: 12, color: "#1B1F2A")
-                    Spacer(height: 2)
-                    Text("started this discussion", size: 11, color: "#6B7280")
+                  Column(gap: 2) {
+                    Text("by {selectedAuthor}", size: 13, color: "#111827")
+                    Text("started this discussion", size: 12, color: "#9CA3AF")
                   }
                 }
-                Text("{selectedBody}", size: 14, color: "#3A3F4B")
+                Text("{selectedBody}", size: 15, color: "#374151")
                 Divider()
                 Row(gap: 10, align: center) {
-                  Button("Like {selectedLikes}", p: 8, rounded: 12, shadow: 2, bg: "#E4572E") {
+                  Button("Like {selectedLikes}", p: 8, rounded: 10, bg: "#4F46E5") {
                     selectedLikes += 1
                   }
-                  Button("Reply", p: 8, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Reply", p: 8, rounded: 10, bg: "#F5F6F8") {
                     replying = true
                   }
-                  Button("Save", p: 8, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Save", p: 8, rounded: 10, bg: "#F5F6F8") {
                     moderatorNote = "Saved to your bookmarks."
                   }
-                  Button("Edit", p: 8, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Edit", p: 8, rounded: 10, bg: "#F5F6F8") {
                     editingReply = true
                   }
-                  Spacer(width: 8)
-                  Text("{selectedViews} views - {selectedReplies} replies", size: 11, color: "#6B7280")
+                  Spacer(width: 1)
+                  Text("{selectedViews} views - {selectedReplies} replies", size: 12, color: "#6B7280")
                 }
                 if (selectedLocked) {
-                  MetaChip("This thread is locked", "#B91C1C")
+                  TagPill("This thread is locked")
                 }
                 Row(gap: 8, align: center) {
-                  Text("Moderator tools", size: 11, color: "#B91C1C")
-                  Button("Lock thread", p: 6, rounded: 10, shadow: 1, bg: "#FEF2F2") {
+                  Text("Moderator tools", size: 12, color: "#B91C1C")
+                  Button("Lock thread", p: 6, rounded: 8, bg: "#FEF2F2") {
                     selectedLocked = true
                   }
-                  Button("Delete thread", p: 6, rounded: 10, shadow: 1, bg: "#FEF2F2") {
+                  Button("Delete thread", p: 6, rounded: 8, bg: "#FEF2F2") {
                     view = "feed"
                     viewFeedDetail = false
                     showFeed = true
                   }
-                  Button("Flag post", p: 6, rounded: 10, shadow: 1, bg: "#FEF2F2") {
+                  Button("Flag post", p: 6, rounded: 8, bg: "#FEF2F2") {
                     flaggedCount += 1
                   }
                 }
@@ -535,26 +511,26 @@ app Relay {
             if (replying) {
               Row(gap: 8, align: center) {
                 Input(bind: replyDraft, placeholder: "Write a reply")
-                Button("Post reply", p: 10, rounded: 12, shadow: 2, bg: "#E4572E") {
+                Button("Post reply", p: 10, rounded: 10, bg: "#4F46E5") {
                   selectedReplies += 1
                   replyDraft = ""
                   replying = false
                 }
-                Button("Cancel", p: 10, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                Button("Cancel", p: 10, rounded: 10, bg: "#FFFFFF") {
                   replying = false
                 }
               }
             }
             if (editingReply) {
               Row(gap: 8, align: center) {
-                Icon(name: "edit", color: "#5B3FD1")
-                Text("Editing your latest reply", size: 12, color: "#6B7280")
-                Button("Save edit", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+                Icon(name: "edit", color: "#4F46E5")
+                Text("Editing your latest reply", size: 13, color: "#6B7280")
+                Button("Save edit", p: 8, rounded: 10, bg: "#FFFFFF") {
                   editingReply = false
                 }
               }
             }
-            Text("Replies", size: 15, color: "#1B1F2A")
+            Text("Replies", size: 18, color: "#111827")
             for (i in 3) {
               ReplyRow("{replyAuthors[i]}", "{replyBodies[i]}", "{replyLikes[i]}")
             }
@@ -563,26 +539,26 @@ app Relay {
 
         // Composer: title, body, tag and validation.
         if (showCompose) {
-          Column(gap: 12) {
+          Column(gap: 14) {
             SectionHead("New discussion", "write a clear title, pick a tag, then publish")
-            Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E6E4EF") {
-              Column(gap: 10, bg: "#FFFFFF") {
+            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+              Column(gap: 12) {
                 Input(bind: draftTitle, placeholder: "Discussion title")
                 Input(bind: draftBody, placeholder: "Write the body of the discussion")
                 Row(gap: 8, align: center) {
-                  Text("Tag", size: 12, color: "#6B7280")
+                  Text("Tag", size: 13, color: "#6B7280")
                   Radio(bind: draftTag, value: "General")
-                  Text("General", size: 12, color: "#6B7280")
+                  Text("General", size: 13, color: "#4B5563")
                   Radio(bind: draftTag, value: "Help")
-                  Text("Help", size: 12, color: "#6B7280")
+                  Text("Help", size: 13, color: "#4B5563")
                   Radio(bind: draftTag, value: "Design")
-                  Text("Design", size: 12, color: "#6B7280")
+                  Text("Design", size: 13, color: "#4B5563")
                 }
                 if (draftInvalid) {
                   FormNote("{draftError}")
                 }
                 Row(gap: 8, align: center) {
-                  Button("Publish", p: 10, rounded: 12, shadow: 2, bg: "#E4572E", animate: spring) {
+                  Button("Publish", p: 10, rounded: 10, bg: "#4F46E5") {
                     draftError = "Title and body are required before publishing."
                     draftInvalid = true
                     hasMore = true
@@ -592,7 +568,7 @@ app Relay {
                     showCompose = false
                     showFeed = true
                   }
-                  Button("Cancel", p: 10, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Cancel", p: 10, rounded: 10, bg: "#F5F6F8") {
                     view = "feed"
                     viewFeedDetail = false
                     showCompose = false
@@ -606,18 +582,18 @@ app Relay {
 
         // Login screen.
         if (showLogin) {
-          Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E6E4EF") {
-            Column(gap: 10, bg: "#FFFFFF") {
-              BrandMark(20, "#1B1F2A", "#E4572E")
-              Text("Welcome back", size: 20, color: "#1B1F2A")
-              Text("Sign in to reply, react and follow members.", size: 12, color: "#6B7280")
+          Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+            Column(gap: 12) {
+              BrandMark(20, "#111827", "#4F46E5", "#FFFFFF")
+              Text("Welcome back", size: 22, color: "#111827")
+              Text("Sign in to reply, react and follow members.", size: 13, color: "#6B7280")
               Input(bind: loginHandle, placeholder: "Handle")
               Input(bind: loginPassword, placeholder: "Password")
               if (authInvalid) {
                 FormNote("{authError}")
               }
               Row(gap: 8, align: center) {
-                Button("Sign in", p: 10, rounded: 12, shadow: 2, bg: "#E4572E", animate: spring) {
+                Button("Sign in", p: 10, rounded: 10, bg: "#4F46E5") {
                   authError = "Use a handle and password to continue."
                   authInvalid = true
                   sessionActive = true
@@ -628,7 +604,7 @@ app Relay {
                   showLogin = false
                   showFeed = true
                 }
-                Button("Create account", p: 10, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                Button("Create account", p: 10, rounded: 10, bg: "#F5F6F8") {
                   view = "register"
                   viewFeedDetail = false
                   showLogin = false
@@ -641,11 +617,11 @@ app Relay {
 
         // Register screen.
         if (showRegister) {
-          Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E6E4EF") {
-            Column(gap: 10, bg: "#FFFFFF") {
-              BrandMark(20, "#1B1F2A", "#E4572E")
-              Text("Join Relay", size: 20, color: "#1B1F2A")
-              Text("Create an account to start discussions and follow others.", size: 12, color: "#6B7280")
+          Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+            Column(gap: 12) {
+              BrandMark(20, "#111827", "#4F46E5", "#FFFFFF")
+              Text("Join Relay", size: 22, color: "#111827")
+              Text("Create an account to start discussions and follow others.", size: 13, color: "#6B7280")
               Input(bind: registerHandle, placeholder: "Handle")
               Input(bind: registerName, placeholder: "Display name")
               Input(bind: registerEmail, placeholder: "Email")
@@ -654,7 +630,7 @@ app Relay {
                 FormNote("{authError}")
               }
               Row(gap: 8, align: center) {
-                Button("Create account", p: 10, rounded: 12, shadow: 2, bg: "#E4572E", animate: spring) {
+                Button("Create account", p: 10, rounded: 10, bg: "#4F46E5") {
                   authError = "All fields are required to register."
                   authInvalid = true
                   sessionActive = true
@@ -665,7 +641,7 @@ app Relay {
                   showRegister = false
                   showFeed = true
                 }
-                Button("Back to sign in", p: 10, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                Button("Back to sign in", p: 10, rounded: 10, bg: "#F5F6F8") {
                   view = "login"
                   viewFeedDetail = false
                   showRegister = false
@@ -678,37 +654,35 @@ app Relay {
 
         // User profile: identity, stats, follow/block, activity feed.
         if (showProfile) {
-          Column(gap: 12) {
-            Card(p: 18, rounded: 18, shadow: 3, gradient: "#5B3FD1,#3A2A8C") {
-              Row(gap: 12, align: center, bg: "#5B3FD1") {
-                Container(width: 56, height: 56, rounded: 16, bg: "#FFFFFF") {
-                  Avatar(label: "{profileName}")
-                }
-                Column(gap: 3, bg: "#5B3FD1") {
-                  Text("{profileName}", size: 20, color: "#FFFFFF")
-                  Text("@{profileHandle} - {profileRole}", size: 12, color: "#D9D0FF")
-                  Text("{meJoined}", size: 11, color: "#D9D0FF")
+          Column(gap: 14) {
+            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+              Row(gap: 14, align: center) {
+                Avatar(label: "{profileName}")
+                Column(gap: 3) {
+                  Text("{profileName}", size: 22, color: "#111827")
+                  Text("@{profileHandle} - {profileRole}", size: 13, color: "#6B7280")
+                  Text("{meJoined}", size: 12, color: "#9CA3AF")
                 }
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Text("{profileBio}", size: 13, color: "#3A3F4B")
+            Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+              Column(gap: 12) {
+                Text("{profileBio}", size: 14, color: "#374151")
                 Row(gap: 8, align: center) {
-                  Button("Follow", p: 8, rounded: 12, shadow: 2, bg: "#E4572E") {
+                  Button("Follow", p: 8, rounded: 10, bg: "#4F46E5") {
                     following = true
                     profileLikes += 1
                   }
-                  Button("Block", p: 8, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Block", p: 8, rounded: 10, bg: "#F5F6F8") {
                     blocked = true
                   }
-                  Button("Message", p: 8, rounded: 12, shadow: 1, bg: "#F6F4FB") {
+                  Button("Message", p: 8, rounded: 10, bg: "#F5F6F8") {
                     moderatorNote = "Message draft opened."
                   }
                 }
                 Row(gap: 8, align: center) {
-                  Text("following: {following}", size: 11, color: "#6B7280")
-                  Text("blocked: {blocked}", size: 11, color: "#6B7280")
+                  Text("following: {following}", size: 12, color: "#6B7280")
+                  Text("blocked: {blocked}", size: 12, color: "#6B7280")
                 }
               }
             }
@@ -717,9 +691,9 @@ app Relay {
               StatTile("Replies", "{profileReplies}")
               StatTile("Likes", "{profileLikes}")
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Text("Activity", size: 14, color: "#1B1F2A")
+            Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+              Column(gap: 10) {
+                Text("Activity", size: 16, color: "#111827")
                 for (i in 3) {
                   ActivityRow("{activityTexts[i]}", "{activityTimes[i]}")
                 }
@@ -730,14 +704,14 @@ app Relay {
 
         // Notifications list with unread badge and mark-read.
         if (showNotifications) {
-          Column(gap: 12) {
+          Column(gap: 14) {
             SectionHead("Notifications", "{unreadCount} unread")
             Row(gap: 8, align: center) {
-              Button("Mark all read", p: 8, rounded: 12, shadow: 2, bg: "#E4572E") {
+              Button("Mark all read", p: 8, rounded: 10, bg: "#4F46E5") {
                 unreadCount = 0
                 notificationsOpen = false
               }
-              Text("queue total {noticeTotal}", size: 11, color: "#6B7280")
+              Text("queue total {noticeTotal}", size: 12, color: "#6B7280")
             }
             for (i in 3) {
               NotificationRow("{notificationKinds[i]}", "{notificationActors[i]}", "{notificationTexts[i]}", "{notificationTimes[i]}")
@@ -747,11 +721,13 @@ app Relay {
 
         // Search results across discussions and members.
         if (showSearch) {
-          Column(gap: 12) {
+          Column(gap: 14) {
             SectionHead("Search", "results for {searchQuery}")
             Input(bind: searchText, placeholder: "Search discussions and members")
-            Button("Run search", p: 8, rounded: 12, shadow: 2, bg: "#E4572E") {
-              searchQuery = searchText
+            Row(gap: 8, align: center) {
+              Button("Run search", p: 8, rounded: 10, bg: "#4F46E5") {
+                searchQuery = searchText
+              }
             }
             for (i in 4) {
               ResultRow("{resultTitles[i]}", "{resultKinds[i]}", "{resultMeta[i]}")
@@ -761,15 +737,15 @@ app Relay {
 
         // Moderation panel: flagged posts with delete/lock/mute actions.
         if (showModeration) {
-          Column(gap: 12) {
+          Column(gap: 14) {
             SectionHead("Moderation", "{flaggedCount} flagged - {mutedCount} muted")
-            Card(p: 14, rounded: 16, shadow: 2, bg: "#FEF2F2", border: "#FBD5D5") {
-              Column(gap: 6, bg: "#FEF2F2") {
+            Card(p: 16, rounded: 14, shadow: 1, bg: "#FFF8F6", border: "#FBD5D5") {
+              Column(gap: 6) {
                 Row(gap: 8, align: center) {
                   Icon(name: "warning", color: "#B91C1C")
-                  Text("Queue note", size: 12, color: "#7F1D1D")
+                  Text("Queue note", size: 13, color: "#7F1D1D")
                 }
-                Text("{moderatorNote}", size: 12, color: "#9A3412")
+                Text("{moderatorNote}", size: 13, color: "#9A3412")
               }
             }
             for (i in 2) {
@@ -780,14 +756,15 @@ app Relay {
       }
     }
 
-    // Footer strip closes the page with brand, links and a border divider.
-    Container(p: 16, shadow: 2, bg: "#1B1F2A") {
-      Row(gap: 12, align: center, bg: "#1B1F2A") {
-        BrandMark(16, "#FFFFFF", "#E4572E")
-        Text("A calm place for thoughtful discussion.", size: 11, color: "#9AA0AC")
-        Spacer(width: 8)
-        Text("Guidelines - Tags - Members - Status", size: 11, color: "#9AA0AC")
+    // Footer strip closes the page with brand, tagline and links.
+    Container(p: 20, bg: "#FFFFFF", border: "#ECEEF2") {
+      Row(gap: 12, align: center) {
+        BrandMark(15, "#111827", "#4F46E5", "#FFFFFF")
+        Text("A calm place for thoughtful discussion.", size: 12, color: "#6B7280")
+        Spacer(width: 1)
+        Text("Guidelines - Tags - Members - Status", size: 12, color: "#9CA3AF")
       }
     }
+
   }
 }
