@@ -1,7 +1,7 @@
 // Dashboard presentation state and the shared palette. An imported module may
 // declare only state, model, api, theme and imports, so the components that
 // use these values live in the importing entry file.
-theme { mode: light, accent: "#0F766E", radius: 14, fontScale: 1.0 }
+theme { mode: light, accent: "#0F766E", radius: 14, fontScale: 1.0, stage: "#E9F1EF" }
 
 model ServiceTarget {
   id: int primary
