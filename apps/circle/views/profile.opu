@@ -1,0 +1,16 @@
+// Personal-center presentation state. List values stay in the module so the
+// entry file remains a composition of shell and view components.
+state displayName = "Circle member"
+state dark = false
+state notifications = true
+state textScale = 100
+
+state myPostTitles = ["Sunrise loop", "New camera roll", "Notes on focus"]
+state myPostAuthors = ["Circle member", "Circle member", "Circle member"]
+state myPostTopics = ["Travel", "Travel", "Tech"]
+state myPostLikes = ["9 likes", "17 likes", "4 likes"]
+
+state bookmarkTitles = ["Trail map picks", "Bakery list", "Reading queue"]
+state bookmarkAuthors = ["Nora", "Iris", "Theo"]
+state bookmarkTopics = ["Travel", "Food", "Tech"]
+state bookmarkLikes = ["14 likes", "6 likes", "3 likes"]

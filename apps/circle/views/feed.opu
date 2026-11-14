@@ -1,0 +1,21 @@
+// Feed presentation state and the shared theme. An imported module declares only
+// state, model, api, theme and imports, so the single theme block lives here.
+theme { mode: light, accent: "#2A5BD7", radius: 14, fontScale: 1.0 }
+
+// Navigation flags let the shell switch between the feed, detail and profile surfaces.
+state showFeed = true
+state showDetail = false
+state showProfile = false
+
+// Topic, sort and paging state keep the feed controls and the detail surface in step.
+state activeTopic = "All"
+state sortBy = "latest"
+state page = 1
+state feedStatus = "idle"
+
+// Feed content: the compiler unrolls each list into literal post cards at compile time.
+state feedTitles = ["Morning trail run", "City market breakfast", "Weekend photography walk", "Late-night reading notes"]
+state feedAuthors = ["Nora", "Iris", "Theo", "Mira"]
+state feedTopics = ["Travel", "Food", "Travel", "Tech"]
+state feedLikes = ["12 likes", "8 likes", "21 likes", "5 likes"]
+state commentTexts = ["Great trail, thanks for sharing!", "Adding this to my list."]

@@ -1,0 +1,89 @@
+// Circle data contracts: one model per entity so every view reads the same fields.
+
+model Post {
+  id: int primary
+  title: string
+  body: string
+  topic: string
+  author: string
+  likes: int = 0
+  comments: int = 0
+  liked: bool = false
+}
+
+model Comment {
+  id: int primary
+  postId: int
+  author: string
+  body: string
+}
+
+model User {
+  id: int primary
+  name: string
+  handle: string
+  followers: int = 0
+  following: bool = false
+}
+
+model Topic {
+  id: int primary
+  name: string
+  posts: int = 0
+}
+
+model Bookmark {
+  id: int primary
+  postId: int
+  savedAt: string
+}
+
+// Routes mirror the entities above so a view calls one path per operation.
+api "/circle/topics" {
+  list Topic
+}
+
+api "/circle/posts" {
+  list Post
+  create Post
+}
+
+api "/circle/posts/:id" {
+  get Post
+  update Post
+  delete Post
+}
+
+api "/circle/posts/:id/comments" {
+  list Comment
+  create Comment
+}
+
+api "/circle/users/:id/follow" {
+  update User
+}
+
+api "/circle/bookmarks" {
+  list Bookmark
+  create Bookmark
+}
+
+api "/circle/bookmarks/:id" {
+  delete Bookmark
+}
+
+// Entity and interaction state: counts and flags shared by the feed, detail and profile surfaces.
+state selectedPost = 1
+state liked = false
+state following = false
+state bookmarked = false
+state likeCount = 12
+state commentCount = 3
+state followCount = 24
+state bookmarkCount = 5
+state myPostCount = 4
+state refreshCount = 0
+state commentDraft = ""
+state titleDraft = ""
+state bodyDraft = ""
+state uploadCount = 0

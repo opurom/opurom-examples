@@ -1,0 +1,227 @@
+// Circle application shell. Reusable nodes live here because an imported module
+// may declare only state, model, api, theme and imports, not components or UI nodes.
+import "models/circle.opu";
+import "views/feed.opu";
+import "views/profile.opu";
+
+// One button keeps the surface flags and the active label consistent, avoiding parallel handlers.
+component NavButton(label: string, feed: bool, detail: bool, profile: bool, target: string) {
+  Button("{label}", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
+    showFeed = feed
+    showDetail = detail
+    showProfile = profile
+    activeNav = target
+  }
+}
+
+// Shared card keeps the feed, profile and bookmark surfaces visually consistent.
+component PostCard(title: string, author: string, topic: string, likes: string) {
+  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+    Row(gap: 10, align: center) {
+      Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+        Avatar(label: "{author}")
+      }
+      Column(gap: 2, bg: "#FFFFFF") {
+        Text("{title}", size: 14, color: "#101828")
+        Text("{author} in {topic}", size: 11, color: "#5A6B8C")
+      }
+      Spacer(width: 8)
+      Text("{likes}", size: 11, color: "#2A5BD7")
+    }
+  }
+}
+
+// Shared row keeps detail comments compact and consistent with the feed rows.
+component CommentRow(author: string, body: string) {
+  Row(gap: 10, align: center) {
+    Container(width: 32, height: 32, rounded: 10, bg: "#EEF3FC") {
+      Avatar(label: "{author}")
+    }
+    Column(gap: 2, bg: "#FFFFFF") {
+      Text("{author}", size: 12, color: "#101828")
+      Text("{body}", size: 11, color: "#5A6B8C")
+    }
+  }
+}
+
+// Shared card gives the personal center the same identity treatment as the feed.
+component ProfileCard(name: string, handle: string) {
+  Card(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C") {
+    Row(gap: 12, align: center, bg: "#2A5BD7") {
+      Container(width: 48, height: 48, rounded: 12, bg: "#FFFFFF") {
+        Icon(name: "user", color: "#2A5BD7")
+      }
+      Column(gap: 4, bg: "#2A5BD7") {
+        Text("{name}", size: 18, color: "#FFFFFF")
+        Text("@{handle}", size: 11, color: "#C9DCFF")
+      }
+    }
+  }
+}
+
+app Circle {
+  state activeNav = "Feed"
+
+  // One derived counter keeps the reaction total consistent across every surface.
+  computed totalReactions = likeCount + followCount + bookmarkCount
+
+  // One shell for every width: the outer Row lays out a rail and content on a wide
+  // viewport and collapses to a vertical stack on a compact one.
+  Column(p: 0, gap: 0) {
+    Container(p: 20, shadow: 4, gradient: "#123C8C,#0B1F4B",
+              particles: "count=48,seed=21,radius=2,alpha=800,color=#C9DCFF") {
+      Column(gap: 4, bg: "#123C8C") {
+        Text("Circle", size: 26, color: "#FFFFFF")
+        Text("{activeNav} - {refreshCount} refreshes - {feedStatus}", size: 12, color: "#C9DCFF")
+      }
+    }
+
+    Row(gap: 16, p: 16) {
+      // Left rail: surface navigation, topic badge and the async refresh control.
+      Column(width: 210, gap: 10, p: 14) {
+        Container(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C") {
+          Column(gap: 4, bg: "#2A5BD7") {
+            Text("Navigation", size: 16, color: "#FFFFFF")
+            Text("one source tree", size: 11, color: "#C9DCFF")
+          }
+        }
+        NavButton("Feed", true, false, false, "Feed")
+        NavButton("Detail", false, true, false, "Detail")
+        NavButton("Profile", false, false, true, "Profile")
+        Badge(label: "{activeTopic}")
+        Button("Refresh", p: 12, rounded: 12, shadow: 2, bg: "#123C8C", animate: spring) async {
+          await delay(50)
+          await fetch("/circle/feed", feedStatus)
+          refreshCount += 1
+        }
+        Container(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
+          Column(gap: 6, bg: "#EEF3FC") {
+            Text("Reactions", size: 11, color: "#5A6B8C")
+            Text("{totalReactions} total", size: 14, color: "#101828")
+          }
+        }
+      }
+
+      // Main content: the selected surface is rendered, the others stay hidden.
+      Column(width: 760, gap: 14) {
+        // Topic tabs, sorted feed, and a load-more control.
+        if (showFeed) {
+          Tabs(labels: "All,Travel,Food,Tech", bind: activeTopic)
+          Scroll(height: 560, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(gap: 12) {
+              Row(gap: 8, align: center) {
+                Icon(name: "refresh", color: "#2A5BD7")
+                Text("{activeTopic} sorted by {sortBy} on page {page}", size: 12, color: "#5A6B8C")
+                Spacer(width: 8)
+                Progress(value: 64)
+              }
+              Row(gap: 12, align: center) {
+                Radio(bind: sortBy, value: "latest")
+                Text("latest", size: 12, color: "#5A6B8C")
+                Radio(bind: sortBy, value: "hot")
+                Text("hot", size: 12, color: "#5A6B8C")
+              }
+              for (i in 4) {
+                PostCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedTopics[i]}", "{feedLikes[i]}")
+              }
+              Button("Load more", p: 12, rounded: 12, shadow: 2, bg: "#123C8C", animate: spring) {
+                page += 1
+                refreshCount += 1
+              }
+            }
+          }
+        }
+
+        // Post detail: body, reactions, follow state, reply composer and comments.
+        if (showDetail) {
+          Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+            Column(gap: 10, bg: "#FFFFFF") {
+              Row(gap: 8, align: center) {
+                Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+                  Icon(name: "chat", color: "#2A5BD7")
+                }
+                Column(gap: 2, bg: "#FFFFFF") {
+                  Text("Post {selectedPost} in {activeTopic}", size: 18, color: "#101828")
+                  Text("{feedStatus}", size: 11, color: "#5A6B8C")
+                }
+              }
+              Text("{titleDraft}", size: 14, color: "#101828")
+              Text("{bodyDraft}", size: 12, color: "#5A6B8C")
+              Divider()
+              Row(gap: 8, align: center) {
+                Button("Like", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
+                  liked.toggle()
+                }
+                Button("Follow", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
+                  following.toggle()
+                }
+                Button("Save", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
+                  bookmarked.toggle()
+                }
+                Spacer(width: 8)
+                Text("{likeCount} likes - {commentCount} comments - {followCount} followers", size: 11, color: "#5A6B8C")
+              }
+              Input(bind: commentDraft, placeholder: "Write a reply")
+              Button("Reply", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7") {
+                commentCount += 1
+                refreshCount += 1
+              }
+              for (i in 2) {
+                CommentRow("Nora", "{commentTexts[i]}")
+              }
+            }
+          }
+        }
+
+        // Personal center: identity, settings, my posts, my bookmarks and publishing.
+        if (showProfile) {
+          Column(gap: 14) {
+            ProfileCard("{displayName}", "circle_member")
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Row(gap: 8, align: center) {
+                  Icon(name: "settings", color: "#2A5BD7")
+                  Text("Basic settings", size: 14, color: "#101828")
+                }
+                Switch(bind: dark)
+                Text("dark mode", size: 12, color: "#5A6B8C")
+                Checkbox(bind: notifications)
+                Text("notifications", size: 12, color: "#5A6B8C")
+                Slider(bind: textScale, min: 50, max: 150)
+                Text("text scale {textScale}", size: 12, color: "#5A6B8C")
+              }
+            }
+            Scroll(height: 240, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(gap: 12) {
+                Text("My posts - {myPostCount}", size: 14, color: "#101828")
+                for (i in 3) {
+                  PostCard("{myPostTitles[i]}", "{myPostAuthors[i]}", "{myPostTopics[i]}", "{myPostLikes[i]}")
+                }
+              }
+            }
+            Scroll(height: 240, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(gap: 12) {
+                Text("My bookmarks - {bookmarkCount}", size: 14, color: "#101828")
+                for (i in 3) {
+                  PostCard("{bookmarkTitles[i]}", "{bookmarkAuthors[i]}", "{bookmarkTopics[i]}", "{bookmarkLikes[i]}")
+                }
+              }
+            }
+            Image(src: "assets/circle-cover.png", width: 44, height: 44)
+            Dialog(title: "New post") {
+              Column(gap: 10) {
+                Input(bind: titleDraft, placeholder: "title")
+                Input(bind: bodyDraft, placeholder: "what is on your mind")
+                Button("Publish", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
+                  uploadCount += 1
+                  myPostCount += 1
+                  refreshCount += 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
