@@ -17,7 +17,7 @@ component Nav(label: string, t: string, src: string, n: int, b1: bool, b2: bool,
 }
 
 app PhotoWall {
-  theme { accent: "#097FEB", radius: 14 }
+  theme { accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   state title = "Dawn"
   state hero = "assets/photo1.png"
@@ -32,9 +32,9 @@ app PhotoWall {
   // show a clean top slice instead of squeezing the whole layout.
   Scroll(height: 640, bg: "#EDF2FA", border: "#EDF2FA", rounded: 14, animate: ease) {
   Column(p: 18, gap: 14, width: 800) {
-    Container(p: 22, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
-      Text("OPUROM Photo Wall", size: 22, color: "#FFFFFF")
-      Text("Selected: {title} - photo {sel} of 5", size: 12, color: "#D6E8FF")
+    Container(p: 22, rounded: 18, glass: true) {
+      Text("OPUROM Photo Wall", size: 22, color: "#111827")
+      Text("Selected: {title} - photo {sel} of 5", size: 12, color: "#6B7280")
     }
     Card(p: 10, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2", animate: ease) {
       Column(gap: 10, align: center) {

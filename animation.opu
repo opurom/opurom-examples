@@ -1,6 +1,6 @@
 // Deterministic entry animation: the same tick always yields the same frame.
 app Animation {
-  theme { accent: "#097FEB", radius: 14 }
+  theme { accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   ScrollView(p: 16) {
     Column(gap: 14, align: center) {

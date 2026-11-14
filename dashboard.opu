@@ -42,7 +42,7 @@ component ActivityRow(icon: string, title: string, detail: string, state: string
 app Northstar {
   state refreshed = 0
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
+  theme { mode: light, accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   Column(p: 0, gap: 0, bg: "#F4F7FB", border: "#F4F7FB") {
     // Header bar: brand panel, search field and account actions.

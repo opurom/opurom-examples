@@ -32,7 +32,7 @@ component OpKey(sym: string, sa: int, ss: int, sm: int, sd: int, dm: bool, nm: b
 }
 
 app Calculator {
-  theme { accent: "#097FEB", radius: 14 }
+  theme { accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   state cur = 0
   state digit = 0

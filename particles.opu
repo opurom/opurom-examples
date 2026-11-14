@@ -1,6 +1,6 @@
 // Seeded particle field: a gradient panel scattered with deterministic dots.
 app Particles {
-  theme { mode: light, accent: "#097FEB", radius: 14 }
+  theme { mode: light, accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   ScrollView(p: 16) {
     Column(gap: 14) {

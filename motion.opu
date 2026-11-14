@@ -16,7 +16,7 @@ app Motion {
   state open = false
   state level = 60
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
+  theme { mode: light, accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   Column(p: 16, gap: 12) {
     // Hero

@@ -2,7 +2,7 @@
 app Typography {
   state count = 0
 
-  theme { accent: "#097FEB", radius: 14, fontScale: 1.5 }
+  theme { accent: "#097FEB", radius: 14, fontScale: 1.5 , stage: "#EDF0F7" }
 
   ScrollView(p: 16) {
     Column(gap: 14) {

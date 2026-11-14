@@ -4,7 +4,7 @@ app Form {
   state age = 36
   state subscribed = false
 
-  theme { accent: "#097FEB", radius: 14 }
+  theme { accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
 
   ScrollView(p: 16) {
     Column(gap: 14) {
