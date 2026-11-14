@@ -1,0 +1,73 @@
+// Domain contracts for the LAN chat: one data model per entity, shared by the
+// UI and any lowered service boundary so types stay in one place.
+model Conversation {
+  id: int primary
+  peer: string
+  status: string
+  preview: string
+  unread: int = 0
+}
+
+model Message {
+  id: int primary
+  conversation: int
+  author: string
+  body: string
+  state: string
+  encrypted: bool = true
+  ciphertext: string
+}
+
+model Contact {
+  id: int primary
+  name: string
+  peer: string
+  note: string
+  pinned: bool = false
+}
+
+model Peer {
+  id: int primary
+  address: string
+  port: int
+  status: string
+  fingerprint: string
+}
+
+api "/conversations" {
+  list Conversation
+  create Conversation
+}
+
+api "/messages" {
+  list Message
+  create Message
+}
+
+api "/contacts" {
+  list Contact
+  create Contact
+}
+
+api "/peers" {
+  list Peer
+  create Peer
+}
+
+// Fixed demonstration roster. The compiler unrolls list-valued state at compile
+// time, so the screen shows one row per entry without a runtime data source.
+state conversationNames = ["Alice", "Bob", "Cara"]
+state conversationStatus = ["online", "idle", "offline"]
+state conversationPreview = ["sync at 19", "photos sent", "see you soon"]
+state conversationUnread = ["3", "0", "1"]
+
+state messageAuthor = ["me", "Alice", "me"]
+state messageBody = ["joined the LAN", "ready when you are", "message locked"]
+state messageState = ["delivered", "received", "sending"]
+
+state peerLabels = ["Alice", "Bob", "Cara"]
+state peerAddresses = ["192.168.1.20", "192.168.1.21", "192.168.1.22"]
+state peerStatus = ["connected", "available", "offline"]
+
+state sentMessages = 12
+state receivedMessages = 9

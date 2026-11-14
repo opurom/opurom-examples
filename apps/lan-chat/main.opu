@@ -1,0 +1,219 @@
+import "models/chat.opu";
+import "views/panels.opu";
+
+// Reusable nodes stay in the entry file: an imported module may declare only
+// state, model, api, theme and imports, so component declarations live here.
+component SectionTitle(title: string, note: string) {
+  Row(gap: 8, align: center) {
+    Text(title, size: 16, color: "#101828")
+    Text(note, size: 11, color: "#667085")
+  }
+}
+
+component ConversationRow(name: string, status: string, preview: string, unread: string) {
+  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+    Row(gap: 12, align: center) {
+      Container(width: 44, height: 44, rounded: 14, bg: "#E8F0FE") { Avatar(label: name) }
+      Column(gap: 2, bg: "#FFFFFF") {
+        Row(gap: 8, align: center) {
+          Text(name, size: 14, color: "#101828")
+          Badge(label: status)
+        }
+        Text(preview, size: 11, color: "#667085")
+      }
+      Spacer(width: 10)
+      Container(width: 28, height: 28, rounded: 10, bg: "#E8F0FE") { Icon(name: "chat", color: "#0B57D0") }
+    }
+  }
+}
+
+component MessageRow(author: string, body: string, delivery: string) {
+  Row(gap: 10, align: center) {
+    Container(width: 36, height: 36, rounded: 12, bg: "#E8F0FE") { Icon(name: "lock", color: "#0B57D0") }
+    Column(gap: 2, bg: "#FFFFFF") {
+      Row(gap: 8, align: center) {
+        Text(author, size: 12, color: "#101828")
+        Badge(label: delivery)
+      }
+      Text(body, size: 13, color: "#344054")
+    }
+  }
+}
+
+component PeerRow(label: string, address: string, status: string) {
+  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+    Row(gap: 12, align: center) {
+      Container(width: 36, height: 36, rounded: 12, bg: "#E8F0FE") { Icon(name: "user", color: "#0B57D0") }
+      Column(gap: 2, bg: "#FFFFFF") {
+        Text(label, size: 14, color: "#101828")
+        Text(address, size: 11, color: "#667085")
+      }
+      Spacer(width: 10)
+      Badge(label: status)
+    }
+  }
+}
+
+component ViewButton(label: string, chats: bool, thread: bool, peers: bool, status: bool, viewName: string) {
+  Button(label, p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
+    showChats = chats
+    showThread = thread
+    showPeers = peers
+    showStatus = status
+    activeTab = viewName
+  }
+}
+
+app LanChat {
+  theme { mode: light, accent: "#0B57D0", radius: 16 }
+
+  Column(p: 0, gap: 0) {
+    Container(p: 20, shadow: 4, gradient: "#0B57D0,#0730A8",
+              particles: "count=32,seed=7,radius=2,alpha=760,color=#C7DBFF") {
+      Column(gap: 4, bg: "#0B57D0") {
+        Row(gap: 8, align: center) {
+          Text("LAN Chat", size: 26, color: "#FFFFFF")
+          Container(width: 26, height: 26, rounded: 8, bg: "#123C8C") { Icon(name: "lock", color: "#C7DBFF") }
+        }
+        Text("{activeTab} - {connectionState} - key {sessionKeyId}", size: 12, color: "#C7DBFF")
+      }
+    }
+
+    Row(gap: 16, p: 16) {
+      Column(width: 230, gap: 10, p: 14) {
+        ViewButton("Chats", true, false, false, false, "Chats")
+        ViewButton("Thread", false, true, false, false, "Thread")
+        ViewButton("Peers", false, false, true, false, "Peers")
+        ViewButton("Status", false, false, false, true, "Status")
+
+        Card(p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+          Column(gap: 6, bg: "#FFFFFF") {
+            Row(gap: 8, align: center) {
+              Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "refresh", color: "#0B57D0") }
+              Text("Connection", size: 12, color: "#667085")
+            }
+            Text("{connectionState}", size: 15, color: "#101828")
+            Text("{peerAddress}:{peerPort}", size: 12, color: "#667085")
+            Button("Connect", p: 10, rounded: 10, shadow: 2, bg: "#0B57D0", animate: spring) {
+              connectionState = "connecting"
+              connected = true
+            }
+            Button("Disconnect", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC", animate: spring) {
+              connectionState = "offline"
+              connected = false
+            }
+          }
+        }
+
+        Card(p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+          Column(gap: 6, bg: "#FFFFFF") {
+            Row(gap: 8, align: center) {
+              Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "lock", color: "#0B57D0") }
+              Text("Encryption", size: 12, color: "#667085")
+            }
+            Switch(bind: encrypted)
+            Text("{sessionKeyId}", size: 12, color: "#101828")
+            Text("key v{keyVersion}", size: 11, color: "#667085")
+            Slider(bind: keyVersion, min: 1, max: 4)
+            Checkbox(bind: persistHistory)
+            Text("history persisted", size: 11, color: "#667085")
+          }
+        }
+      }
+
+      Column(width: 820, gap: 14) {
+        if (showChats) {
+          SectionTitle("Conversations", "local history")
+          for (i in 3) {
+            ConversationRow("{conversationNames[i]}", "{conversationStatus[i]}",
+                            "{conversationPreview[i]}", "{conversationUnread[i]}")
+          }
+          Button("Open thread", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
+            showChats = false
+            showThread = true
+            activeTab = "Thread"
+          }
+        }
+
+        if (showThread) {
+          SectionTitle("Message thread", "{messageAuthor[0]} with {conversationNames[0]}")
+          Scroll(height: 360, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
+            for (i in 3) {
+              MessageRow("{messageAuthor[i]}", "{messageBody[i]}", "{messageState[i]}")
+            }
+          }
+          Row(gap: 10, align: center, p: 8) {
+            Input(bind: draft, placeholder: "message")
+            Button("Send", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
+              connectionState = "sending"
+              sentMessages += 1
+              draft = ""
+            }
+          }
+          Text("sent {sentMessages} - received {receivedMessages}", size: 11, color: "#667085")
+        }
+
+        if (showPeers) {
+          SectionTitle("Contacts", "frequent peers")
+          Input(bind: peerAddress, placeholder: "peer address")
+          Input(bind: peerPort, placeholder: "peer port")
+          Button("Add peer", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
+            connectionState = "connecting"
+          }
+          for (i in 3) {
+            PeerRow("{peerLabels[i]}", "{peerAddresses[i]}", "{peerStatus[i]}")
+          }
+        }
+
+        if (showStatus) {
+          SectionTitle("Connection status", "transport and key state")
+          Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
+            Column(gap: 10, bg: "#FFFFFF") {
+              Row(gap: 8, align: center) {
+                Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "info", color: "#0B57D0") }
+                Text("Transport", size: 12, color: "#667085")
+              }
+              Text("state {connectionState}", size: 14, color: "#101828")
+              Text("{peerAddress}:{peerPort}", size: 12, color: "#667085")
+              Divider()
+              Grid(columns: 2) {
+                Card(p: 12, rounded: 12, shadow: 2, bg: "#F4F7FB") {
+                  Column(gap: 4) {
+                    Text("Sent", size: 11, color: "#667085")
+                    Text("{sentMessages}", size: 16, color: "#101828")
+                  }
+                }
+                Card(p: 12, rounded: 12, shadow: 2, bg: "#F4F7FB") {
+                  Column(gap: 4) {
+                    Text("Received", size: 11, color: "#667085")
+                    Text("{receivedMessages}", size: 16, color: "#101828")
+                  }
+                }
+              }
+              Tabs(labels: "session,store,devices", bind: panel)
+              Text("panel {panel}", size: 12, color: "#667085")
+              Row(gap: 8, align: center) {
+                Spinner()
+                Text("handshake pending", size: 11, color: "#667085")
+              }
+              Dialog(title: "Key material") {
+                Text("session key {sessionKeyId} v{keyVersion}")
+                Text("fingerprint {fingerprint}")
+              }
+            }
+          }
+          Container(p: 16, rounded: 16, shadow: 3, gradient: "#0730A8,#0B57D0",
+                    particles: "count=24,seed=11,radius=2,alpha=820,color=#FFFFFF") {
+            Row(gap: 10, align: center, bg: "#0730A8") {
+              Container(width: 26, height: 26, rounded: 8, bg: "#123C8C") { Icon(name: "check", color: "#FFFFFF") }
+              Column(gap: 2, bg: "#0730A8") {
+                Text("End-to-end encryption", size: 14, color: "#FFFFFF")
+                Text("key {sessionKeyId}", size: 11, color: "#C7DBFF")
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
