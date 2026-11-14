@@ -1,0 +1,62 @@
+// Parallel lists share positions because the compiler unrolls loops into literal nodes.
+
+state postTitle = "Sunrise trail loop above the harbour"
+state postBody = "The fog lifted just before the ridge, so the whole harbour caught the first light. Worth the early alarm, and the descent is easier than the climb up. The full route map will follow in the comments."
+state postAuthor = "Nora Whitfield"
+state postHandle = "norawhit"
+state postTime = "12 min ago"
+state postViews = "2.4k"
+state postTopic = "Travel"
+state postImgA = "assets/photo1.png"
+state postImgB = "assets/photo2.png"
+state postImgC = "assets/photo3.png"
+
+state commentAuthors = ["Iris Bell", "Caleb Rowe", "Mira Sol"]
+state commentBodies = ["This is exactly the run worth saving. Adding it to the weekend list.", "The descent note is helpful, thank you for the honest detail.", "Saved the map, would love a follow-up on the trail conditions."]
+state commentTimes = ["8 min ago", "22 min ago", "41 min ago"]
+state replyTargets = ["", "Iris Bell", ""]
+
+state circleName = "Trail Notes"
+state circleDesc = "Route notes, gear notes and trail reports from the local ridge."
+state circleCreated = "Mar 2026"
+state circleCover = "assets/photo1.png"
+state circleMemberNames = ["Nora Whitfield", "Mira Sol", "Theo Marsh", "Iris Bell", "Caleb Rowe", "Sage Lin"]
+state circlePostTitles = ["Sunrise trail loop above the harbour", "Kayak estuary at the slow tide", "Sunrise photo walk notes"]
+state circlePostAuthors = ["Nora Whitfield", "Mira Sol", "Sage Lin"]
+state circlePostTimes = ["12 min ago", "2 hours ago", "6 hours ago"]
+state circlePostBodies = ["The fog lifted just before the ridge, so the whole harbour caught the first light.", "Paddling the shallow channels at low tide is the quietest way to see the shore.", "The bridge lights came up in sequence, so a single long exposure caught the whole arc."]
+state circlePostLikes = ["26", "14", "9"]
+state circlePostComments = ["4", "2", "1"]
+
+state activityTitle = "Saturday Trail Run"
+state activityDetailCategory = "Outdoor"
+state activityDetailStatus = "Open"
+state activityPrice = "Free"
+state activityStart = "Sat, 08:00"
+state activityEnd = "Sat, 11:00"
+state activityLocation = "Harbour Ridge Trailhead"
+state activityOrganizer = "Nora Whitfield"
+state activityBody = "A guided run along the ridge with a slow start and a steady pace. Bring water, wear trail shoes and meet at the trailhead gate ten minutes early. The route is about eight kilometres with one short climb."
+state activityCover = "assets/photo5.png"
+state activityParticipantNames = ["Nora Whitfield", "Mira Sol", "Theo Marsh", "Iris Bell", "Caleb Rowe", "Sage Lin"]
+state activityCommentAuthors = ["Iris Bell", "Caleb Rowe"]
+state activityCommentBodies = ["Confirmed, bringing water and a light jacket.", "Is the pace set for a steady jog or a run?"]
+state activityCommentTimes = ["10 min ago", "26 min ago"]
+
+state activityEditTitle = "Saturday Trail Run"
+state activityEditCategory = "Outdoor"
+state activityEditStart = "Saturday 08:00"
+state activityEditEnd = "Saturday 11:00"
+state activityEditLocation = "Harbour Ridge Trailhead"
+state activityEditCapacity = "30"
+state activityEditPrice = "0"
+state activityEditBody = "A guided run along the ridge with a slow start and a steady pace. Bring water, wear trail shoes and meet at the trailhead gate ten minutes early."
+state activityEditContact = "nora@orbit.example"
+state activityEditCategoryList = "Outdoor,Food,Art,Reads,Tech,Music"
+
+state circleFormName = "Field Lab"
+state circleFormDesc = "Hands-on experiments, workshops and maker notes."
+state circleFormCover = "assets/photo1.png"
+
+state circleSubmitted = false
+state activitySaved = false

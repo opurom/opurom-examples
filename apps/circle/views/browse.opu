@@ -1,0 +1,32 @@
+// Parallel lists share positions because the compiler unrolls loops into literal nodes.
+
+state circleSquareNames = ["Trail Notes", "City Kitchen", "Sketchpad", "Reading Nook", "Night Loop", "Field Lab"]
+state circleSquareDescs = ["Route notes, gear notes and trail reports from the local ridge.", "Home cooking, market finds and weeknight recipes.", "Daily drawing, ink studies and workspace tours.", "Book discussions, notes and seasonal reading lists.", "Evening runs, night photography and quiet city walks.", "Hands-on experiments, workshops and maker notes."]
+state circleSquareMembers = ["320", "512", "248", "196", "287", "163"]
+state circleSquareCovers = ["assets/photo1.png", "assets/photo4.png", "assets/photo2.png", "assets/photo3.png", "assets/photo5.png", "assets/photo1.png"]
+state circleSquareTopics = ["Travel", "Food", "Design", "Reads", "Outdoor", "Tech"]
+state circleCategory = "All"
+state circleCategoryList = "All,Travel,Food,Tech,Outdoor,Reads,Design"
+
+state activityListTitles = ["Saturday Trail Run", "Neighborhood Potluck", "Ink and Inkwash Meetup", "Book Club Evening", "Sunrise Photo Walk", "Intro to Clay"]
+state activityListCategories = ["Outdoor", "Food", "Design", "Reads", "Outdoor", "Design"]
+state activityListTimes = ["Sat 08:00", "Sun 17:00", "Wed 19:00", "Thu 20:00", "Sat 06:30", "Sun 14:00"]
+state activityListLocations = ["Harbour Ridge Trailhead", "Maple Community Hall", "Old Mill Studio", "Cedar Library Lounge", "Pier East End", "Harbour Clay Studio"]
+state activityListOrganizers = ["Nora Whitfield", "Iris Bell", "Sage Lin", "Caleb Rowe", "Mira Sol", "Theo Marsh"]
+state activityListPrices = ["Free", "Free", "20", "Free", "Free", "45"]
+state activityListParticipants = ["18", "26", "12", "9", "14", "8"]
+state activityListCapacities = ["30", "40", "16", "20", "20", "8"]
+state activityListCovers = ["assets/photo5.png", "assets/photo4.png", "assets/photo2.png", "assets/photo3.png", "assets/photo1.png", "assets/photo5.png"]
+state activityCategory = "All"
+state activityCategoryList = "All,Outdoor,Food,Design,Reads,Tech,Music"
+state activityStatus = "all"
+state activitySort = "time"
+state activityQuery = ""
+
+state searchQuery = ""
+state searchDone = false
+state searchResults = ["Sunrise trail loop above the harbour", "Kayak estuary at the slow tide", "A reading list for slow autumn evenings", "Harbour market breakfast run"]
+state searchAuthors = ["Nora Whitfield", "Mira Sol", "Caleb Rowe", "Nora Whitfield"]
+state searchTimes = ["12 min ago", "2 hours ago", "5 hours ago", "10 hours ago"]
+state searchTopics = ["Travel", "Outdoor", "Reads", "Food"]
+state searchBodies = ["The fog lifted just before the ridge, so the whole harbour caught the first light.", "Paddling the shallow channels at low tide is the quietest way to see the shore.", "Six books that reward a second pass, with short notes on the one to start with.", "A warm pastry and a flat white, then a slow walk home."]

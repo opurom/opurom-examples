@@ -1,21 +1,35 @@
-// Feed presentation state and the shared theme. An imported module declares only
-// state, model, api, theme and imports, so the single theme block lives here.
-theme { mode: light, accent: "#2A5BD7", radius: 14, fontScale: 1.0 }
+// The single theme block lives here because an imported module may declare only state, model, api, theme and imports.
+theme { mode: light, accent: "#2A6CF6", radius: 16, fontScale: 1.0 }
 
-// Navigation flags let the shell switch between the feed, detail and profile surfaces.
-state showFeed = true
-state showDetail = false
-state showProfile = false
+// Topic, sort and paging state is grouped so the feed controls read one shared selection.
+state feedTopic = "All"
+state feedTopicList = "All,Travel,Food,Tech,Outdoor,Reads,Design"
+state feedSort = "latest"
+state feedPage = 1
+state feedMore = false
+state refreshing = false
 
-// Topic, sort and paging state keep the feed controls and the detail surface in step.
-state activeTopic = "All"
-state sortBy = "latest"
-state page = 1
-state feedStatus = "idle"
+// Parallel lists stay in lockstep because the compiler unrolls each for loop into literal nodes.
+state feedTitles = ["Sunrise trail loop above the harbour", "Sourdough mornings, finally clicked", "A quiet terminal palette for night work", "Kayak estuary at the slow tide", "A reading list for slow autumn evenings", "Studio notes on a clean grid system"]
+state feedAuthors = ["Nora Whitfield", "Iris Bell", "Theo Marsh", "Mira Sol", "Caleb Rowe", "Sage Lin"]
+state feedHandles = ["norawhit", "irisbell", "theomarsh", "mirasol", "calebrowe", "sagelin"]
+state feedTopics = ["Travel", "Food", "Tech", "Outdoor", "Reads", "Design"]
+state feedTimes = ["12 min ago", "40 min ago", "1 hour ago", "2 hours ago", "3 hours ago", "5 hours ago"]
+state feedBodies = ["The fog lifted just before the ridge, so the whole harbour caught the first light. Worth the early alarm.", "A cooler starter and a longer bulk ferment are the two changes that mattered. Recipe notes in the comments.", "Seven carefully chosen tokens keep contrast high and eye strain low. Sharing the mapping for anyone who wants it.", "Paddling the shallow channels at low tide is the quietest way to see the shore. Bring a dry bag for the camera.", "Six books that reward a second pass, with short notes on the one to start with and the one to save for last.", "Consistent spacing and a single type scale do most of the work. The sketches show the grid before the polish."]
+state feedImgA = ["assets/photo1.png", "assets/photo4.png", "assets/photo2.png", "assets/photo5.png", "assets/photo3.png", "assets/photo1.png"]
+state feedImgB = ["assets/photo2.png", "assets/photo5.png", "assets/photo3.png", "assets/photo1.png", "assets/photo4.png", "assets/photo5.png"]
+state feedImgC = ["assets/photo3.png", "assets/photo1.png", "assets/photo4.png", "assets/photo2.png", "assets/photo5.png", "assets/photo3.png"]
 
-// Feed content: the compiler unrolls each list into literal post cards at compile time.
-state feedTitles = ["Morning trail run", "City market breakfast", "Weekend photography walk", "Late-night reading notes"]
-state feedAuthors = ["Nora", "Iris", "Theo", "Mira"]
-state feedTopics = ["Travel", "Food", "Travel", "Tech"]
-state feedLikes = ["12 likes", "8 likes", "21 likes", "5 likes"]
-state commentTexts = ["Great trail, thanks for sharing!", "Adding this to my list."]
+// A second page stays separate so load-more reveals a fixed second slice.
+state feedMoreTitles = ["Harbour market breakfast run", "Notes on a focused workday", "Evening sketch from the bridge"]
+state feedMoreAuthors = ["Nora Whitfield", "Theo Marsh", "Sage Lin"]
+state feedMoreHandles = ["norawhit", "theomarsh", "sagelin"]
+state feedMoreTopics = ["Food", "Tech", "Design"]
+state feedMoreTimes = ["6 hours ago", "8 hours ago", "10 hours ago"]
+state feedMoreBodies = ["A warm pastry and a flat white, then a slow walk home. The best kind of slow morning.", "One task at a time, a clear list and a shut door. The rest is just showing up and starting.", "The bridge lights came up in sequence, so a single long exposure caught the whole arc."]
+state feedMoreImgA = ["assets/photo4.png", "assets/photo2.png", "assets/photo5.png"]
+state feedMoreImgB = ["assets/photo1.png", "assets/photo3.png", "assets/photo2.png"]
+state feedMoreImgC = ["assets/photo3.png", "assets/photo5.png", "assets/photo1.png"]
+
+// Comment counts stay in lockstep so each card reads the right position.
+state feedComments = ["18", "12", "9", "7", "5", "3"]

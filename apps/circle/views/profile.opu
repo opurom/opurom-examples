@@ -1,16 +1,48 @@
-// Personal-center presentation state. List values stay in the module so the
-// entry file remains a composition of shell and view components.
-state displayName = "Circle member"
+// Lists stay in the module because modules carry declarations only.
+
+state displayName = "Ada Reyes"
+state displayHandle = "adareyes"
+state displayBio = "Trail runner, home baker and slow reader, based near the harbour."
+state profilePosts = "12"
+state profileFollowers = "180"
+state profileFollowing = "96"
+state profileLikes = "2.4k"
+
+state myPostTitles = ["Sunrise trail loop above the harbour", "A reading list for slow autumn evenings", "Harbour market breakfast run"]
+state myPostTopics = ["Travel", "Reads", "Food"]
+state myPostTimes = ["12 min ago", "5 hours ago", "10 hours ago"]
+state myPostLikes = ["26", "11", "7"]
+state myPostComments = ["4", "2", "1"]
+
+state favTitles = ["Sourdough mornings, finally clicked", "A quiet terminal palette for night work", "Kayak estuary at the slow tide"]
+state favAuthors = ["Iris Bell", "Theo Marsh", "Mira Sol"]
+state favTopics = ["Food", "Tech", "Outdoor"]
+state favTimes = ["40 min ago", "1 hour ago", "2 hours ago"]
+
+state followNames = ["Nora Whitfield", "Iris Bell", "Theo Marsh", "Mira Sol", "Caleb Rowe"]
+state followHandles = ["norawhit", "irisbell", "theomarsh", "mirasol", "calebrowe"]
+state followBios = ["Trail notes and route reports.", "Home cooking and market finds.", "Night-time screens and quiet tools.", "Kayak, coast and quiet water.", "Reading notes and autumn lists."]
+
+state notifActors = ["Iris Bell", "Caleb Rowe", "Mira Sol", "Theo Marsh", "Sage Lin"]
+state notifKinds = ["liked your post", "commented on your post", "replied to your comment", "started following you", "mentioned you in a post"]
+state notifTexts = ["Sunrise trail loop above the harbour", "A reading list for slow autumn evenings", "The route map shared this morning", "Harbour market breakfast run", "Studio notes on a clean grid system"]
+state notifTimes = ["5 min ago", "20 min ago", "44 min ago", "1 hour ago", "3 hours ago"]
+state notifRead = ["false", "false", "true", "false", "true"]
+
 state dark = false
-state notifications = true
+state reduceMotion = false
+state compact = false
+state notifyOn = true
 state textScale = 100
+state aboutText = "Orbit is a topic-based community mini-program: share image and text posts into a circle, follow members and join local activities."
 
-state myPostTitles = ["Sunrise loop", "New camera roll", "Notes on focus"]
-state myPostAuthors = ["Circle member", "Circle member", "Circle member"]
-state myPostTopics = ["Travel", "Travel", "Tech"]
-state myPostLikes = ["9 likes", "17 likes", "4 likes"]
+state composeTitle = ""
+state composeBody = ""
+state composeTopic = "Travel"
+state composeAttachments = "assets/photo1.png"
+state composeTopicList = "Travel,Food,Tech,Outdoor,Reads,Design"
+state editName = "Ada Reyes"
+state editBio = "Trail runner, home baker and slow reader, based near the harbour."
 
-state bookmarkTitles = ["Trail map picks", "Bakery list", "Reading queue"]
-state bookmarkAuthors = ["Nora", "Iris", "Theo"]
-state bookmarkTopics = ["Travel", "Food", "Tech"]
-state bookmarkLikes = ["14 likes", "6 likes", "3 likes"]
+// The mark-read flag stays observable because list contents are fixed at compile time.
+state notifCleared = false

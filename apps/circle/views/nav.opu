@@ -1,0 +1,19 @@
+// Each screen owns a flag because the language lowers every if guard to one bool state.
+state tabFeed = true
+state tabCircles = false
+state tabActivity = false
+state tabNotif = false
+state tabProfile = false
+
+// overlayOpen swaps the tab column out so detail pages do not show the bottom bar.
+state overlayOpen = false
+state tabArea = true
+state showSearch = false
+state showPost = false
+state showCircle = false
+state showActivity = false
+state showCompose = false
+state showCreateCircle = false
+state showActivityEdit = false
+state showEditProfile = false
+state showSettings = false

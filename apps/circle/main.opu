@@ -1,226 +1,895 @@
-// Circle application shell. Reusable nodes live here because an imported module
-// may declare only state, model, api, theme and imports, not components or UI nodes.
+// Reusable components stay in the entry file because imported modules accept only state, model, api, theme and imports.
 import "models/circle.opu";
+import "views/nav.opu";
 import "views/feed.opu";
+import "views/detail.opu";
+import "views/browse.opu";
 import "views/profile.opu";
 
-// One button keeps the surface flags and the active label consistent, avoiding parallel handlers.
-component NavButton(label: string, feed: bool, detail: bool, profile: bool, target: string) {
-  Button("{label}", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
-    showFeed = feed
-    showDetail = detail
-    showProfile = profile
-    activeNav = target
+component TabItem(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
+  Button("{label}", p: 10, rounded: 12, shadow: 1, bg: "#EEF3FC") {
+    tabFeed = feed
+    tabCircles = circles
+    tabActivity = activity
+    tabNotif = notif
+    tabProfile = profile
+    overlayOpen = false
   }
 }
 
-// Shared card keeps the feed, profile and bookmark surfaces visually consistent.
-component PostCard(title: string, author: string, topic: string, likes: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-    Row(gap: 10, align: center) {
-      Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+component TabItemActive(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
+  Button("{label}", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+    tabFeed = feed
+    tabCircles = circles
+    tabActivity = activity
+    tabNotif = notif
+    tabProfile = profile
+    overlayOpen = false
+  }
+}
+
+component TabBar() {
+  Row(p: 8, gap: 6, align: center, bg: "#FFFFFF", border: "#E2E8F0") {
+    if (tabFeed) { TabItemActive("Feed", true, false, false, false, false) } else { TabItem("Feed", true, false, false, false, false) }
+    if (tabCircles) { TabItemActive("Circles", false, true, false, false, false) } else { TabItem("Circles", false, true, false, false, false) }
+    if (tabActivity) { TabItemActive("Activity", false, false, true, false, false) } else { TabItem("Activity", false, false, true, false, false) }
+    if (tabNotif) { TabItemActive("Notices", false, false, false, true, false) } else { TabItem("Notices", false, false, false, true, false) }
+    if (tabProfile) { TabItemActive("Me", false, false, false, false, true) } else { TabItem("Me", false, false, false, false, true) }
+  }
+}
+
+// Each opener is dedicated because handler actions name literal state fields.
+component OpenSearch(label: string) {
+  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    overlayOpen = true
+    tabArea = false
+    showSearch = true
+  }
+}
+
+component OpenPost(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showPost = true
+  }
+}
+
+component OpenCircle(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showCircle = true
+  }
+}
+
+component OpenActivity(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showActivity = true
+  }
+}
+
+component OpenCompose(label: string) {
+  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+    overlayOpen = true
+    tabArea = false
+    showCompose = true
+  }
+}
+
+component OpenCreateCircle(label: string) {
+  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+    overlayOpen = true
+    tabArea = false
+    showCreateCircle = true
+  }
+}
+
+component OpenActivityEdit(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showActivityEdit = true
+  }
+}
+
+component OpenEditProfile(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showEditProfile = true
+  }
+}
+
+component OpenSettings(label: string) {
+  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+    overlayOpen = true
+    tabArea = false
+    showSettings = true
+  }
+}
+
+// Back buttons clear every overlay flag so only one detail page renders at a time.
+component BackButton(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
+  Button(label, p: 10, rounded: 12, shadow: 1, bg: "#EEF3FC") {
+    showSearch = false
+    showPost = false
+    showCircle = false
+    showActivity = false
+    showCompose = false
+    showCreateCircle = false
+    showActivityEdit = false
+    showEditProfile = false
+    showSettings = false
+    overlayOpen = false
+    tabArea = true
+    tabFeed = feed
+    tabCircles = circles
+    tabActivity = activity
+    tabNotif = notif
+    tabProfile = profile
+  }
+}
+
+// Active and inactive branches keep counter updates as plain statements, which the handler grammar requires.
+component LikeButton(label: string, on: bool, delta: int, bg: string) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+    liked = on
+    likeCount += delta
+  }
+}
+
+component SaveButton(label: string, on: bool, delta: int, bg: string) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+    saved = on
+    saveCount += delta
+  }
+}
+
+component FollowButton(label: string, on: bool, delta: int, bg: string) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+    following = on
+    followCount += delta
+  }
+}
+
+component JoinCircleButton(label: string, on: bool, delta: int, bg: string) {
+  Button("{label}", p: 10, rounded: 12, shadow: 2, bg: "{bg}") {
+    joined = on
+    circleMembers += delta
+  }
+}
+
+component FavButton(label: string, on: bool, bg: string) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+    isFav = on
+  }
+}
+
+component JoinActivityButton(label: string, on: bool, delta: int, bg: string) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+    isParticipant = on
+    participantCount += delta
+  }
+}
+
+// One comment row owns its reply control so the shared reply bar can name a target.
+component CommentRow(author: string, body: string, time: string) {
+  Card(p: 12, rounded: 12, shadow: 1, bg: "#F8FAFC", border: "#E2E8F0") {
+    Column(gap: 4, bg: "#F8FAFC") {
+      Row(gap: 8, align: center) {
         Avatar(label: "{author}")
+        Text("{author}", size: 12, color: "#0F172A")
+        Spacer(width: 8)
+        Text("{time}", size: 10, color: "#94A3B8")
       }
-      Column(gap: 2, bg: "#FFFFFF") {
-        Text("{title}", size: 14, color: "#101828")
-        Text("{author} in {topic}", size: 11, color: "#5A6B8C")
-      }
-      Spacer(width: 8)
-      Text("{likes}", size: 11, color: "#2A5BD7")
-    }
-  }
-}
-
-// Shared row keeps detail comments compact and consistent with the feed rows.
-component CommentRow(author: string, body: string) {
-  Row(gap: 10, align: center) {
-    Container(width: 32, height: 32, rounded: 10, bg: "#EEF3FC") {
-      Avatar(label: "{author}")
-    }
-    Column(gap: 2, bg: "#FFFFFF") {
-      Text("{author}", size: 12, color: "#101828")
-      Text("{body}", size: 11, color: "#5A6B8C")
-    }
-  }
-}
-
-// Shared card gives the personal center the same identity treatment as the feed.
-component ProfileCard(name: string, handle: string) {
-  Card(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C") {
-    Row(gap: 12, align: center, bg: "#2A5BD7") {
-      Container(width: 48, height: 48, rounded: 12, bg: "#FFFFFF") {
-        Icon(name: "user", color: "#2A5BD7")
-      }
-      Column(gap: 4, bg: "#2A5BD7") {
-        Text("{name}", size: 18, color: "#FFFFFF")
-        Text("@{handle}", size: 11, color: "#C9DCFF")
+      Text("{body}", size: 12, color: "#334155")
+      Button("Reply", p: 6, rounded: 8, shadow: 1, bg: "#EEF3FC") {
+        replyActive = true
+        replyName = author
       }
     }
   }
 }
 
-app Circle {
-  state activeNav = "Feed"
+component PostCard(title: string, author: string, handle: string, topic: string, time: string, body: string, imgA: string, imgB: string, imgC: string, comments: string) {
+  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 8, bg: "#FFFFFF") {
+      Row(gap: 10, align: center) {
+        Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+          Avatar(label: "{author}")
+        }
+        Column(gap: 2, bg: "#FFFFFF") {
+          Text("{author}", size: 13, color: "#0F172A")
+          Text("@{handle} - {time}", size: 10, color: "#94A3B8")
+        }
+        Spacer(width: 8)
+        Badge(label: "{topic}")
+      }
+      Text("{title}", size: 14, color: "#0F172A")
+      Text("{body}", size: 12, color: "#475569")
+      Grid(columns: 3) {
+        Image(src: "{imgA}", width: 96, height: 96)
+        Image(src: "{imgB}", width: 96, height: 96)
+        Image(src: "{imgC}", width: 96, height: 96)
+      }
+      Divider()
+      Row(gap: 8, align: center) {
+        if (liked) { LikeButton("Unlike", true, -1, "#FDECEC") } else { LikeButton("Like", false, 1, "#EEF3FC") }
+        Text("{likeCount}", size: 11, color: "#64748B")
+        Text("{comments} comments", size: 11, color: "#64748B")
+        Spacer(width: 8)
+        if (saved) { SaveButton("Saved", true, -1, "#FFF6E0") } else { SaveButton("Save", false, 1, "#EEF3FC") }
+        Text("{saveCount}", size: 11, color: "#64748B")
+        Spacer(width: 8)
+        OpenPost("Open")
+      }
+    }
+  }
+}
 
-  // One derived counter keeps the reaction total consistent across every surface.
-  computed totalReactions = likeCount + followCount + bookmarkCount
+component CircleCard(name: string, desc: string, members: string, cover: string, topic: string) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 8, bg: "#FFFFFF") {
+      Image(src: "{cover}", width: 240, height: 120)
+      Text("{name}", size: 14, color: "#0F172A")
+      Text("{desc}", size: 11, color: "#64748B")
+      Row(gap: 8, align: center) {
+        Badge(label: "{topic}")
+        Text("{members} members", size: 11, color: "#2A6CF6")
+      }
+      OpenCircle("Enter")
+    }
+  }
+}
 
-  // One shell for every width: the outer Row lays out a rail and content on a wide
-  // viewport and collapses to a vertical stack on a compact one.
+component ActivityCard(title: string, category: string, time: string, location: string, organizer: string, price: string, participants: string, cover: string) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 8, bg: "#FFFFFF") {
+      Image(src: "{cover}", width: 240, height: 120)
+      Text("{title}", size: 14, color: "#0F172A")
+      Row(gap: 8, align: center) {
+        Badge(label: "{category}")
+        Text("{price}", size: 11, color: "#2A6CF6")
+      }
+      Text("{time} - {location}", size: 11, color: "#64748B")
+      Text("by {organizer} - {participants} joined", size: 11, color: "#94A3B8")
+      OpenActivity("Details")
+    }
+  }
+}
+
+component NotifRow(actor: string, kind: string, text: string, time: string) {
+  Card(p: 12, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 4, bg: "#FFFFFF") {
+      Row(gap: 10, align: center) {
+        Container(width: 36, height: 36, rounded: 10, bg: "#EEF3FC") {
+          Avatar(label: "{actor}")
+        }
+        Column(gap: 2, bg: "#FFFFFF") {
+          Text("{actor} {kind}", size: 12, color: "#0F172A")
+          Text("{time}", size: 10, color: "#94A3B8")
+        }
+      }
+      Text("{text}", size: 11, color: "#64748B")
+      OpenPost("View")
+    }
+  }
+}
+
+component StatTile(label: string, value: string) {
+  Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 2, bg: "#FFFFFF", align: center) {
+      Text("{value}", size: 16, color: "#0F172A")
+      Text("{label}", size: 10, color: "#94A3B8")
+    }
+  }
+}
+
+app Orbit {
+  // One computed total keeps reaction counters consistent across the feed and detail surfaces.
+  computed reactions = likeCount + saveCount + followCount
+
   Column(p: 0, gap: 0) {
-    Container(p: 20, shadow: 4, gradient: "#123C8C,#0B1F4B",
-              particles: "count=48,seed=21,radius=2,alpha=800,color=#C9DCFF") {
-      Column(gap: 4, bg: "#123C8C") {
-        Text("Circle", size: 26, color: "#FFFFFF")
-        Text("{activeNav} - {refreshCount} refreshes - {feedStatus}", size: 12, color: "#C9DCFF")
+    Container(p: 18, shadow: 4, gradient: "#2A6CF6,#123C8C",
+              particles: "count=40,seed=23,radius=2,alpha=760,color=#C9DCFF") {
+      Column(gap: 4, bg: "#2A6CF6") {
+        Row(gap: 8, align: center) {
+          Text("Orbit", size: 24, color: "#FFFFFF")
+          Badge(label: "{feedTopic}")
+        }
+        Text("Circles, posts and local activities in one place", size: 11, color: "#C9DCFF")
       }
     }
 
-    Row(gap: 16, p: 16) {
-      // Left rail: surface navigation, topic badge and the async refresh control.
-      Column(width: 210, gap: 10, p: 14) {
-        Container(p: 16, rounded: 16, shadow: 3, gradient: "#2A5BD7,#123C8C") {
-          Column(gap: 4, bg: "#2A5BD7") {
-            Text("Navigation", size: 16, color: "#FFFFFF")
-            Text("one source tree", size: 11, color: "#C9DCFF")
+    if (overlayOpen) {
+      Column(gap: 12, p: 14) {
+        if (showSearch) {
+          Column(gap: 12) {
+            BackButton("Back", true, false, false, false, false)
+            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Input(bind: searchQuery, placeholder: "Search posts")
+                Button("Search", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                  searchDone = true
+                }
+              }
+            }
+            if (searchDone) {
+              Text("Results for {searchQuery}", size: 15, color: "#0F172A")
+              Scroll(height: 480, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+                Column(gap: 12) {
+                  for (i in 4) {
+                    PostCard("{searchResults[i]}", "{searchAuthors[i]}", "handle", "{searchTopics[i]}", "{searchTimes[i]}", "{searchBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "3")
+                  }
+                }
+              }
+            } else {
+              Text("Enter a keyword to search posts across every circle.", size: 12, color: "#64748B")
+            }
           }
         }
-        NavButton("Feed", true, false, false, "Feed")
-        NavButton("Detail", false, true, false, "Detail")
-        NavButton("Profile", false, false, true, "Profile")
-        Badge(label: "{activeTopic}")
-        Button("Refresh", p: 12, rounded: 12, shadow: 2, bg: "#123C8C", animate: spring) async {
-          await delay(50)
-          await fetch("/circle/feed", feedStatus)
-          refreshCount += 1
+
+        if (showPost) {
+          Column(gap: 12) {
+            BackButton("Back", true, false, false, false, false)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Row(gap: 10, align: center) {
+                  Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                    Avatar(label: "{postAuthor}")
+                  }
+                  Column(gap: 2, bg: "#FFFFFF") {
+                    Text("{postAuthor}", size: 14, color: "#0F172A")
+                    Text("@{postHandle} - {postTime} - {postViews} views", size: 10, color: "#94A3B8")
+                  }
+                  Spacer(width: 8)
+                  Badge(label: "{postTopic}")
+                }
+                Text("{postTitle}", size: 17, color: "#0F172A")
+                Text("{postBody}", size: 13, color: "#334155")
+                Grid(columns: 3) {
+                  Image(src: "{postImgA}", width: 110, height: 110)
+                  Image(src: "{postImgB}", width: 110, height: 110)
+                  Image(src: "{postImgC}", width: 110, height: 110)
+                }
+                Divider()
+                Row(gap: 8, align: center) {
+                  if (liked) { LikeButton("Unlike", true, -1, "#FDECEC") } else { LikeButton("Like", false, 1, "#EEF3FC") }
+                  Text("{likeCount}", size: 11, color: "#64748B")
+                  Button("Share", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+                    shareCount += 1
+                  }
+                  Text("{shareCount} shares", size: 11, color: "#64748B")
+                  Spacer(width: 8)
+                  if (saved) { SaveButton("Saved", true, -1, "#FFF6E0") } else { SaveButton("Save", false, 1, "#EEF3FC") }
+                  Text("{saveCount}", size: 11, color: "#64748B")
+                  Spacer(width: 8)
+                  Button("Report", p: 8, rounded: 10, shadow: 1, bg: "#FEE2E2") {
+                    reported = true
+                    reportReason = "other"
+                  }
+                }
+                if (reported) {
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#FEF2F2", border: "#FECACA") {
+                    Column(gap: 6, bg: "#FEF2F2") {
+                      Text("Reported as {reportReason}", size: 12, color: "#B91C1C")
+                      Button("Clear", p: 8, rounded: 8, shadow: 1, bg: "#FFFFFF") {
+                        reported = false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Text("Comments - {commentCount}", size: 14, color: "#0F172A")
+                if (replyActive) {
+                  Row(gap: 8, align: center) {
+                    Text("Replying to {replyName}", size: 11, color: "#2A6CF6")
+                    Spacer(width: 8)
+                    Button("Cancel", p: 6, rounded: 8, shadow: 1, bg: "#EEF3FC") {
+                      replyActive = false
+                      replyName = ""
+                    }
+                  }
+                }
+                Input(bind: commentDraft, placeholder: "Write a comment")
+                Button("Send", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                  commentCount += 1
+                  commentDraft = ""
+                  latestNotif = "New comment on your post"
+                  notifCount += 1
+                }
+                for (i in 3) {
+                  CommentRow("{commentAuthors[i]}", "{commentBodies[i]}", "{commentTimes[i]}")
+                }
+              }
+            }
+          }
         }
-        Container(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
-          Column(gap: 6, bg: "#EEF3FC") {
-            Text("Reactions", size: 11, color: "#5A6B8C")
-            Text("{totalReactions} total", size: 14, color: "#101828")
+
+        if (showCircle) {
+          Column(gap: 12) {
+            BackButton("Back", false, true, false, false, false)
+            Card(p: 0, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 0, bg: "#FFFFFF") {
+                Image(src: "{circleCover}", width: 360, height: 150)
+                Column(gap: 8, p: 16, bg: "#FFFFFF") {
+                  Text("{circleName}", size: 18, color: "#0F172A")
+                  Text("{circleDesc}", size: 12, color: "#64748B")
+                  Row(gap: 8, align: center) {
+                    Badge(label: "{circleMembers} members")
+                    Text("Created {circleCreated}", size: 11, color: "#94A3B8")
+                  }
+                  if (joined) { JoinCircleButton("Joined", true, -1, "#EEF3FC") } else { JoinCircleButton("Join circle", false, 1, "#2A6CF6") }
+                }
+              }
+            }
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Text("Members", size: 14, color: "#0F172A")
+                Row(gap: 8, align: center) {
+                  for (i in 6) {
+                    Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                      Avatar(label: "{circleMemberNames[i]}")
+                    }
+                  }
+                }
+              }
+            }
+            Text("Posts in {circleName}", size: 14, color: "#0F172A")
+            for (i in 3) {
+              PostCard("{circlePostTitles[i]}", "{circlePostAuthors[i]}", "handle", "Travel", "{circlePostTimes[i]}", "{circlePostBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "{circlePostComments[i]}")
+            }
+          }
+        }
+
+        if (showActivity) {
+          Column(gap: 12) {
+            BackButton("Back", false, false, true, false, false)
+            Card(p: 0, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 0, bg: "#FFFFFF") {
+                Image(src: "{activityCover}", width: 360, height: 150)
+                Column(gap: 8, p: 16, bg: "#FFFFFF") {
+                  Row(gap: 8, align: center) {
+                    Text("{activityTitle}", size: 18, color: "#0F172A")
+                    Badge(label: "{activityDetailStatus}")
+                  }
+                  Row(gap: 8, align: center) {
+                    Text("{activityPrice}", size: 14, color: "#2A6CF6")
+                    Text("{activityDetailCategory}", size: 12, color: "#64748B")
+                  }
+                  Row(gap: 8, align: center) {
+                    Icon(name: "calendar", color: "#64748B")
+                    Text("{activityStart} - {activityEnd}", size: 11, color: "#64748B")
+                  }
+                  Row(gap: 8, align: center) {
+                    Icon(name: "location", color: "#64748B")
+                    Text("{activityLocation}", size: 11, color: "#64748B")
+                  }
+                  Row(gap: 8, align: center) {
+                    Icon(name: "user", color: "#64748B")
+                    Text("{participantCount} participants - by {activityOrganizer}", size: 11, color: "#64748B")
+                  }
+                  Text("{activityBody}", size: 13, color: "#334155")
+                  Divider()
+                  Row(gap: 8, align: center) {
+                    if (isFav) { FavButton("Favorited", true, "#FFF6E0") } else { FavButton("Favorite", false, "#EEF3FC") }
+                    Spacer(width: 8)
+                    if (isParticipant) { JoinActivityButton("Leave", true, -1, "#EEF3FC") } else { JoinActivityButton("Join", false, 1, "#2A6CF6") }
+                    Spacer(width: 8)
+                    Button("Share", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+                      shareCount += 1
+                    }
+                  }
+                }
+              }
+            }
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Text("Participants", size: 14, color: "#0F172A")
+                Row(gap: 8, align: center) {
+                  for (i in 6) {
+                    Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                      Avatar(label: "{activityParticipantNames[i]}")
+                    }
+                  }
+                }
+              }
+            }
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Text("Comments - {activityCommentCount}", size: 14, color: "#0F172A")
+                Input(bind: activityCommentDraft, placeholder: "Write a comment")
+                Button("Send", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                  activityCommentCount += 1
+                  activityCommentDraft = ""
+                }
+                for (i in 2) {
+                  CommentRow("{activityCommentAuthors[i]}", "{activityCommentBodies[i]}", "{activityCommentTimes[i]}")
+                }
+              }
+            }
+          }
+        }
+
+        if (showCompose) {
+          Column(gap: 12) {
+            BackButton("Back", true, false, false, false, false)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("New post", size: 18, color: "#0F172A")
+                Input(bind: composeTitle, placeholder: "Title")
+                Input(bind: composeBody, placeholder: "Share a note with a circle")
+                Text("Topic", size: 12, color: "#64748B")
+                Row(gap: 8, align: center) {
+                  Radio(bind: composeTopic, value: "Travel")
+                  Text("Travel", size: 11, color: "#64748B")
+                  Radio(bind: composeTopic, value: "Food")
+                  Text("Food", size: 11, color: "#64748B")
+                  Radio(bind: composeTopic, value: "Tech")
+                  Text("Tech", size: 11, color: "#64748B")
+                }
+                Row(gap: 8, align: center) {
+                  Radio(bind: composeTopic, value: "Outdoor")
+                  Text("Outdoor", size: 11, color: "#64748B")
+                  Radio(bind: composeTopic, value: "Reads")
+                  Text("Reads", size: 11, color: "#64748B")
+                  Radio(bind: composeTopic, value: "Design")
+                  Text("Design", size: 11, color: "#64748B")
+                }
+                Image(src: "{composeAttachments}", width: 120, height: 120, rounded: 12)
+                Button("Publish", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                  postCount += 1
+                  refreshCount += 1
+                  composerDone = true
+                }
+                if (composerDone) {
+                  Text("Published to {composeTopic}. {postCount} posts now.", size: 12, color: "#16A34A")
+                }
+              }
+            }
+          }
+        }
+
+        if (showCreateCircle) {
+          Column(gap: 12) {
+            BackButton("Back", false, true, false, false, false)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Create a circle", size: 18, color: "#0F172A")
+                Image(src: "{circleFormCover}", width: 240, height: 120, rounded: 12)
+                Input(bind: circleFormName, placeholder: "Circle name")
+                Input(bind: circleFormDesc, placeholder: "Describe the circle")
+                Button("Submit for review", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                  circleSubmitted = true
+                }
+                if (circleSubmitted) {
+                  Text("Submission received. It appears in the square once approved.", size: 12, color: "#16A34A")
+                }
+              }
+            }
+          }
+        }
+
+        if (showActivityEdit) {
+          Column(gap: 12) {
+            BackButton("Back", false, false, true, false, false)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Edit activity", size: 18, color: "#0F172A")
+                Input(bind: activityEditTitle, placeholder: "Activity title")
+                Text("Category", size: 12, color: "#64748B")
+                Row(gap: 8, align: center) {
+                  Radio(bind: activityEditCategory, value: "Outdoor")
+                  Text("Outdoor", size: 11, color: "#64748B")
+                  Radio(bind: activityEditCategory, value: "Food")
+                  Text("Food", size: 11, color: "#64748B")
+                  Radio(bind: activityEditCategory, value: "Art")
+                  Text("Art", size: 11, color: "#64748B")
+                }
+                Row(gap: 8, align: center) {
+                  Radio(bind: activityEditCategory, value: "Reads")
+                  Text("Reads", size: 11, color: "#64748B")
+                  Radio(bind: activityEditCategory, value: "Tech")
+                  Text("Tech", size: 11, color: "#64748B")
+                  Radio(bind: activityEditCategory, value: "Music")
+                  Text("Music", size: 11, color: "#64748B")
+                }
+                Input(bind: activityEditStart, placeholder: "Start")
+                Input(bind: activityEditEnd, placeholder: "End")
+                Input(bind: activityEditLocation, placeholder: "Location")
+                Input(bind: activityEditCapacity, placeholder: "Capacity")
+                Input(bind: activityEditPrice, placeholder: "Price")
+                Input(bind: activityEditBody, placeholder: "Details")
+                Input(bind: activityEditContact, placeholder: "Contact")
+                Button("Save changes", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                  activitySaved = true
+                }
+                if (activitySaved) {
+                  Text("Activity updated.", size: 12, color: "#16A34A")
+                }
+              }
+            }
+          }
+        }
+
+        if (showEditProfile) {
+          Column(gap: 12) {
+            BackButton("Back", false, false, false, false, true)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Edit profile", size: 18, color: "#0F172A")
+                Input(bind: editName, placeholder: "Display name")
+                Input(bind: editBio, placeholder: "Bio")
+                Button("Save profile", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                  displayName = editName
+                  displayBio = editBio
+                }
+              }
+            }
+          }
+        }
+
+        if (showSettings) {
+          Column(gap: 12) {
+            BackButton("Back", false, false, false, false, true)
+            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Settings", size: 18, color: "#0F172A")
+                Row(gap: 8, align: center) {
+                  Switch(bind: dark)
+                  Text("Dark appearance", size: 12, color: "#64748B")
+                }
+                Row(gap: 8, align: center) {
+                  Switch(bind: reduceMotion)
+                  Text("Reduce motion", size: 12, color: "#64748B")
+                }
+                Row(gap: 8, align: center) {
+                  Switch(bind: compact)
+                  Text("Compact density", size: 12, color: "#64748B")
+                }
+                Row(gap: 8, align: center) {
+                  Switch(bind: notifyOn)
+                  Text("Interaction notifications", size: 12, color: "#64748B")
+                }
+                Slider(bind: textScale, min: 50, max: 150)
+                Text("Text scale {textScale}", size: 12, color: "#64748B")
+              }
+            }
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#EEF3FC") {
+              Column(gap: 6, bg: "#EEF3FC") {
+                Text("About Orbit", size: 13, color: "#0F172A")
+                Text("{aboutText}", size: 12, color: "#475569")
+              }
+            }
           }
         }
       }
-
-      // Main content: the selected surface is rendered, the others stay hidden.
-      Column(width: 760, gap: 14) {
-        // Topic tabs, sorted feed, and a load-more control.
-        if (showFeed) {
-          Tabs(labels: "All,Travel,Food,Tech", bind: activeTopic)
-          Scroll(height: 560, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
-            Column(gap: 12) {
-              Row(gap: 8, align: center) {
-                Icon(name: "refresh", color: "#2A5BD7")
-                Text("{activeTopic} sorted by {sortBy} on page {page}", size: 12, color: "#5A6B8C")
-                Spacer(width: 8)
-                Progress(value: 64)
+    }
+    if (tabArea) {
+      Column(gap: 12, p: 14) {
+        if (tabFeed) {
+          Column(gap: 12) {
+            Row(gap: 8, align: center) {
+              OpenSearch("Search")
+              Spacer(width: 8)
+              Button("New post", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                overlayOpen = true
+    tabArea = false
+                showCompose = true
               }
-              Row(gap: 12, align: center) {
-                Radio(bind: sortBy, value: "latest")
-                Text("latest", size: 12, color: "#5A6B8C")
-                Radio(bind: sortBy, value: "hot")
-                Text("hot", size: 12, color: "#5A6B8C")
-              }
-              for (i in 4) {
-                PostCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedTopics[i]}", "{feedLikes[i]}")
-              }
-              Button("Load more", p: 12, rounded: 12, shadow: 2, bg: "#123C8C", animate: spring) {
-                page += 1
+            }
+            Tabs(labels: feedTopicList, bind: feedTopic)
+            Row(gap: 8, align: center) {
+              Radio(bind: feedSort, value: "latest")
+              Text("Latest", size: 11, color: "#64748B")
+              Radio(bind: feedSort, value: "hot")
+              Text("Hot", size: 11, color: "#64748B")
+              Text("{feedSort} - page {feedPage}", size: 11, color: "#94A3B8")
+            }
+            Row(gap: 8, align: center) {
+              Icon(name: "refresh", color: "#2A6CF6")
+              Text("{feedStatus}", size: 11, color: "#64748B")
+              Spacer(width: 8)
+              Button("Refresh", p: 10, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") async {
+                refreshing = true
+                await delay(50)
+                await fetch("/orbit/feed", feedStatus)
                 refreshCount += 1
+                refreshing = false
               }
             }
-          }
-        }
-
-        // Post detail: body, reactions, follow state, reply composer and comments.
-        if (showDetail) {
-          Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
-            Column(gap: 10, bg: "#FFFFFF") {
-              Row(gap: 8, align: center) {
-                Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
-                  Icon(name: "chat", color: "#2A5BD7")
-                }
-                Column(gap: 2, bg: "#FFFFFF") {
-                  Text("Post {selectedPost} in {activeTopic}", size: 18, color: "#101828")
-                  Text("{feedStatus}", size: 11, color: "#5A6B8C")
-                }
-              }
-              Text("{titleDraft}", size: 14, color: "#101828")
-              Text("{bodyDraft}", size: 12, color: "#5A6B8C")
-              Divider()
-              Row(gap: 8, align: center) {
-                Button("Like", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
-                  liked.toggle()
-                }
-                Button("Follow", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
-                  following.toggle()
-                }
-                Button("Save", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC") {
-                  bookmarked.toggle()
-                }
-                Spacer(width: 8)
-                Text("{likeCount} likes - {commentCount} comments - {followCount} followers", size: 11, color: "#5A6B8C")
-              }
-              Input(bind: commentDraft, placeholder: "Write a reply")
-              Button("Reply", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7") {
-                commentCount += 1
-                refreshCount += 1
-              }
-              for (i in 2) {
-                CommentRow("Nora", "{commentTexts[i]}")
-              }
+            if (refreshing) {
+              Spinner()
             }
-          }
-        }
-
-        // Personal center: identity, settings, my posts, my bookmarks and publishing.
-        if (showProfile) {
-          Column(gap: 14) {
-            ProfileCard("{displayName}", "circle_member")
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
-              Column(gap: 12, bg: "#FFFFFF") {
-                Row(gap: 8, align: center) {
-                  Icon(name: "settings", color: "#2A5BD7")
-                  Text("Basic settings", size: 14, color: "#101828")
-                }
-                Switch(bind: dark)
-                Text("dark mode", size: 12, color: "#5A6B8C")
-                Checkbox(bind: notifications)
-                Text("notifications", size: 12, color: "#5A6B8C")
-                Slider(bind: textScale, min: 50, max: 150)
-                Text("text scale {textScale}", size: 12, color: "#5A6B8C")
-              }
-            }
-            Scroll(height: 240, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
               Column(gap: 12) {
-                Text("My posts - {myPostCount}", size: 14, color: "#101828")
-                for (i in 3) {
-                  PostCard("{myPostTitles[i]}", "{myPostAuthors[i]}", "{myPostTopics[i]}", "{myPostLikes[i]}")
+                for (i in 6) {
+                  PostCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedHandles[i]}", "{feedTopics[i]}", "{feedTimes[i]}", "{feedBodies[i]}", "{feedImgA[i]}", "{feedImgB[i]}", "{feedImgC[i]}", "{feedComments[i]}")
                 }
-              }
-            }
-            Scroll(height: 240, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
-              Column(gap: 12) {
-                Text("My bookmarks - {bookmarkCount}", size: 14, color: "#101828")
-                for (i in 3) {
-                  PostCard("{bookmarkTitles[i]}", "{bookmarkAuthors[i]}", "{bookmarkTopics[i]}", "{bookmarkLikes[i]}")
+                if (feedMore) {
+                  for (i in 3) {
+                    PostCard("{feedMoreTitles[i]}", "{feedMoreAuthors[i]}", "{feedMoreHandles[i]}", "{feedMoreTopics[i]}", "{feedMoreTimes[i]}", "{feedMoreBodies[i]}", "{feedMoreImgA[i]}", "{feedMoreImgB[i]}", "{feedMoreImgC[i]}", "2")
+                  }
                 }
-              }
-            }
-            Image(src: "assets/circle-cover.png", width: 44, height: 44)
-            Dialog(title: "New post") {
-              Column(gap: 10) {
-                Input(bind: titleDraft, placeholder: "title")
-                Input(bind: bodyDraft, placeholder: "what is on your mind")
-                Button("Publish", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
-                  uploadCount += 1
-                  myPostCount += 1
+                Button("Load more", p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+                  feedMore = true
+                  feedPage += 1
                   refreshCount += 1
                 }
+                Text("{refreshCount} refreshes - {feedStatus}", size: 11, color: "#94A3B8")
               }
             }
           }
         }
+
+        if (tabCircles) {
+          Column(gap: 12) {
+            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Input(bind: circleCategory, placeholder: "Search circles")
+                Row(gap: 8, align: center) {
+                  OpenCreateCircle("New circle")
+                  Text("{circleCategory} filter", size: 11, color: "#94A3B8")
+                }
+              }
+            }
+            Tabs(labels: circleCategoryList, bind: circleCategory)
+            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 12) {
+                Grid(columns: 2) {
+                  for (i in 6) {
+                    CircleCard("{circleSquareNames[i]}", "{circleSquareDescs[i]}", "{circleSquareMembers[i]}", "{circleSquareCovers[i]}", "{circleSquareTopics[i]}")
+                  }
+                }
+                if (feedMore) {
+                  CircleCard("Harbour Writers", "Notes, essays and quiet writing sessions.", "142", "assets/photo4.png", "Reads")
+                }
+              }
+            }
+          }
+        }
+
+        if (tabActivity) {
+          Column(gap: 12) {
+            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                Input(bind: activityQuery, placeholder: "Search activities")
+                Row(gap: 8, align: center) {
+                  Button("Create activity", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                    overlayOpen = true
+    tabArea = false
+                    showActivityEdit = true
+                  }
+                  Text("{activityStatus} - {activitySort}", size: 11, color: "#94A3B8")
+                }
+              }
+            }
+            Tabs(labels: activityCategoryList, bind: activityCategory)
+            Row(gap: 8, align: center) {
+              Radio(bind: activityStatus, value: "all")
+              Text("All", size: 11, color: "#64748B")
+              Radio(bind: activityStatus, value: "open")
+              Text("Open", size: 11, color: "#64748B")
+              Radio(bind: activityStatus, value: "full")
+              Text("Full", size: 11, color: "#64748B")
+            }
+            Row(gap: 8, align: center) {
+              Radio(bind: activitySort, value: "time")
+              Text("Recent", size: 11, color: "#64748B")
+              Radio(bind: activitySort, value: "hot")
+              Text("Popular", size: 11, color: "#64748B")
+            }
+            Scroll(height: 400, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 12) {
+                for (i in 6) {
+                  ActivityCard("{activityListTitles[i]}", "{activityListCategories[i]}", "{activityListTimes[i]}", "{activityListLocations[i]}", "{activityListOrganizers[i]}", "{activityListPrices[i]}", "{activityListParticipants[i]}", "{activityListCovers[i]}")
+                }
+              }
+            }
+          }
+        }
+
+        if (tabNotif) {
+          Column(gap: 12) {
+            Row(gap: 8, align: center) {
+              Text("Notifications", size: 18, color: "#0F172A")
+              Spacer(width: 8)
+              Badge(label: "{unreadCount} unread")
+              Button("Mark read", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+                unreadCount = 0
+                notifCount = 0
+                notifCleared = true
+              }
+            }
+            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 12) {
+                for (i in 5) {
+                  NotifRow("{notifActors[i]}", "{notifKinds[i]}", "{notifTexts[i]}", "{notifTimes[i]}")
+                }
+                if (notifCleared) {
+                  Text("All caught up.", size: 12, color: "#94A3B8")
+                }
+              }
+            }
+          }
+        }
+
+        if (tabProfile) {
+          Column(gap: 12) {
+            Card(p: 0, rounded: 16, shadow: 3, gradient: "#2A6CF6,#123C8C") {
+              Column(gap: 10, p: 16, bg: "#2A6CF6") {
+                Row(gap: 12, align: center) {
+                  Container(width: 56, height: 56, rounded: 14, bg: "#FFFFFF") {
+                    Avatar(label: "{displayName}")
+                  }
+                  Column(gap: 2, bg: "#2A6CF6") {
+                    Text("{displayName}", size: 18, color: "#FFFFFF")
+                    Text("@{displayHandle}", size: 11, color: "#C9DCFF")
+                  }
+                  Spacer(width: 8)
+                  OpenEditProfile("Edit")
+                }
+                Text("{displayBio}", size: 12, color: "#C9DCFF")
+                Row(gap: 8, align: center) {
+                  StatTile("Posts", "{profilePosts}")
+                  StatTile("Followers", "{profileFollowers}")
+                  StatTile("Following", "{profileFollowing}")
+                  StatTile("Likes", "{profileLikes}")
+                }
+              }
+            }
+            Row(gap: 8, align: center) {
+              if (following) { FollowButton("Following", true, -1, "#EEF3FC") } else { FollowButton("Follow", false, 1, "#2A6CF6") }
+              Text("{followCount} followers", size: 11, color: "#64748B")
+              Spacer(width: 8)
+              OpenSettings("Settings")
+            }
+            Text("My posts - {postCount}", size: 14, color: "#0F172A")
+            Scroll(height: 180, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 12) {
+                for (i in 3) {
+                  PostCard("{myPostTitles[i]}", "{displayName}", "{displayHandle}", "{myPostTopics[i]}", "{myPostTimes[i]}", "{myPostTitles[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "{myPostComments[i]}")
+                }
+              }
+            }
+            Text("Favorites", size: 14, color: "#0F172A")
+            Scroll(height: 180, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 12) {
+                for (i in 3) {
+                  PostCard("{favTitles[i]}", "{favAuthors[i]}", "handle", "{favTopics[i]}", "{favTimes[i]}", "{favTitles[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "2")
+                }
+              }
+            }
+            Text("Following", size: 14, color: "#0F172A")
+            Scroll(height: 200, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Column(gap: 10) {
+                for (i in 5) {
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
+                    Row(gap: 10, align: center) {
+                      Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+                        Avatar(label: "{followNames[i]}")
+                      }
+                      Column(gap: 2, bg: "#FFFFFF") {
+                        Text("{followNames[i]}", size: 13, color: "#0F172A")
+                        Text("{followBios[i]}", size: 11, color: "#64748B")
+                      }
+                      Spacer(width: 8)
+                      if (following) { FollowButton("Following", true, -1, "#EEF3FC") } else { FollowButton("Follow", false, 1, "#2A6CF6") }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        TabBar()
       }
     }
   }
