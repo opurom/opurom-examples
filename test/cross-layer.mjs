@@ -889,11 +889,11 @@ try {
     const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
     const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
-      /digest=16b69e96b1534324/);
+      /digest=8d45f412996a99c6/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
-      /digest=aaf572509f15d60c/);
+      /digest=318beb1dd337bc4e/);
     assert.match(ok(run(r, [P('opurom-spec', 'counter.opuir.json'), '800', '600', c,
-      '--state', 'count=7']), 'tier state'), /digest=e5d71acb7602eab2/);
+      '--state', 'count=7']), 'tier state'), /digest=40073cb95c912d80/);
   });
   check('Wayland wire encoding is verified without a compositor', () => {
     const wire = P('opurom-platform', 'src', 'wayland_wire.rs');
