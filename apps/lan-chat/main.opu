@@ -50,7 +50,7 @@ component SectionLabel(title: string) {
 component ConversationRow(avatar: string, tint: string, name: string, kind: string,
                           preview: string, stamp: string, unread: string,
                           peer: string, initials: string, status: string) {
-  Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 12, rounded: 16, glass: true) {
     Row(gap: 12, align: center) {
       AvatarCircle("{avatar}", "{tint}", 46)
       Column(gap: 3, width: 190) {
@@ -93,7 +93,7 @@ component InBubble(avatar: string, tint: string, body: string, meta: string) {
   Row(gap: 8) {
     AvatarCircle("{avatar}", "{tint}", 30)
     Column(gap: 5) {
-      Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+      Card(p: 12, rounded: 16, glass: true) {
         Text("{body}", size: 14, color: "#101828")
       }
       Text("{meta}", size: 9, color: "#A6ACB8")
@@ -106,7 +106,7 @@ component InBubble(avatar: string, tint: string, body: string, meta: string) {
 
 component ContactRow(avatar: string, tint: string, name: string, handle: string,
                      note: string, presence: string, peer: string, initials: string) {
-  Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 12, rounded: 16, glass: true) {
     Row(gap: 12, align: center) {
       AvatarCircle("{avatar}", "{tint}", 42)
       Column(gap: 3, width: 170) {
@@ -135,7 +135,7 @@ component ContactRow(avatar: string, tint: string, name: string, handle: string,
 // --- Small shared rows -------------------------------------------------------
 
 component MemberRow(avatar: string, name: string, role: string) {
-  Card(p: 10, rounded: 12, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 10, rounded: 12, glass: true) {
     Row(gap: 10, align: center) {
       AvatarCircle("{avatar}", "#5B6AD0", 32)
       Column(gap: 2, width: 220) {
@@ -148,7 +148,7 @@ component MemberRow(avatar: string, name: string, role: string) {
 }
 
 component NotificationRow(title: string, body: string, stamp: string) {
-  Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 12, rounded: 16, glass: true) {
     Row(gap: 12, align: center) {
       Container(width: 34, height: 34, rounded: 11, bg: "#EDF4F1") {
         Icon(name: "bell", color: "#1F6F5C")
@@ -170,7 +170,7 @@ component NotificationRow(title: string, body: string, stamp: string) {
 }
 
 component CallRow(name: string, kind: string, stamp: string, outcome: string) {
-  Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 12, rounded: 16, glass: true) {
     Row(gap: 12, align: center) {
       Container(width: 32, height: 32, rounded: 10, bg: "#EDF4F1") {
         Icon(name: "play", color: "#1F6F5C")
@@ -185,7 +185,7 @@ component CallRow(name: string, kind: string, stamp: string, outcome: string) {
 }
 
 component DiscoverCard(title: string, note: string) {
-  Card(p: 14, rounded: 18, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 14, rounded: 18, glass: true) {
     Column(gap: 8) {
       Container(width: 34, height: 34, rounded: 11, bg: "#EDF4F1") {
         Icon(name: "star", color: "#1F6F5C")
@@ -197,7 +197,7 @@ component DiscoverCard(title: string, note: string) {
 }
 
 component SettingRow(label: string, note: string) {
-  Card(p: 12, rounded: 14, bg: "#FFFFFF", border: "#EEF0F3") {
+  Card(p: 12, rounded: 14, glass: true) {
     Row(gap: 10, align: center) {
       Column(gap: 2, width: 240) {
         Text("{label}", size: 13, color: "#101828")
@@ -211,7 +211,7 @@ component SettingRow(label: string, note: string) {
 // --- Tab bar -----------------------------------------------------------------
 
 component TabBar() {
-  Card(p: 8, rounded: 0, bg: "#FFFFFF", border: "#E6E8EC") {
+  Card(p: 8, rounded: 0, glass: true) {
     Column(gap: 8) {
       Row(gap: 8, align: center) {
         Button("Chats", p: 8, rounded: 10, bg: "#F2F5F4") {
@@ -297,11 +297,11 @@ component TabBar() {
 
 
 app Relay {
-  theme { mode: light, accent: "#1F6F5C", radius: 18 }
+  theme { mode: light, accent: "#1F6F5C", radius: 18, stage: "#E4EDEB" }
 
   Column(p: 0, gap: 0) {
     // Top bar: brand mark, title and a live unread summary.
-    Container(p: 16, bg: "#FFFFFF") {
+    Container(p: 16, glass: true) {
       Row(gap: 10, align: center) {
         Container(width: 34, height: 34, rounded: 11, bg: "#1F6F5C") {
           Icon(name: "chat", color: "#FFFFFF")
@@ -339,7 +339,7 @@ app Relay {
           }
         }
         if (chatHasQuery) {
-          Card(p: 12, rounded: 14, bg: "#F2F5F4", border: "#E6E8EC") {
+          Card(p: 12, rounded: 14, glass: true) {
             Row(gap: 8, align: center) {
               Text("Results for {chatSearch}", size: 12, color: "#101828")
               Spacer(width: 8)
@@ -385,7 +385,7 @@ app Relay {
           }
         }
         if (contactHasQuery) {
-          Card(p: 12, rounded: 14, bg: "#F2F5F4", border: "#E6E8EC") {
+          Card(p: 12, rounded: 14, glass: true) {
             Row(gap: 8, align: center) {
               Text("Matching {contactSearch}", size: 12, color: "#101828")
               Spacer(width: 8)
@@ -434,7 +434,7 @@ app Relay {
 
     if (showMe) {
       Column(p: 16, gap: 12) {
-        Card(p: 16, rounded: 18, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 16, rounded: 18, glass: true) {
           Row(gap: 14, align: center) {
             AvatarCircle("{profileAvatar}", "#1F6F5C", 56)
             Column(gap: 3, width: 180) {
@@ -446,13 +446,13 @@ app Relay {
           }
         }
         Grid(columns: 2) {
-          Card(p: 12, rounded: 14, bg: "#FFFFFF", border: "#EEF0F3") {
+          Card(p: 12, rounded: 14, glass: true) {
             Column(gap: 2) {
               Text("{unreadTotal}", size: 18, color: "#101828")
               Text("Unread", size: 11, color: "#8A91A0")
             }
           }
-          Card(p: 12, rounded: 14, bg: "#FFFFFF", border: "#EEF0F3") {
+          Card(p: 12, rounded: 14, glass: true) {
             Column(gap: 2) {
               Text("6", size: 18, color: "#101828")
               Text("Contacts", size: 11, color: "#8A91A0")
@@ -509,7 +509,7 @@ app Relay {
           }
         }
 
-        Card(p: 10, rounded: 16, bg: "#F2F5F4", border: "#EEF0F3") {
+        Card(p: 10, rounded: 16, glass: true) {
           Column(gap: 12) {
             Text("Today", size: 10, color: "#A6ACB8")
             InBubble("AL", "#1F6F5C", "Morning! Are we still on for the review?", "09:38")
@@ -542,7 +542,7 @@ app Relay {
         }
 
         if (msgActions) {
-          Card(p: 12, rounded: 14, bg: "#FFFFFF", border: "#E6E8EC") {
+          Card(p: 12, rounded: 14, glass: true) {
             Column(gap: 8) {
               Text("{actionBody}", size: 12, color: "#101828")
               Row(gap: 8, align: center) {
@@ -566,10 +566,10 @@ app Relay {
           }
         }
 
-        Card(p: 12, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 12, rounded: 16, glass: true) {
           Column(gap: 8) {
             if (emojiOpen) {
-              Card(p: 10, rounded: 12, bg: "#F2F5F4", border: "#EEF0F3") {
+              Card(p: 10, rounded: 12, glass: true) {
                 Row(gap: 8, align: center) {
                   Button("smile", p: 6, rounded: 8, bg: "#FFFFFF", border: "#E6E8EC") {
                     draft = "smile"
@@ -624,11 +624,11 @@ app Relay {
           }
         }
         if (newChatHasQuery) {
-          Card(p: 12, rounded: 14, bg: "#F2F5F4", border: "#E6E8EC") {
+          Card(p: 12, rounded: 14, glass: true) {
             Text("People matching {newChatSearch}", size: 12, color: "#101828")
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Add a contact")
             Input(bind: newContactName, placeholder: "Name")
@@ -654,7 +654,7 @@ app Relay {
     if (screenProfile) {
       Column(p: 16, gap: 12) {
         BackBar("Profile", "{chatPeer}")
-        Card(p: 18, rounded: 18, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 18, rounded: 18, glass: true) {
           Column(gap: 12) {
             Row(gap: 14, align: center) {
               AvatarCircle("{chatAvatar}", "#1F6F5C", 56)
@@ -696,7 +696,7 @@ app Relay {
     if (screenGroup) {
       Column(p: 16, gap: 12) {
         BackBar("Group info", "Design Guild - 8 members")
-        Card(p: 16, rounded: 18, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 16, rounded: 18, glass: true) {
           Column(gap: 8) {
             SectionLabel("Group name")
             Input(bind: groupNameEdit, placeholder: "Group name")
@@ -707,7 +707,7 @@ app Relay {
             }
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Members")
             MemberRow("DA", "Dana", "Owner")
@@ -737,7 +737,7 @@ app Relay {
     if (screenNewGroup) {
       Column(p: 16, gap: 12) {
         BackBar("Create group", "Name and members")
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Group name")
             Input(bind: groupNameEdit, placeholder: "Group name")
@@ -745,7 +745,7 @@ app Relay {
             Input(bind: groupNoticeEdit, placeholder: "Notice")
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 10) {
             SectionLabel("Choose members")
             Row(gap: 8, align: center) {
@@ -798,7 +798,7 @@ app Relay {
             }
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 10) {
             Row(gap: 8, align: center) {
               Button("Mute", p: 8, rounded: 10, bg: "#F2F5F4") {
@@ -850,7 +850,7 @@ app Relay {
         NotificationRow("Group update", "Dana added a mockup.", "09:32")
         NotificationRow("Call missed", "Marcus called you.", "09:12")
         NotificationRow("New contact", "Owen accepted your request.", "Yesterday")
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 10) {
             SectionLabel("Delivery")
             Row(gap: 10, align: center) {
@@ -870,7 +870,7 @@ app Relay {
     if (screenSettings) {
       Column(p: 16, gap: 12) {
         BackBar("Settings", "Profile, privacy and theme")
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Profile")
             Input(bind: profileName, placeholder: "Display name")
@@ -884,7 +884,7 @@ app Relay {
             }
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 10) {
             SectionLabel("Privacy")
             Row(gap: 10, align: center) {
@@ -901,7 +901,7 @@ app Relay {
             }
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Theme")
             Text("accent {themeAccent}", size: 11, color: "#4B5563")
@@ -923,7 +923,7 @@ app Relay {
             Slider(bind: themeSpacing, min: 4, max: 24)
           }
         }
-        Card(p: 14, rounded: 16, bg: "#FFFFFF", border: "#EEF0F3") {
+        Card(p: 14, rounded: 16, glass: true) {
           Column(gap: 8) {
             SectionLabel("Storage")
             Text("cache {cacheBytes} MB", size: 12, color: "#101828")
