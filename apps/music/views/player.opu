@@ -1,0 +1,64 @@
+// Playback core view for the desktop music player.
+// A standalone app is required for the compiler to check a file, so the
+// transport, seek, volume and mode state live in this app's own body.
+
+app PlayerView {
+  state playing = true
+  state volume = 40
+  state position = 62
+  state duration = 214
+  state mode = "sequence"
+
+  computed remaining = duration - position
+
+  theme { mode: dark, accent: "#0F766E", radius: 14, fontScale: 1.0 }
+
+  Column(p: 16, gap: 14) {
+    Text("Player view", size: 22, color: "#FFFFFF")
+
+    Container(p: 16, rounded: 16, shadow: 3, gradient: "#0F766E,#053D38",
+              particles: "count=28,seed=5,radius=2,alpha=880,color=#CFF3EE") {
+      Column(gap: 6, bg: "#0F766E") {
+        Text("{playing} - {mode} mode", size: 16, color: "#FFFFFF")
+        Text("{position} / {duration} - {remaining} remaining", size: 12, color: "#CFF3EE")
+      }
+    }
+
+    Card(p: 16, rounded: 16, shadow: 3, bg: "#101828", border: "#24324A") {
+      Column(gap: 10, bg: "#101828") {
+        Player(src: "media/aurora.opumedia", width: 560, height: 200)
+        Waveform(value: 88, width: 560, height: 56)
+        Equalizer(value: 52, width: 560, height: 48)
+        LevelMeter(value: 76, width: 560)
+
+        Row(gap: 10, align: center) {
+          Container(width: 38, height: 38, rounded: 10, bg: "#0F766E") {
+            Icon(name: "arrow_back", color: "#FFFFFF")
+          }
+          Button("Pause", p: 12, rounded: 12, shadow: 2, bg: "#0F766E", animate: spring) {
+            playing = false
+          }
+          Container(width: 38, height: 38, rounded: 10, bg: "#0F766E") {
+            Icon(name: "arrow_forward", color: "#FFFFFF")
+          }
+        }
+
+        Slider(bind: position, min: 0, max: 240)
+        Text("seek {position}s", size: 11, color: "#9FB3C8")
+        Slider(bind: volume, min: 0, max: 100)
+        Text("volume {volume}%", size: 11, color: "#9FB3C8")
+
+        Row(gap: 8, align: center) {
+          Radio(bind: mode, value: "sequence")
+          Text("sequence", size: 11, color: "#9FB3C8")
+          Radio(bind: mode, value: "loop")
+          Text("loop", size: 11, color: "#9FB3C8")
+          Radio(bind: mode, value: "shuffle")
+          Text("shuffle", size: 11, color: "#9FB3C8")
+        }
+
+        Badge(label: "{mode} - {position}s")
+      }
+    }
+  }
+}

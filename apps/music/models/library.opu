@@ -1,0 +1,77 @@
+// Library data layer for the desktop music player.
+// A standalone app is required for the compiler to check a file, so the model,
+// service routes and classification state live in this app's own body.
+
+app LibraryModel {
+  state classify = "all"
+  state selectedArtist = "Northwind"
+  state selectedAlbum = "First Light"
+
+  // Parallel compile-time lists stand in for the scanned media records.
+  state libraryTitles = ["Aurora Lights", "Coastal Drift", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
+  state libraryArtists = ["Northwind", "Cinder Row", "The Pale Choir", "Harbor Light", "Marlowe", "Sable and Co"]
+  state libraryAlbums = ["First Light", "Tidal", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
+  state playlists = ["Road Trip", "Focus Loop", "Late Night"]
+
+  model Track {
+    id: int primary
+    title: string
+    artist: string
+    album: string
+    duration: int
+    path: string
+  }
+
+  model Playlist {
+    id: int primary
+    name: string
+    trackId: int
+  }
+
+  api "/music/library" {
+    list Track
+    create Track
+  }
+
+  api "/music/playlists" {
+    list Playlist
+    create Playlist
+  }
+
+  theme { mode: light, accent: "#2A5BD7", radius: 14, fontScale: 1.0 }
+
+  Column(p: 16, gap: 14) {
+    Text("Library model", size: 22, color: "#101828")
+
+    // Classification control binds the active classify value to the state.
+    Row(gap: 10, align: center) {
+      Radio(bind: classify, value: "all")
+      Text("all", size: 11, color: "#5A6B8C")
+      Radio(bind: classify, value: "artist")
+      Text("artist", size: 11, color: "#5A6B8C")
+      Radio(bind: classify, value: "album")
+      Text("album", size: 11, color: "#5A6B8C")
+    }
+
+    Scroll(height: 440, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
+      Column(gap: 10, p: 12) {
+        for (i in 6) {
+          Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
+            Column(gap: 4, bg: "#FFFFFF") {
+              Text("{libraryTitles[i]}", size: 14, color: "#101828")
+              Text("{libraryArtists[i]} - {libraryAlbums[i]}", size: 11, color: "#5A6B8C")
+            }
+          }
+        }
+      }
+    }
+
+    Card(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
+      Column(gap: 6, bg: "#EEF3FC") {
+        Text("Classification", size: 12, color: "#5A6B8C")
+        Text("{classify} - {selectedArtist} - {selectedAlbum}", size: 13, color: "#101828")
+        Text("{playlists[0]} playlist tracked", size: 11, color: "#5A6B8C")
+      }
+    }
+  }
+}
