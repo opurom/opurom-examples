@@ -437,13 +437,22 @@ try {
     const cmds = join(tmp, 'commands.json');
     const cpu = join(tmp, 'cpu.ppm');
     const gpuOut = join(tmp, 'gpu.ppm');
-    ok(run(renderer, [P('opurom-spec', 'counter.opuir.json'), '320', '240', cpu,
-      '--commands', cmds]), 'render commands');
-    assert.ok(existsSync(cmds), 'display list not written');
     const gpuBin = bin('opurom-gpu', 'opurom-gpu') || ensureBin('opurom-gpu', 'opurom-gpu');
-    ok(run(gpuBin, ['raster', cmds, gpuOut]), 'gpu raster');
-    assert.ok(readFileSync(cpu).equals(readFileSync(gpuOut)),
-      'GPU PPM differs from the software renderer PPM');
+    const animation = P('opurom-render', 'tests', 'fixtures', 'animation-loop.opuir.json');
+    const cases = [
+      ['counter', P('opurom-spec', 'counter.opuir.json'), '320', '240', []],
+      ...[0, 96, 192, 4000].map(tick => [
+        `animation tick ${tick}`, animation, '200', '200', ['--tick', String(tick)]
+      ])
+    ];
+    for (const [label, ir, width, height, extra] of cases) {
+      ok(run(renderer, [ir, width, height, cpu, '--commands', cmds, ...extra]),
+        `${label}: render commands`);
+      assert.ok(existsSync(cmds), 'display list not written');
+      ok(run(gpuBin, ['raster', cmds, gpuOut]), `${label}: gpu raster`);
+      assert.ok(readFileSync(cpu).equals(readFileSync(gpuOut)),
+        `${label}: GPU PPM differs from the software renderer PPM`);
+    }
   });
   check('browser DOM/Canvas hybrid verifies a real canvas digest', () => {
     const dir = join(tmp, 'webout');
