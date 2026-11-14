@@ -1,190 +1,1282 @@
-// Entry application for the desktop music player skeleton.
-// A standalone app is required for the compiler to check a file, so this entry
-// carries the merged declarations that a production build splits across modules.
+import "models/library.opu";
+import "views/state.opu";
+import "views/player.opu";
 
-component TrackRow(title: string, artist: string, album: string, mark: string) {
-  Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-    Column(gap: 4, bg: "#FFFFFF") {
-      Row(gap: 8, align: center) {
-        Text("{title}", size: 14, color: "#101828")
-        Spacer(width: 8)
-        Container(width: 54) {
-          Badge(label: "{mark}")
-        }
+// Components stay in the entry because imported modules accept data declarations only.
+
+// Cover art is drawn as a gradient tile so the demo needs no external images.
+component Cover(tint: string, glyph: string, width: int, height: int) {
+  Container(width: width, height: height, rounded: 10, gradient: "{tint},#0B1220") {
+    Icon(name: glyph, color: "#FFFFFF")
+  }
+}
+
+// Each play action writes the whole record so the bar updates in one tap.
+component TrackRow(title: string, artist: string, album: string, dur: int, tint: string, index: int, f0: bool, f1: bool, f2: bool, f3: bool, f4: bool, f5: bool) {
+  Card(p: 10, rounded: 12, shadow: 1, bg: "#16213A", border: "#22304F") {
+    Row(gap: 10, align: center, bg: "#16213A") {
+      Cover(tint, "play", 44, 44)
+      Column(gap: 2, bg: "#16213A", width: 400) {
+        Text("{title}", size: 14, color: "#F8FAFC")
+        Text("{artist} - {album}", size: 11, color: "#94A3B8")
       }
-      Text("{artist} - {album}", size: 11, color: "#5A6B8C")
+      Spacer(width: 8)
+      Text("{dur}s", size: 11, color: "#94A3B8")
+      Container(width: 34, height: 34, rounded: 9, bg: "#2A5BD7") {
+        Icon(name: "play", color: "#FFFFFF")
+      }
+      Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+        npTitle = title
+        npArtist = artist
+        npAlbum = album
+        duration = dur
+        currentIndex = index
+        np0 = f0
+        np1 = f1
+        np2 = f2
+        np3 = f3
+        np4 = f4
+        np5 = f5
+        playing = true
+      }
     }
   }
 }
 
-component PlaylistRow(name: string, count: string) {
-  Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-    Column(gap: 4, bg: "#FFFFFF") {
-      Row(gap: 8, align: center) {
-        Container(width: 22, height: 22, rounded: 6, bg: "#EEF3FC") {
-          Icon(name: "folder", color: "#2A5BD7")
+// Literal target data keeps transport changes declarative.
+component Step(label: string, title: string, artist: string, album: string, dur: int, index: int, f0: bool, f1: bool, f2: bool, f3: bool, f4: bool, f5: bool) {
+  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+    npTitle = title
+    npArtist = artist
+    npAlbum = album
+    duration = dur
+    currentIndex = index
+    np0 = f0
+    np1 = f1
+    np2 = f2
+    np3 = f3
+    np4 = f4
+    np5 = f5
+    playing = true
+  }
+}
+
+component StatTile(label: string, metric: string) {
+  Card(p: 12, rounded: 12, shadow: 2, bg: "#16213A", border: "#22304F") {
+    Column(gap: 4, bg: "#16213A") {
+      Text("{label}", size: 11, color: "#94A3B8")
+      Text("{metric}", size: 20, color: "#F8FAFC")
+    }
+  }
+}
+
+component SettingRow(label: string, value: string) {
+  Row(gap: 8, align: center, bg: "#16213A") {
+    Text("{label}", size: 13, color: "#CBD5E1")
+    Spacer(width: 8)
+    Text("{value}", size: 12, color: "#94A3B8")
+  }
+}
+
+// The bar is a root sibling so it stays visible across every screen.
+component NowBar() {
+  Container(p: 12, rounded: 16, shadow: 4, bg: "#0B1220", border: "#22304F") {
+    Row(gap: 12, align: center) {
+      Cover("#2A5BD7", "play", 56, 56)
+      Column(gap: 2, bg: "#0B1220", width: 260) {
+        Text("{npTitle}", size: 15, color: "#F8FAFC")
+        Text("{npArtist} - {npAlbum}", size: 11, color: "#94A3B8")
+        Text("track {currentIndex} - {mode} mode", size: 10, color: "#64748B")
+      }
+      Row(gap: 6, align: center) {
+        if (np0) {
+          Step("Prev", "Quiet Current", "Sable and Co", "Quiet Current", 205, 5, false, false, false, false, false, true)
         }
-        Text("{name}", size: 13, color: "#101828")
-        Spacer(width: 8)
-        Text("{count} tracks", size: 11, color: "#5A6B8C")
+        if (np1) {
+          Step("Prev", "Aurora Lights", "Northwind", "First Light", 214, 0, true, false, false, false, false, false)
+        }
+        if (np2) {
+          Step("Prev", "Coastal Drift", "Cinder Row", "Tidal", 198, 1, false, true, false, false, false, false)
+        }
+        if (np3) {
+          Step("Prev", "Ember Field", "The Pale Choir", "Ember Field", 245, 2, false, false, true, false, false, false)
+        }
+        if (np4) {
+          Step("Prev", "Harbor Line", "Harbor Light", "Harbor Line", 176, 3, false, false, false, true, false, false)
+        }
+        if (np5) {
+          Step("Prev", "Northern Mark", "Marlowe", "Northern Mark", 232, 4, false, false, false, false, true, false)
+        }
+        Button("Play / Pause", p: 8, rounded: 10, shadow: 2, bg: "#2A5BD7", animate: spring) {
+          playing.toggle()
+        }
+        if (np0) {
+          Step("Next", "Coastal Drift", "Cinder Row", "Tidal", 198, 1, false, true, false, false, false, false)
+        }
+        if (np1) {
+          Step("Next", "Ember Field", "The Pale Choir", "Ember Field", 245, 2, false, false, true, false, false, false)
+        }
+        if (np2) {
+          Step("Next", "Harbor Line", "Harbor Light", "Harbor Line", 176, 3, false, false, false, true, false, false)
+        }
+        if (np3) {
+          Step("Next", "Northern Mark", "Marlowe", "Northern Mark", 232, 4, false, false, false, false, true, false)
+        }
+        if (np4) {
+          Step("Next", "Quiet Current", "Sable and Co", "Quiet Current", 205, 5, false, false, false, false, false, true)
+        }
+        if (np5) {
+          Step("Next", "Aurora Lights", "Northwind", "First Light", 214, 0, true, false, false, false, false, false)
+        }
+      }
+      Column(gap: 4, bg: "#0B1220", width: 340) {
+        Slider(bind: position, min: 0, max: 260)
+        Row(gap: 8, align: center) {
+          Text("seek {position}s", size: 11, color: "#94A3B8")
+          Spacer(width: 8)
+          Text("{duration}s total", size: 11, color: "#94A3B8")
+          Spacer(width: 8)
+          Text("{remaining}s left", size: 11, color: "#64748B")
+        }
+        Waveform(value: 70, width: 340, height: 30)
+      }
+      Column(gap: 6, bg: "#0B1220", width: 230) {
+        Row(gap: 6, align: center) {
+          Radio(bind: mode, value: "sequence")
+          Text("seq", size: 10, color: "#94A3B8")
+          Radio(bind: mode, value: "loop")
+          Text("loop", size: 10, color: "#94A3B8")
+          Radio(bind: mode, value: "shuffle")
+          Text("mix", size: 10, color: "#94A3B8")
+        }
+        Row(gap: 8, align: center) {
+          Switch(bind: repeatOne)
+          Text("repeat one", size: 10, color: "#94A3B8")
+        }
+        Slider(bind: volume, min: 0, max: 100)
+        Text("volume {volume}%", size: 11, color: "#94A3B8")
+        Button("Open queue", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+          panelQueue = true
+          panelLyrics = false
+        }
       }
     }
   }
 }
 
-app MusicPlayer {
-  state filter = "aurora"
-  state nowPlaying = "Aurora Lights"
-  state artist = "Northwind"
-  state album = "First Light"
-  state duration = 214
-  state position = 62
-  state volume = 40
-  state playing = true
-  state mode = "sequence"
-  state alwaysOnTop = true
-  state trayHidden = false
-  state hotkeyEnabled = true
-  state globalHotkey = "Ctrl+Shift+P"
+// Exclusive line flags keep exactly one lyric highlighted.
+component LyricsPanel() {
+  Container(p: 14, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+    Column(gap: 10, bg: "#16213A") {
+      Text("Lyrics", size: 16, color: "#F8FAFC")
+      Text("{npTitle} - {npArtist}", size: 11, color: "#94A3B8")
+      Scroll(height: 470, bg: "#0B1220", border: "#22304F", rounded: 14) {
+        Column(gap: 10, p: 12) {
+          if (lyric0) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("Hold the light, the coast is near", size: 13, color: "#FFFFFF")
+                Button("line 1", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = true
+                  lyric1 = false
+                  lyric2 = false
+                  lyric3 = false
+                  lyric4 = false
+                  lyric5 = false
+                }
+              }
+            }
+          } else {
+            Text("Hold the light, the coast is near", size: 12, color: "#64748B")
+          }
+          if (lyric1) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("Morning moves across the floor", size: 13, color: "#FFFFFF")
+                Button("line 2", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = false
+                  lyric1 = true
+                  lyric2 = false
+                  lyric3 = false
+                  lyric4 = false
+                  lyric5 = false
+                }
+              }
+            }
+          } else {
+            Text("Morning moves across the floor", size: 12, color: "#64748B")
+          }
+          if (lyric2) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("Every window holds a name", size: 13, color: "#FFFFFF")
+                Button("line 3", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = false
+                  lyric1 = false
+                  lyric2 = true
+                  lyric3 = false
+                  lyric4 = false
+                  lyric5 = false
+                }
+              }
+            }
+          } else {
+            Text("Every window holds a name", size: 12, color: "#64748B")
+          }
+          if (lyric3) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("We drive until the signal fades", size: 13, color: "#FFFFFF")
+                Button("line 4", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = false
+                  lyric1 = false
+                  lyric2 = false
+                  lyric3 = true
+                  lyric4 = false
+                  lyric5 = false
+                }
+              }
+            }
+          } else {
+            Text("We drive until the signal fades", size: 12, color: "#64748B")
+          }
+          if (lyric4) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("Quiet current, steady hand", size: 13, color: "#FFFFFF")
+                Button("line 5", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = false
+                  lyric1 = false
+                  lyric2 = false
+                  lyric3 = false
+                  lyric4 = true
+                  lyric5 = false
+                }
+              }
+            }
+          } else {
+            Text("Quiet current, steady hand", size: 12, color: "#64748B")
+          }
+          if (lyric5) {
+            Container(p: 10, rounded: 10, bg: "#2A5BD7") {
+              Column(gap: 4, bg: "#2A5BD7") {
+                Text("Carry it home, carry it on", size: 13, color: "#FFFFFF")
+                Button("line 6", p: 6, rounded: 8, shadow: 1, bg: "#123C8C", animate: spring) {
+                  lyric0 = false
+                  lyric1 = false
+                  lyric2 = false
+                  lyric3 = false
+                  lyric4 = false
+                  lyric5 = true
+                }
+              }
+            }
+          } else {
+            Text("Carry it home, carry it on", size: 12, color: "#64748B")
+          }
+          Divider()
+          Text("Scroll for the full lyric sheet", size: 11, color: "#64748B")
+          Equalizer(value: 55, width: 240, height: 40)
+        }
+      }
+    }
+  }
+}
 
-  // Parallel compile-time lists model the library records read by the list.
-  state libraryTitles = ["Aurora Lights", "Coastal Drift", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
-  state libraryArtists = ["Northwind", "Cinder Row", "The Pale Choir", "Harbor Light", "Marlowe", "Sable and Co"]
-  state libraryAlbums = ["First Light", "Tidal", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
-  state playlists = ["Road Trip", "Focus Loop", "Late Night"]
+// Inclusion flags let each queue entry be played or removed independently.
+component QueuePanel() {
+  Container(p: 14, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+    Column(gap: 10, bg: "#16213A") {
+      Text("Play Queue", size: 16, color: "#F8FAFC")
+      Text("{currentIndex} of 6 - {mode} mode", size: 11, color: "#94A3B8")
+      Row(gap: 8, align: center) {
+        Button("Clear queue", p: 8, rounded: 10, shadow: 1, bg: "#3B1D1D", animate: spring) {
+          q0 = false
+          q1 = false
+          q2 = false
+          q3 = false
+          q4 = false
+          q5 = false
+        }
+        Button("Reset queue", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+          q0 = true
+          q1 = true
+          q2 = true
+          q3 = true
+          q4 = true
+          q5 = true
+        }
+      }
+      Scroll(height: 470, bg: "#0B1220", border: "#22304F", rounded: 14) {
+        Column(gap: 8, p: 12) {
+          if (q0) {
+            Row(gap: 8, align: center) {
+              Cover("#2A5BD7", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Aurora Lights", size: 12, color: "#F8FAFC")
+                Text("Northwind", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Aurora Lights"
+                npArtist = "Northwind"
+                npAlbum = "First Light"
+                duration = 214
+                currentIndex = 0
+                np0 = true
+                np1 = false
+                np2 = false
+                np3 = false
+                np4 = false
+                np5 = false
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q0 = false
+              }
+            }
+          }
+          if (q1) {
+            Row(gap: 8, align: center) {
+              Cover("#0F766E", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Coastal Drift", size: 12, color: "#F8FAFC")
+                Text("Cinder Row", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Coastal Drift"
+                npArtist = "Cinder Row"
+                npAlbum = "Tidal"
+                duration = 198
+                currentIndex = 1
+                np0 = false
+                np1 = true
+                np2 = false
+                np3 = false
+                np4 = false
+                np5 = false
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q1 = false
+              }
+            }
+          }
+          if (q2) {
+            Row(gap: 8, align: center) {
+              Cover("#B45309", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Ember Field", size: 12, color: "#F8FAFC")
+                Text("The Pale Choir", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Ember Field"
+                npArtist = "The Pale Choir"
+                npAlbum = "Ember Field"
+                duration = 245
+                currentIndex = 2
+                np0 = false
+                np1 = false
+                np2 = true
+                np3 = false
+                np4 = false
+                np5 = false
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q2 = false
+              }
+            }
+          }
+          if (q3) {
+            Row(gap: 8, align: center) {
+              Cover("#0369A1", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Harbor Line", size: 12, color: "#F8FAFC")
+                Text("Harbor Light", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Harbor Line"
+                npArtist = "Harbor Light"
+                npAlbum = "Harbor Line"
+                duration = 176
+                currentIndex = 3
+                np0 = false
+                np1 = false
+                np2 = false
+                np3 = true
+                np4 = false
+                np5 = false
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q3 = false
+              }
+            }
+          }
+          if (q4) {
+            Row(gap: 8, align: center) {
+              Cover("#6D28D9", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Northern Mark", size: 12, color: "#F8FAFC")
+                Text("Marlowe", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Northern Mark"
+                npArtist = "Marlowe"
+                npAlbum = "Northern Mark"
+                duration = 232
+                currentIndex = 4
+                np0 = false
+                np1 = false
+                np2 = false
+                np3 = false
+                np4 = true
+                np5 = false
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q4 = false
+              }
+            }
+          }
+          if (q5) {
+            Row(gap: 8, align: center) {
+              Cover("#0E7490", "play", 34, 34)
+              Column(gap: 1, width: 140) {
+                Text("Quiet Current", size: 12, color: "#F8FAFC")
+                Text("Sable and Co", size: 10, color: "#94A3B8")
+              }
+              Button("Play", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                npTitle = "Quiet Current"
+                npArtist = "Sable and Co"
+                npAlbum = "Quiet Current"
+                duration = 205
+                currentIndex = 5
+                np0 = false
+                np1 = false
+                np2 = false
+                np3 = false
+                np4 = false
+                np5 = true
+                playing = true
+              }
+              Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                q5 = false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
+app Halcyon {
   computed remaining = duration - position
-
-  model Track {
-    id: int primary
-    title: string
-    artist: string
-    album: string
-    duration: int
-    path: string
-  }
-
-  model Playlist {
-    id: int primary
-    name: string
-    trackId: int
-  }
-
-  api "/music/library" {
-    list Track
-    create Track
-  }
-
-  api "/music/playlists" {
-    list Playlist
-    create Playlist
-  }
 
   theme { mode: dark, accent: "#2A5BD7", radius: 14, fontScale: 1.0 }
 
-  // One shell for every width: a wide viewport shows three panes and a compact
-  // viewport stacks the library, the player and the playlist vertically.
+  // One shell keeps the three regions and the bar in a single tree.
   Column(p: 0, gap: 0) {
     Container(p: 20, shadow: 4, gradient: "#2A5BD7,#123C8C",
-              particles: "count=40,seed=21,radius=2,alpha=800,color=#C9DCFF") {
+              particles: "count=40,seed=21,radius=2,alpha=820,color=#C9DCFF") {
       Column(gap: 4, bg: "#2A5BD7") {
-        Text("Music Player", size: 26, color: "#FFFFFF")
-        Text("{nowPlaying} - {artist} - {mode} mode", size: 12, color: "#C9DCFF")
+        Row(gap: 10, align: center) {
+          Container(width: 38, height: 38, rounded: 11, bg: "#FFFFFF") {
+            Icon(name: "play", color: "#2A5BD7")
+          }
+          Text("Halcyon", size: 26, color: "#FFFFFF")
+          Spacer(width: 10)
+          Badge(label: "desktop music")
+        }
+        Text("{npTitle} - {npArtist} - {mode} mode", size: 12, color: "#C9DCFF")
       }
     }
 
     Row(gap: 16, p: 16) {
-      // Library pane: filter field plus the scrollable track list.
-      Column(width: 340, gap: 12) {
-        Text("Library", size: 18, color: "#101828")
-        Input(bind: filter, placeholder: "filter library")
-        Scroll(height: 620, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
-          Column(gap: 10, p: 12) {
-            for (i in 6) {
-              TrackRow("{libraryTitles[i]}", "{libraryArtists[i]}", "{libraryAlbums[i]}", "track")
+      // Screen flags guard each rail button's active marker.
+      Column(width: 220, gap: 10, p: 14) {
+        Container(p: 16, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+          Column(gap: 4, bg: "#16213A") {
+            Text("Navigation", size: 16, color: "#F8FAFC")
+            Text("one library, every view", size: 11, color: "#94A3B8")
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewSearch) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
             }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "search", color: "#9FB3C8")
+          }
+          Button("Search", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = true
+            viewOnline = false
+            viewPlaylists = false
+            viewFavorites = false
+            viewHistory = false
+            viewSettings = false
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewOnline) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
+            }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "home", color: "#9FB3C8")
+          }
+          Button("Online Library", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = false
+            viewOnline = true
+            viewPlaylists = false
+            viewFavorites = false
+            viewHistory = false
+            viewSettings = false
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewPlaylists) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
+            }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "folder", color: "#9FB3C8")
+          }
+          Button("Local Playlists", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = false
+            viewOnline = false
+            viewPlaylists = true
+            viewFavorites = false
+            viewHistory = false
+            viewSettings = false
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewFavorites) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
+            }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "heart", color: "#9FB3C8")
+          }
+          Button("Favorites", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = false
+            viewOnline = false
+            viewPlaylists = false
+            viewFavorites = true
+            viewHistory = false
+            viewSettings = false
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewHistory) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
+            }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "bell", color: "#9FB3C8")
+          }
+          Button("History", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = false
+            viewOnline = false
+            viewPlaylists = false
+            viewFavorites = false
+            viewHistory = true
+            viewSettings = false
+          }
+        }
+        Row(gap: 8, align: center) {
+          if (viewSettings) {
+            Container(width: 4, height: 22, rounded: 2, bg: "#2A5BD7") {
+              Spacer(width: 1)
+            }
+          }
+          Container(width: 28, height: 28, rounded: 8, bg: "#1E293B") {
+            Icon(name: "settings", color: "#9FB3C8")
+          }
+          Button("Settings", p: 8, rounded: 10, shadow: 1, bg: "#16213A", animate: spring) {
+            viewSearch = false
+            viewOnline = false
+            viewPlaylists = false
+            viewFavorites = false
+            viewHistory = false
+            viewSettings = true
+          }
+        }
+        Container(p: 14, rounded: 14, shadow: 2, bg: "#1E293B") {
+          Column(gap: 6, bg: "#1E293B") {
+            Text("Now playing", size: 12, color: "#94A3B8")
+            Text("{npTitle}", size: 13, color: "#F8FAFC")
+            Text("{npArtist}", size: 11, color: "#94A3B8")
+            Badge(label: "{playing} - {mode}")
+          }
+        }
+        Container(p: 14, rounded: 14, shadow: 2, bg: "#1E293B") {
+          Column(gap: 6, bg: "#1E293B") {
+            Text("Library", size: 12, color: "#94A3B8")
+            Text("6 tracks", size: 13, color: "#F8FAFC")
+            Text("4 sources", size: 11, color: "#94A3B8")
           }
         }
       }
 
-      // Now-playing pane: media surface, transport, seek, volume and mode.
-      Column(width: 560, gap: 14) {
-        Container(p: 16, rounded: 16, shadow: 3, gradient: "#123C8C,#2A5BD7") {
-          Column(gap: 6, bg: "#123C8C") {
-            Text("Now Playing", size: 18, color: "#FFFFFF")
-            Text("{nowPlaying}", size: 22, color: "#FFFFFF")
-            Text("{artist} - {album}", size: 12, color: "#C9DCFF")
-            Text("{position} / {duration} - {remaining} remaining", size: 12, color: "#C9DCFF")
-          }
-        }
-
-        Container(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
-          Column(gap: 10) {
-            Player(src: "media/aurora.opumedia", width: 528, height: 180)
-            Waveform(value: 90, width: 528, height: 56)
-            Equalizer(value: 45, width: 528, height: 48)
-
-            Row(gap: 10, align: center) {
-              Container(width: 36, height: 36, rounded: 10, bg: "#2A5BD7") {
-                Icon(name: "arrow_back", color: "#FFFFFF")
-              }
-              Button("Play", p: 12, rounded: 12, shadow: 2, bg: "#2A5BD7", animate: spring) {
-                playing = false
-              }
-              Container(width: 36, height: 36, rounded: 10, bg: "#2A5BD7") {
-                Icon(name: "arrow_forward", color: "#FFFFFF")
-              }
-            }
-
-            Slider(bind: position, min: 0, max: 240)
-            Text("seek {position}s", size: 11, color: "#5A6B8C")
-            Slider(bind: volume, min: 0, max: 100)
-            Text("volume {volume}%", size: 11, color: "#5A6B8C")
-
+      // One branch per screen keeps every view reachable from the rail.
+      Column(width: 820, gap: 14) {
+        if (viewSearch) {
+          Column(gap: 12) {
+            Text("Search", size: 24, color: "#F8FAFC")
+            Input(bind: searchText, placeholder: "search tracks, artists, albums")
             Row(gap: 8, align: center) {
-              Radio(bind: mode, value: "sequence")
-              Text("sequence", size: 11, color: "#5A6B8C")
-              Radio(bind: mode, value: "loop")
-              Text("loop", size: 11, color: "#5A6B8C")
-              Radio(bind: mode, value: "shuffle")
-              Text("shuffle", size: 11, color: "#5A6B8C")
+              Text("Sort", size: 12, color: "#94A3B8")
+              Button("Title", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                sortKey = "title"
+              }
+              Button("Artist", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                sortKey = "artist"
+              }
+              Button("Album", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                sortKey = "album"
+              }
+              Button("Duration", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                sortKey = "duration"
+              }
+              Spacer(width: 8)
+              Badge(label: "sort {sortKey}")
+              Badge(label: "query {searchText}")
             }
+            Container(p: 12, rounded: 14, shadow: 2, bg: "#16213A", border: "#22304F") {
+              Column(gap: 8, bg: "#16213A") {
+                Text("Multi-select", size: 12, color: "#94A3B8")
+                Row(gap: 10, align: center) {
+                  Checkbox(bind: sel0)
+                  Text("1", size: 11, color: "#CBD5E1")
+                  Checkbox(bind: sel1)
+                  Text("2", size: 11, color: "#CBD5E1")
+                  Checkbox(bind: sel2)
+                  Text("3", size: 11, color: "#CBD5E1")
+                  Checkbox(bind: sel3)
+                  Text("4", size: 11, color: "#CBD5E1")
+                  Checkbox(bind: sel4)
+                  Text("5", size: 11, color: "#CBD5E1")
+                  Checkbox(bind: sel5)
+                  Text("6", size: 11, color: "#CBD5E1")
+                }
+                Row(gap: 8, align: center) {
+                  Button("Select all", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                    sel0 = true
+                    sel1 = true
+                    sel2 = true
+                    sel3 = true
+                    sel4 = true
+                    sel5 = true
+                  }
+                  Button("Clear selection", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                    sel0 = false
+                    sel1 = false
+                    sel2 = false
+                    sel3 = false
+                    sel4 = false
+                    sel5 = false
+                  }
+                }
+              }
+            }
+            Grid(columns: 3) {
+              StatTile("Tracks", "6")
+              StatTile("Sources", "4")
+              StatTile("Playlists", "3")
+            }
+            Scroll(height: 520, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 8, p: 12) {
+                Row(gap: 10, align: center) {
+                  Text("Cover", size: 11, color: "#64748B")
+                  Text("Title", size: 11, color: "#64748B")
+                  Text("Artist", size: 11, color: "#64748B")
+                  Text("Album", size: 11, color: "#64748B")
+                  Text("Duration", size: 11, color: "#64748B")
+                }
+                TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                TrackRow("Northern Mark", "Marlowe", "Northern Mark", 232, "#6D28D9", 4, false, false, false, false, true, false)
+                TrackRow("Quiet Current", "Sable and Co", "Quiet Current", 205, "#0E7490", 5, false, false, false, false, false, true)
+              }
+            }
+          }
+        }
 
-            Badge(label: "{mode} mode")
+        if (viewOnline) {
+          Column(gap: 12) {
+            Text("Online Library", size: 24, color: "#F8FAFC")
+            Text("Source", size: 12, color: "#94A3B8")
+            Row(gap: 8, align: center) {
+              Radio(bind: onlineSource, value: "Aurora FM")
+              Text("Aurora FM", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineSource, value: "Lumen Sound")
+              Text("Lumen Sound", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineSource, value: "Northwave Radio")
+              Text("Northwave Radio", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineSource, value: "Echo Cache")
+              Text("Echo Cache", size: 11, color: "#CBD5E1")
+              Spacer(width: 8)
+              Badge(label: "{onlineSource}")
+            }
+            Row(gap: 8, align: center) {
+              Text("Browse", size: 12, color: "#94A3B8")
+              Button("Category", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                browseCategory = true
+                browseHot = false
+                browseNew = false
+              }
+              Button("Hot", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                browseCategory = false
+                browseHot = true
+                browseNew = false
+              }
+              Button("New", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                browseCategory = false
+                browseHot = false
+                browseNew = true
+              }
+              if (browseCategory) {
+                Badge(label: "category")
+              }
+              if (browseHot) {
+                Badge(label: "hot")
+              }
+              if (browseNew) {
+                Badge(label: "new")
+              }
+            }
+            Row(gap: 8, align: center) {
+              Radio(bind: onlineCategory, value: "Pop")
+              Text("Pop", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineCategory, value: "Rock")
+              Text("Rock", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineCategory, value: "Jazz")
+              Text("Jazz", size: 11, color: "#CBD5E1")
+              Radio(bind: onlineCategory, value: "Electronic")
+              Text("Electronic", size: 11, color: "#CBD5E1")
+              Spacer(width: 8)
+              Badge(label: "{onlineCategory}")
+            }
+            Grid(columns: 3) {
+              StatTile("Hot", "24 lists")
+              StatTile("New", "12 drops")
+              StatTile("Category", "4 genres")
+            }
+            Scroll(height: 500, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 8, p: 12) {
+                Text("Featured on {onlineSource} - {onlineCategory}", size: 13, color: "#CBD5E1")
+                TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                TrackRow("Northern Mark", "Marlowe", "Northern Mark", 232, "#6D28D9", 4, false, false, false, false, true, false)
+                TrackRow("Quiet Current", "Sable and Co", "Quiet Current", 205, "#0E7490", 5, false, false, false, false, false, true)
+                Row(gap: 8, align: center) {
+                  Text("Sources", size: 11, color: "#64748B")
+                  Text("{sourceNames[0]}", size: 11, color: "#CBD5E1")
+                  Text("{sourceNames[1]}", size: 11, color: "#CBD5E1")
+                  Text("{sourceNames[2]}", size: 11, color: "#CBD5E1")
+                  Text("{sourceNames[3]}", size: 11, color: "#CBD5E1")
+                }
+              }
+            }
+          }
+        }
+
+        if (viewPlaylists) {
+          Column(gap: 12) {
+            Text("Local Playlists", size: 24, color: "#F8FAFC")
+            Row(gap: 8, align: center) {
+              Input(bind: newPlaylistName, placeholder: "new playlist name")
+              Button("Create", p: 8, rounded: 10, shadow: 2, bg: "#2A5BD7", animate: spring) {
+                pl0Name = newPlaylistName
+                pl0Visible = true
+                pl0Count = 0
+                pl0HasT0 = false
+                pl0T0 = ""
+                pl0T1 = ""
+                pl0HasT1 = false
+                pl0First = true
+                pl0Extra = ""
+                pl0HasExtra = false
+                rename0 = ""
+                renameOpen0 = false
+              }
+              Badge(label: "draft {newPlaylistName}")
+            }
+            Container(p: 12, rounded: 14, shadow: 2, bg: "#16213A", border: "#22304F") {
+              Column(gap: 8, bg: "#16213A") {
+                Text("Add track picker", size: 12, color: "#94A3B8")
+                Row(gap: 6, align: center) {
+                  Radio(bind: addPick, value: "Aurora Lights")
+                  Text("Aurora", size: 10, color: "#CBD5E1")
+                  Radio(bind: addPick, value: "Coastal Drift")
+                  Text("Coastal", size: 10, color: "#CBD5E1")
+                  Radio(bind: addPick, value: "Ember Field")
+                  Text("Ember", size: 10, color: "#CBD5E1")
+                  Radio(bind: addPick, value: "Harbor Line")
+                  Text("Harbor", size: 10, color: "#CBD5E1")
+                  Radio(bind: addPick, value: "Northern Mark")
+                  Text("Northern", size: 10, color: "#CBD5E1")
+                  Radio(bind: addPick, value: "Quiet Current")
+                  Text("Quiet", size: 10, color: "#CBD5E1")
+                  Spacer(width: 8)
+                  Badge(label: "{addPick}")
+                }
+              }
+            }
+            Scroll(height: 520, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 12, p: 12) {
+                if (pl0Visible) {
+                  Card(p: 14, rounded: 14, shadow: 2, bg: "#16213A", border: "#22304F") {
+                    Column(gap: 10, bg: "#16213A") {
+                      Row(gap: 8, align: center, bg: "#16213A") {
+                        Container(width: 34, height: 34, rounded: 9, bg: "#1E293B") {
+                          Icon(name: "folder", color: "#2A5BD7")
+                        }
+                        Text("{pl0Name}", size: 15, color: "#F8FAFC")
+                        Spacer(width: 8)
+                        Badge(label: "{pl0Count} tracks")
+                        Button("Rename", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          renameOpen0 = true
+                        }
+                        Button("Delete", p: 6, rounded: 8, shadow: 1, bg: "#3B1D1D", animate: spring) {
+                          pl0Visible = false
+                        }
+                      }
+                      if (renameOpen0) {
+                        Row(gap: 8, align: center) {
+                          Input(bind: rename0, placeholder: "playlist name")
+                          Button("Save", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                            pl0Name = rename0
+                            renameOpen0 = false
+                          }
+                        }
+                      }
+                      if (pl0HasT0) {
+                        Text("{pl0T0}", size: 12, color: "#CBD5E1")
+                      } else {
+                        Text("Empty playlist - add a track below", size: 11, color: "#64748B")
+                      }
+                      if (pl0HasT1) {
+                        Text("{pl0T1}", size: 12, color: "#CBD5E1")
+                      }
+                      if (pl0HasExtra) {
+                        Text("{pl0Extra}", size: 11, color: "#94A3B8")
+                      }
+                      Row(gap: 8, align: center) {
+                        Button("Add track", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                          pl0Extra = addPick
+                          pl0HasExtra = true
+                          pl0T0 = addPick
+                          pl0HasT0 = true
+                          pl0Count += 1
+                        }
+                        Button("Remove last", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl0HasExtra = false
+                          pl0Extra = ""
+                          pl0Count -= 1
+                        }
+                        Button("Move up", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl0First = true
+                        }
+                        Button("Move down", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl0First = false
+                        }
+                        Badge(label: "order {pl0First}")
+                      }
+                    }
+                  }
+                }
+                if (pl1Visible) {
+                  Card(p: 14, rounded: 14, shadow: 2, bg: "#16213A", border: "#22304F") {
+                    Column(gap: 10, bg: "#16213A") {
+                      Row(gap: 8, align: center, bg: "#16213A") {
+                        Container(width: 34, height: 34, rounded: 9, bg: "#1E293B") {
+                          Icon(name: "folder", color: "#2A5BD7")
+                        }
+                        Text("{pl1Name}", size: 15, color: "#F8FAFC")
+                        Spacer(width: 8)
+                        Badge(label: "{pl1Count} tracks")
+                        Button("Rename", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          renameOpen1 = true
+                        }
+                        Button("Delete", p: 6, rounded: 8, shadow: 1, bg: "#3B1D1D", animate: spring) {
+                          pl1Visible = false
+                        }
+                      }
+                      if (renameOpen1) {
+                        Row(gap: 8, align: center) {
+                          Input(bind: rename1, placeholder: "playlist name")
+                          Button("Save", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                            pl1Name = rename1
+                            renameOpen1 = false
+                          }
+                        }
+                      }
+                      if (pl1First) {
+                        TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                        if (pl1HasT1) {
+                          TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                        }
+                      } else {
+                        if (pl1HasT1) {
+                          TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                        }
+                        if (pl1HasT0) {
+                          TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                        }
+                      }
+                      if (pl1HasExtra) {
+                        Row(gap: 8, align: center) {
+                          Badge(label: "{pl1Extra}")
+                          Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                            pl1HasExtra = false
+                            pl1Extra = ""
+                            pl1Count -= 1
+                          }
+                        }
+                      }
+                      Row(gap: 8, align: center) {
+                        Button("Add track", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                          pl1Extra = addPick
+                          pl1HasExtra = true
+                          pl1Count += 1
+                        }
+                        Button("Remove track", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl1HasT1 = false
+                          pl1T1 = ""
+                          pl1Count -= 1
+                        }
+                        Button("Move up", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl1First = true
+                        }
+                        Button("Move down", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl1First = false
+                        }
+                        Badge(label: "order {pl1First}")
+                      }
+                    }
+                  }
+                }
+                if (pl2Visible) {
+                  Card(p: 14, rounded: 14, shadow: 2, bg: "#16213A", border: "#22304F") {
+                    Column(gap: 10, bg: "#16213A") {
+                      Row(gap: 8, align: center, bg: "#16213A") {
+                        Container(width: 34, height: 34, rounded: 9, bg: "#1E293B") {
+                          Icon(name: "folder", color: "#2A5BD7")
+                        }
+                        Text("{pl2Name}", size: 15, color: "#F8FAFC")
+                        Spacer(width: 8)
+                        Badge(label: "{pl2Count} tracks")
+                        Button("Rename", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          renameOpen2 = true
+                        }
+                        Button("Delete", p: 6, rounded: 8, shadow: 1, bg: "#3B1D1D", animate: spring) {
+                          pl2Visible = false
+                        }
+                      }
+                      if (renameOpen2) {
+                        Row(gap: 8, align: center) {
+                          Input(bind: rename2, placeholder: "playlist name")
+                          Button("Save", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                            pl2Name = rename2
+                            renameOpen2 = false
+                          }
+                        }
+                      }
+                      if (pl2First) {
+                        TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                        if (pl2HasT1) {
+                          TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                        }
+                      } else {
+                        if (pl2HasT1) {
+                          TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                        }
+                        if (pl2HasT0) {
+                          TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                        }
+                      }
+                      if (pl2HasExtra) {
+                        Row(gap: 8, align: center) {
+                          Badge(label: "{pl2Extra}")
+                          Button("Remove", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                            pl2HasExtra = false
+                            pl2Extra = ""
+                            pl2Count -= 1
+                          }
+                        }
+                      }
+                      Row(gap: 8, align: center) {
+                        Button("Add track", p: 6, rounded: 8, shadow: 1, bg: "#2A5BD7", animate: spring) {
+                          pl2Extra = addPick
+                          pl2HasExtra = true
+                          pl2Count += 1
+                        }
+                        Button("Remove track", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl2HasT1 = false
+                          pl2T1 = ""
+                          pl2Count -= 1
+                        }
+                        Button("Move up", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl2First = true
+                        }
+                        Button("Move down", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                          pl2First = false
+                        }
+                        Badge(label: "order {pl2First}")
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (viewFavorites) {
+          Column(gap: 12) {
+            Text("Favorites", size: 24, color: "#F8FAFC")
+            Row(gap: 8, align: center) {
+              Button("Clear favorites", p: 8, rounded: 10, shadow: 1, bg: "#3B1D1D", animate: spring) {
+                fav0 = false
+                fav1 = false
+                fav2 = false
+                fav3 = false
+                fav4 = false
+                fav5 = false
+              }
+              Button("Restore selection", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+                fav0 = true
+                fav2 = true
+                fav4 = true
+              }
+              Badge(label: "favorite songs")
+            }
+            Grid(columns: 3) {
+              StatTile("Favorites", "3")
+              StatTile("Artists", "6")
+              StatTile("Albums", "6")
+            }
+            Scroll(height: 520, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 8, p: 12) {
+                if (fav0) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav0 = false
+                    }
+                  }
+                }
+                if (fav1) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav1 = false
+                    }
+                  }
+                }
+                if (fav2) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav2 = false
+                    }
+                  }
+                }
+                if (fav3) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav3 = false
+                    }
+                  }
+                }
+                if (fav4) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Northern Mark", "Marlowe", "Northern Mark", 232, "#6D28D9", 4, false, false, false, false, true, false)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav4 = false
+                    }
+                  }
+                }
+                if (fav5) {
+                  Row(gap: 8, align: center) {
+                    TrackRow("Quiet Current", "Sable and Co", "Quiet Current", 205, "#0E7490", 5, false, false, false, false, false, true)
+                    Button("Unfavorite", p: 6, rounded: 8, shadow: 1, bg: "#1E293B", animate: spring) {
+                      fav5 = false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (viewHistory) {
+          Column(gap: 12) {
+            Text("Recently Played", size: 24, color: "#F8FAFC")
+            Row(gap: 8, align: center) {
+              Button("Clear history", p: 8, rounded: 10, shadow: 1, bg: "#3B1D1D", animate: spring) {
+                hist0 = false
+                hist1 = false
+                hist2 = false
+                hist3 = false
+                hist4 = false
+                hist5 = false
+              }
+              Button("Restore selection", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+                hist0 = true
+                hist2 = true
+                hist4 = true
+              }
+              Badge(label: "recently played")
+            }
+            Scroll(height: 540, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 8, p: 12) {
+                if (hist0) {
+                  TrackRow("Aurora Lights", "Northwind", "First Light", 214, "#2A5BD7", 0, true, false, false, false, false, false)
+                }
+                if (hist1) {
+                  TrackRow("Coastal Drift", "Cinder Row", "Tidal", 198, "#0F766E", 1, false, true, false, false, false, false)
+                }
+                if (hist2) {
+                  TrackRow("Ember Field", "The Pale Choir", "Ember Field", 245, "#B45309", 2, false, false, true, false, false, false)
+                }
+                if (hist3) {
+                  TrackRow("Harbor Line", "Harbor Light", "Harbor Line", 176, "#0369A1", 3, false, false, false, true, false, false)
+                }
+                if (hist4) {
+                  TrackRow("Northern Mark", "Marlowe", "Northern Mark", 232, "#6D28D9", 4, false, false, false, false, true, false)
+                }
+                if (hist5) {
+                  TrackRow("Quiet Current", "Sable and Co", "Quiet Current", 205, "#0E7490", 5, false, false, false, false, false, true)
+                }
+                Divider()
+                Text("History is cleared from this view.", size: 11, color: "#64748B")
+              }
+            }
+          }
+        }
+
+        if (viewSettings) {
+          Column(gap: 12) {
+            Text("Settings", size: 24, color: "#F8FAFC")
+            Scroll(height: 600, bg: "#0F172A", border: "#22304F", rounded: 16) {
+              Column(width: 796, gap: 12, p: 12) {
+                Container(p: 16, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+                  Column(gap: 10, bg: "#16213A") {
+                    Text("Playback defaults", size: 15, color: "#F8FAFC")
+                    SettingRow("Default volume", "{settingVolume}%")
+                    Slider(bind: settingVolume, min: 0, max: 100)
+                    SettingRow("Startup mode", "{settingMode}")
+                    Row(gap: 8, align: center) {
+                      Radio(bind: settingMode, value: "sequence")
+                      Text("sequence", size: 11, color: "#CBD5E1")
+                      Radio(bind: settingMode, value: "loop")
+                      Text("loop", size: 11, color: "#CBD5E1")
+                      Radio(bind: settingMode, value: "shuffle")
+                      Text("shuffle", size: 11, color: "#CBD5E1")
+                    }
+                    Row(gap: 10, align: center) {
+                      Switch(bind: settingShuffle)
+                      Text("shuffle on startup", size: 11, color: "#CBD5E1")
+                      Switch(bind: settingCrossfade)
+                      Text("crossfade", size: 11, color: "#CBD5E1")
+                      Switch(bind: settingPrefetch)
+                      Text("prefetch", size: 11, color: "#CBD5E1")
+                    }
+                  }
+                }
+                Container(p: 16, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+                  Column(gap: 10, bg: "#16213A") {
+                    Text("Appearance", size: 15, color: "#F8FAFC")
+                    Row(gap: 10, align: center) {
+                      Switch(bind: darkTheme)
+                      Text("dark theme", size: 12, color: "#CBD5E1")
+                      Badge(label: "{darkTheme}")
+                    }
+                    if (darkTheme) {
+                      Container(p: 14, rounded: 12, shadow: 2, bg: "#0B1220", border: "#22304F") {
+                        Column(gap: 4, bg: "#0B1220") {
+                          Text("Dark palette", size: 13, color: "#F8FAFC")
+                          Text("deep navy surfaces, cool accent", size: 11, color: "#94A3B8")
+                          Cover("#2A5BD7", "play", 28, 28)
+                        }
+                      }
+                    } else {
+                      Container(p: 14, rounded: 12, shadow: 2, bg: "#EEF2FF", border: "#C7D2FE") {
+                        Column(gap: 4, bg: "#EEF2FF") {
+                          Text("Light palette", size: 13, color: "#1E1B4B")
+                          Text("pale surfaces, indigo accent", size: 11, color: "#4338CA")
+                          Cover("#4F46E5", "play", 28, 28)
+                        }
+                      }
+                    }
+                  }
+                }
+                Container(p: 16, rounded: 16, shadow: 3, bg: "#16213A", border: "#22304F") {
+                  Column(gap: 10, bg: "#16213A") {
+                    Text("Source management", size: 15, color: "#F8FAFC")
+                    SettingRow("Aurora FM", "{sourceEnabled0}")
+                    Switch(bind: sourceEnabled0)
+                    SettingRow("Lumen Sound", "{sourceEnabled1}")
+                    Switch(bind: sourceEnabled1)
+                    SettingRow("Northwave Radio", "{sourceEnabled2}")
+                    Switch(bind: sourceEnabled2)
+                    SettingRow("Echo Cache", "{sourceEnabled3}")
+                    Switch(bind: sourceEnabled3)
+                    Divider()
+                    Text("Enabled sources appear in the online library.", size: 11, color: "#64748B")
+                  }
+                }
+              }
+            }
           }
         }
       }
 
-      // Playlist pane plus the desktop capability placeholders.
-      Column(width: 280, gap: 12, p: 14) {
-        Text("Playlists", size: 18, color: "#101828")
-        Scroll(height: 360, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
-          Column(gap: 10, p: 12) {
-            for (item in playlists) {
-              PlaylistRow("{item}", "12")
-            }
+      // Tab flags keep the right panel on lyrics or the queue.
+      Column(width: 300, gap: 12, p: 14) {
+        Container(p: 16, rounded: 16, shadow: 3, gradient: "#123C8C,#2A5BD7") {
+          Column(gap: 4, bg: "#123C8C") {
+            Text("Now Playing", size: 16, color: "#FFFFFF")
+            Text("{npTitle}", size: 13, color: "#C9DCFF")
+            Text("{npArtist} - {npAlbum}", size: 11, color: "#C9DCFF")
           }
         }
-
-        Container(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
-          Column(gap: 8) {
-            Text("Desktop", size: 12, color: "#5A6B8C")
-            Switch(bind: alwaysOnTop)
-            Text("always on top", size: 11, color: "#5A6B8C")
-            Switch(bind: trayHidden)
-            Text("minimize to tray", size: 11, color: "#5A6B8C")
-            Switch(bind: hotkeyEnabled)
-            Text("global hotkey", size: 11, color: "#5A6B8C")
-            Text("{globalHotkey}", size: 12, color: "#101828")
+        Row(gap: 8, align: center) {
+          Button("Lyrics", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+            panelLyrics = true
+            panelQueue = false
+          }
+          Button("Queue", p: 8, rounded: 10, shadow: 1, bg: "#1E293B", animate: spring) {
+            panelQueue = true
+            panelLyrics = false
           }
         }
-
-        if (trayHidden) {
-          Container(p: 14, rounded: 14, shadow: 2, gradient: "#2A5BD7,#123C8C") {
-            Text("Running in the background tray", size: 12, color: "#FFFFFF")
-          }
+        if (panelLyrics) {
+          LyricsPanel()
+        }
+        if (panelQueue) {
+          QueuePanel()
         }
       }
     }
+
+    // The bar is outside the branch column so no screen hides it.
+    NowBar()
   }
 }

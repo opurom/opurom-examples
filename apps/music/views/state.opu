@@ -1,0 +1,99 @@
+// Catalog and preference values live apart from playback so each module owns one concern.
+
+// One flag per screen keeps conditional rendering exclusive.
+state viewSearch = true
+state viewOnline = false
+state viewPlaylists = false
+state viewFavorites = false
+state viewHistory = false
+state viewSettings = false
+
+// Filter values stay local so list and source views read them directly.
+state searchText = ""
+state sortKey = "title"
+state onlineSource = "Aurora FM"
+state onlineCategory = "Pop"
+state browseCategory = true
+state browseHot = false
+state browseNew = false
+state sourceNames = ["Aurora FM", "Lumen Sound", "Northwave Radio", "Echo Cache"]
+state categoryNames = ["Pop", "Rock", "Jazz", "Electronic"]
+
+// Fixed slots model create, rename and delete without runtime collections.
+state pl0Name = "New Playlist"
+state pl0Visible = false
+state pl0Count = 0
+state pl0HasT0 = false
+state pl0T0 = ""
+state pl0T1 = ""
+state pl0HasT1 = false
+state pl0First = true
+state pl0Extra = ""
+state pl0HasExtra = false
+state rename0 = ""
+state renameOpen0 = false
+
+state pl1Name = "Road Trip"
+state pl1Visible = true
+state pl1Count = 2
+state pl1HasT0 = true
+state pl1T0 = "Aurora Lights"
+state pl1T1 = "Coastal Drift"
+state pl1HasT1 = true
+state pl1First = true
+state pl1Extra = ""
+state pl1HasExtra = false
+state rename1 = ""
+state renameOpen1 = false
+
+state pl2Name = "Focus Loop"
+state pl2Visible = true
+state pl2Count = 2
+state pl2HasT0 = true
+state pl2T0 = "Ember Field"
+state pl2T1 = "Harbor Line"
+state pl2HasT1 = true
+state pl2First = true
+state pl2Extra = ""
+state pl2HasExtra = false
+state rename2 = ""
+state renameOpen2 = false
+
+// A draft value keeps creation and add-to-playlist actions declarative.
+state newPlaylistName = ""
+state addPick = "Aurora Lights"
+
+// Per-row flags let the header select or clear the whole list.
+state sel0 = false
+state sel1 = false
+state sel2 = false
+state sel3 = false
+state sel4 = false
+state sel5 = false
+
+// Presence flags make clearing each view a single state change.
+state fav0 = true
+state fav1 = false
+state fav2 = true
+state fav3 = false
+state fav4 = true
+state fav5 = false
+
+state hist0 = true
+state hist1 = false
+state hist2 = true
+state hist3 = false
+state hist4 = true
+state hist5 = false
+
+// Defaults stay in state so toggles and sliders bind directly.
+state darkTheme = false
+state settingVolume = 45
+state settingMode = "sequence"
+state settingShuffle = false
+state settingCrossfade = false
+state settingPrefetch = true
+state sourceEnabled0 = true
+state sourceEnabled1 = true
+state sourceEnabled2 = true
+state sourceEnabled3 = false

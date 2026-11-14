@@ -1,77 +1,131 @@
-// Library data layer for the desktop music player.
-// A standalone app is required for the compiler to check a file, so the model,
-// service routes and classification state live in this app's own body.
+// Entities live in one module so every screen reads a single canonical schema.
 
-app LibraryModel {
-  state classify = "all"
-  state selectedArtist = "Northwind"
-  state selectedAlbum = "First Light"
+model Track {
+  id: int primary
+  title: string
+  artist: string
+  album: string
+  duration: int
+  path: string
+}
 
-  // Parallel compile-time lists stand in for the scanned media records.
-  state libraryTitles = ["Aurora Lights", "Coastal Drift", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
-  state libraryArtists = ["Northwind", "Cinder Row", "The Pale Choir", "Harbor Light", "Marlowe", "Sable and Co"]
-  state libraryAlbums = ["First Light", "Tidal", "Ember Field", "Harbor Line", "Northern Mark", "Quiet Current"]
-  state playlists = ["Road Trip", "Focus Loop", "Late Night"]
+model Playlist {
+  id: int primary
+  name: string
+  owner: string
+  createdAt: string
+}
 
-  model Track {
-    id: int primary
-    title: string
-    artist: string
-    album: string
-    duration: int
-    path: string
-  }
+model PlaylistTrack {
+  id: int primary
+  playlistId: int
+  trackId: int
+  position: int
+}
 
-  model Playlist {
-    id: int primary
-    name: string
-    trackId: int
-  }
+model Source {
+  id: int primary
+  name: string
+  kind: string
+  enabled: bool = true
+}
 
-  api "/music/library" {
-    list Track
-    create Track
-  }
+model LyricLine {
+  id: int primary
+  trackId: int
+  text: string
+  startMs: int
+}
 
-  api "/music/playlists" {
-    list Playlist
-    create Playlist
-  }
+model Favorite {
+  id: int primary
+  trackId: int
+  owner: string
+}
 
-  theme { mode: light, accent: "#2A5BD7", radius: 14, fontScale: 1.0 }
+model HistoryEntry {
+  id: int primary
+  trackId: int
+  playedAt: string
+}
 
-  Column(p: 16, gap: 14) {
-    Text("Library model", size: 22, color: "#101828")
+model QueueItem {
+  id: int primary
+  trackId: int
+  position: int
+}
 
-    // Classification control binds the active classify value to the state.
-    Row(gap: 10, align: center) {
-      Radio(bind: classify, value: "all")
-      Text("all", size: 11, color: "#5A6B8C")
-      Radio(bind: classify, value: "artist")
-      Text("artist", size: 11, color: "#5A6B8C")
-      Radio(bind: classify, value: "album")
-      Text("album", size: 11, color: "#5A6B8C")
-    }
+api "/music/tracks" {
+  list Track
+  create Track
+}
 
-    Scroll(height: 440, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
-      Column(gap: 10, p: 12) {
-        for (i in 6) {
-          Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-            Column(gap: 4, bg: "#FFFFFF") {
-              Text("{libraryTitles[i]}", size: 14, color: "#101828")
-              Text("{libraryArtists[i]} - {libraryAlbums[i]}", size: 11, color: "#5A6B8C")
-            }
-          }
-        }
-      }
-    }
+api "/music/tracks/:id" {
+  get Track
+  update Track
+  delete Track
+}
 
-    Card(p: 14, rounded: 14, shadow: 2, bg: "#EEF3FC") {
-      Column(gap: 6, bg: "#EEF3FC") {
-        Text("Classification", size: 12, color: "#5A6B8C")
-        Text("{classify} - {selectedArtist} - {selectedAlbum}", size: 13, color: "#101828")
-        Text("{playlists[0]} playlist tracked", size: 11, color: "#5A6B8C")
-      }
-    }
-  }
+api "/music/playlists" {
+  list Playlist
+  create Playlist
+}
+
+api "/music/playlists/:id" {
+  get Playlist
+  update Playlist
+  delete Playlist
+}
+
+api "/music/playlists/:id/tracks" {
+  list PlaylistTrack
+  create PlaylistTrack
+}
+
+api "/music/playlists/:id/tracks/:trackId" {
+  update PlaylistTrack
+  delete PlaylistTrack
+}
+
+api "/music/sources" {
+  list Source
+  create Source
+}
+
+api "/music/sources/:id" {
+  get Source
+  update Source
+  delete Source
+}
+
+api "/music/lyrics" {
+  list LyricLine
+}
+
+api "/music/favorites" {
+  list Favorite
+  create Favorite
+}
+
+api "/music/favorites/:id" {
+  delete Favorite
+}
+
+api "/music/history" {
+  list HistoryEntry
+  create HistoryEntry
+}
+
+api "/music/history/:id" {
+  delete HistoryEntry
+}
+
+api "/music/queue" {
+  list QueueItem
+  create QueueItem
+}
+
+api "/music/queue/:id" {
+  update QueueItem
+  delete QueueItem
 }
