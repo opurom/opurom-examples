@@ -15,7 +15,7 @@ component KpiCard(label: string, metric: string, trend: string) {
 
 component ServiceRow(name: string, role: string, rate: int, state: string) {
   Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#D7E3E0") {
-    Grid(columns: 4) {
+    Grid(columns: 4, compactColumns: 4) {
       Container(width: 26, height: 26) {
         Avatar(label: "{name}")
       }
