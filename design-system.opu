@@ -1,28 +1,11 @@
 // Design System: a fixed-viewport component gallery for the default OPUROM UI.
 
-component SolidButtonCell(label: string, action: string, fill: string, edge: string) {
+component ButtonCell(label: string, action: string, variant: string, state: string) {
   Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
     Column(gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
       Text("{label}", size: 10, color: "#132C5A")
-      Container(width: 112, height: 27, p: 0, rounded: 8, shadow: 1, bg: "{fill}", border: "{edge}") {
-        Column(align: center, bg: "{fill}", border: "{fill}") {
-          Button(label: "{action}", p: 0, rounded: 8, bg: "{fill}", border: "{edge}", fontScale: 0.6)
-        }
-      }
-    }
-  }
-}
-
-// shortcut: Button labels are fixed to white, upgrade flat variants when variant ships.
-component FlatButtonCell(label: string, action: string, fill: string, ink: string, edge: string) {
-  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
-    Column(gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
-      Text("{label}", size: 10, color: "#132C5A")
-      Container(width: 112, height: 27, p: 0, rounded: 8, bg: "{fill}", border: "{edge}") {
-        Column(align: center, bg: "{fill}", border: "{fill}") {
-          Text("{action}", size: 10, color: "{ink}")
-        }
-      }
+      Button(label: "{action}", p: 0, rounded: 8, fontScale: 0.6,
+             variant: "{variant}", state: "{state}")
     }
   }
 }
@@ -232,12 +215,12 @@ component CardCell(label: string, value: string) {
   }
 }
 
-component FeedbackCell(title: string, detail: string, badge: string, tone: string) {
-  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "{tone}") {
+component FeedbackCell(title: string, detail: string, badge: string, semantic: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", tone: "{semantic}") {
     Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
-      Badge(label: "{badge}", p: 0, rounded: 8, bg: "{tone}", border: "{tone}", fontScale: 0.6)
-      Text("{title}", size: 10, color: "{tone}")
-      Text("{detail}", size: 10, color: "#132C5A")
+      Badge(label: "{badge}", p: 0, rounded: 8, fontScale: 0.6, tone: "{semantic}")
+      Text("{title}", size: 10, color: "#132C5A")
+      Text("{detail}", size: 10, color: "#5A6478")
     }
   }
 }
@@ -269,14 +252,14 @@ app DesignSystem {
         }
         Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
           Grid(columns: 4, compactColumns: 4, bg: "#F4F6F9", border: "#F4F6F9") {
-            SolidButtonCell("Primary", "Apply", "#0A71FC", "#0A71FC")
-            FlatButtonCell("Secondary", "Cancel", "#FFFFFF", "#132C5A", "#0A71FC")
-            FlatButtonCell("Text", "Learn more", "#FFFFFF", "#0A71FC", "#FFFFFF")
-            SolidButtonCell("Danger", "Delete", "#F62B35", "#F62B35")
-            FlatButtonCell("Hover", "Apply", "#FFFFFF", "#0A71FC", "#0A71FC")
-            FlatButtonCell("Focus", "Apply", "#FFFFFF", "#0A71FC", "#0DB2FF")
-            SolidButtonCell("Active", "Apply", "#132C5A", "#132C5A")
-            FlatButtonCell("Disabled", "Apply", "#F4F6F9", "#132C5A", "#F4F6F9")
+            ButtonCell("Primary", "Apply", "primary", "default")
+            ButtonCell("Secondary", "Cancel", "secondary", "default")
+            ButtonCell("Text", "Learn more", "text", "default")
+            ButtonCell("Danger", "Delete", "danger", "default")
+            ButtonCell("Hover", "Apply", "secondary", "hover")
+            ButtonCell("Focus", "Apply", "secondary", "focus")
+            ButtonCell("Active", "Apply", "primary", "active")
+            ButtonCell("Disabled", "Apply", "text", "disabled")
           }
         }
       }
@@ -349,10 +332,10 @@ app DesignSystem {
         }
         Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
           Grid(columns: 2, compactColumns: 2, bg: "#F4F6F9", border: "#F4F6F9") {
-            FeedbackCell("Success", "Changes saved", "OK", "#1FB14C")
-            FeedbackCell("Warning", "Check settings", "!", "#FD960E")
-            FeedbackCell("Error", "Try again", "X", "#F62B35")
-            FeedbackCell("Info", "Read updates", "i", "#0A71FC")
+            FeedbackCell("Success", "Changes saved", "OK", "success")
+            FeedbackCell("Warning", "Check settings", "!", "warning")
+            FeedbackCell("Error", "Try again", "X", "error")
+            FeedbackCell("Info", "Read updates", "i", "info")
           }
         }
       }
