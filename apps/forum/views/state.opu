@@ -20,7 +20,7 @@ state role = "member"
 // A bool mirrors the moderator tier because `if` guards read only bool state.
 state isModerator = true
 // The detail surface shows when no other main screen owns the column.
-state viewFeedDetail = true
+state viewFeedDetail = false
 state meHandle = "ada"
 state meName = "Ada Renn"
 state meBio = "Maintainer of the Relay community. Loves clean layout and slow coffee."

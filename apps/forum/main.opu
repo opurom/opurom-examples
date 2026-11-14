@@ -17,8 +17,9 @@ component BrandMark(size: int, ink: string, accent: string) {
 // Section heading used above every grouped surface keeps type scale consistent.
 component SectionHead(title: string, detail: string) {
   Row(gap: 8, align: center) {
-    Column(gap: 2, bg: "#FFFFFF") {
+    Container(height: 40, color: "#FFFFFF") {
       Text("{title}", size: 20, color: "#1B1F2A")
+      Spacer(height: 2)
       Text("{detail}", size: 12, color: "#6B7280")
     }
     Spacer(width: 8)
@@ -57,8 +58,9 @@ component DiscussionCard(title: string, author: string, tag: string, tagAccent: 
     Column(gap: 10, bg: "#FFFFFF") {
       Row(gap: 10, align: center) {
         Avatar(label: "{author}")
-        Column(gap: 2, bg: "#FFFFFF") {
+        Container(height: 32, color: "#FFFFFF") {
           Text("{author}", size: 12, color: "#1B1F2A")
+          Spacer(height: 2)
           Text("{when}", size: 11, color: "#6B7280")
         }
         Spacer(width: 8)
@@ -107,12 +109,14 @@ component ReplyRow(author: string, body: string, likes: string) {
   Card(p: 12, rounded: 14, shadow: 1, bg: "#F6F4FB", border: "#E6E4EF") {
     Row(gap: 10, align: center) {
       Avatar(label: "{author}")
-      Column(gap: 4, bg: "#F6F4FB") {
+      Container(height: 64, color: "#F6F4FB") {
         Row(gap: 8, align: center) {
           Text("{author}", size: 12, color: "#1B1F2A")
           Text("{likes} likes", size: 11, color: "#6B7280")
         }
+        Spacer(height: 4)
         Text("{body}", size: 13, color: "#3A3F4B")
+        Spacer(height: 4)
         Row(gap: 8, align: center) {
           Button("Like", p: 6, rounded: 10, shadow: 1, bg: "#FFFFFF") {
             selectedLikes += 1
@@ -129,8 +133,9 @@ component ReplyRow(author: string, body: string, likes: string) {
 // Stat tile gives the side panel and profile a shared metric treatment.
 component StatTile(label: string, metric: string) {
   Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E6E4EF") {
-    Column(gap: 4, bg: "#FFFFFF") {
+    Container(height: 42, color: "#FFFFFF") {
       Text("{label}", size: 11, color: "#6B7280")
+      Spacer(height: 4)
       Text("{metric}", size: 22, color: "#1B1F2A")
     }
   }
@@ -180,12 +185,14 @@ component NotificationRow(kind: string, actor: string, text: string, when: strin
       Container(width: 34, height: 34, rounded: 11, bg: "#FDEAE2") {
         Icon(name: "bell", color: "#E4572E")
       }
-      Column(gap: 2, bg: "#FFFFFF") {
+      Container(height: 40, color: "#FFFFFF") {
         Row(gap: 6, align: center) {
           Text("{actor}", size: 12, color: "#1B1F2A")
           Text("{kind}", size: 11, color: "#5B3FD1")
         }
+        Spacer(height: 2)
         Text("{text}", size: 12, color: "#6B7280")
+        Spacer(height: 2)
         Text("{when}", size: 10, color: "#9AA0AC")
       }
       Spacer(width: 8)
@@ -203,8 +210,9 @@ component ResultRow(title: string, kind: string, meta: string) {
       Container(width: 30, height: 30, rounded: 10, bg: "#EDE8FF") {
         Icon(name: "search", color: "#5B3FD1")
       }
-      Column(gap: 2, bg: "#FFFFFF") {
+      Container(height: 32, color: "#FFFFFF") {
         Text("{title}", size: 13, color: "#1B1F2A")
+        Spacer(height: 2)
         Text("{kind} - {meta}", size: 11, color: "#6B7280")
       }
     }
@@ -481,8 +489,9 @@ app Relay {
                 Text("{selectedTitle}", size: 22, color: "#1B1F2A")
                 Row(gap: 10, align: center) {
                   Avatar(label: "{selectedAuthor}")
-                  Column(gap: 2, bg: "#FFFFFF") {
+                  Container(height: 34, color: "#FFFFFF") {
                     Text("by {selectedAuthor}", size: 12, color: "#1B1F2A")
+                    Spacer(height: 2)
                     Text("started this discussion", size: 11, color: "#6B7280")
                   }
                 }
