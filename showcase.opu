@@ -1,5 +1,5 @@
 // Showcase: one source file uses catalog components, a11y props and effects.
-// All 216 named components lower onto 100 distinct primitive kinds at compile time.
+// All 240 named components lower onto 100 distinct primitive kinds at compile time.
 app Showcase {
   state count = 0
   state dark = false
@@ -10,7 +10,7 @@ app Showcase {
     Column(gap: 14) {
       Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
         Heading("OPUROM Components", size: 22, color: "#FFFFFF")
-        Paragraph("One catalog, 216 named components, 100 distinct primitive kinds", size: 12, color: "#D6E8FF")
+        Paragraph("One catalog, 240 named components, 100 distinct primitive kinds", size: 12, color: "#D6E8FF")
       }
       CardGrid(columns: 2) {
         Tile(p: 14, radius: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {

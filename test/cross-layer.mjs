@@ -175,7 +175,7 @@ try {
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], '16b69e96b1534324', 'core golden digest regressed');
+    assert.equal(da[1], '8d45f412996a99c6', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -709,7 +709,13 @@ try {
   const galleryIr = join(tmp, 'gallery.opuir.json');
   const galleryCatalog = JSON.parse(readFileSync(P('opurom-spec', 'components.json'), 'utf8'));
   const catalogKinds = new Set(galleryCatalog.components.map(x => x[1]));
-  const familyOf = new Map(galleryCatalog.components.map(x => [x[1], x[2]]));
+  // A primitive kind can belong to more than one named family, so the check
+  // accepts every family the catalog declares for the exhibit's kind.
+  const familyOf = new Map();
+  for (const x of galleryCatalog.components) {
+    if (!familyOf.has(x[1])) familyOf.set(x[1], new Set());
+    familyOf.get(x[1]).add(x[2]);
+  }
   const walkGallery = n => {
     const out = [n];
     for (const c of n.children || []) out.push(...walkGallery(c));
@@ -720,9 +726,9 @@ try {
 
   check('showcase states the current catalog size in comment and UI text', () => {
     const src = readFileSync(P('opurom-examples', 'showcase.opu'), 'utf8');
-    assert.match(src, /\/\/ All 216 named components lower onto 100 distinct primitive kinds/,
+    assert.match(src, /\/\/ All 240 named components lower onto 100 distinct primitive kinds/,
       'stale source comment');
-    assert.match(src, /Paragraph\("One catalog, 216 named components, 100 distinct primitive kinds"/,
+    assert.match(src, /Paragraph\("One catalog, 240 named components, 100 distinct primitive kinds"/,
       'stale UI text');
     assert.ok(!/108 catalog|24 primitives|One catalog, 24/.test(src), 'stale catalog numbers remain');
     assert.ok(!/\bR[0-9]+\b|\bRound [0-9]+\b/.test(src), 'internal codename in showcase');
@@ -743,7 +749,7 @@ try {
     for (const n of items) {
       const [family, kind] = n.props.label.split('/');
       assert.equal(n.kind, kind, `label/kind mismatch on ${n.props.label}`);
-      assert.equal(familyOf.get(kind), family, `wrong family group for ${kind}`);
+      assert.ok(familyOf.get(kind)?.has(family), `wrong family group for ${kind}`);
     }
   });
 

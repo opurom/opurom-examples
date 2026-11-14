@@ -1,5 +1,5 @@
 // Gallery: one instance of every distinct primitive kind in the component catalog.
-// Derived from opurom-spec/components.json: 216 named components lower onto 100
+// Derived from opurom-spec/components.json: 240 named components lower onto 100
 // distinct primitive kinds, grouped here by catalog family. Each exhibit carries
 // an a11y label of the form "family/Kind" so roles and bounds can be asserted.
 app Gallery {
@@ -13,7 +13,7 @@ app Gallery {
     Column(gap: 10) {
       Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
         Text("OPUROM primitive gallery", size: 22, color: "#FFFFFF", role: "heading")
-        Text("216 named components, 100 distinct primitive kinds", size: 12, color: "#D6E8FF")
+        Text("240 named components, 100 distinct primitive kinds", size: 12, color: "#D6E8FF")
       }
       // family: layout (17 kinds)
       Container(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
