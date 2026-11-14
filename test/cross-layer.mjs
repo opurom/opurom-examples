@@ -867,6 +867,28 @@ try {
     assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
     lowerRegistry(registry, targets);
   });
+  check('the design-system gallery loads in every non-emitter consumer', () => {
+    // The largest registered app (261 nodes, compact grids) exercises the
+    // renderer, kernel and responsive DOM consumer beyond the emitter matrix.
+    const ir = join(tmp, 'design-system-consumers.opuir.json');
+    ok(run(compiler, ['compile', P('opurom-examples', 'design-system.opu'), '-o', ir]),
+      'compile design-system');
+    const digests = new Set();
+    for (const [width, height] of [[320, 700], [800, 600], [1600, 900]]) {
+      const out = ok(run(renderer, [ir, String(width), String(height),
+        join(tmp, `design-system-${width}.ppm`)]), 'render design-system');
+      const digest = /digest=([0-9a-f]+)/i.exec(out)?.[1];
+      assert.ok(digest, `no digest at ${width}x${height}`);
+      digests.add(digest);
+    }
+    assert.equal(digests.size, 3, 'responsive tiers must produce distinct frames');
+    const coreOut = ok(run(core, [ir]), 'kernel load design-system');
+    assert.match(coreOut, /^state \[/m, 'kernel must report initial state');
+    const domDir = join(tmp, 'design-system-web-dom');
+    ok(run('node', [P('opurom-web', 'bin', 'opurom-web.mjs'), 'emit', ir, domDir]),
+      'web-dom emit design-system');
+    assert.ok(existsSync(join(domDir, 'index.html')), 'web-dom must emit a standalone page');
+  });
   check('emitter matrix rejects broken registry entries and artifacts', () => {
     // Synthetic inputs keep the negative case independent of the sibling repos.
     const ghost = { apps: [{ name: 'ghost', source: 'ghost.opu' }] };
