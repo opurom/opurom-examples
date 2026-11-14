@@ -1,219 +1,1313 @@
 import "models/chat.opu";
-import "views/panels.opu";
+import "views/state.opu";
 
-// Reusable nodes stay in the entry file: an imported module may declare only
-// state, model, api, theme and imports, so component declarations live here.
+// Imported modules carry declarations only, so components and the app tree live here.
+
+component AvatarCircle(label: string, tint: string, size: int) {
+  Container(width: size, height: size, rounded: 12, bg: tint) {
+    Avatar(label: "{label}")
+  }
+}
+
+component IconChip(name: string, ink: string) {
+  Container(width: 28, height: 28, rounded: 9, bg: "#EEF2FF") {
+    Icon(name: "{name}", color: "{ink}")
+  }
+}
+
 component SectionTitle(title: string, note: string) {
   Row(gap: 8, align: center) {
-    Text(title, size: 16, color: "#101828")
-    Text(note, size: 11, color: "#667085")
+    Text("{title}", size: 16, color: "#101828")
+    Text("{note}", size: 11, color: "#667085")
   }
 }
 
-component ConversationRow(name: string, status: string, preview: string, unread: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-    Row(gap: 12, align: center) {
-      Container(width: 44, height: 44, rounded: 14, bg: "#E8F0FE") { Avatar(label: name) }
-      Column(gap: 2, bg: "#FFFFFF") {
-        Row(gap: 8, align: center) {
-          Text(name, size: 14, color: "#101828")
-          Badge(label: status)
+component StatTile(label: string, value: string) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Column(gap: 4, bg: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#667085")
+      Text("{value}", size: 18, color: "#101828")
+    }
+  }
+}
+
+component BackButton(label: string) {
+  Button("{label}", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+    screenChat = false
+    screenNewChat = false
+    screenProfile = false
+    screenGroup = false
+    screenNewGroup = false
+    screenCall = false
+    screenNotifs = false
+    screenSettings = false
+    emojiOpen = false
+    msgActions = false
+    onRoot = true
+  }
+}
+
+component TabBar() {
+  Card(p: 8, rounded: 0, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 6, align: center) {
+      if (tabChats) {
+        Button("Chats", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) {
+          tabChats = true
+          tabContacts = false
+          tabDiscover = false
+          tabMe = false
+          tabLabel = "Chats"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
         }
-        Text(preview, size: 11, color: "#667085")
+      } else {
+        Button("Chats", p: 11, rounded: 12, shadow: 1, bg: "#475467") {
+          tabChats = true
+          tabContacts = false
+          tabDiscover = false
+          tabMe = false
+          tabLabel = "Chats"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
       }
-      Spacer(width: 10)
-      Container(width: 28, height: 28, rounded: 10, bg: "#E8F0FE") { Icon(name: "chat", color: "#0B57D0") }
+      if (tabContacts) {
+        Button("Contacts", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) {
+          tabChats = false
+          tabContacts = true
+          tabDiscover = false
+          tabMe = false
+          tabLabel = "Contacts"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      } else {
+        Button("Contacts", p: 11, rounded: 12, shadow: 1, bg: "#475467") {
+          tabChats = false
+          tabContacts = true
+          tabDiscover = false
+          tabMe = false
+          tabLabel = "Contacts"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      }
+      if (tabDiscover) {
+        Button("Discover", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) {
+          tabChats = false
+          tabContacts = false
+          tabDiscover = true
+          tabMe = false
+          tabLabel = "Discover"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      } else {
+        Button("Discover", p: 11, rounded: 12, shadow: 1, bg: "#475467") {
+          tabChats = false
+          tabContacts = false
+          tabDiscover = true
+          tabMe = false
+          tabLabel = "Discover"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      }
+      if (tabMe) {
+        Button("Me", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) {
+          tabChats = false
+          tabContacts = false
+          tabDiscover = false
+          tabMe = true
+          tabLabel = "Me"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      } else {
+        Button("Me", p: 11, rounded: 12, shadow: 1, bg: "#475467") {
+          tabChats = false
+          tabContacts = false
+          tabDiscover = false
+          tabMe = true
+          tabLabel = "Me"
+          onRoot = true
+          screenChat = false
+          screenNewChat = false
+          screenProfile = false
+          screenGroup = false
+          screenNewGroup = false
+          screenCall = false
+          screenNotifs = false
+          screenSettings = false
+        }
+      }
+      if (chatAllRead) {
+        Spacer(width: 6)
+      } else {
+        Badge(label: "{unreadTotal}", color: "#D92D20")
+      }
     }
   }
 }
 
-component MessageRow(author: string, body: string, delivery: string) {
-  Row(gap: 10, align: center) {
-    Container(width: 36, height: 36, rounded: 12, bg: "#E8F0FE") { Icon(name: "lock", color: "#0B57D0") }
-    Column(gap: 2, bg: "#FFFFFF") {
-      Row(gap: 8, align: center) {
-        Text(author, size: 12, color: "#101828")
-        Badge(label: delivery)
+component ConversationRow(avatar: string, tint: string, name: string, kind: string,
+                          preview: string, stamp: string, unread: string,
+                          peer: string, initials: string, status: string, idx: int) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 10, align: center) {
+      AvatarCircle("{avatar}", "{tint}", 44)
+      Column(gap: 3, width: 300, bg: "#FFFFFF") {
+        Row(gap: 8, align: center) {
+          Text("{name}", size: 14, color: "#101828")
+          Badge(label: "{kind}")
+        }
+        Text("{preview}", size: 11, color: "#667085")
       }
-      Text(body, size: 13, color: "#344054")
+      Column(gap: 4, align: center, bg: "#FFFFFF") {
+        Text("{stamp}", size: 9, color: "#98A2B3")
+        Badge(label: "{unread}", color: "#D92D20")
+      }
+      Button("Open", p: 10, rounded: 10, shadow: 2, bg: "#2F5BE7", animate: spring) {
+        chatPeer = peer
+        chatAvatar = initials
+        chatStatus = status
+        openConversation = idx
+        screenChat = true
+        onRoot = false
+      }
     }
   }
 }
 
-component PeerRow(label: string, address: string, status: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-    Row(gap: 12, align: center) {
-      Container(width: 36, height: 36, rounded: 12, bg: "#E8F0FE") { Icon(name: "user", color: "#0B57D0") }
+component OutBubble(body: string, meta: string, receipt: string) {
+  Row(align: end, gap: 8) {
+    Column(gap: 4, align: end, bg: "#F4F7FB") {
+      Card(p: 10, rounded: 14, shadow: 2, bg: "#2F5BE7") {
+        Text("{body}", size: 13, color: "#FFFFFF")
+      }
+      Row(gap: 6, align: center) {
+        Text("{meta}", size: 9, color: "#98A2B3")
+        Badge(label: "{receipt}", color: "#0E9384")
+      }
+      Button("Actions", p: 5, rounded: 8, shadow: 1, bg: "#475467") {
+        actionBody = body
+        msgActions = true
+      }
+    }
+  }
+}
+
+component InBubble(avatar: string, tint: string, body: string, meta: string) {
+  Row(align: start, gap: 8) {
+    AvatarCircle("{avatar}", "{tint}", 30)
+    Column(gap: 4, bg: "#F4F7FB") {
+      Card(p: 10, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E4E9F2") {
+        Text("{body}", size: 13, color: "#101828")
+      }
+      Text("{meta}", size: 9, color: "#98A2B3")
+    }
+  }
+}
+
+component ContactRow(avatar: string, tint: string, name: string, handle: string,
+                     note: string, presence: string, peer: string, initials: string, idx: int) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 10, align: center) {
+      AvatarCircle("{avatar}", "{tint}", 40)
+      Column(gap: 3, width: 260, bg: "#FFFFFF") {
+        Text("{name}", size: 14, color: "#101828")
+        Text("{handle} - {note}", size: 10, color: "#667085")
+      }
+      Badge(label: "{presence}", color: "#0E9384")
+      Button("View", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+        chatPeer = peer
+        chatAvatar = initials
+        chatStatus = presence
+        openContact = idx
+        screenProfile = true
+        onRoot = false
+      }
+      Button("Chat", p: 9, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+        chatPeer = peer
+        chatAvatar = initials
+        chatStatus = presence
+        openConversation = idx
+        screenChat = true
+        onRoot = false
+      }
+    }
+  }
+}
+
+component MemberRow(avatar: string, name: string, role: string) {
+  Card(p: 10, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 10, align: center) {
+      AvatarCircle("{avatar}", "#5B6AD0", 32)
       Column(gap: 2, bg: "#FFFFFF") {
-        Text(label, size: 14, color: "#101828")
-        Text(address, size: 11, color: "#667085")
+        Text("{name}", size: 13, color: "#101828")
+        Text("{role}", size: 10, color: "#667085")
       }
-      Spacer(width: 10)
-      Badge(label: status)
+      Spacer(width: 8)
+      Icon(name: "user", color: "#98A2B3")
     }
   }
 }
 
-component ViewButton(label: string, chats: bool, thread: bool, peers: bool, status: bool, viewName: string) {
-  Button(label, p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
-    showChats = chats
-    showThread = thread
-    showPeers = peers
-    showStatus = status
-    activeTab = viewName
+component NotificationRow(title: string, body: string, stamp: string, icon: string) {
+  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 10, align: center) {
+      IconChip("{icon}", "#2F5BE7")
+      Column(gap: 3, width: 300, bg: "#FFFFFF") {
+        Text("{title}", size: 13, color: "#101828")
+        Text("{body}", size: 10, color: "#667085")
+      }
+      Column(gap: 4, align: center, bg: "#FFFFFF") {
+        Text("{stamp}", size: 9, color: "#98A2B3")
+        if (notifAllRead) {
+          Text("read", size: 9, color: "#98A2B3")
+        } else {
+          Badge(label: "NEW", color: "#D92D20")
+        }
+      }
+    }
   }
 }
 
-app LanChat {
-  theme { mode: light, accent: "#0B57D0", radius: 16 }
+component CallRow(name: string, kind: string, stamp: string, outcome: string) {
+  Card(p: 12, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E4E9F2") {
+    Row(gap: 10, align: center) {
+      IconChip("play", "#2F5BE7")
+      Column(gap: 3, width: 280, bg: "#FFFFFF") {
+        Text("{name}", size: 13, color: "#101828")
+        Text("{kind} - {stamp}", size: 10, color: "#667085")
+      }
+      Badge(label: "{outcome}", color: "#D97706")
+    }
+  }
+}
+
+component DiscoverCard(icon: string, ink: string, title: string, note: string) {
+  Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Column(gap: 8, bg: "#FFFFFF") {
+      IconChip("{icon}", "{ink}")
+      Text("{title}", size: 14, color: "#101828")
+      Text("{note}", size: 10, color: "#667085")
+    }
+  }
+}
+
+component EmojiKey(token: string, glyph: string) {
+  Button("{glyph}", p: 10, rounded: 10, shadow: 1, bg: "#475467") {
+    draft = token
+    emojiPick = token
+    emojiOpen = false
+  }
+}
+
+app Relay {
+  theme { mode: light, accent: "#2F5BE7", radius: 18, fontScale: 1.0 }
 
   Column(p: 0, gap: 0) {
-    Container(p: 20, shadow: 4, gradient: "#0B57D0,#0730A8",
-              particles: "count=32,seed=7,radius=2,alpha=760,color=#C7DBFF") {
-      Column(gap: 4, bg: "#0B57D0") {
+    Container(p: 16, shadow: 4, gradient: "#2F5BE7,#1B3FA8",
+              particles: "count=28,seed=9,radius=2,alpha=700,color=#C7DBFF") {
+      Column(gap: 3, bg: "#2F5BE7") {
         Row(gap: 8, align: center) {
-          Text("LAN Chat", size: 26, color: "#FFFFFF")
-          Container(width: 26, height: 26, rounded: 8, bg: "#123C8C") { Icon(name: "lock", color: "#C7DBFF") }
+          Container(width: 30, height: 30, rounded: 10, bg: "#1B3FA8") {
+            Icon(name: "chat", color: "#FFFFFF")
+          }
+          Text("Relay", size: 24, color: "#FFFFFF")
+          Spacer(width: 8)
+          Badge(label: "{tabLabel}", color: "#1B3FA8")
         }
-        Text("{activeTab} - {connectionState} - key {sessionKeyId}", size: 12, color: "#C7DBFF")
+        Text("Stay close, talk freely - {accountHandle}", size: 11, color: "#C7DBFF")
       }
     }
 
-    Row(gap: 16, p: 16) {
-      Column(width: 230, gap: 10, p: 14) {
-        ViewButton("Chats", true, false, false, false, "Chats")
-        ViewButton("Thread", false, true, false, false, "Thread")
-        ViewButton("Peers", false, false, true, false, "Peers")
-        ViewButton("Status", false, false, false, true, "Status")
-
-        Card(p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-          Column(gap: 6, bg: "#FFFFFF") {
+    Row(gap: 14, p: 14, align: center) {
+      Column(width: 250, gap: 10, p: 12) {
+        Card(p: 14, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+          Column(gap: 8, bg: "#FFFFFF") {
+            Row(gap: 10, align: center) {
+              AvatarCircle("{accountAvatar}", "#2F5BE7", 42)
+              Column(gap: 2, bg: "#FFFFFF") {
+                Text("{profileName}", size: 14, color: "#101828")
+                Text("{profileHandle}", size: 10, color: "#667085")
+              }
+            }
+            Divider()
             Row(gap: 8, align: center) {
-              Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "refresh", color: "#0B57D0") }
-              Text("Connection", size: 12, color: "#667085")
+              Badge(label: "{accountHandle}", color: "#0E9384")
+              Text("online", size: 10, color: "#667085")
             }
-            Text("{connectionState}", size: 15, color: "#101828")
-            Text("{peerAddress}:{peerPort}", size: 12, color: "#667085")
-            Button("Connect", p: 10, rounded: 10, shadow: 2, bg: "#0B57D0", animate: spring) {
-              connectionState = "connecting"
-              connected = true
+            Text("{profileNote}", size: 11, color: "#344054")
+          }
+        }
+
+        Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+          Column(gap: 8, bg: "#FFFFFF") {
+            SectionTitle("Inbox", "unread and counts")
+            Grid(columns: 2) {
+              StatTile("Unread", "{unreadTotal}")
+              StatTile("Sent", "{sentCount}")
+              StatTile("Received", "{receivedCount}")
+              StatTile("Groups", "2")
             }
-            Button("Disconnect", p: 10, rounded: 10, shadow: 2, bg: "#EEF3FC", animate: spring) {
-              connectionState = "offline"
-              connected = false
+            Button("Notifications", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+              screenNotifs = true
+              onRoot = false
             }
           }
         }
 
-        Card(p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
-          Column(gap: 6, bg: "#FFFFFF") {
-            Row(gap: 8, align: center) {
-              Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "lock", color: "#0B57D0") }
-              Text("Encryption", size: 12, color: "#667085")
+        Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+          Column(gap: 8, bg: "#FFFFFF") {
+            SectionTitle("Quick actions", "start something")
+            Button("New chat", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+              screenNewChat = true
+              onRoot = false
             }
-            Switch(bind: encrypted)
-            Text("{sessionKeyId}", size: 12, color: "#101828")
-            Text("key v{keyVersion}", size: 11, color: "#667085")
-            Slider(bind: keyVersion, min: 1, max: 4)
-            Checkbox(bind: persistHistory)
-            Text("history persisted", size: 11, color: "#667085")
+            Button("New group", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+              screenNewGroup = true
+              onRoot = false
+            }
+            Button("Start a call", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+              callPeerName = "Alice"
+              callPeerAvatar = "AL"
+              callActive = true
+              callSeconds = 0
+              screenCall = true
+              onRoot = false
+            }
+            Button("Settings", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+              screenSettings = true
+              onRoot = false
+            }
+          }
+        }
+
+        Card(p: 14, rounded: 16, shadow: 2, bg: "#EEF2FF", border: "#DCE4F2") {
+          Column(gap: 6, bg: "#EEF2FF") {
+            SectionTitle("Appearance", "tokens in one place")
+            Text("accent {themeAccent}", size: 11, color: "#344054")
+            Text("radius {themeRadius} - spacing {themeSpacing}", size: 11, color: "#344054")
+            Text("font scale {themeFont} - mode {themeMode}", size: 11, color: "#344054")
+            Progress(value: 64)
+            Slider(bind: themeRadius, min: 8, max: 28)
+            Slider(bind: themeSpacing, min: 4, max: 24)
+            Button("Theme details", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+              screenSettings = true
+              onRoot = false
+            }
           }
         }
       }
 
-      Column(width: 820, gap: 14) {
-        if (showChats) {
-          SectionTitle("Conversations", "local history")
-          for (i in 3) {
-            ConversationRow("{conversationNames[i]}", "{conversationStatus[i]}",
-                            "{conversationPreview[i]}", "{conversationUnread[i]}")
-          }
-          Button("Open thread", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
-            showChats = false
-            showThread = true
-            activeTab = "Thread"
-          }
-        }
+      Column(width: 820, gap: 12) {
+        Tabs(labels: "Chats,Contacts,Discover,Me", bind: tabLabel)
+        Text("Viewing {tabLabel} - {chatNotice}", size: 10, color: "#98A2B3")
 
-        if (showThread) {
-          SectionTitle("Message thread", "{messageAuthor[0]} with {conversationNames[0]}")
-          Scroll(height: 360, bg: "#F4F7FB", border: "#E4E9F2", rounded: 16) {
-            for (i in 3) {
-              MessageRow("{messageAuthor[i]}", "{messageBody[i]}", "{messageState[i]}")
-            }
-          }
-          Row(gap: 10, align: center, p: 8) {
-            Input(bind: draft, placeholder: "message")
-            Button("Send", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
-              connectionState = "sending"
-              sentMessages += 1
-              draft = ""
-            }
-          }
-          Text("sent {sentMessages} - received {receivedMessages}", size: 11, color: "#667085")
-        }
-
-        if (showPeers) {
-          SectionTitle("Contacts", "frequent peers")
-          Input(bind: peerAddress, placeholder: "peer address")
-          Input(bind: peerPort, placeholder: "peer port")
-          Button("Add peer", p: 12, rounded: 12, shadow: 2, bg: "#0B57D0", animate: spring) {
-            connectionState = "connecting"
-          }
-          for (i in 3) {
-            PeerRow("{peerLabels[i]}", "{peerAddresses[i]}", "{peerStatus[i]}")
-          }
-        }
-
-        if (showStatus) {
-          SectionTitle("Connection status", "transport and key state")
-          Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#DCE4F2") {
-            Column(gap: 10, bg: "#FFFFFF") {
-              Row(gap: 8, align: center) {
-                Container(width: 20, height: 20, rounded: 6, bg: "#E8F0FE") { Icon(name: "info", color: "#0B57D0") }
-                Text("Transport", size: 12, color: "#667085")
-              }
-              Text("state {connectionState}", size: 14, color: "#101828")
-              Text("{peerAddress}:{peerPort}", size: 12, color: "#667085")
-              Divider()
-              Grid(columns: 2) {
-                Card(p: 12, rounded: 12, shadow: 2, bg: "#F4F7FB") {
-                  Column(gap: 4) {
-                    Text("Sent", size: 11, color: "#667085")
-                    Text("{sentMessages}", size: 16, color: "#101828")
+        if (onRoot) {
+          Column(gap: 12) {
+          if (tabChats) {
+            Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(width: 796, gap: 10, p: 14) {
+                SectionTitle("Conversations", "recent activity")
+                Row(gap: 8, align: center) {
+                  Input(bind: chatSearch, placeholder: "search conversations")
+                  Button("Search", p: 10, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                    chatHasQuery = true
+                  }
+                  Button("Mark all read", p: 10, rounded: 10, shadow: 1, bg: "#475467") {
+                    chatAllRead = true
+                    unreadTotal = 0
+                    chatNotice = "all conversations read"
                   }
                 }
-                Card(p: 12, rounded: 12, shadow: 2, bg: "#F4F7FB") {
-                  Column(gap: 4) {
-                    Text("Received", size: 11, color: "#667085")
-                    Text("{receivedMessages}", size: 16, color: "#101828")
+                if (chatHasQuery) {
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#EEF2FF", border: "#DCE4F2") {
+                    Column(gap: 4, bg: "#EEF2FF") {
+                      Text("Results for {chatSearch}", size: 12, color: "#101828")
+                      Text("{conversationPeer[0]} - {conversationPreview[0]}", size: 10, color: "#667085")
+                      Button("Clear search", p: 8, rounded: 9, shadow: 1, bg: "#475467") {
+                        chatHasQuery = false
+                        chatSearch = ""
+                      }
+                    }
+                  }
+                }
+                ConversationRow("AL", "#2F5BE7", "Alice", "direct", "On my way to the studio", "09:41", "3", "Alice", "AL", "online", 0)
+                ConversationRow("DG", "#0E9384", "Design Guild", "group", "Dana shared a new mockup", "09:32", "0", "Design Guild", "DG", "8 members", 1)
+                ConversationRow("MA", "#D97706", "Marcus", "direct", "Thanks, that worked", "Yesterday", "1", "Marcus", "MA", "offline", 2)
+                ConversationRow("PR", "#7A5AF8", "Priya", "direct", "Photos from the trip are ready", "Mon", "0", "Priya", "PR", "online", 3)
+                ConversationRow("NS", "#0E7490", "Night Shift", "group", "Shift handover notes posted", "Sun", "2", "Night Shift", "NS", "5 members", 4)
+                Row(gap: 8, align: center) {
+                  Button("New chat", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                    screenNewChat = true
+                    onRoot = false
+                  }
+                  Button("Group info", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                    screenGroup = true
+                    onRoot = false
                   }
                 }
               }
-              Tabs(labels: "session,store,devices", bind: panel)
-              Text("panel {panel}", size: 12, color: "#667085")
+            }
+          }
+          if (tabContacts) {
+            Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(width: 796, gap: 10, p: 14) {
+                SectionTitle("Contacts", "{contactSearch}")
+                Row(gap: 8, align: center) {
+                  Input(bind: contactSearch, placeholder: "search contacts")
+                  Button("Search", p: 10, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                    contactHasQuery = true
+                  }
+                  Button("Add contact", p: 10, rounded: 10, shadow: 1, bg: "#475467") {
+                    screenNewChat = true
+                    onRoot = false
+                  }
+                }
+                if (contactHasQuery) {
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#EEF2FF", border: "#DCE4F2") {
+                    Column(gap: 4, bg: "#EEF2FF") {
+                      Text("Matching {contactSearch}", size: 12, color: "#101828")
+                      Text("{contactName[0]} - {contactHandle[0]}", size: 10, color: "#667085")
+                      Button("Clear", p: 8, rounded: 9, shadow: 1, bg: "#475467") {
+                        contactHasQuery = false
+                        contactSearch = ""
+                      }
+                    }
+                  }
+                }
+                ContactRow("AL", "#2F5BE7", "Alice", "@alice", "Studio lead", "online", "Alice", "AL", 0)
+                ContactRow("MA", "#D97706", "Marcus", "@marcus", "Build engineer", "offline", "Marcus", "MA", 1)
+                ContactRow("PR", "#7A5AF8", "Priya", "@priya", "Product", "online", "Priya", "PR", 2)
+                ContactRow("DA", "#0E9384", "Dana", "@dana", "Designer", "online", "Dana", "DA", 3)
+                ContactRow("OW", "#475467", "Owen", "@owen", "Ops", "offline", "Owen", "OW", 4)
+                ContactRow("SA", "#0E7490", "Sara", "@sara", "QA", "online", "Sara", "SA", 5)
+              }
+            }
+          }
+          if (tabDiscover) {
+            Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(width: 796, gap: 12, p: 14) {
+                SectionTitle("Discover", "more from Relay")
+                Grid(columns: 3) {
+                  DiscoverCard("star", "#D97706", "Moments", "Short updates from friends")
+                  DiscoverCard("chat", "#2F5BE7", "Channels", "Topic-based group feeds")
+                  DiscoverCard("folder", "#0E9384", "Files", "Shared documents and media")
+                  DiscoverCard("calendar", "#7A5AF8", "Events", "Plan a meetup together")
+                  DiscoverCard("bell", "#D92D20", "Alerts", "Delivery and read notices")
+                  DiscoverCard("settings", "#475467", "Settings", "Privacy, theme, storage")
+                }
+                Row(gap: 8, align: center) {
+                  Button("Moments", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                    chatNotice = "moments opened"
+                  }
+                  Button("Notifications", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                    screenNotifs = true
+                    onRoot = false
+                  }
+                  Button("Settings", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                    screenSettings = true
+                    onRoot = false
+                  }
+                }
+                Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                  Column(gap: 8, bg: "#FFFFFF") {
+                    SectionTitle("Call log", "recent sessions")
+                    for (i in 3) {
+                      CallRow("{callPeer[i]}", "{callKind[i]}", "{callStamp[i]}", "{callOutcome[i]}")
+                    }
+                    Button("Call again", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      callPeerName = "Alice"
+                      callPeerAvatar = "AL"
+                      callActive = true
+                      callSeconds = 0
+                      screenCall = true
+                      onRoot = false
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (tabMe) {
+            Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(width: 796, gap: 12, p: 14) {
+                Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+                  Column(gap: 10, bg: "#FFFFFF") {
+                    Row(gap: 12, align: center) {
+                      AvatarCircle("{profileAvatar}", "#2F5BE7", 58)
+                      Column(gap: 3, bg: "#FFFFFF") {
+                        Text("{profileName}", size: 20, color: "#101828")
+                        Text("{profileHandle}", size: 12, color: "#667085")
+                        Text("{profileNote}", size: 11, color: "#344054")
+                      }
+                      Spacer(width: 12)
+                      Badge(label: "online", color: "#0E9384")
+                    }
+                    Divider()
+                    Grid(columns: 4) {
+                      StatTile("Chats", "5")
+                      StatTile("Contacts", "6")
+                      StatTile("Groups", "2")
+                      StatTile("Unread", "{unreadTotal}")
+                    }
+                  }
+                }
+                Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                  Column(gap: 10, bg: "#FFFFFF") {
+                    SectionTitle("Account", "manage your presence")
+                    Input(bind: profileName, placeholder: "display name")
+                    Input(bind: profileHandle, placeholder: "handle")
+                    Input(bind: profileNote, placeholder: "about you")
+                    Row(gap: 8, align: center) {
+                      Button("Save profile", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                        profileSaved = true
+                        chatNotice = "profile saved"
+                      }
+                      Button("Avatar A", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                        profileAvatar = "RU"
+                        avatarChoice = 0
+                      }
+                      Button("Avatar B", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                        profileAvatar = "RY"
+                        avatarChoice = 1
+                      }
+                      Button("Avatar C", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                        profileAvatar = "RL"
+                        avatarChoice = 2
+                      }
+                    }
+                    if (profileSaved) {
+                      Text("Profile saved as {profileName}", size: 11, color: "#0E9384")
+                    } else {
+                      Text("Changes apply immediately", size: 11, color: "#667085")
+                    }
+                  }
+                }
+                Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                  Column(gap: 10, bg: "#FFFFFF") {
+                    SectionTitle("Preferences", "privacy and appearance")
+                    Switch(bind: readReceipts, label: "Send read receipts")
+                    Text("Read receipts", size: 11, color: "#344054")
+                    Switch(bind: typingIndicators, label: "Show typing indicators")
+                    Text("Typing indicators", size: 11, color: "#344054")
+                    Switch(bind: presence, label: "Share online status")
+                    Text("Online presence", size: 11, color: "#344054")
+                    Switch(bind: pushNotifications, label: "Push notifications")
+                    Text("Push notifications", size: 11, color: "#344054")
+                    Radio(bind: themeMode, value: "Light", label: "Light theme")
+                    Radio(bind: themeMode, value: "Dark", label: "Dark theme")
+                    Radio(bind: themeMode, value: "System", label: "System theme")
+                    Text("Theme mode: {themeMode}", size: 11, color: "#344054")
+                    Button("Full settings", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      screenSettings = true
+                      onRoot = false
+                    }
+                  }
+                }
+              }
+            }
+          }
+          }
+        }
+
+        if (screenChat) {
+          Column(gap: 10) {
+            Card(p: 12, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+              Row(gap: 10, align: center) {
+                BackButton("<")
+                AvatarCircle("{chatAvatar}", "#2F5BE7", 40)
+                Column(gap: 2, bg: "#FFFFFF") {
+                  Text("{chatPeer}", size: 16, color: "#101828")
+                  if (chatTyping) {
+                    Text("typing...", size: 10, color: "#0E9384")
+                  } else {
+                    Text("{chatStatus}", size: 10, color: "#667085")
+                  }
+                }
+                Spacer(width: 10)
+                Button("Call", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                  callPeerName = chatPeer
+                  callPeerAvatar = chatAvatar
+                  callActive = true
+                  callSeconds = 0
+                  screenCall = true
+                }
+                Button("Group info", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                  screenGroup = true
+                }
+              }
+            }
+
+            if (chatTyping) {
+              Card(p: 10, rounded: 12, shadow: 1, bg: "#EEF2FF", border: "#DCE4F2") {
+                Row(gap: 8, align: center, bg: "#EEF2FF") {
+                  Spinner()
+                  Text("{chatPeer} is typing a message", size: 11, color: "#344054")
+                  Button("Stop", p: 7, rounded: 8, shadow: 1, bg: "#475467") {
+                    chatTyping = false
+                    chatStatus = "online"
+                  }
+                }
+              }
+            }
+
+            Scroll(height: 430, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+              Column(width: 796, gap: 12, p: 14) {
+                Text("Today", size: 10, color: "#98A2B3")
+                InBubble("AL", "#2F5BE7", "Morning! Are we still on for the review?", "09:38 - received")
+                OutBubble("Yes, running five minutes late.", "09:39 - read", "read")
+                InBubble("AL", "#2F5BE7", "No problem, I will hold the room.", "09:40 - delivered")
+                OutBubble("The build is green again.", "09:20 - read", "read")
+                if (expandLong) {
+                  Column(gap: 6, bg: "#F4F7FB") {
+                    OutBubble("Can we move the review to Thursday? The design team needs an extra day to finish the mockups, and the room booking changes after noon.", "Yesterday - sending", "sending")
+                    Button("Collapse", p: 8, rounded: 9, shadow: 1, bg: "#475467") {
+                      expandLong = false
+                    }
+                  }
+                } else {
+                  Row(gap: 8, align: center) {
+                    Text("Long message preview", size: 11, color: "#667085")
+                    Button("Expand", p: 8, rounded: 9, shadow: 1, bg: "#2F5BE7") {
+                      expandLong = true
+                    }
+                  }
+                }
+                if (msgDeleted) {
+                  Card(p: 10, rounded: 12, shadow: 1, bg: "#F2F4F7") {
+                    Text("This message was deleted", size: 11, color: "#98A2B3")
+                  }
+                }
+                if (msgRecalled) {
+                  Card(p: 10, rounded: 12, shadow: 1, bg: "#F2F4F7") {
+                    Text("You recalled a message", size: 11, color: "#98A2B3")
+                  }
+                }
+                InBubble("PR", "#7A5AF8", "Already rescheduled it for Thursday.", "Yesterday - received")
+                OutBubble("Perfect, thank you.", "Yesterday - delivered", "delivered")
+                if (copied) {
+                  Text("Message copied: {actionBody}", size: 10, color: "#0E9384")
+                }
+              }
+            }
+
+            if (msgActions) {
+              Dialog(title: "Message actions") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  Text("{actionBody}", size: 12, color: "#101828")
+                  Row(gap: 8, align: center) {
+                    Button("Copy", p: 9, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                      copied = true
+                      msgActions = false
+                      chatNotice = "message copied"
+                    }
+                    Button("Delete", p: 9, rounded: 10, shadow: 1, bg: "#D92D20") {
+                      msgDeleted = true
+                      msgActions = false
+                      chatNotice = "message deleted"
+                    }
+                    Button("Recall", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      msgRecalled = true
+                      msgActions = false
+                      chatNotice = "message recalled"
+                    }
+                    Button("Close", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      msgActions = false
+                    }
+                  }
+                }
+              }
+            }
+
+            Card(p: 12, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+              Column(gap: 8, bg: "#FFFFFF") {
+                if (emojiOpen) {
+                  Card(p: 10, rounded: 12, shadow: 1, bg: "#F4F7FB", border: "#E4E9F2") {
+                    Column(gap: 6, bg: "#F4F7FB") {
+                      Text("Emoji - {emojiPick}", size: 11, color: "#667085")
+                      Grid(columns: 4) {
+                        EmojiKey("smile", ":)")
+                        EmojiKey("laugh", ":D")
+                        EmojiKey("wink", ";)")
+                        EmojiKey("love", "<3")
+                        EmojiKey("ok", "(ok)")
+                        EmojiKey("wave", "o/")
+                        EmojiKey("star", "(*)")
+                        EmojiKey("heart", "<>")
+                      }
+                      Button("Close picker", p: 8, rounded: 9, shadow: 1, bg: "#475467") {
+                        emojiOpen = false
+                      }
+                    }
+                  }
+                }
+                Row(gap: 8, align: center) {
+                  Button("Emoji", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                    emojiOpen = true
+                  }
+                  Input(bind: draft, placeholder: "write a message")
+                  Button("Send", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) async {
+                    await delay(20)
+                    sentCount += 1
+                    sendState = "sent"
+                    draft = ""
+                  }
+                }
+                Row(gap: 8, align: center) {
+                  Text("draft {draft}", size: 10, color: "#98A2B3")
+                  Spacer(width: 8)
+                  Text("delivery {sendState} - sent {sentCount}", size: 10, color: "#98A2B3")
+                  Button("Typing", p: 8, rounded: 9, shadow: 1, bg: "#0E9384") {
+                    chatTyping = true
+                    chatStatus = "typing"
+                  }
+                  Button("Mark read", p: 8, rounded: 9, shadow: 1, bg: "#475467") {
+                    sendState = "read"
+                    chatTyping = false
+                    chatStatus = "online"
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (screenNewChat) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
               Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("New chat", size: 18, color: "#101828")
+              }
+              Row(gap: 8, align: center) {
+                Input(bind: newChatSearch, placeholder: "search people")
+                Button("Search", p: 10, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                  newChatHasQuery = true
+                }
+              }
+              if (newChatHasQuery) {
+                Card(p: 12, rounded: 12, shadow: 1, bg: "#EEF2FF", border: "#DCE4F2") {
+                  Text("People matching {newChatSearch}", size: 12, color: "#101828")
+                }
+              }
+              Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Add a contact", "name and handle")
+                  Input(bind: newContactName, placeholder: "name")
+                  Input(bind: newContactHandle, placeholder: "handle")
+                  Button("Add contact", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                    contactAdded = true
+                    addedMember = newContactName
+                    chatNotice = "contact added"
+                  }
+                  if (contactAdded) {
+                    Text("{addedMember} joined your contacts", size: 11, color: "#0E9384")
+                  } else {
+                    Text("New peers appear in Contacts", size: 11, color: "#667085")
+                  }
+                }
+              }
+              Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Start a conversation", "pick a person")
+                  ContactRow("AL", "#2F5BE7", "Alice", "@alice", "Studio lead", "online", "Alice", "AL", 0)
+                  ContactRow("MA", "#D97706", "Marcus", "@marcus", "Build engineer", "offline", "Marcus", "MA", 1)
+                  ContactRow("PR", "#7A5AF8", "Priya", "@priya", "Product", "online", "Priya", "PR", 2)
+                  ContactRow("DA", "#0E9384", "Dana", "@dana", "Designer", "online", "Dana", "DA", 3)
+                  ContactRow("OW", "#475467", "Owen", "@owen", "Ops", "offline", "Owen", "OW", 4)
+                  ContactRow("SA", "#0E7490", "Sara", "@sara", "QA", "online", "Sara", "SA", 5)
+                  Button("Create group", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                    screenNewGroup = true
+                    screenNewChat = false
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (screenProfile) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
+              Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("Profile", size: 18, color: "#101828")
+              }
+              Card(p: 18, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 10, bg: "#FFFFFF") {
+                  Row(gap: 12, align: center) {
+                    AvatarCircle("{chatAvatar}", "#2F5BE7", 56)
+                    Column(gap: 3, bg: "#FFFFFF") {
+                      Text("{chatPeer}", size: 20, color: "#101828")
+                      Text("@{chatPeer}", size: 11, color: "#667085")
+                      Text("{chatStatus}", size: 11, color: "#0E9384")
+                    }
+                  }
+                  Divider()
+                  Grid(columns: 3) {
+                    StatTile("Shared chats", "4")
+                    StatTile("Media", "18")
+                    StatTile("Since", "2024")
+                  }
+                  Row(gap: 8, align: center) {
+                    Button("Start chat", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      screenProfile = false
+                      screenChat = true
+                    }
+                    Button("Call", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                      callPeerName = chatPeer
+                      callPeerAvatar = chatAvatar
+                      callActive = true
+                      callSeconds = 0
+                      screenCall = true
+                    }
+                    Button("Block", p: 10, rounded: 12, shadow: 1, bg: "#D92D20") {
+                      contactBlocked = true
+                    }
+                    Button("Unblock", p: 10, rounded: 12, shadow: 1, bg: "#0E9384") {
+                      contactBlocked = false
+                    }
+                  }
+                  if (contactBlocked) {
+                    Text("{chatPeer} is blocked", size: 11, color: "#D92D20")
+                  } else {
+                    Text("{chatPeer} can reach you", size: 11, color: "#667085")
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (screenGroup) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
+              Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("Group info", size: 18, color: "#101828")
+              }
+              Card(p: 16, rounded: 18, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 10, bg: "#FFFFFF") {
+                  Row(gap: 12, align: center) {
+                    AvatarCircle("{groupNameEdit}", "#0E9384", 54)
+                    Column(gap: 3, bg: "#FFFFFF") {
+                      Text("{groupNameEdit}", size: 18, color: "#101828")
+                      Text("Design Guild - 8 members", size: 11, color: "#667085")
+                    }
+                  }
+                  Divider()
+                  Text("Group name", size: 11, color: "#667085")
+                  Input(bind: groupNameEdit, placeholder: "group name")
+                  Text("Notice", size: 11, color: "#667085")
+                  Input(bind: groupNoticeEdit, placeholder: "group notice")
+                  Text("{groupNoticeEdit}", size: 11, color: "#344054")
+                  Row(gap: 8, align: center) {
+                    Button("Save name", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      chatNotice = "group name saved"
+                    }
+                    Button("Avatar A", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                      avatarChoice = 0
+                    }
+                    Button("Avatar B", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                      avatarChoice = 1
+                    }
+                    Button("Open chat", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                      chatPeer = "Design Guild"
+                      chatAvatar = "DG"
+                      chatStatus = "8 members"
+                      screenGroup = false
+                      screenChat = true
+                    }
+                  }
+                }
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Members", "add or remove")
+                  for (i in 6) {
+                    MemberRow("{memberAvatar[i]}", "{memberName[i]}", "{memberRole[i]}")
+                  }
+                  Row(gap: 8, align: center) {
+                    Button("Add member", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      memberAdded = true
+                      chatNotice = "member added"
+                    }
+                    Button("Remove member", p: 10, rounded: 12, shadow: 1, bg: "#D92D20") {
+                      memberGone0 = true
+                      chatNotice = "member removed"
+                    }
+                    Button("Remove admin", p: 10, rounded: 12, shadow: 1, bg: "#D92D20") {
+                      memberGone1 = true
+                    }
+                    Button("Mute all", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                      memberGone2 = true
+                    }
+                  }
+                  if (memberAdded) {
+                    Text("{addedMember} joined the group", size: 11, color: "#0E9384")
+                  } else {
+                    Text("Members are managed here", size: 11, color: "#667085")
+                  }
+                  if (memberGone0) {
+                    Text("One member was removed", size: 11, color: "#D92D20")
+                  }
+                  if (memberGone1) {
+                    Text("Admin role updated", size: 11, color: "#D92D20")
+                  }
+                  if (memberGone2) {
+                    Text("Group is muted", size: 11, color: "#667085")
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (screenNewGroup) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
+              Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("Create group", size: 18, color: "#101828")
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  Text("Group name", size: 11, color: "#667085")
+                  Input(bind: groupNameEdit, placeholder: "group name")
+                  Text("Notice", size: 11, color: "#667085")
+                  Input(bind: groupNoticeEdit, placeholder: "notice")
+                }
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Choose members", "select people")
+                  Checkbox(bind: pickAlice)
+                  Text("Alice", size: 11, color: "#344054")
+                  Checkbox(bind: pickMarcus)
+                  Text("Marcus", size: 11, color: "#344054")
+                  Checkbox(bind: pickPriya)
+                  Text("Priya", size: 11, color: "#344054")
+                  Checkbox(bind: pickDana)
+                  Text("Dana", size: 11, color: "#344054")
+                  Checkbox(bind: pickOwen)
+                  Text("Owen", size: 11, color: "#344054")
+                  Checkbox(bind: pickSara)
+                  Text("Sara", size: 11, color: "#344054")
+                  Button("Create group", p: 11, rounded: 12, shadow: 2, bg: "#2F5BE7", animate: spring) {
+                    groupCreated = true
+                    screenNewGroup = false
+                    screenGroup = true
+                    chatNotice = "group created"
+                  }
+                  if (groupCreated) {
+                    Text("{groupNameEdit} is ready", size: 11, color: "#0E9384")
+                  } else {
+                    Text("A group needs at least two members", size: 11, color: "#667085")
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (screenCall) {
+          Column(gap: 12) {
+            Container(p: 22, rounded: 20, shadow: 4, gradient: "#1B3FA8,#0E7490",
+                      particles: "count=20,seed=4,radius=2,alpha=620,color=#FFFFFF") {
+              Column(gap: 12, bg: "#1B3FA8") {
+                Row(gap: 8, align: center) {
+                  BackButton("<")
+                  Text("Call", size: 18, color: "#FFFFFF")
+                }
+                AvatarCircle("{callPeerAvatar}", "#2F5BE7", 92)
+                Text("{callPeerName}", size: 24, color: "#FFFFFF")
+                Text("{callSeconds} seconds - connected", size: 12, color: "#C7DBFF")
+                if (callMuted) {
+                  Badge(label: "muted", color: "#D92D20")
+                } else {
+                  Badge(label: "mic on", color: "#0E9384")
+                }
+                if (callSpeaker) {
+                  Badge(label: "speaker on", color: "#0E9384")
+                } else {
+                  Badge(label: "earpiece", color: "#1B3FA8")
+                }
                 Spinner()
-                Text("handshake pending", size: 11, color: "#667085")
-              }
-              Dialog(title: "Key material") {
-                Text("session key {sessionKeyId} v{keyVersion}")
-                Text("fingerprint {fingerprint}")
               }
             }
-          }
-          Container(p: 16, rounded: 16, shadow: 3, gradient: "#0730A8,#0B57D0",
-                    particles: "count=24,seed=11,radius=2,alpha=820,color=#FFFFFF") {
-            Row(gap: 10, align: center, bg: "#0730A8") {
-              Container(width: 26, height: 26, rounded: 8, bg: "#123C8C") { Icon(name: "check", color: "#FFFFFF") }
-              Column(gap: 2, bg: "#0730A8") {
-                Text("End-to-end encryption", size: 14, color: "#FFFFFF")
-                Text("key {sessionKeyId}", size: 11, color: "#C7DBFF")
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+              Column(gap: 10, bg: "#FFFFFF") {
+                SectionTitle("Call controls", "mute, speaker, end")
+                Grid(columns: 3) {
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#F4F7FB") {
+                    Column(gap: 6, bg: "#F4F7FB") {
+                      Icon(name: "close", color: "#D92D20")
+                      Switch(bind: callMuted, label: "Mute")
+                      Text("Mute", size: 11, color: "#344054")
+                    }
+                  }
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#F4F7FB") {
+                    Column(gap: 6, bg: "#F4F7FB") {
+                      Icon(name: "play", color: "#2F5BE7")
+                      Switch(bind: callSpeaker, label: "Speaker")
+                      Text("Speaker", size: 11, color: "#344054")
+                    }
+                  }
+                  Card(p: 12, rounded: 12, shadow: 1, bg: "#F4F7FB") {
+                    Column(gap: 6, bg: "#F4F7FB") {
+                      Icon(name: "close", color: "#D92D20")
+                      Button("End call", p: 9, rounded: 10, shadow: 2, bg: "#D92D20") {
+                        callActive = false
+                        screenCall = false
+                        onRoot = true
+                      }
+                      Text("End", size: 11, color: "#344054")
+                    }
+                  }
+                }
+                Row(gap: 8, align: center) {
+                  Button("Add second", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                    callSeconds += 1
+                  }
+                  Button("Simulate incoming", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                    callPeerName = "Priya"
+                    callPeerAvatar = "PR"
+                    callActive = true
+                  }
+                  Button("Back to chat", p: 9, rounded: 10, shadow: 1, bg: "#2F5BE7") {
+                    screenCall = false
+                    screenChat = true
+                  }
+                }
+                Progress(value: 72)
+                Text("call quality 72 percent", size: 10, color: "#667085")
               }
             }
           }
         }
+
+        if (screenNotifs) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
+              Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("Notifications", size: 18, color: "#101828")
+                Spacer(width: 8)
+                Badge(label: "{unreadTotal} unread", color: "#D92D20")
+              }
+              Row(gap: 8, align: center) {
+                Button("Mark all read", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                  notifAllRead = true
+                  notifRead0 = true
+                  notifRead1 = true
+                  notifRead2 = true
+                  notifRead3 = true
+                  unreadTotal = 0
+                }
+                Button("Open message", p: 10, rounded: 12, shadow: 1, bg: "#475467") {
+                  chatPeer = "Alice"
+                  chatAvatar = "AL"
+                  chatStatus = "online"
+                  screenNotifs = false
+                  screenChat = true
+                }
+              }
+              for (i in 4) {
+                NotificationRow("{notificationTitle[i]}", "{notificationBody[i]}", "{notificationStamp[i]}", "bell")
+              }
+              Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Notification settings", "delivery channels")
+                  Switch(bind: pushNotifications, label: "Allow push")
+                  Text("Push alerts", size: 11, color: "#344054")
+                  Switch(bind: groupInvites, label: "Group invites")
+                  Text("Group invitation alerts", size: 11, color: "#344054")
+                  Text("Badge count {unreadTotal}", size: 11, color: "#667085")
+                }
+              }
+            }
+          }
+        }
+
+        if (screenSettings) {
+          Scroll(height: 660, bg: "#F4F7FB", border: "#E4E9F2", rounded: 18) {
+            Column(width: 796, gap: 12, p: 14) {
+              Row(gap: 8, align: center) {
+                BackButton("<")
+                Text("Settings", size: 18, color: "#101828")
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Profile", "name and avatar")
+                  Input(bind: profileName, placeholder: "display name")
+                  Input(bind: profileHandle, placeholder: "handle")
+                  Input(bind: profileNote, placeholder: "about")
+                  Row(gap: 8, align: center) {
+                    AvatarCircle("{profileAvatar}", "#2F5BE7", 44)
+                    Button("Avatar A", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      profileAvatar = "RU"
+                    }
+                    Button("Avatar B", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      profileAvatar = "RY"
+                    }
+                    Button("Avatar C", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      profileAvatar = "RL"
+                    }
+                    Button("Save", p: 9, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                      profileSaved = true
+                    }
+                  }
+                }
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Privacy", "who sees what")
+                  Switch(bind: readReceipts, label: "Read receipts")
+                  Text("Read receipts", size: 11, color: "#344054")
+                  Switch(bind: typingIndicators, label: "Typing indicators")
+                  Text("Typing indicators", size: 11, color: "#344054")
+                  Switch(bind: presence, label: "Online status")
+                  Text("Online status", size: 11, color: "#344054")
+                  Switch(bind: groupInvites, label: "Group invites")
+                  Text("Group invites", size: 11, color: "#344054")
+                  Switch(bind: pushNotifications, label: "Push notifications")
+                  Text("Push notifications", size: 11, color: "#344054")
+                }
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Theme", "accent, radius, spacing, font scale")
+                  Text("accent {themeAccent}", size: 11, color: "#344054")
+                  Row(gap: 8, align: center) {
+                    Button("Blue", p: 9, rounded: 10, shadow: 2, bg: "#2F5BE7") {
+                      themeAccent = "#2F5BE7"
+                      darkPreview = false
+                    }
+                    Button("Teal", p: 9, rounded: 10, shadow: 1, bg: "#0E9384") {
+                      themeAccent = "#0E9384"
+                      darkPreview = false
+                    }
+                    Button("Violet", p: 9, rounded: 10, shadow: 1, bg: "#7A5AF8") {
+                      themeAccent = "#7A5AF8"
+                      darkPreview = false
+                    }
+                    Button("Dark", p: 9, rounded: 10, shadow: 1, bg: "#475467") {
+                      darkPreview = true
+                      themeMode = "Dark"
+                    }
+                  }
+                  Text("Radius", size: 11, color: "#667085")
+                  Slider(bind: themeRadius, min: 8, max: 28)
+                  Text("Spacing", size: 11, color: "#667085")
+                  Slider(bind: themeSpacing, min: 4, max: 24)
+                  Text("Font scale", size: 11, color: "#667085")
+                  Slider(bind: themeFont, min: 1, max: 3)
+                  Radio(bind: themeMode, value: "Light", label: "Light")
+                  Radio(bind: themeMode, value: "Dark", label: "Dark")
+                  Radio(bind: themeMode, value: "System", label: "System")
+                  if (darkPreview) {
+                    Card(p: 14, rounded: 14, shadow: 2, bg: "#101828", border: "#344054") {
+                      Column(gap: 6, bg: "#101828") {
+                        Text("Dark preview", size: 13, color: "#FFFFFF")
+                        Text("radius {themeRadius} - spacing {themeSpacing} - font {themeFont}", size: 10, color: "#98A2B3")
+                      }
+                    }
+                  } else {
+                    Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                      Column(gap: 6, bg: "#FFFFFF") {
+                        Text("Light preview", size: 13, color: "#101828")
+                        Text("radius {themeRadius} - spacing {themeSpacing} - font {themeFont}", size: 10, color: "#667085")
+                      }
+                    }
+                  }
+                }
+              }
+              Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+                Column(gap: 8, bg: "#FFFFFF") {
+                  SectionTitle("Storage", "local cache")
+                  Text("cache {cacheBytes} MB", size: 12, color: "#101828")
+                  Progress(value: 58)
+                  Row(gap: 8, align: center) {
+                    Button("Clear cache", p: 10, rounded: 12, shadow: 2, bg: "#D92D20") {
+                      cacheBytes = 0
+                      cacheCleared = true
+                    }
+                    Button("Save settings", p: 10, rounded: 12, shadow: 2, bg: "#2F5BE7") {
+                      settingsSaved = true
+                      chatNotice = "settings saved"
+                    }
+                  }
+                  if (cacheCleared) {
+                    Text("Cache cleared - {cacheBytes} MB", size: 11, color: "#0E9384")
+                  } else {
+                    Text("{settingKey[5]} uses {settingValue[5]}", size: 11, color: "#667085")
+                  }
+                  if (settingsSaved) {
+                    Text("Preferences stored", size: 11, color: "#0E9384")
+                  }
+                }
+              }
+            }
+          }
+        }
+
       }
+    }
+    if (onRoot) {
+      TabBar
     }
   }
 }

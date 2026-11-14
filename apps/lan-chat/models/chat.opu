@@ -1,11 +1,23 @@
-// Domain contracts for the LAN chat: one data model per entity, shared by the
-// UI and any lowered service boundary so types stay in one place.
+// One typed declaration per entity keeps the UI and the lowered service boundary aligned.
+model Account {
+  id: int primary
+  name: string
+  handle: string
+  avatar: string
+  note: string
+  online: bool = false
+}
+
 model Conversation {
   id: int primary
   peer: string
-  status: string
+  kind: string
   preview: string
+  stamp: string
   unread: int = 0
+  pinned: bool = false
+  muted: bool = false
+  draft: string
 }
 
 model Message {
@@ -13,25 +25,64 @@ model Message {
   conversation: int
   author: string
   body: string
+  stamp: string
+  direction: string
   state: string
-  encrypted: bool = true
-  ciphertext: string
+  expanded: bool = false
 }
 
 model Contact {
   id: int primary
   name: string
-  peer: string
+  handle: string
+  avatar: string
   note: string
-  pinned: bool = false
+  online: bool = false
+  blocked: bool = false
 }
 
-model Peer {
+model Group {
   id: int primary
-  address: string
-  port: int
-  status: string
-  fingerprint: string
+  name: string
+  avatar: string
+  memberCount: int = 0
+  notice: string
+}
+
+model Member {
+  id: int primary
+  group: int
+  name: string
+  avatar: string
+  role: string
+}
+
+model CallRecord {
+  id: int primary
+  peer: string
+  kind: string
+  stamp: string
+  outcome: string
+}
+
+model Notification {
+  id: int primary
+  title: string
+  body: string
+  stamp: string
+  kind: string
+  read: bool = false
+}
+
+model Setting {
+  id: int primary
+  key: string
+  value: string
+}
+
+api "/account/:id" {
+  get Account
+  update Account
 }
 
 api "/conversations" {
@@ -39,9 +90,20 @@ api "/conversations" {
   create Conversation
 }
 
-api "/messages" {
+api "/conversations/:id" {
+  get Conversation
+  update Conversation
+}
+
+api "/conversations/:id/messages" {
   list Message
   create Message
+}
+
+api "/messages/:id" {
+  get Message
+  update Message
+  delete Message
 }
 
 api "/contacts" {
@@ -49,25 +111,96 @@ api "/contacts" {
   create Contact
 }
 
-api "/peers" {
-  list Peer
-  create Peer
+api "/contacts/:id" {
+  get Contact
+  update Contact
 }
 
-// Fixed demonstration roster. The compiler unrolls list-valued state at compile
-// time, so the screen shows one row per entry without a runtime data source.
-state conversationNames = ["Alice", "Bob", "Cara"]
-state conversationStatus = ["online", "idle", "offline"]
-state conversationPreview = ["sync at 19", "photos sent", "see you soon"]
-state conversationUnread = ["3", "0", "1"]
+api "/groups" {
+  list Group
+  create Group
+}
 
-state messageAuthor = ["me", "Alice", "me"]
-state messageBody = ["joined the LAN", "ready when you are", "message locked"]
-state messageState = ["delivered", "received", "sending"]
+api "/groups/:id" {
+  get Group
+  update Group
+}
 
-state peerLabels = ["Alice", "Bob", "Cara"]
-state peerAddresses = ["192.168.1.20", "192.168.1.21", "192.168.1.22"]
-state peerStatus = ["connected", "available", "offline"]
+api "/groups/:id/members" {
+  list Member
+  create Member
+}
 
-state sentMessages = 12
-state receivedMessages = 9
+api "/members/:id" {
+  delete Member
+}
+
+api "/calls" {
+  list CallRecord
+  create CallRecord
+}
+
+api "/notifications" {
+  list Notification
+}
+
+api "/notifications/:id" {
+  update Notification
+}
+
+api "/settings/:id" {
+  list Setting
+  update Setting
+}
+
+// Compile-time list unrolling keeps each list screen populated without a runtime data source.
+state accountName = "Relay User"
+state accountHandle = "@relay_user"
+state accountAvatar = "RU"
+state accountNote = "Keeps conversations close."
+state accountOnline = true
+
+state conversationPeer = ["Alice", "Design Guild", "Marcus", "Priya", "Night Shift"]
+state conversationKind = ["direct", "group", "direct", "direct", "group"]
+state conversationPreview = ["On my way to the studio", "Dana shared a new mockup", "Thanks, that worked", "Photos from the trip are ready", "Shift handover notes posted"]
+state conversationStamp = ["09:41", "09:32", "Yesterday", "Mon", "Sun"]
+state conversationUnread = ["3", "0", "1", "0", "2"]
+state conversationPinned = ["yes", "no", "no", "yes", "no"]
+state conversationMuted = ["no", "yes", "no", "no", "no"]
+state conversationDraft = ["", "", "follow up", "", ""]
+
+state messageAuthor = ["me", "Alice", "me", "Alice", "Marcus", "Priya"]
+state messageBody = ["Running five minutes late.", "No problem, I will hold the room.", "The build is green again.", "Great, thanks for the update.", "Can we move the review to Thursday?", "Already rescheduled it."]
+state messageStamp = ["09:39", "09:40", "09:20", "09:21", "Yesterday", "Yesterday"]
+state messageDirection = ["out", "in", "out", "in", "out", "in"]
+state messageState = ["read", "delivered", "read", "delivered", "sending", "received"]
+
+state contactName = ["Alice", "Marcus", "Priya", "Dana", "Owen", "Sara"]
+state contactHandle = ["@alice", "@marcus", "@priya", "@dana", "@owen", "@sara"]
+state contactAvatar = ["AL", "MA", "PR", "DA", "OW", "SA"]
+state contactNote = ["Studio lead", "Build engineer", "Product", "Designer", "Ops", "QA"]
+state contactOnline = ["yes", "no", "yes", "yes", "no", "yes"]
+state contactBlockFlags = ["no", "no", "no", "no", "no", "no"]
+
+state groupName = ["Design Guild", "Night Shift"]
+state groupAvatar = ["DG", "NS"]
+state groupMemberCount = ["8", "5"]
+state groupNotice = ["Mockups and review notes.", "Handover and on-call roll."]
+
+state memberName = ["Dana", "Owen", "Sara", "Alice", "Marcus", "Priya"]
+state memberAvatar = ["DA", "OW", "SA", "AL", "MA", "PR"]
+state memberRole = ["Owner", "Admin", "Member", "Member", "Member", "Member"]
+
+state callPeer = ["Alice", "Marcus", "Priya"]
+state callKind = ["voice", "video", "voice"]
+state callStamp = ["09:12", "Yesterday", "Mon"]
+state callOutcome = ["missed", "answered", "missed"]
+
+state notificationTitle = ["New message", "Group update", "Call missed", "New contact"]
+state notificationBody = ["Alice sent a message.", "Dana added a mockup to Design Guild.", "Marcus called you.", "Owen accepted your request."]
+state notificationStamp = ["09:41", "09:32", "09:12", "Yesterday"]
+state notificationKind = ["message", "group", "call", "contact"]
+state notificationRead = ["no", "no", "no", "yes"]
+
+state settingKey = ["readReceipts", "typingIndicators", "presence", "groupInvites", "notifications", "storage"]
+state settingValue = ["on", "on", "on", "off", "on", "1.2 GB"]
