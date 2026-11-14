@@ -679,6 +679,48 @@
       ]
     },
     {
+      "name": "northstar-dashboard",
+      "source": "dashboard.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "northstar-dashboard.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the analytics dashboard source"
+        },
+        {
+          "id": "northstar-dashboard.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the analytics dashboard source to IR"
+        },
+        {
+          "id": "northstar-dashboard.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1280",
+            "800",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the analytics dashboard at 1280x800"
+        }
+      ]
+    },
+    {
       "name": "icons",
       "source": "icons.opu",
       "required": true,

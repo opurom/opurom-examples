@@ -1,0 +1,202 @@
+// Northstar Analytics: a compact production-style dashboard.
+// The shell is a fixed 1280x800 frame: a header bar, a navigation sidebar,
+// metric cards, a revenue chart, an activity stream and a status footer.
+
+component MetricCard(label: string, value: string, trend: string, tint: string, rate: int) {
+  Container(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+    Column(gap: 6, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 12, color: "#667085")
+      Text("{value}", size: 26, color: "#101828")
+      Text("{trend}", size: 11, color: "{tint}")
+      Row(p: 0, gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+        Progress(value: rate, bg: "#E4E9F2")
+      }
+    }
+  }
+}
+
+component NavRow(icon: string, title: string, badge: string) {
+  Container(height: 36, p: 8, rounded: 8, bg: "#F4F7FB", border: "#E4E9F2") {
+    Row(p: 0, gap: 8, align: center, bg: "#F4F7FB", border: "#F4F7FB") {
+      Icon(name: "{icon}", color: "#097FEB")
+      Text("{title}", size: 12, color: "#101828")
+      Spacer(width: 40)
+      Text("{badge}", size: 10, color: "#98A2B3")
+    }
+  }
+}
+
+component ActivityRow(icon: string, title: string, detail: string, state: string, tone: string) {
+  Container(height: 48, p: 10, rounded: 8, bg: "#F4F7FB", border: "#E4E9F2") {
+    Row(p: 0, gap: 8, align: center, bg: "#F4F7FB", border: "#F4F7FB") {
+      Icon(name: "{icon}", color: "#097FEB")
+      Column(gap: 2, bg: "#F4F7FB", border: "#F4F7FB") {
+        Text("{title}", size: 12, color: "#101828")
+        Text("{detail}", size: 10, color: "#667085")
+      }
+      Badge(label: "{state}", bg: "{tone}")
+    }
+  }
+}
+
+app Northstar {
+  state refreshed = 0
+
+  theme { mode: light, accent: "#097FEB", radius: 14 }
+
+  Column(p: 0, gap: 0, bg: "#F4F7FB", border: "#F4F7FB") {
+    // Header bar: brand panel, search field and account actions.
+    Container(p: 0, height: 76, bg: "#FFFFFF", border: "#E4E9F2", shadow: 1) {
+      Row(p: 0, gap: 16, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(width: 260, height: 76, p: 14, rounded: 14, gradient: "#097FEB,#0558A8", bg: "#097FEB", border: "#0558A8") {
+          Column(gap: 2, bg: "#097FEB", border: "#097FEB") {
+            Icon(name: "home", color: "#5BA9FF")
+            Text("Northstar Analytics", size: 18, color: "#FFFFFF")
+            Text("Production overview", size: 11, color: "#D6E8FF")
+          }
+        }
+        Spacer(width: 238, height: 1)
+        Container(width: 380, height: 40, p: 10, rounded: 10, bg: "#F4F7FB", border: "#E4E9F2") {
+          Row(p: 0, gap: 0, align: center, bg: "#F4F7FB", border: "#F4F7FB") {
+            Input(placeholder: "Search dashboards", bg: "#F4F7FB", border: "#F4F7FB")
+          }
+        }
+        Spacer(width: 238, height: 1)
+        Container(width: 60, height: 22, p: 0, rounded: 11, bg: "#097FEB", border: "#097FEB") {
+          Badge(label: "Live", bg: "#097FEB")
+        }
+        Container(width: 24, height: 24, p: 0, rounded: 12, bg: "#097FEB", border: "#097FEB") {
+          Avatar(label: "AM")
+        }
+      }
+    }
+
+    // Body: fixed navigation rail and a content column.
+    Container(p: 0, height: 724, bg: "#F4F7FB", border: "#E4E9F2") {
+      Row(p: 16, gap: 16, bg: "#F4F7FB", border: "#F4F7FB") {
+        Column(width: 240, gap: 12, p: 0, bg: "#F4F7FB", border: "#F4F7FB") {
+          Container(p: 14, height: 268, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+            Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+              Text("Navigation", size: 12, color: "#667085")
+              Container(height: 36, p: 8, rounded: 8, gradient: "#097FEB,#0558A8", bg: "#097FEB", border: "#0558A8") {
+                Row(p: 0, gap: 8, align: center, bg: "#097FEB", border: "#097FEB") {
+                  Icon(name: "home", color: "#5BA9FF")
+                  Text("Overview", size: 12, color: "#FFFFFF")
+                }
+              }
+              NavRow("star", "Revenue", "12")
+              NavRow("user", "Audience", "8")
+              NavRow("eye", "Reports", "4")
+              NavRow("settings", "Settings", "0")
+            }
+          }
+
+          Container(p: 14, height: 200, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+            Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+              Text("Account", size: 14, color: "#101828")
+              Text("Priya Menon", size: 12, color: "#101828")
+              Text("priya@northstar.io", size: 10, color: "#667085")
+              Spacer(height: 12)
+              Button("Sign out")
+            }
+          }
+
+          Container(p: 14, height: 200, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+            Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+              Text("Status", size: 14, color: "#101828")
+              Badge(label: "Operational", bg: "#097FEB")
+              Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                Container(width: 74, bg: "#FFFFFF", border: "#FFFFFF") { Text("API", size: 11, color: "#667085") }
+                Container(width: 90, bg: "#FFFFFF", border: "#FFFFFF") { Progress(value: 99, bg: "#E4E9F2") }
+                Container(width: 32, bg: "#FFFFFF", border: "#FFFFFF") { Text("99%", size: 11, color: "#667085") }
+              }
+              Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                Container(width: 74, bg: "#FFFFFF", border: "#FFFFFF") { Text("Web", size: 11, color: "#667085") }
+                Container(width: 90, bg: "#FFFFFF", border: "#FFFFFF") { Progress(value: 98, bg: "#E4E9F2") }
+                Container(width: 32, bg: "#FFFFFF", border: "#FFFFFF") { Text("98%", size: 11, color: "#667085") }
+              }
+              Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                Container(width: 74, bg: "#FFFFFF", border: "#FFFFFF") { Text("Mobile", size: 11, color: "#667085") }
+                Container(width: 90, bg: "#FFFFFF", border: "#FFFFFF") { Progress(value: 97, bg: "#E4E9F2") }
+                Container(width: 32, bg: "#FFFFFF", border: "#FFFFFF") { Text("97%", size: 11, color: "#667085") }
+              }
+              Button("Refresh") {
+                refreshed += 1
+              }
+              Text("Refreshed {refreshed}x", size: 11, color: "#667085")
+            }
+          }
+        }
+
+        Column(width: 980, gap: 14, p: 0, bg: "#F4F7FB", border: "#F4F7FB") {
+          // KPI card grid.
+          Container(p: 0, height: 104, bg: "#FFFFFF", border: "#E4E9F2", shadow: 1) {
+            Grid(columns: 4) {
+              MetricCard("Revenue", "$48.2K", "+12.4%", "#0B8A5B", 82)
+              MetricCard("Active users", "24,891", "+8.1%", "#0B8A5B", 64)
+              MetricCard("Conversion", "6.42%", "+1.1%", "#0B8A5B", 71)
+              MetricCard("Avg. response", "1.8h", "-14%", "#B45309", 58)
+            }
+          }
+
+          // Chart and activity stream.
+          Row(p: 0, gap: 16, bg: "#F4F7FB", border: "#F4F7FB") {
+            Container(width: 620, height: 516, p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+              Column(gap: 10, bg: "#FFFFFF", border: "#FFFFFF") {
+                Container(p: 0, height: 44, bg: "#FFFFFF", border: "#FFFFFF") {
+                  Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                    Text("Revenue trend", size: 16, color: "#101828")
+                    Text("Last 30 days", size: 11, color: "#667085")
+                  }
+                }
+                Container(p: 8, height: 388, rounded: 12, bg: "#FFFFFF", border: "#E4E9F2") {
+                  AreaChart(values: "22,38,31,52,46,64,58,74", width: 572, height: 372, bg: "#FFFFFF", border: "#E4E9F2", rounded: 12)
+                }
+                Container(p: 0, height: 32, bg: "#FFFFFF", border: "#FFFFFF") {
+                  Row(p: 0, gap: 12, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                    Text("Legend", size: 11, color: "#667085")
+                    Text("Revenue", size: 11, color: "#101828")
+                    Text("Target", size: 11, color: "#667085")
+                  }
+                }
+              }
+            }
+
+            Container(width: 340, height: 516, p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E4E9F2") {
+              Column(gap: 7, bg: "#FFFFFF", border: "#FFFFFF") {
+                Container(p: 0, height: 44, bg: "#FFFFFF", border: "#FFFFFF") {
+                  Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                    Text("Recent activity", size: 16, color: "#101828")
+                    Text("24h", size: 11, color: "#667085")
+                  }
+                }
+                ActivityRow("check", "Payment received", "Invoice #2841 paid", "Done", "#0B8A5B")
+                ActivityRow("user", "Member joined", "Alex joined Growth", "Live", "#097FEB")
+                ActivityRow("upload", "Report exported", "Board shared with team", "Done", "#0B8A5B")
+                ActivityRow("warning", "Usage alert", "API usage at 82%", "Info", "#097FEB")
+                ActivityRow("check", "Goal hit", "Monthly target reached", "Done", "#0B8A5B")
+                ActivityRow("check", "Billing updated", "Plan upgraded to Pro", "Done", "#0B8A5B")
+                ActivityRow("info", "Segment ready", "5,204 new members", "Info", "#097FEB")
+                Container(p: 0, height: 45, bg: "#FFFFFF", border: "#FFFFFF") {
+                  Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+                    Text("View all", size: 11, color: "#097FEB")
+                    Icon(name: "chevron_right", color: "#097FEB")
+                  }
+                }
+              }
+            }
+          }
+
+          // Status line.
+          Container(p: 0, height: 44, bg: "#FFFFFF", border: "#E4E9F2") {
+            Row(p: 0, gap: 8, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+              Icon(name: "check", color: "#097FEB")
+              Text("All systems operational", size: 11, color: "#101828")
+              Text("Updated 2 minutes ago", size: 10, color: "#667085")
+            }
+          }
+        }
+      }
+    }
+  }
+}

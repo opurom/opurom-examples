@@ -26,6 +26,7 @@ the smallest program to the richest multi-device application.
 | [field-service.opu](field-service.opu) | The multi-device full-stack board: `model`, `api`, computed values, an adaptive `Grid` and device breakpoints, so one IR reflows between phone and tablet. |
 | [workbench/main.opu](workbench/main.opu) | A desktop-class multi-view shell: a navigation rail, stat and task panels and a self-drawn frame in one multi-file project that reflows to a single column on phones. |
 | [dashboard/main.opu](dashboard/main.opu) | A production-style telemetry console: KPI cards, a filter sidebar, service rows and conditional panels, in one multi-file project. |
+| [dashboard.opu](dashboard.opu) | A compact analytics dashboard: header bar, sidebar navigation, KPI cards, a revenue chart, a recent-activity list and a status footer. |
 
 The canonical frontend IR lives in
 [counter.opuir.json](https://github.com/opurom/opurom-spec/blob/main/counter.opuir.json); the
