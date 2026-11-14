@@ -63,8 +63,9 @@ component TagPill(label: string) {
 }
 
 // Stat unit inside the footer strip of a discussion card.
+// Cap the unit so its nested row hugs inline instead of claiming a full row line.
 component StatUnit(icon: string, label: string) {
-  Row(gap: 5, align: center) {
+  Row(gap: 5, align: center, width: 120) {
     Icon(name: "{icon}", color: "#9CA3AF")
     Text("{label}", size: 12, color: "#6B7280")
   }
@@ -72,7 +73,7 @@ component StatUnit(icon: string, label: string) {
 
 // One discussion card: identity row, tag pill, title, engagement counts and open action.
 component DiscussionCard(title: string, author: string, tag: string, likes: string, replies: string, views: string, when: string) {
-  Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+  Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
     Column(gap: 10) {
       Row(gap: 10, align: center) {
         Avatar(label: "{author}")
@@ -113,7 +114,7 @@ component DiscussionCard(title: string, author: string, tag: string, likes: stri
 
 // Reply row renders author, body and a compact like control.
 component ReplyRow(author: string, body: string, likes: string) {
-  Card(p: 14, rounded: 14, shadow: 1, bg: "#FAFBFC", border: "#ECEEF2") {
+  Card(p: 14, rounded: 14, glass: true, border: "#ECEEF2") {
     Row(gap: 12, align: start) {
       Avatar(label: "{author}")
       Column(gap: 6) {
@@ -137,7 +138,7 @@ component ReplyRow(author: string, body: string, likes: string) {
 
 // Stat tile gives the feed and profile a shared metric treatment.
 component StatTile(label: string, metric: string) {
-  Card(p: 16, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+  Card(p: 16, rounded: 14, glass: true, border: "#ECEEF2") {
     Column(gap: 4) {
       Text("{label}", size: 12, color: "#6B7280")
       Text("{metric}", size: 24, color: "#111827")
@@ -185,7 +186,7 @@ component NavButton(label: string, surface: string) {
 
 // Notification line with kind chip, actor and mark-read action.
 component NotificationRow(kind: string, actor: string, text: string, when: string) {
-  Card(p: 14, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+  Card(p: 14, rounded: 14, glass: true, border: "#ECEEF2") {
     Row(gap: 12, align: center) {
       Container(width: 36, height: 36, rounded: 10, bg: "#EEF0FF") {
         Icon(name: "bell", color: "#4F46E5")
@@ -208,7 +209,7 @@ component NotificationRow(kind: string, actor: string, text: string, when: strin
 
 // Search result line routes a discussion result to its detail composition.
 component ResultRow(title: string, kind: string, meta: string) {
-  Card(p: 14, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+  Card(p: 14, rounded: 14, glass: true, border: "#ECEEF2") {
     Row(gap: 12, align: center) {
       Container(width: 32, height: 32, rounded: 10, bg: "#EEF0FF") {
         Icon(name: "search", color: "#4F46E5")
@@ -275,11 +276,15 @@ app Relay {
 
   // One shell for every width: the outer Row lays the side panel beside the main
   // column. A start alignment keeps the sidebar pinned to the top beside the tall feed.
-  Column(p: 0, gap: 0, bg: "#F5F6F8") {
+  // No shell fill: the theme stage tints the page, so glass laminas refract it.
+  Column(p: 0, gap: 0) {
     // Persistent header: brand, search box, notification bell and user menu.
-    Container(p: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+    Container(p: 16, glass: true, border: "#ECEEF2") {
       Row(gap: 12, align: center) {
-        BrandMark(19, "#111827", "#4F46E5", "#FFFFFF")
+        // Cap the brand block so its inner row hugs and the toolbar stays one line.
+        Column(width: 100) {
+          BrandMark(19, "#111827", "#4F46E5", "#FFFFFF")
+        }
         Spacer(width: 1)
         Input(bind: searchText, placeholder: "Search discussions and members")
         Button("Search", p: 8, rounded: 10, bg: "#F5F6F8") {
@@ -355,7 +360,7 @@ app Relay {
       // Side panel: community stats, tags, active members, quick links.
       // Width caps at 260px on wide screens; at narrow the Row stacks it full-width.
       Column(width: 260, gap: 14) {
-        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+        Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
           Column(gap: 8) {
             Text("Community", size: 13, color: "#6B7280")
             Row(gap: 8, align: center) {
@@ -366,7 +371,7 @@ app Relay {
           }
         }
 
-        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+        Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
           Column(gap: 8) {
             Text("Tags", size: 13, color: "#111827")
             SideTag("Announcements", "announcements", "9")
@@ -378,7 +383,7 @@ app Relay {
           }
         }
 
-        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+        Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
           Column(gap: 10) {
             Text("Active now", size: 13, color: "#111827")
             for (m in activeMembers) {
@@ -387,7 +392,7 @@ app Relay {
           }
         }
 
-        Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+        Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
           Column(gap: 8) {
             Text("Quick links", size: 13, color: "#111827")
             NavButton("Feed", "feed")
@@ -452,7 +457,7 @@ app Relay {
                 showFeed = true
               }
             }
-            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+            Card(p: 22, rounded: 16, glass: true, border: "#ECEEF2") {
               Column(gap: 12) {
                 Row(gap: 8, align: center) {
                   TagPill("{selectedTag}")
@@ -541,7 +546,7 @@ app Relay {
         if (showCompose) {
           Column(gap: 14) {
             SectionHead("New discussion", "write a clear title, pick a tag, then publish")
-            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+            Card(p: 22, rounded: 16, glass: true, border: "#ECEEF2") {
               Column(gap: 12) {
                 Input(bind: draftTitle, placeholder: "Discussion title")
                 Input(bind: draftBody, placeholder: "Write the body of the discussion")
@@ -582,7 +587,7 @@ app Relay {
 
         // Login screen.
         if (showLogin) {
-          Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+          Card(p: 22, rounded: 16, glass: true, border: "#ECEEF2") {
             Column(gap: 12) {
               BrandMark(20, "#111827", "#4F46E5", "#FFFFFF")
               Text("Welcome back", size: 22, color: "#111827")
@@ -617,7 +622,7 @@ app Relay {
 
         // Register screen.
         if (showRegister) {
-          Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+          Card(p: 22, rounded: 16, glass: true, border: "#ECEEF2") {
             Column(gap: 12) {
               BrandMark(20, "#111827", "#4F46E5", "#FFFFFF")
               Text("Join Relay", size: 22, color: "#111827")
@@ -655,7 +660,7 @@ app Relay {
         // User profile: identity, stats, follow/block, activity feed.
         if (showProfile) {
           Column(gap: 14) {
-            Card(p: 22, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#ECEEF2") {
+            Card(p: 22, rounded: 16, glass: true, border: "#ECEEF2") {
               Row(gap: 14, align: center) {
                 Avatar(label: "{profileName}")
                 Column(gap: 3) {
@@ -665,7 +670,7 @@ app Relay {
                 }
               }
             }
-            Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+            Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
               Column(gap: 12) {
                 Text("{profileBio}", size: 14, color: "#374151")
                 Row(gap: 8, align: center) {
@@ -691,7 +696,7 @@ app Relay {
               StatTile("Replies", "{profileReplies}")
               StatTile("Likes", "{profileLikes}")
             }
-            Card(p: 18, rounded: 16, shadow: 1, bg: "#FFFFFF", border: "#ECEEF2") {
+            Card(p: 18, rounded: 16, glass: true, border: "#ECEEF2") {
               Column(gap: 10) {
                 Text("Activity", size: 16, color: "#111827")
                 for (i in 3) {
@@ -739,7 +744,7 @@ app Relay {
         if (showModeration) {
           Column(gap: 14) {
             SectionHead("Moderation", "{flaggedCount} flagged - {mutedCount} muted")
-            Card(p: 16, rounded: 14, shadow: 1, bg: "#FFF8F6", border: "#FBD5D5") {
+            Card(p: 16, rounded: 14, glass: true, border: "#FBD5D5") {
               Column(gap: 6) {
                 Row(gap: 8, align: center) {
                   Icon(name: "warning", color: "#B91C1C")
@@ -757,9 +762,13 @@ app Relay {
     }
 
     // Footer strip closes the page with brand, tagline and links.
-    Container(p: 20, bg: "#FFFFFF", border: "#ECEEF2") {
+    Container(p: 20, glass: true, border: "#ECEEF2") {
       Row(gap: 12, align: center) {
-        BrandMark(15, "#111827", "#4F46E5", "#FFFFFF")
+        // Cap the brand block so its inner row hugs instead of stretching and
+        // squeezing the footer texts into clipped overlaps.
+        Column(width: 92) {
+          BrandMark(15, "#111827", "#4F46E5", "#FFFFFF")
+        }
         Text("A calm place for thoughtful discussion.", size: 12, color: "#6B7280")
         Spacer(width: 1)
         Text("Guidelines - Tags - Members - Status", size: 12, color: "#9CA3AF")
