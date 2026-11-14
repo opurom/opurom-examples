@@ -209,6 +209,17 @@
             "{tmp}/frame.ppm"
           ],
           "description": "render the compiled IR to a PPM frame"
+        },
+        {
+          "id": "gallery.media",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "320",
+            "3000",
+            "{tmp}/media.ppm"
+          ],
+          "description": "render the tall media section for source coverage"
         }
       ]
     },
@@ -401,6 +412,21 @@
             "subscribed=true"
           ],
           "description": "render the conditional subscription panel"
+        },
+        {
+          "id": "form.review",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "560",
+            "480",
+            "{tmp}/review.ppm",
+            "--state",
+            "name=Jordan",
+            "--state",
+            "age=42"
+          ],
+          "description": "render the refined form with updated bindings"
         }
       ]
     },

@@ -4,36 +4,62 @@ app Form {
   state age = 36
   state subscribed = false
 
-  theme { accent: "#097FEB", radius: 14 , stage: "#EDF0F7" }
+  theme { mode: light, accent: "#097FEB", radius: 12, stage: "#F4F6F9" }
 
-  ScrollView(p: 16) {
-    Column(gap: 14) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
-        Text("OPUROM Form", size: 22, color: "#FFFFFF")
-        Text("Bound inputs update state on every edit", size: 12, color: "#D6E8FF")
+  Column(p: 24, gap: 16, bg: "#F4F6F9", border: "#F4F6F9") {
+    Container(height: 84, p: 10, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
+      Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+        Image(src: "opurom-examples/assets/opurom-logo.png", width: 32, height: 32,
+              rounded: 10, bg: "#F8FAFC", border: "#E2E8F0", label: "OPUROM brand")
+        Text("Account setup", size: 14, color: "#101828", role: "heading")
+        Text("A few details to personalize your workspace", size: 10, color: "#667085")
       }
-      Container(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
-        Column(gap: 12, bg: "#FFFFFF") {
-          Text("Account setup", size: 15, color: "#101828")
-          Input(placeholder: "Display name", bind: name)
-          Slider(min: 0, max: 100, bind: age)
-          Text("Name: {name}", size: 16, color: "#101828")
-          Text("Years: {age}", size: 16, color: "#101828")
-        }
-      }
-      Container(p: 13, rounded: 16, shadow: 3, bg: "#F4F7FB") {
-        Row(gap: 10, bg: "#F4F7FB") {
-          Button("Toggle subscription", p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
-                 fontScale: 1.1, animate: spring) {
-            subscribed.toggle()
+    }
+
+    Container(height: 200, p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Text("Profile details", size: 11, color: "#344054", role: "heading")
+        Text("Display name", size: 9, color: "#667085")
+        Input(placeholder: "Alex Morgan", bind: name, p: 8, rounded: 8,
+              bg: "#F8FAFC", border: "#D8E0EA", fontScale: 0.6, label: "Display name")
+        Text("Years of experience", size: 9, color: "#667085")
+        Slider(min: 0, max: 100, bind: age, bg: "#E2E8F0", border: "#E2E8F0",
+               label: "Years of experience")
+        Divider()
+        Container(height: 36, p: 8, rounded: 8, bg: "#F8FAFC", border: "#E2E8F0") {
+          Column(gap: 2, bg: "#F8FAFC", border: "#F8FAFC") {
+            Text("Name: {name}", size: 10, color: "#344054")
+            Text("Years: {age}", size: 10, color: "#667085")
           }
         }
       }
-      if (subscribed) {
-        Container(p: 18, rounded: 16, shadow: 3,
-                  gradient: "#097FEB,#043B70", bg: "#043B70", animate: ease) {
-          Text("Subscribed as {name}", size: 17, color: "#FFFFFF")
+    }
+
+    Container(height: 72, p: 8, rounded: 14, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
+      Grid(columns: 2) {
+        Container(height: 52, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Column(gap: 4, bg: "#FFFFFF", border: "#FFFFFF") {
+            Text("Product updates", size: 10, color: "#344054", role: "heading")
+            Text("Optional release notes", size: 9, color: "#667085")
+          }
         }
+        Container(height: 52, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+            Button("Toggle subscription", p: 8, rounded: 8, bg: "#097FEB",
+                   fontScale: 0.6, shadow: 1) {
+              subscribed.toggle()
+            }
+            if (subscribed) {
+              Text("Subscribed as {name}", size: 9, color: "#097FEB")
+            }
+          }
+        }
+      }
+    }
+
+    Container(height: 20, p: 0, bg: "#F4F6F9", border: "#F4F6F9") {
+      Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+        Text("Changes save automatically", size: 9, color: "#98A2B3")
       }
     }
   }

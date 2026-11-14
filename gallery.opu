@@ -81,7 +81,7 @@ app Gallery {
         Column(gap: 8) {
           Text("media / 13 kinds", size: 15, role: "heading")
           Grid(columns: 4) {
-            Image(src: "opurom-logo.png", width: 64, height: 64, label: "media/Image")
+            Image(src: "opurom-examples/assets/opurom-logo.png", width: 64, height: 64, rounded: 10, bg: "#FFFFFF", border: "#D9E2EF", label: "media/Image")
             Icon(name: "star", label: "media/Icon")
             Avatar(label: "media/Avatar")
             Player(src: "clip.mp4", width: 120, height: 80, label: "media/Player")
