@@ -868,6 +868,48 @@
           "description": "render the expanded panel with the open state"
         }
       ]
+    },
+    {
+      "name": "media",
+      "source": "media.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "media.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the image media source"
+        },
+        {
+          "id": "media.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the image media source to IR"
+        },
+        {
+          "id": "media.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "640",
+            "480",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render decoded PNG nodes into a PPM frame"
+        }
+      ]
     }
   ]
 }
