@@ -150,38 +150,33 @@ Fifteen API blocks back the screens with list, get, create, update and delete ha
 
 ### Seed roster
 
-List-valued state holds the deterministic seed roster: conversation peers, kinds, previews,
-timestamps, unread counts, pinned and muted flags and drafts; message authors, bodies,
-timestamps, directions and delivery states; contact names, handles, avatars, notes, presence and
-block flags; group names, avatars, member counts and notices; member names, avatars and roles;
-call peers, kinds, timestamps and outcomes; notification titles, bodies, timestamps, kinds and
-read flags; and setting keys and values. The compiler unrolls list-valued state at compile time,
-so each list screen renders one row per entry.
+The web product path cannot emit runtime list-typed state, so the demo declares no `state` list.
+Each row-bearing screen instead renders one explicit row component call per entry, written out at
+source level: five conversation rows, six contact rows, four member rows, three call rows, four
+notification rows and the emoji presets. Every row carries its own literal text, tint and target,
+so each list screen stays populated and every row opens its own destination after compilation.
 
 ### View state
 
-`views/state.opu` holds scalar state grouped by concern: navigation flags and the active tab
-label; conversation, contact and group selection; search queries and composer content; message
-interaction, delivery and action-sheet state; contact and group management flags; per-member
-selection; notification read flags; call session state; account profile and preference values;
-and unread counters. The `main.opu` entry file owns the components and the app tree, reads these
-values through interpolation and mutates them through tap, input, toggle and slider events.
+`views/state.opu` holds scalar state grouped by concern: per-destination navigation booleans and
+the root flag that anchors the tab bar; conversation, contact and group selection; search queries
+and composer content; message interaction, delivery and action-sheet state; contact and group
+management flags; per-member selection; notification read flags; call session state; account
+profile and preference values; and unread counters. The `main.opu` entry file owns the components
+and the app tree, reads these values through interpolation and mutates them through tap, input,
+toggle and slider events.
 
 ## Visual system
 
-The theme block declares a light mode, a blue accent, a corner radius and a font scale. A
-consistent palette is applied across cards, bubbles, badges and controls: white surfaces, a pale
-blue page background, slate and violet avatar tints, green presence badges, red unread badges and
-blue outgoing bubbles. Spacing is expressed as a design token with a settings slider, and the
-entry tree uses shared padding, gap and radius values so list rows, cards and bubbles read as one
-family.
-
-Avatar circles, icon chips, section titles, statistic tiles, conversation rows, contact rows,
-member rows, notification rows, call rows, discover cards, emoji keys, message bubbles, back
-controls and the tab bar are declared as reusable components. The outer row places the account
-rail beside the content column on wide viewports and stacks both into one phone-style column on
-compact viewports. The tab bar is anchored at the bottom of the frame, the chat composer is fixed
-beneath the thread, and every screen keeps a single vertical content flow.
+The theme block declares a calm light mode, a restrained teal accent (#1F6F5C) and an 18px corner
+radius. One cohesive palette runs across every surface: a #F5F6F8 page, white cards with hairline
+#EEF0F3 borders, ink #101828 titles, secondary #8A91A0 text, soft avatar tints in teal, slate,
+amber and violet, and low-area teal used only for accents, badges and outgoing bubbles. Type
+follows a clear hierarchy: 20px screen titles, 15-16px row and section titles, 12-14px body,
+10-12px captions. Spacing is generous: 12px card padding, 14-16px card radius, 8-12px inter-card
+gaps and comfortable 46px avatar rows, with shadows kept soft. Spacing and radius are still driven
+by settings sliders through the theme tokens, and the entry tree uses shared padding, gap and
+radius values so list rows, cards and bubbles read as one family.
 
 ## Interaction flows
 

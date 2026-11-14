@@ -6,41 +6,44 @@ import "views/detail.opu";
 import "views/browse.opu";
 import "views/profile.opu";
 
-component TabItem(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
-  Button("{label}", p: 10, rounded: 12, shadow: 1, bg: "#EEF3FC") {
+// A tab pill reads as a soft chip when idle and a filled accent chip when active.
+component TabItem(icon: string, label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
+  Button(label, p: 10, rounded: 14, bg: "#F2F3F6") {
     tabFeed = feed
     tabCircles = circles
     tabActivity = activity
     tabNotif = notif
     tabProfile = profile
     overlayOpen = false
+    tabArea = true
   }
 }
 
-component TabItemActive(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
-  Button("{label}", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+component TabItemActive(icon: string, label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
+  Button(label, p: 10, rounded: 14, shadow: 1, bg: "#4F46E5") {
     tabFeed = feed
     tabCircles = circles
     tabActivity = activity
     tabNotif = notif
     tabProfile = profile
     overlayOpen = false
+    tabArea = true
   }
 }
 
 component TabBar() {
-  Row(p: 8, gap: 6, align: center, bg: "#FFFFFF", border: "#E2E8F0") {
-    if (tabFeed) { TabItemActive("Feed", true, false, false, false, false) } else { TabItem("Feed", true, false, false, false, false) }
-    if (tabCircles) { TabItemActive("Circles", false, true, false, false, false) } else { TabItem("Circles", false, true, false, false, false) }
-    if (tabActivity) { TabItemActive("Activity", false, false, true, false, false) } else { TabItem("Activity", false, false, true, false, false) }
-    if (tabNotif) { TabItemActive("Notices", false, false, false, true, false) } else { TabItem("Notices", false, false, false, true, false) }
-    if (tabProfile) { TabItemActive("Me", false, false, false, false, true) } else { TabItem("Me", false, false, false, false, true) }
+  Row(p: 8, gap: 6, align: center, bg: "#FFFFFF", border: "#EBECF0") {
+    if (tabFeed) { TabItemActive("home", "Feed", true, false, false, false, false) } else { TabItem("home", "Feed", true, false, false, false, false) }
+    if (tabCircles) { TabItemActive("folder", "Circles", false, true, false, false, false) } else { TabItem("folder", "Circles", false, true, false, false, false) }
+    if (tabActivity) { TabItemActive("calendar", "Events", false, false, true, false, false) } else { TabItem("calendar", "Events", false, false, true, false, false) }
+    if (tabNotif) { TabItemActive("bell", "Notices", false, false, false, true, false) } else { TabItem("bell", "Notices", false, false, false, true, false) }
+    if (tabProfile) { TabItemActive("user", "Me", false, false, false, false, true) } else { TabItem("user", "Me", false, false, false, false, true) }
   }
 }
 
 // Each opener is dedicated because handler actions name literal state fields.
 component OpenSearch(label: string) {
-  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+  Button(label, p: 10, rounded: 12, shadow: 1, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showSearch = true
@@ -48,7 +51,7 @@ component OpenSearch(label: string) {
 }
 
 component OpenPost(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#EEF0FF") {
     overlayOpen = true
     tabArea = false
     showPost = true
@@ -56,7 +59,7 @@ component OpenPost(label: string) {
 }
 
 component OpenCircle(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showCircle = true
@@ -64,7 +67,7 @@ component OpenCircle(label: string) {
 }
 
 component OpenActivity(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showActivity = true
@@ -72,7 +75,7 @@ component OpenActivity(label: string) {
 }
 
 component OpenCompose(label: string) {
-  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showCompose = true
@@ -80,7 +83,7 @@ component OpenCompose(label: string) {
 }
 
 component OpenCreateCircle(label: string) {
-  Button(label, p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+  Button(label, p: 10, rounded: 12, shadow: 1, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showCreateCircle = true
@@ -88,7 +91,7 @@ component OpenCreateCircle(label: string) {
 }
 
 component OpenActivityEdit(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#4F46E5") {
     overlayOpen = true
     tabArea = false
     showActivityEdit = true
@@ -96,7 +99,7 @@ component OpenActivityEdit(label: string) {
 }
 
 component OpenEditProfile(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#EEF0FF") {
     overlayOpen = true
     tabArea = false
     showEditProfile = true
@@ -104,7 +107,7 @@ component OpenEditProfile(label: string) {
 }
 
 component OpenSettings(label: string) {
-  Button(label, p: 8, rounded: 10, shadow: 1, bg: "#2A6CF6") {
+  Button(label, p: 8, rounded: 10, bg: "#F2F3F6") {
     overlayOpen = true
     tabArea = false
     showSettings = true
@@ -113,7 +116,7 @@ component OpenSettings(label: string) {
 
 // Back buttons clear every overlay flag so only one detail page renders at a time.
 component BackButton(label: string, feed: bool, circles: bool, activity: bool, notif: bool, profile: bool) {
-  Button(label, p: 10, rounded: 12, shadow: 1, bg: "#EEF3FC") {
+  Button(label, p: 10, rounded: 12, bg: "#F2F3F6") {
     showSearch = false
     showPost = false
     showCircle = false
@@ -135,41 +138,41 @@ component BackButton(label: string, feed: bool, circles: bool, activity: bool, n
 
 // Active and inactive branches keep counter updates as plain statements, which the handler grammar requires.
 component LikeButton(label: string, on: bool, delta: int, bg: string) {
-  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+  Button(label, p: 8, rounded: 10, bg: "{bg}") {
     liked = on
     likeCount += delta
   }
 }
 
 component SaveButton(label: string, on: bool, delta: int, bg: string) {
-  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+  Button(label, p: 8, rounded: 10, bg: "{bg}") {
     saved = on
     saveCount += delta
   }
 }
 
 component FollowButton(label: string, on: bool, delta: int, bg: string) {
-  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+  Button(label, p: 8, rounded: 10, bg: "{bg}") {
     following = on
     followCount += delta
   }
 }
 
 component JoinCircleButton(label: string, on: bool, delta: int, bg: string) {
-  Button("{label}", p: 10, rounded: 12, shadow: 2, bg: "{bg}") {
+  Button(label, p: 10, rounded: 12, shadow: 1, bg: "{bg}") {
     joined = on
     circleMembers += delta
   }
 }
 
 component FavButton(label: string, on: bool, bg: string) {
-  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+  Button(label, p: 8, rounded: 10, bg: "{bg}") {
     isFav = on
   }
 }
 
 component JoinActivityButton(label: string, on: bool, delta: int, bg: string) {
-  Button("{label}", p: 8, rounded: 10, shadow: 1, bg: "{bg}") {
+  Button(label, p: 8, rounded: 10, bg: "{bg}") {
     isParticipant = on
     participantCount += delta
   }
@@ -177,53 +180,54 @@ component JoinActivityButton(label: string, on: bool, delta: int, bg: string) {
 
 // One comment row owns its reply control so the shared reply bar can name a target.
 component CommentRow(author: string, body: string, time: string) {
-  Card(p: 12, rounded: 12, shadow: 1, bg: "#F8FAFC", border: "#E2E8F0") {
-    Column(gap: 4, bg: "#F8FAFC") {
+  Card(p: 12, rounded: 12, bg: "#F7F8FA") {
+    Column(gap: 6, bg: "#F7F8FA") {
       Row(gap: 8, align: center) {
-        Avatar(label: "{author}")
-        Text("{author}", size: 12, color: "#0F172A")
+        Container(width: 32, height: 32, rounded: 10, bg: "#E9EBFF") {
+          Avatar(label: "{author}")
+        }
+        Column(gap: 1, bg: "#F7F8FA") {
+          Text("{author}", size: 13, color: "#111827")
+          Text("{time}", size: 11, color: "#9CA3AF")
+        }
         Spacer(width: 8)
-        Text("{time}", size: 10, color: "#94A3B8")
+        Button("Reply", p: 6, rounded: 8, bg: "#EEF0FF") {
+          replyActive = true
+          replyName = author
+        }
       }
-      Text("{body}", size: 12, color: "#334155")
-      Button("Reply", p: 6, rounded: 8, shadow: 1, bg: "#EEF3FC") {
-        replyActive = true
-        replyName = author
-      }
+      Text("{body}", size: 13, color: "#4B5563")
     }
   }
 }
 
 component PostCard(title: string, author: string, handle: string, topic: string, time: string, body: string, imgA: string, imgB: string, imgC: string, comments: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-    Column(gap: 8, bg: "#FFFFFF") {
+  Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF") {
+    Column(gap: 12, bg: "#FFFFFF") {
       Row(gap: 10, align: center) {
-        Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+        Container(width: 40, height: 40, rounded: 12, bg: "#E9EBFF") {
           Avatar(label: "{author}")
         }
         Column(gap: 2, bg: "#FFFFFF") {
-          Text("{author}", size: 13, color: "#0F172A")
-          Text("@{handle} - {time}", size: 10, color: "#94A3B8")
+          Text("{author}", size: 14, color: "#111827")
+          Text("@{handle} · {time}", size: 11, color: "#9CA3AF")
         }
         Spacer(width: 8)
         Badge(label: "{topic}")
       }
-      Text("{title}", size: 14, color: "#0F172A")
-      Text("{body}", size: 12, color: "#475569")
-      Grid(columns: 3) {
-        Image(src: "{imgA}", width: 96, height: 96)
-        Image(src: "{imgB}", width: 96, height: 96)
-        Image(src: "{imgC}", width: 96, height: 96)
+      Text("{title}", size: 16, color: "#111827")
+      Text("{body}", size: 14, color: "#4B5563")
+      Row(gap: 8) {
+        Image(src: "{imgA}", width: 100, height: 96, rounded: 12)
+        Image(src: "{imgB}", width: 100, height: 96, rounded: 12)
+        Image(src: "{imgC}", width: 100, height: 96, rounded: 12)
       }
-      Divider()
+      Divider(border: "#ECEEF2")
       Row(gap: 8, align: center) {
-        if (liked) { LikeButton("Unlike", true, -1, "#FDECEC") } else { LikeButton("Like", false, 1, "#EEF3FC") }
-        Text("{likeCount}", size: 11, color: "#64748B")
-        Text("{comments} comments", size: 11, color: "#64748B")
+        if (liked) { LikeButton("Liked", true, -1, "#FDE7E7") } else { LikeButton("Like", false, 1, "#F2F3F6") }
+        Text("· {likeCount} · {comments} comments", size: 12, color: "#6B7280")
         Spacer(width: 8)
-        if (saved) { SaveButton("Saved", true, -1, "#FFF6E0") } else { SaveButton("Save", false, 1, "#EEF3FC") }
-        Text("{saveCount}", size: 11, color: "#64748B")
-        Spacer(width: 8)
+        if (saved) { SaveButton("Saved", true, -1, "#FEF3C7") } else { SaveButton("Save", false, 1, "#F2F3F6") }
         OpenPost("Open")
       }
     }
@@ -231,60 +235,70 @@ component PostCard(title: string, author: string, handle: string, topic: string,
 }
 
 component CircleCard(name: string, desc: string, members: string, cover: string, topic: string) {
-  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-    Column(gap: 8, bg: "#FFFFFF") {
-      Image(src: "{cover}", width: 240, height: 120)
-      Text("{name}", size: 14, color: "#0F172A")
-      Text("{desc}", size: 11, color: "#64748B")
-      Row(gap: 8, align: center) {
-        Badge(label: "{topic}")
-        Text("{members} members", size: 11, color: "#2A6CF6")
+  Card(p: 0, rounded: 16, shadow: 2, bg: "#FFFFFF") {
+    Column(gap: 0, bg: "#FFFFFF") {
+      Image(src: "{cover}", width: 190, height: 96, rounded: 0)
+      Column(gap: 8, p: 12, bg: "#FFFFFF") {
+        Text("{name}", size: 15, color: "#111827")
+        Text("{desc}", size: 12, color: "#6B7280")
+        Text("{topic} · {members} members", size: 12, color: "#4F46E5")
+        OpenCircle("Enter")
       }
-      OpenCircle("Enter")
     }
   }
 }
 
 component ActivityCard(title: string, category: string, time: string, location: string, organizer: string, price: string, participants: string, cover: string) {
-  Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-    Column(gap: 8, bg: "#FFFFFF") {
-      Image(src: "{cover}", width: 240, height: 120)
-      Text("{title}", size: 14, color: "#0F172A")
-      Row(gap: 8, align: center) {
-        Badge(label: "{category}")
-        Text("{price}", size: 11, color: "#2A6CF6")
+  Card(p: 0, rounded: 16, shadow: 2, bg: "#FFFFFF") {
+    Column(gap: 0, bg: "#FFFFFF") {
+      Image(src: "{cover}", width: 400, height: 140, rounded: 0)
+      Column(gap: 8, p: 14, bg: "#FFFFFF") {
+        Row(gap: 8, align: center) {
+          Text("{title}", size: 16, color: "#111827")
+          Spacer(width: 8)
+          Badge(label: "{category}")
+        }
+        Row(gap: 8, align: center) {
+          Icon(name: "calendar", color: "#6B7280")
+          Text("{time}", size: 12, color: "#6B7280")
+          Text("{price}", size: 12, color: "#4F46E5")
+        }
+        Row(gap: 8, align: center) {
+          Icon(name: "location", color: "#6B7280")
+          Text("{location}", size: 12, color: "#6B7280")
+        }
+        Row(gap: 8, align: center) {
+          Text("by {organizer} · {participants} joined", size: 12, color: "#9CA3AF")
+          Spacer(width: 8)
+          OpenActivity("Details")
+        }
       }
-      Text("{time} - {location}", size: 11, color: "#64748B")
-      Text("by {organizer} - {participants} joined", size: 11, color: "#94A3B8")
-      OpenActivity("Details")
     }
   }
 }
 
 component NotifRow(actor: string, kind: string, text: string, time: string) {
-  Card(p: 12, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
-    Column(gap: 4, bg: "#FFFFFF") {
+  Card(p: 12, rounded: 14, shadow: 1, bg: "#FFFFFF") {
+    Column(gap: 6, bg: "#FFFFFF") {
       Row(gap: 10, align: center) {
-        Container(width: 36, height: 36, rounded: 10, bg: "#EEF3FC") {
+        Container(width: 36, height: 36, rounded: 10, bg: "#E9EBFF") {
           Avatar(label: "{actor}")
         }
         Column(gap: 2, bg: "#FFFFFF") {
-          Text("{actor} {kind}", size: 12, color: "#0F172A")
-          Text("{time}", size: 10, color: "#94A3B8")
+          Text("{actor} {kind}", size: 13, color: "#111827")
+          Text("{time}", size: 11, color: "#9CA3AF")
         }
       }
-      Text("{text}", size: 11, color: "#64748B")
+      Text("{text}", size: 12, color: "#6B7280")
       OpenPost("View")
     }
   }
 }
 
 component StatTile(label: string, value: string) {
-  Card(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-    Column(gap: 2, bg: "#FFFFFF", align: center) {
-      Text("{value}", size: 16, color: "#0F172A")
-      Text("{label}", size: 10, color: "#94A3B8")
-    }
+  Column(gap: 2, align: center) {
+    Text("{value}", size: 17, color: "#111827")
+    Text("{label}", size: 11, color: "#9CA3AF")
   }
 }
 
@@ -292,34 +306,23 @@ app Orbit {
   // One computed total keeps reaction counters consistent across the feed and detail surfaces.
   computed reactions = likeCount + saveCount + followCount
 
-  Column(p: 0, gap: 0) {
-    Container(p: 18, shadow: 4, gradient: "#2A6CF6,#123C8C",
-              particles: "count=40,seed=23,radius=2,alpha=760,color=#C9DCFF") {
-      Column(gap: 4, bg: "#2A6CF6") {
-        Row(gap: 8, align: center) {
-          Text("Orbit", size: 24, color: "#FFFFFF")
-          Badge(label: "{feedTopic}")
-        }
-        Text("Circles, posts and local activities in one place", size: 11, color: "#C9DCFF")
-      }
-    }
-
+  Column(p: 0, gap: 0, bg: "#F5F6F8") {
     if (overlayOpen) {
-      Column(gap: 12, p: 14) {
+      Column(gap: 12, p: 16) {
         if (showSearch) {
           Column(gap: 12) {
             BackButton("Back", true, false, false, false, false)
-            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 14, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 10, bg: "#FFFFFF") {
                 Input(bind: searchQuery, placeholder: "Search posts")
-                Button("Search", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                Button("Search", p: 10, rounded: 12, bg: "#4F46E5") {
                   searchDone = true
                 }
               }
             }
             if (searchDone) {
-              Text("Results for {searchQuery}", size: 15, color: "#0F172A")
-              Scroll(height: 480, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+              Text("Results for {searchQuery}", size: 15, color: "#111827")
+              Scroll(height: 480, bg: "#F5F6F8", rounded: 16) {
                 Column(gap: 12) {
                   for (i in 4) {
                     PostCard("{searchResults[i]}", "{searchAuthors[i]}", "handle", "{searchTopics[i]}", "{searchTimes[i]}", "{searchBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "3")
@@ -327,7 +330,7 @@ app Orbit {
                 }
               }
             } else {
-              Text("Enter a keyword to search posts across every circle.", size: 12, color: "#64748B")
+              Text("Enter a keyword to search posts across every circle.", size: 13, color: "#6B7280")
             }
           }
         }
@@ -335,48 +338,43 @@ app Orbit {
         if (showPost) {
           Column(gap: 12) {
             BackButton("Back", true, false, false, false, false)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
-              Column(gap: 10, bg: "#FFFFFF") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
+              Column(gap: 12, bg: "#FFFFFF") {
                 Row(gap: 10, align: center) {
-                  Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                  Container(width: 44, height: 44, rounded: 12, bg: "#E9EBFF") {
                     Avatar(label: "{postAuthor}")
                   }
                   Column(gap: 2, bg: "#FFFFFF") {
-                    Text("{postAuthor}", size: 14, color: "#0F172A")
-                    Text("@{postHandle} - {postTime} - {postViews} views", size: 10, color: "#94A3B8")
+                    Text("{postAuthor}", size: 15, color: "#111827")
+                    Text("@{postHandle} · {postTime} · {postViews} views", size: 11, color: "#9CA3AF")
                   }
                   Spacer(width: 8)
                   Badge(label: "{postTopic}")
                 }
-                Text("{postTitle}", size: 17, color: "#0F172A")
-                Text("{postBody}", size: 13, color: "#334155")
-                Grid(columns: 3) {
-                  Image(src: "{postImgA}", width: 110, height: 110)
-                  Image(src: "{postImgB}", width: 110, height: 110)
-                  Image(src: "{postImgC}", width: 110, height: 110)
+                Text("{postTitle}", size: 22, color: "#111827")
+                Text("{postBody}", size: 15, color: "#374151")
+                Row(gap: 8) {
+                  Image(src: "{postImgA}", width: 104, height: 104, rounded: 12)
+                  Image(src: "{postImgB}", width: 104, height: 104, rounded: 12)
+                  Image(src: "{postImgC}", width: 104, height: 104, rounded: 12)
                 }
-                Divider()
+                Divider(border: "#ECEEF2")
                 Row(gap: 8, align: center) {
-                  if (liked) { LikeButton("Unlike", true, -1, "#FDECEC") } else { LikeButton("Like", false, 1, "#EEF3FC") }
-                  Text("{likeCount}", size: 11, color: "#64748B")
-                  Button("Share", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+                  if (liked) { LikeButton("Unlike", true, -1, "#FDE7E7") } else { LikeButton("Like", false, 1, "#F2F3F6") }
+                  Text("{likeCount}", size: 12, color: "#6B7280")
+                  Button("Share", p: 8, rounded: 10, bg: "#F2F3F6") {
                     shareCount += 1
                   }
-                  Text("{shareCount} shares", size: 11, color: "#64748B")
+                  Text("{shareCount} shares", size: 12, color: "#6B7280")
                   Spacer(width: 8)
-                  if (saved) { SaveButton("Saved", true, -1, "#FFF6E0") } else { SaveButton("Save", false, 1, "#EEF3FC") }
-                  Text("{saveCount}", size: 11, color: "#64748B")
-                  Spacer(width: 8)
-                  Button("Report", p: 8, rounded: 10, shadow: 1, bg: "#FEE2E2") {
-                    reported = true
-                    reportReason = "other"
-                  }
+                  if (saved) { SaveButton("Saved", true, -1, "#FEF3C7") } else { SaveButton("Save", false, 1, "#F2F3F6") }
+                  Text("{saveCount}", size: 12, color: "#6B7280")
                 }
                 if (reported) {
-                  Card(p: 12, rounded: 12, shadow: 1, bg: "#FEF2F2", border: "#FECACA") {
+                  Card(p: 12, rounded: 12, bg: "#FEF2F2") {
                     Column(gap: 6, bg: "#FEF2F2") {
                       Text("Reported as {reportReason}", size: 12, color: "#B91C1C")
-                      Button("Clear", p: 8, rounded: 8, shadow: 1, bg: "#FFFFFF") {
+                      Button("Clear", p: 8, rounded: 8, bg: "#FFFFFF") {
                         reported = false
                       }
                     }
@@ -384,21 +382,21 @@ app Orbit {
                 }
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 10, bg: "#FFFFFF") {
-                Text("Comments - {commentCount}", size: 14, color: "#0F172A")
+                Text("Comments · {commentCount}", size: 16, color: "#111827")
                 if (replyActive) {
                   Row(gap: 8, align: center) {
-                    Text("Replying to {replyName}", size: 11, color: "#2A6CF6")
+                    Text("Replying to {replyName}", size: 12, color: "#4F46E5")
                     Spacer(width: 8)
-                    Button("Cancel", p: 6, rounded: 8, shadow: 1, bg: "#EEF3FC") {
+                    Button("Cancel", p: 6, rounded: 8, bg: "#EEF0FF") {
                       replyActive = false
                       replyName = ""
                     }
                   }
                 }
                 Input(bind: commentDraft, placeholder: "Write a comment")
-                Button("Send", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                Button("Send", p: 10, rounded: 12, bg: "#4F46E5") {
                   commentCount += 1
                   commentDraft = ""
                   latestNotif = "New comment on your post"
@@ -415,33 +413,33 @@ app Orbit {
         if (showCircle) {
           Column(gap: 12) {
             BackButton("Back", false, true, false, false, false)
-            Card(p: 0, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 0, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 0, bg: "#FFFFFF") {
-                Image(src: "{circleCover}", width: 360, height: 150)
+                Image(src: "{circleCover}", width: 400, height: 150, rounded: 0)
                 Column(gap: 8, p: 16, bg: "#FFFFFF") {
-                  Text("{circleName}", size: 18, color: "#0F172A")
-                  Text("{circleDesc}", size: 12, color: "#64748B")
+                  Text("{circleName}", size: 20, color: "#111827")
+                  Text("{circleDesc}", size: 13, color: "#6B7280")
                   Row(gap: 8, align: center) {
                     Badge(label: "{circleMembers} members")
-                    Text("Created {circleCreated}", size: 11, color: "#94A3B8")
+                    Text("Created {circleCreated}", size: 12, color: "#9CA3AF")
                   }
-                  if (joined) { JoinCircleButton("Joined", true, -1, "#EEF3FC") } else { JoinCircleButton("Join circle", false, 1, "#2A6CF6") }
+                  if (joined) { JoinCircleButton("Joined", true, -1, "#EEF0FF") } else { JoinCircleButton("Join circle", false, 1, "#4F46E5") }
                 }
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Text("Members", size: 14, color: "#0F172A")
+            Card(p: 16, rounded: 16, shadow: 1, bg: "#FFFFFF") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Members", size: 16, color: "#111827")
                 Row(gap: 8, align: center) {
                   for (i in 6) {
-                    Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                    Container(width: 44, height: 44, rounded: 12, bg: "#E9EBFF") {
                       Avatar(label: "{circleMemberNames[i]}")
                     }
                   }
                 }
               }
             }
-            Text("Posts in {circleName}", size: 14, color: "#0F172A")
+            Text("Posts in {circleName}", size: 16, color: "#111827")
             for (i in 3) {
               PostCard("{circlePostTitles[i]}", "{circlePostAuthors[i]}", "handle", "Travel", "{circlePostTimes[i]}", "{circlePostBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "{circlePostComments[i]}")
             }
@@ -451,61 +449,62 @@ app Orbit {
         if (showActivity) {
           Column(gap: 12) {
             BackButton("Back", false, false, true, false, false)
-            Card(p: 0, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 0, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 0, bg: "#FFFFFF") {
-                Image(src: "{activityCover}", width: 360, height: 150)
-                Column(gap: 8, p: 16, bg: "#FFFFFF") {
+                Image(src: "{activityCover}", width: 400, height: 150, rounded: 0)
+                Column(gap: 10, p: 16, bg: "#FFFFFF") {
                   Row(gap: 8, align: center) {
-                    Text("{activityTitle}", size: 18, color: "#0F172A")
+                    Text("{activityTitle}", size: 20, color: "#111827")
+                    Spacer(width: 8)
                     Badge(label: "{activityDetailStatus}")
                   }
                   Row(gap: 8, align: center) {
-                    Text("{activityPrice}", size: 14, color: "#2A6CF6")
-                    Text("{activityDetailCategory}", size: 12, color: "#64748B")
+                    Text("{activityPrice}", size: 15, color: "#4F46E5")
+                    Text("{activityDetailCategory}", size: 13, color: "#6B7280")
                   }
                   Row(gap: 8, align: center) {
-                    Icon(name: "calendar", color: "#64748B")
-                    Text("{activityStart} - {activityEnd}", size: 11, color: "#64748B")
+                    Icon(name: "calendar", color: "#6B7280")
+                    Text("{activityStart} - {activityEnd}", size: 13, color: "#6B7280")
                   }
                   Row(gap: 8, align: center) {
-                    Icon(name: "location", color: "#64748B")
-                    Text("{activityLocation}", size: 11, color: "#64748B")
+                    Icon(name: "location", color: "#6B7280")
+                    Text("{activityLocation}", size: 13, color: "#6B7280")
                   }
                   Row(gap: 8, align: center) {
-                    Icon(name: "user", color: "#64748B")
-                    Text("{participantCount} participants - by {activityOrganizer}", size: 11, color: "#64748B")
+                    Icon(name: "user", color: "#6B7280")
+                    Text("{participantCount} participants · by {activityOrganizer}", size: 13, color: "#6B7280")
                   }
-                  Text("{activityBody}", size: 13, color: "#334155")
-                  Divider()
+                  Text("{activityBody}", size: 14, color: "#374151")
+                  Divider(border: "#ECEEF2")
                   Row(gap: 8, align: center) {
-                    if (isFav) { FavButton("Favorited", true, "#FFF6E0") } else { FavButton("Favorite", false, "#EEF3FC") }
+                    if (isFav) { FavButton("Favorited", true, "#FEF3C7") } else { FavButton("Favorite", false, "#F2F3F6") }
                     Spacer(width: 8)
-                    if (isParticipant) { JoinActivityButton("Leave", true, -1, "#EEF3FC") } else { JoinActivityButton("Join", false, 1, "#2A6CF6") }
+                    if (isParticipant) { JoinActivityButton("Leave", true, -1, "#F2F3F6") } else { JoinActivityButton("Join", false, 1, "#4F46E5") }
                     Spacer(width: 8)
-                    Button("Share", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+                    Button("Share", p: 8, rounded: 10, bg: "#F2F3F6") {
                       shareCount += 1
                     }
                   }
                 }
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Text("Participants", size: 14, color: "#0F172A")
+            Card(p: 16, rounded: 16, shadow: 1, bg: "#FFFFFF") {
+              Column(gap: 12, bg: "#FFFFFF") {
+                Text("Participants", size: 16, color: "#111827")
                 Row(gap: 8, align: center) {
                   for (i in 6) {
-                    Container(width: 44, height: 44, rounded: 12, bg: "#EEF3FC") {
+                    Container(width: 44, height: 44, rounded: 12, bg: "#E9EBFF") {
                       Avatar(label: "{activityParticipantNames[i]}")
                     }
                   }
                 }
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 1, bg: "#FFFFFF") {
               Column(gap: 10, bg: "#FFFFFF") {
-                Text("Comments - {activityCommentCount}", size: 14, color: "#0F172A")
+                Text("Comments · {activityCommentCount}", size: 16, color: "#111827")
                 Input(bind: activityCommentDraft, placeholder: "Write a comment")
-                Button("Send", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
+                Button("Send", p: 10, rounded: 12, bg: "#4F46E5") {
                   activityCommentCount += 1
                   activityCommentDraft = ""
                 }
@@ -520,30 +519,30 @@ app Orbit {
         if (showCompose) {
           Column(gap: 12) {
             BackButton("Back", true, false, false, false, false)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 12, bg: "#FFFFFF") {
-                Text("New post", size: 18, color: "#0F172A")
+                Text("New post", size: 20, color: "#111827")
                 Input(bind: composeTitle, placeholder: "Title")
                 Input(bind: composeBody, placeholder: "Share a note with a circle")
-                Text("Topic", size: 12, color: "#64748B")
-                Row(gap: 8, align: center) {
+                Text("Topic", size: 13, color: "#6B7280")
+                Row(gap: 10, align: center) {
                   Radio(bind: composeTopic, value: "Travel")
-                  Text("Travel", size: 11, color: "#64748B")
+                  Text("Travel", size: 12, color: "#4B5563")
                   Radio(bind: composeTopic, value: "Food")
-                  Text("Food", size: 11, color: "#64748B")
+                  Text("Food", size: 12, color: "#4B5563")
                   Radio(bind: composeTopic, value: "Tech")
-                  Text("Tech", size: 11, color: "#64748B")
+                  Text("Tech", size: 12, color: "#4B5563")
                 }
-                Row(gap: 8, align: center) {
+                Row(gap: 10, align: center) {
                   Radio(bind: composeTopic, value: "Outdoor")
-                  Text("Outdoor", size: 11, color: "#64748B")
+                  Text("Outdoor", size: 12, color: "#4B5563")
                   Radio(bind: composeTopic, value: "Reads")
-                  Text("Reads", size: 11, color: "#64748B")
+                  Text("Reads", size: 12, color: "#4B5563")
                   Radio(bind: composeTopic, value: "Design")
-                  Text("Design", size: 11, color: "#64748B")
+                  Text("Design", size: 12, color: "#4B5563")
                 }
                 Image(src: "{composeAttachments}", width: 120, height: 120, rounded: 12)
-                Button("Publish", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                Button("Publish", p: 12, rounded: 12, shadow: 2, bg: "#4F46E5") {
                   postCount += 1
                   refreshCount += 1
                   composerDone = true
@@ -559,13 +558,13 @@ app Orbit {
         if (showCreateCircle) {
           Column(gap: 12) {
             BackButton("Back", false, true, false, false, false)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 12, bg: "#FFFFFF") {
-                Text("Create a circle", size: 18, color: "#0F172A")
+                Text("Create a circle", size: 20, color: "#111827")
                 Image(src: "{circleFormCover}", width: 240, height: 120, rounded: 12)
                 Input(bind: circleFormName, placeholder: "Circle name")
                 Input(bind: circleFormDesc, placeholder: "Describe the circle")
-                Button("Submit for review", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                Button("Submit for review", p: 12, rounded: 12, shadow: 2, bg: "#4F46E5") {
                   circleSubmitted = true
                 }
                 if (circleSubmitted) {
@@ -579,26 +578,26 @@ app Orbit {
         if (showActivityEdit) {
           Column(gap: 12) {
             BackButton("Back", false, false, true, false, false)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 12, bg: "#FFFFFF") {
-                Text("Edit activity", size: 18, color: "#0F172A")
+                Text("Edit activity", size: 20, color: "#111827")
                 Input(bind: activityEditTitle, placeholder: "Activity title")
-                Text("Category", size: 12, color: "#64748B")
-                Row(gap: 8, align: center) {
+                Text("Category", size: 13, color: "#6B7280")
+                Row(gap: 10, align: center) {
                   Radio(bind: activityEditCategory, value: "Outdoor")
-                  Text("Outdoor", size: 11, color: "#64748B")
+                  Text("Outdoor", size: 12, color: "#4B5563")
                   Radio(bind: activityEditCategory, value: "Food")
-                  Text("Food", size: 11, color: "#64748B")
+                  Text("Food", size: 12, color: "#4B5563")
                   Radio(bind: activityEditCategory, value: "Art")
-                  Text("Art", size: 11, color: "#64748B")
+                  Text("Art", size: 12, color: "#4B5563")
                 }
-                Row(gap: 8, align: center) {
+                Row(gap: 10, align: center) {
                   Radio(bind: activityEditCategory, value: "Reads")
-                  Text("Reads", size: 11, color: "#64748B")
+                  Text("Reads", size: 12, color: "#4B5563")
                   Radio(bind: activityEditCategory, value: "Tech")
-                  Text("Tech", size: 11, color: "#64748B")
+                  Text("Tech", size: 12, color: "#4B5563")
                   Radio(bind: activityEditCategory, value: "Music")
-                  Text("Music", size: 11, color: "#64748B")
+                  Text("Music", size: 12, color: "#4B5563")
                 }
                 Input(bind: activityEditStart, placeholder: "Start")
                 Input(bind: activityEditEnd, placeholder: "End")
@@ -607,7 +606,7 @@ app Orbit {
                 Input(bind: activityEditPrice, placeholder: "Price")
                 Input(bind: activityEditBody, placeholder: "Details")
                 Input(bind: activityEditContact, placeholder: "Contact")
-                Button("Save changes", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                Button("Save changes", p: 12, rounded: 12, shadow: 2, bg: "#4F46E5") {
                   activitySaved = true
                 }
                 if (activitySaved) {
@@ -621,12 +620,12 @@ app Orbit {
         if (showEditProfile) {
           Column(gap: 12) {
             BackButton("Back", false, false, false, false, true)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 12, bg: "#FFFFFF") {
-                Text("Edit profile", size: 18, color: "#0F172A")
+                Text("Edit profile", size: 20, color: "#111827")
                 Input(bind: editName, placeholder: "Display name")
                 Input(bind: editBio, placeholder: "Bio")
-                Button("Save profile", p: 12, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+                Button("Save profile", p: 12, rounded: 12, shadow: 2, bg: "#4F46E5") {
                   displayName = editName
                   displayBio = editBio
                 }
@@ -638,33 +637,33 @@ app Orbit {
         if (showSettings) {
           Column(gap: 12) {
             BackButton("Back", false, false, false, false, true)
-            Card(p: 16, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Card(p: 16, rounded: 16, shadow: 2, bg: "#FFFFFF") {
               Column(gap: 12, bg: "#FFFFFF") {
-                Text("Settings", size: 18, color: "#0F172A")
-                Row(gap: 8, align: center) {
+                Text("Settings", size: 20, color: "#111827")
+                Row(gap: 10, align: center) {
                   Switch(bind: dark)
-                  Text("Dark appearance", size: 12, color: "#64748B")
+                  Text("Dark appearance", size: 13, color: "#4B5563")
                 }
-                Row(gap: 8, align: center) {
+                Row(gap: 10, align: center) {
                   Switch(bind: reduceMotion)
-                  Text("Reduce motion", size: 12, color: "#64748B")
+                  Text("Reduce motion", size: 13, color: "#4B5563")
                 }
-                Row(gap: 8, align: center) {
+                Row(gap: 10, align: center) {
                   Switch(bind: compact)
-                  Text("Compact density", size: 12, color: "#64748B")
+                  Text("Compact density", size: 13, color: "#4B5563")
                 }
-                Row(gap: 8, align: center) {
+                Row(gap: 10, align: center) {
                   Switch(bind: notifyOn)
-                  Text("Interaction notifications", size: 12, color: "#64748B")
+                  Text("Interaction notifications", size: 13, color: "#4B5563")
                 }
                 Slider(bind: textScale, min: 50, max: 150)
-                Text("Text scale {textScale}", size: 12, color: "#64748B")
+                Text("Text scale {textScale}", size: 12, color: "#6B7280")
               }
             }
-            Card(p: 16, rounded: 16, shadow: 2, bg: "#EEF3FC") {
-              Column(gap: 6, bg: "#EEF3FC") {
-                Text("About Orbit", size: 13, color: "#0F172A")
-                Text("{aboutText}", size: 12, color: "#475569")
+            Card(p: 16, rounded: 16, bg: "#EEF0FF") {
+              Column(gap: 6, bg: "#EEF0FF") {
+                Text("About Orbit", size: 14, color: "#111827")
+                Text("{aboutText}", size: 12, color: "#4B5563")
               }
             }
           }
@@ -672,31 +671,37 @@ app Orbit {
       }
     }
     if (tabArea) {
-      Column(gap: 12, p: 14) {
+      // Masthead: brand mark, a quiet subtitle, search and compose.
+      Column(gap: 14, p: 16) {
+        Row(gap: 10, align: center) {
+          Column(gap: 2, bg: "#F5F6F8") {
+            Text("Orbit", size: 24, color: "#111827")
+            Text("Circles, posts and local activities", size: 12, color: "#9CA3AF")
+          }
+          Spacer(width: 8)
+          OpenSearch("Search")
+        }
+
         if (tabFeed) {
           Column(gap: 12) {
-            Row(gap: 8, align: center) {
-              OpenSearch("Search")
+            Tabs(labels: feedTopicList, bind: feedTopic)
+            Row(gap: 10, align: center) {
+              Radio(bind: feedSort, value: "latest")
+              Text("Latest", size: 12, color: "#4B5563")
+              Radio(bind: feedSort, value: "hot")
+              Text("Hot", size: 12, color: "#4B5563")
               Spacer(width: 8)
-              Button("New post", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6", animate: spring) {
+              Button("New post", p: 10, rounded: 12, shadow: 1, bg: "#4F46E5") {
                 overlayOpen = true
-    tabArea = false
+                tabArea = false
                 showCompose = true
               }
             }
-            Tabs(labels: feedTopicList, bind: feedTopic)
             Row(gap: 8, align: center) {
-              Radio(bind: feedSort, value: "latest")
-              Text("Latest", size: 11, color: "#64748B")
-              Radio(bind: feedSort, value: "hot")
-              Text("Hot", size: 11, color: "#64748B")
-              Text("{feedSort} - page {feedPage}", size: 11, color: "#94A3B8")
-            }
-            Row(gap: 8, align: center) {
-              Icon(name: "refresh", color: "#2A6CF6")
-              Text("{feedStatus}", size: 11, color: "#64748B")
+              Icon(name: "refresh", color: "#4F46E5")
+              Text("{feedStatus}", size: 12, color: "#9CA3AF")
               Spacer(width: 8)
-              Button("Refresh", p: 10, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") async {
+              Button("Refresh", p: 8, rounded: 10, bg: "#E9EBFF") async {
                 refreshing = true
                 await delay(50)
                 await fetch("/orbit/feed", feedStatus)
@@ -707,7 +712,7 @@ app Orbit {
             if (refreshing) {
               Spinner()
             }
-            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+            Scroll(height: 1120, bg: "#F5F6F8", rounded: 16) {
               Column(gap: 12) {
                 for (i in 6) {
                   PostCard("{feedTitles[i]}", "{feedAuthors[i]}", "{feedHandles[i]}", "{feedTopics[i]}", "{feedTimes[i]}", "{feedBodies[i]}", "{feedImgA[i]}", "{feedImgB[i]}", "{feedImgC[i]}", "{feedComments[i]}")
@@ -717,12 +722,11 @@ app Orbit {
                     PostCard("{feedMoreTitles[i]}", "{feedMoreAuthors[i]}", "{feedMoreHandles[i]}", "{feedMoreTopics[i]}", "{feedMoreTimes[i]}", "{feedMoreBodies[i]}", "{feedMoreImgA[i]}", "{feedMoreImgB[i]}", "{feedMoreImgC[i]}", "2")
                   }
                 }
-                Button("Load more", p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+                Button("Load more", p: 12, rounded: 12, bg: "#FFFFFF") {
                   feedMore = true
                   feedPage += 1
                   refreshCount += 1
                 }
-                Text("{refreshCount} refreshes - {feedStatus}", size: 11, color: "#94A3B8")
               }
             }
           }
@@ -730,17 +734,12 @@ app Orbit {
 
         if (tabCircles) {
           Column(gap: 12) {
-            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Input(bind: circleCategory, placeholder: "Search circles")
-                Row(gap: 8, align: center) {
-                  OpenCreateCircle("New circle")
-                  Text("{circleCategory} filter", size: 11, color: "#94A3B8")
-                }
-              }
+            Row(gap: 8, align: center) {
+              Input(bind: circleCategory, placeholder: "Search circles")
+              OpenCreateCircle("New circle")
             }
             Tabs(labels: circleCategoryList, bind: circleCategory)
-            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+            Scroll(height: 1180, bg: "#F5F6F8", rounded: 16) {
               Column(gap: 12) {
                 Grid(columns: 2) {
                   for (i in 6) {
@@ -757,35 +756,29 @@ app Orbit {
 
         if (tabActivity) {
           Column(gap: 12) {
-            Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
-              Column(gap: 10, bg: "#FFFFFF") {
-                Input(bind: activityQuery, placeholder: "Search activities")
-                Row(gap: 8, align: center) {
-                  Button("Create activity", p: 10, rounded: 12, shadow: 2, bg: "#2A6CF6") {
-                    overlayOpen = true
-    tabArea = false
-                    showActivityEdit = true
-                  }
-                  Text("{activityStatus} - {activitySort}", size: 11, color: "#94A3B8")
-                }
+            Row(gap: 8, align: center) {
+              Input(bind: activityQuery, placeholder: "Search activities")
+              Button("Create", p: 10, rounded: 12, shadow: 1, bg: "#4F46E5") {
+                overlayOpen = true
+                tabArea = false
+                showActivityEdit = true
               }
             }
             Tabs(labels: activityCategoryList, bind: activityCategory)
-            Row(gap: 8, align: center) {
+            Row(gap: 10, align: center) {
               Radio(bind: activityStatus, value: "all")
-              Text("All", size: 11, color: "#64748B")
+              Text("All", size: 12, color: "#4B5563")
               Radio(bind: activityStatus, value: "open")
-              Text("Open", size: 11, color: "#64748B")
+              Text("Open", size: 12, color: "#4B5563")
               Radio(bind: activityStatus, value: "full")
-              Text("Full", size: 11, color: "#64748B")
-            }
-            Row(gap: 8, align: center) {
+              Text("Full", size: 12, color: "#4B5563")
+              Spacer(width: 8)
               Radio(bind: activitySort, value: "time")
-              Text("Recent", size: 11, color: "#64748B")
+              Text("Recent", size: 12, color: "#4B5563")
               Radio(bind: activitySort, value: "hot")
-              Text("Popular", size: 11, color: "#64748B")
+              Text("Popular", size: 12, color: "#4B5563")
             }
-            Scroll(height: 400, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+            Scroll(height: 1050, bg: "#F5F6F8", rounded: 16) {
               Column(gap: 12) {
                 for (i in 6) {
                   ActivityCard("{activityListTitles[i]}", "{activityListCategories[i]}", "{activityListTimes[i]}", "{activityListLocations[i]}", "{activityListOrganizers[i]}", "{activityListPrices[i]}", "{activityListParticipants[i]}", "{activityListCovers[i]}")
@@ -798,22 +791,22 @@ app Orbit {
         if (tabNotif) {
           Column(gap: 12) {
             Row(gap: 8, align: center) {
-              Text("Notifications", size: 18, color: "#0F172A")
+              Text("Notifications", size: 20, color: "#111827")
               Spacer(width: 8)
               Badge(label: "{unreadCount} unread")
-              Button("Mark read", p: 8, rounded: 10, shadow: 1, bg: "#EEF3FC") {
+              Button("Mark read", p: 8, rounded: 10, bg: "#EEF0FF") {
                 unreadCount = 0
                 notifCount = 0
                 notifCleared = true
               }
             }
-            Scroll(height: 470, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
-              Column(gap: 12) {
+            Scroll(height: 1180, bg: "#F5F6F8", rounded: 16) {
+              Column(gap: 10) {
                 for (i in 5) {
                   NotifRow("{notifActors[i]}", "{notifKinds[i]}", "{notifTexts[i]}", "{notifTimes[i]}")
                 }
                 if (notifCleared) {
-                  Text("All caught up.", size: 12, color: "#94A3B8")
+                  Text("All caught up.", size: 12, color: "#9CA3AF")
                 }
               }
             }
@@ -822,65 +815,65 @@ app Orbit {
 
         if (tabProfile) {
           Column(gap: 12) {
-            Card(p: 0, rounded: 16, shadow: 3, gradient: "#2A6CF6,#123C8C") {
-              Column(gap: 10, p: 16, bg: "#2A6CF6") {
+            Card(p: 0, rounded: 16, shadow: 2, bg: "#FFFFFF") {
+              Column(gap: 12, p: 16, bg: "#FFFFFF") {
                 Row(gap: 12, align: center) {
-                  Container(width: 56, height: 56, rounded: 14, bg: "#FFFFFF") {
+                  Container(width: 56, height: 56, rounded: 16, bg: "#E9EBFF") {
                     Avatar(label: "{displayName}")
                   }
-                  Column(gap: 2, bg: "#2A6CF6") {
-                    Text("{displayName}", size: 18, color: "#FFFFFF")
-                    Text("@{displayHandle}", size: 11, color: "#C9DCFF")
+                  Column(gap: 2, bg: "#FFFFFF") {
+                    Text("{displayName}", size: 19, color: "#111827")
+                    Text("@{displayHandle}", size: 12, color: "#9CA3AF")
                   }
                   Spacer(width: 8)
                   OpenEditProfile("Edit")
                 }
-                Text("{displayBio}", size: 12, color: "#C9DCFF")
+                Text("{displayBio}", size: 13, color: "#4B5563")
                 Row(gap: 8, align: center) {
                   StatTile("Posts", "{profilePosts}")
                   StatTile("Followers", "{profileFollowers}")
                   StatTile("Following", "{profileFollowing}")
                   StatTile("Likes", "{profileLikes}")
                 }
-              }
-            }
-            Row(gap: 8, align: center) {
-              if (following) { FollowButton("Following", true, -1, "#EEF3FC") } else { FollowButton("Follow", false, 1, "#2A6CF6") }
-              Text("{followCount} followers", size: 11, color: "#64748B")
-              Spacer(width: 8)
-              OpenSettings("Settings")
-            }
-            Text("My posts - {postCount}", size: 14, color: "#0F172A")
-            Scroll(height: 180, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
-              Column(gap: 12) {
-                for (i in 3) {
-                  PostCard("{myPostTitles[i]}", "{displayName}", "{displayHandle}", "{myPostTopics[i]}", "{myPostTimes[i]}", "{myPostTitles[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "{myPostComments[i]}")
+                Row(gap: 8, align: center) {
+                  if (following) { FollowButton("Following", true, -1, "#EEF0FF") } else { FollowButton("Follow", false, 1, "#4F46E5") }
+                  Text("{followCount} followers", size: 12, color: "#6B7280")
+                  Spacer(width: 8)
+                  OpenSettings("Settings")
                 }
               }
             }
-            Text("Favorites", size: 14, color: "#0F172A")
-            Scroll(height: 180, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+            Text("My posts · {postCount}", size: 16, color: "#111827")
+            Scroll(height: 420, bg: "#F5F6F8", rounded: 16) {
               Column(gap: 12) {
                 for (i in 3) {
-                  PostCard("{favTitles[i]}", "{favAuthors[i]}", "handle", "{favTopics[i]}", "{favTimes[i]}", "{favTitles[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "2")
+                  PostCard("{myPostTitles[i]}", "{displayName}", "{displayHandle}", "{myPostTopics[i]}", "{myPostTimes[i]}", "{myPostBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "{myPostComments[i]}")
                 }
               }
             }
-            Text("Following", size: 14, color: "#0F172A")
-            Scroll(height: 200, bg: "#F4F7FB", border: "#E2E8F0", rounded: 16) {
+            Text("Favorites", size: 16, color: "#111827")
+            Scroll(height: 420, bg: "#F5F6F8", rounded: 16) {
+              Column(gap: 12) {
+                for (i in 3) {
+                  PostCard("{favTitles[i]}", "{favAuthors[i]}", "handle", "{favTopics[i]}", "{favTimes[i]}", "{favBodies[i]}", "assets/photo1.png", "assets/photo2.png", "assets/photo3.png", "2")
+                }
+              }
+            }
+            Text("Following", size: 16, color: "#111827")
+            Scroll(height: 360, bg: "#F5F6F8", rounded: 16) {
               Column(gap: 10) {
                 for (i in 5) {
-                  Card(p: 12, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#E2E8F0") {
+                  Card(p: 12, rounded: 14, shadow: 1, bg: "#FFFFFF") {
                     Row(gap: 10, align: center) {
-                      Container(width: 40, height: 40, rounded: 12, bg: "#EEF3FC") {
+                      Container(width: 40, height: 40, rounded: 12, bg: "#E9EBFF") {
                         Avatar(label: "{followNames[i]}")
                       }
                       Column(gap: 2, bg: "#FFFFFF") {
-                        Text("{followNames[i]}", size: 13, color: "#0F172A")
-                        Text("{followBios[i]}", size: 11, color: "#64748B")
+                        Text("{followNames[i]}", size: 14, color: "#111827")
+                        Text("{followBios[i]}", size: 12, color: "#6B7280")
                       }
                       Spacer(width: 8)
-                      if (following) { FollowButton("Following", true, -1, "#EEF3FC") } else { FollowButton("Follow", false, 1, "#2A6CF6") }
+                      if (following) { FollowButton("Following", true, -1, "#EEF0FF") } else { FollowButton("Follow", false, 1, "#4F46E5") }
                     }
                   }
                 }

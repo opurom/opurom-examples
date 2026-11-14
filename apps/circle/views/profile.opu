@@ -11,6 +11,7 @@ state profileLikes = "2.4k"
 state myPostTitles = ["Sunrise trail loop above the harbour", "A reading list for slow autumn evenings", "Harbour market breakfast run"]
 state myPostTopics = ["Travel", "Reads", "Food"]
 state myPostTimes = ["12 min ago", "5 hours ago", "10 hours ago"]
+state myPostBodies = ["The fog lifted just before the ridge, so the whole harbour caught the first light.", "Six books that reward a second pass, with short notes on the one to start with.", "A warm pastry and a flat white, then a slow walk home."]
 state myPostLikes = ["26", "11", "7"]
 state myPostComments = ["4", "2", "1"]
 
@@ -18,6 +19,7 @@ state favTitles = ["Sourdough mornings, finally clicked", "A quiet terminal pale
 state favAuthors = ["Iris Bell", "Theo Marsh", "Mira Sol"]
 state favTopics = ["Food", "Tech", "Outdoor"]
 state favTimes = ["40 min ago", "1 hour ago", "2 hours ago"]
+state favBodies = ["A cooler starter and a longer bulk ferment are the two changes that mattered.", "Seven carefully chosen tokens keep contrast high and eye strain low.", "Paddling the shallow channels at low tide is the quietest way to see the shore."]
 
 state followNames = ["Nora Whitfield", "Iris Bell", "Theo Marsh", "Mira Sol", "Caleb Rowe"]
 state followHandles = ["norawhit", "irisbell", "theomarsh", "mirasol", "calebrowe"]

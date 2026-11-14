@@ -1,7 +1,10 @@
-// Navigation flags live in one module so a single conditional router can select one screen.
-
-state onRoot = true
-state tabLabel = "Chats"
+// One bool per destination and per detail screen so a single tree can route
+// every surface without a runtime list.
+state rootNow = true
+state showChats = true
+state showContacts = false
+state showDiscover = false
+state showMe = false
 state tabChats = true
 state tabContacts = false
 state tabDiscover = false
@@ -16,14 +19,12 @@ state screenCall = false
 state screenNotifs = false
 state screenSettings = false
 
-state openConversation = 0
-state openContact = 0
-state openGroup = 0
 state chatPeer = "Alice"
 state chatAvatar = "AL"
 state chatStatus = "online"
 state chatTyping = false
 
+// Composer, search and thread interaction.
 state chatSearch = ""
 state contactSearch = ""
 state newChatSearch = ""
@@ -32,34 +33,29 @@ state contactHasQuery = false
 state newChatHasQuery = false
 state draft = ""
 state emojiOpen = false
-state emojiPick = "smile"
-
+state msgActions = false
+state actionBody = ""
+state copied = false
+state msgDeleted = false
+state msgRecalled = false
+state expandLong = false
 state sendState = "idle"
 state sentCount = 0
 state receivedCount = 0
-state expandLong = false
-state msgActions = false
-state actionBody = ""
-state msgDeleted = false
-state msgRecalled = false
-state chatNotice = ""
-state copied = false
 
+// Contact and group management.
 state contactBlocked = false
 state groupNameEdit = "Design Guild"
 state groupNoticeEdit = "Mockups and review notes."
-state memberGone0 = false
-state memberGone1 = false
-state memberGone2 = false
 state memberAdded = false
-state addedMember = "Leo"
+state memberGone = false
 state newContactName = ""
 state newContactHandle = ""
 state contactAdded = false
 state groupCreated = false
 state profileSaved = false
 state settingsSaved = false
-state darkPreview = false
+state cacheCleared = false
 state pickAlice = true
 state pickMarcus = false
 state pickPriya = true
@@ -67,10 +63,7 @@ state pickDana = false
 state pickOwen = false
 state pickSara = false
 
-state notifRead0 = false
-state notifRead1 = false
-state notifRead2 = false
-state notifRead3 = false
+// Call session.
 state callActive = false
 state callSeconds = 0
 state callMuted = false
@@ -78,13 +71,14 @@ state callSpeaker = false
 state callPeerName = "Alice"
 state callPeerAvatar = "AL"
 
+// Account profile and preferences.
 state profileName = "Relay User"
 state profileHandle = "@relay_user"
 state profileNote = "Keeps conversations close."
 state profileAvatar = "RU"
-state avatarChoice = 0
+state darkPreview = false
 state themeMode = "Light"
-state themeAccent = "#2F5BE7"
+state themeAccent = "#1F6F5C"
 state themeRadius = 18
 state themeSpacing = 12
 state themeFont = 1
@@ -94,8 +88,9 @@ state presence = true
 state groupInvites = false
 state pushNotifications = true
 state cacheBytes = 248
-state cacheCleared = false
 
+// Unread counters shared by the tab badge, list rows and notification screens.
 state unreadTotal = 6
 state notifAllRead = false
 state chatAllRead = false
+state chatNotice = ""
