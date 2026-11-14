@@ -1,0 +1,16 @@
+{
+  "name": "opurom-icons",
+  "version": "0.1.0",
+  "kind": "icons",
+  "entry": "icons/icons.json",
+  "license": "MIT",
+  "attribution": "Phosphor Icons (c) 2023 Phosphor Icons (MIT), phosphoricons.com; full text in LICENSE",
+  "iconSource": { "package": "@phosphor-icons/core", "version": "2.1.1", "redistributed": true },
+  "viewBox": "0 0 256 256",
+  "weights": ["regular"],
+  "files": [
+    "LICENSE",
+    "icons/icons.json",
+    "opurom-pkg.json"
+  ]
+}

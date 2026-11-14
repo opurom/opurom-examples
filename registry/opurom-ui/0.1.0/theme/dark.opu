@@ -1,0 +1,11 @@
+// OPUROM default UI system: dark theme package.
+// One theme declaration per program; import this module once.
+theme {
+  mode: dark,
+  accent: "#0A84FF",
+  radius: 12,
+  fontScale: 1.0,
+  surface: "#1E1E1E",
+  onSurface: "#E5E7EB",
+  stage: "#121212",
+}

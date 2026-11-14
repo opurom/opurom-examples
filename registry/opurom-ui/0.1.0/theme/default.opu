@@ -1,0 +1,11 @@
+// OPUROM default UI system: light theme package.
+// One theme declaration per program; import this module once.
+theme {
+  mode: light,
+  accent: "#007AFF",
+  radius: 12,
+  fontScale: 1.0,
+  surface: "#FFFFFF",
+  onSurface: "#111827",
+  stage: "#F9FAFB",
+}
