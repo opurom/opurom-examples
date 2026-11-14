@@ -1,0 +1,367 @@
+// Design System: a fixed-viewport component gallery for the default OPUROM UI.
+
+component SolidButtonCell(label: string, action: string, fill: string, edge: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 112, height: 27, p: 0, rounded: 8, shadow: 1, bg: "{fill}", border: "{edge}") {
+        Column(align: center, bg: "{fill}", border: "{fill}") {
+          Button(label: "{action}", p: 0, rounded: 8, bg: "{fill}", border: "{edge}", fontScale: 0.6)
+        }
+      }
+    }
+  }
+}
+
+// shortcut: Button labels are fixed to white, upgrade flat variants when variant ships.
+component FlatButtonCell(label: string, action: string, fill: string, ink: string, edge: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 112, height: 27, p: 0, rounded: 8, bg: "{fill}", border: "{edge}") {
+        Column(align: center, bg: "{fill}", border: "{fill}") {
+          Text("{action}", size: 10, color: "{ink}")
+        }
+      }
+    }
+  }
+}
+
+component InputCell(value: string, note: string, edge: string, noteInk: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 0, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Container(width: 112, height: 27, p: 0, rounded: 8, bg: "#FFFFFF", border: "{edge}") {
+        Column(align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+          Input(placeholder: "{value}", p: 0, rounded: 8, bg: "#FFFFFF", border: "#FFFFFF", fontScale: 0.6)
+        }
+      }
+      Text("{note}", size: 10, color: "{noteInk}")
+    }
+  }
+}
+
+component SwitchOn(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Switch on", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Switch(bind: updates, p: 0, rounded: 8, bg: "#FFFFFF", border: "#0A71FC")
+        }
+      }
+      Text("{note}", size: 10, color: "#0A71FC")
+    }
+  }
+}
+
+component SwitchOff(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Switch off", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Switch(bind: alerts, p: 0, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9")
+        }
+      }
+      Text("{note}", size: 10, color: "#132C5A")
+    }
+  }
+}
+
+component CheckOn(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Checkbox", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Checkbox(bind: checks, p: 0, rounded: 4, bg: "#FFFFFF", border: "#0A71FC")
+        }
+      }
+      Text("{note}", size: 10, color: "#0A71FC")
+    }
+  }
+}
+
+component CheckOff(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Checkbox", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Checkbox(bind: archived, p: 0, rounded: 4, bg: "#FFFFFF", border: "#F4F6F9")
+        }
+      }
+      Text("{note}", size: 10, color: "#132C5A")
+    }
+  }
+}
+
+component RadioTeam(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Radio", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Radio(bind: plan, value: "team", p: 0, rounded: 8, bg: "#FFFFFF", border: "#0A71FC")
+        }
+      }
+      Text("{note}", size: 10, color: "#0A71FC")
+    }
+  }
+}
+
+component RadioPro(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Radio", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Radio(bind: plan, value: "pro", p: 0, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9")
+        }
+      }
+      Text("{note}", size: 10, color: "#132C5A")
+    }
+  }
+}
+
+component SliderHigh(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Slider", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Slider(bind: volume, min: 0, max: 100, p: 0, rounded: 4, bg: "#F4F6F9", border: "#F4F6F9")
+        }
+      }
+      Text("{note}", size: 10, color: "#0A71FC")
+    }
+  }
+}
+
+component SliderLow(note: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("Slider", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Slider(bind: brightness, min: 0, max: 100, p: 0, rounded: 4, bg: "#F4F6F9", border: "#F4F6F9")
+        }
+      }
+      Text("{note}", size: 10, color: "#132C5A")
+    }
+  }
+}
+
+component BadgeCell(label: string, value: string, fill: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 24, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Badge(label: "{value}", p: 0, rounded: 8, bg: "{fill}", border: "{fill}", fontScale: 0.6)
+        }
+      }
+    }
+  }
+}
+
+component TagCell(label: string, value: string, fill: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 24, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Tag(label: "{value}", p: 0, rounded: 8, bg: "{fill}", border: "{fill}", fontScale: 0.6)
+        }
+      }
+    }
+  }
+}
+
+component AvatarCell(label: string, value: string, fill: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 24, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Avatar(label: "{value}", p: 0, rounded: 12, bg: "{fill}", border: "{fill}", fontScale: 0.6)
+        }
+      }
+    }
+  }
+}
+
+component ProgressHigh(label: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Progress(value: 72, p: 0, rounded: 4, bg: "#F4F6F9", border: "#F4F6F9")
+        }
+      }
+    }
+  }
+}
+
+component ProgressLow(label: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 16, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Progress(value: 36, p: 0, rounded: 4, bg: "#F4F6F9", border: "#F4F6F9")
+        }
+      }
+    }
+  }
+}
+
+component CardCell(label: string, value: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "#F4F6F9") {
+    Column(gap: 4, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Text("{label}", size: 10, color: "#132C5A")
+      Container(width: 88, height: 24, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+        Column(align: center, bg: "#F4F6F9", border: "#F4F6F9") {
+          Card(p: 4, rounded: 8, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+            Text("{value}", size: 10, color: "#132C5A")
+          }
+        }
+      }
+    }
+  }
+}
+
+component FeedbackCell(title: string, detail: string, badge: string, tone: string) {
+  Container(height: 52, m: 4, p: 4, rounded: 8, bg: "#FFFFFF", border: "{tone}") {
+    Column(gap: 2, align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+      Badge(label: "{badge}", p: 0, rounded: 8, bg: "{tone}", border: "{tone}", fontScale: 0.6)
+      Text("{title}", size: 10, color: "{tone}")
+      Text("{detail}", size: 10, color: "#132C5A")
+    }
+  }
+}
+
+app DesignSystem {
+  state updates = true
+  state alerts = false
+  state checks = true
+  state archived = false
+  state plan = "team"
+  state volume = 72
+  state brightness = 36
+
+  theme { mode: light, accent: "#097FEB", radius: 8, surface: "#FFFFFF", onSurface: "#132C5A", stage: "#F4F6F9" }
+
+  Column(p: 8, gap: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+    Container(height: 64, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Text("OPUROM Design System", size: 18, color: "#132C5A", role: "heading")
+        Text("Default UI kit / responsive 560-1280", size: 10, color: "#132C5A")
+        Container(height: 4, p: 0, rounded: 2, bg: "#0A71FC", border: "#0A71FC")
+      }
+    }
+
+    Container(height: 152, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(height: 20, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("01 / BUTTONS", size: 12, color: "#0A71FC", role: "heading")
+        }
+        Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+          Grid(columns: 4, compactColumns: 4, bg: "#F4F6F9", border: "#F4F6F9") {
+            SolidButtonCell("Primary", "Apply", "#0A71FC", "#0A71FC")
+            FlatButtonCell("Secondary", "Cancel", "#FFFFFF", "#132C5A", "#0A71FC")
+            FlatButtonCell("Text", "Learn more", "#FFFFFF", "#0A71FC", "#FFFFFF")
+            SolidButtonCell("Danger", "Delete", "#F62B35", "#F62B35")
+            FlatButtonCell("Hover", "Apply", "#FFFFFF", "#0A71FC", "#0A71FC")
+            FlatButtonCell("Focus", "Apply", "#FFFFFF", "#0A71FC", "#0DB2FF")
+            SolidButtonCell("Active", "Apply", "#132C5A", "#132C5A")
+            FlatButtonCell("Disabled", "Apply", "#F4F6F9", "#132C5A", "#F4F6F9")
+          }
+        }
+      }
+    }
+
+    Container(height: 152, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(height: 20, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("02 / INPUTS", size: 12, color: "#0A71FC", role: "heading")
+        }
+        Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+          Grid(columns: 3, compactColumns: 3, bg: "#F4F6F9", border: "#F4F6F9") {
+            InputCell("Placeholder", "Empty field", "#F4F6F9", "#132C5A")
+            InputCell("name@example.com", "Updates only", "#0A71FC", "#132C5A")
+            InputCell("name@team", "Check email", "#F62B35", "#F62B35")
+            InputCell("Type here", "Focused field", "#0DB2FF", "#0A71FC")
+            InputCell("Ada Lovelace", "Filled value", "#F4F6F9", "#132C5A")
+            InputCell("Not editable", "Disabled field", "#F4F6F9", "#132C5A")
+          }
+        }
+      }
+    }
+
+    Container(height: 152, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(height: 20, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("03 / SELECTION", size: 12, color: "#0A71FC", role: "heading")
+        }
+        Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+          Grid(columns: 4, compactColumns: 4, bg: "#F4F6F9", border: "#F4F6F9") {
+            SwitchOn("Enabled")
+            SwitchOff("Muted")
+            CheckOn("Checked")
+            CheckOff("Empty")
+            RadioTeam("Team")
+            RadioPro("Pro")
+            SliderHigh("72%")
+            SliderLow("36%")
+          }
+        }
+      }
+    }
+
+    Container(height: 152, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(height: 20, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("04 / DISPLAY", size: 12, color: "#0A71FC", role: "heading")
+        }
+        Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+          Grid(columns: 5, compactColumns: 5, bg: "#F4F6F9", border: "#F4F6F9") {
+            BadgeCell("Badge", "12", "#0A71FC")
+            TagCell("Tag", "UI", "#132C5A")
+            AvatarCell("Avatar", "AM", "#0DB2FF")
+            ProgressHigh("Progress 72%")
+            CardCell("Card", "Surface")
+            BadgeCell("Count", "99", "#1FB14C")
+            TagCell("Pill", "New", "#FD960E")
+            AvatarCell("Initials", "OP", "#0A71FC")
+            ProgressLow("Progress 36%")
+            CardCell("Card", "Quiet")
+          }
+        }
+      }
+    }
+
+    Container(height: 152, p: 8, rounded: 12, shadow: 1, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(gap: 8, bg: "#FFFFFF", border: "#FFFFFF") {
+        Container(height: 20, p: 0, bg: "#FFFFFF", border: "#FFFFFF") {
+          Text("05 / FEEDBACK", size: 12, color: "#0A71FC", role: "heading")
+        }
+        Container(height: 104, p: 0, rounded: 8, bg: "#F4F6F9", border: "#F4F6F9") {
+          Grid(columns: 2, compactColumns: 2, bg: "#F4F6F9", border: "#F4F6F9") {
+            FeedbackCell("Success", "Changes saved", "OK", "#1FB14C")
+            FeedbackCell("Warning", "Check settings", "!", "#FD960E")
+            FeedbackCell("Error", "Try again", "X", "#F62B35")
+            FeedbackCell("Info", "Read updates", "i", "#0A71FC")
+          }
+        }
+      }
+    }
+
+    Container(height: 12, p: 0, rounded: 6, bg: "#FFFFFF", border: "#F4F6F9") {
+      Column(align: center, bg: "#FFFFFF", border: "#FFFFFF") {
+        Text("OPUROM / Default UI Kit", size: 10, color: "#132C5A")
+      }
+    }
+  }
+}

@@ -910,6 +910,59 @@
           "description": "render decoded PNG nodes into a PPM frame"
         }
       ]
+    },
+    {
+      "name": "design-system",
+      "source": "design-system.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "design-system.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the design system gallery"
+        },
+        {
+          "id": "design-system.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the design system gallery to IR"
+        },
+        {
+          "id": "design-system.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1280",
+            "900",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the design system gallery at 1280x900"
+        },
+        {
+          "id": "design-system.responsive",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "560",
+            "900",
+            "{tmp}/compact.ppm"
+          ],
+          "description": "render the responsive gallery at 560x900"
+        }
+      ]
     }
   ]
 }
