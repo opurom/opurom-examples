@@ -13,12 +13,12 @@ const REPOS = [
   'opurom-platform', 'opurom-cli', 'opurom-ide-plugins', 'opurom-examples',
   'opurom-plugins', 'opurom-server', 'opurom-db', 'opurom-runtime-adapters',
   'opurom-lsp', 'opurom-debug', 'opurom-pkg', 'opurom-gpu',
-  'opurom-web', 'opurom-mobile',
+  'opurom-web', 'opurom-mobile', 'opurom-icons', 'opurom-ui',
 ];
 const RUST_REPOS = ['opurom-core', 'opurom-lang', 'opurom-render', 'opurom-platform',
   'opurom-server', 'opurom-db', 'opurom-runtime-adapters', 'opurom-gpu', 'opurom-mobile'];
 const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opurom-lsp',
-  'opurom-debug', 'opurom-pkg', 'opurom-web', 'opurom-mobile'];
+  'opurom-debug', 'opurom-pkg', 'opurom-web', 'opurom-mobile', 'opurom-icons', 'opurom-ui'];
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
