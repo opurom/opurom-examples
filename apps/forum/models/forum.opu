@@ -1,0 +1,90 @@
+// Forum entities: the canonical data contract shared by the screens, the HTTP
+// routes and the generated migrations. Written in the bare declaration form so
+// it can be checked on its own; the root node below only satisfies the checker,
+// while an importing app merges these declarations and supplies its own tree.
+model User {
+  id: int primary
+  handle: string
+  displayName: string
+  role: string
+  bio: string
+}
+
+model Board {
+  id: int primary
+  slug: string
+  title: string
+  description: string
+}
+
+model Post {
+  id: int primary
+  boardId: int
+  author: string
+  title: string
+  body: string
+  likes: int = 0
+  replies: int = 0
+  pinned: bool = false
+}
+
+model Comment {
+  id: int primary
+  postId: int
+  author: string
+  body: string
+  likes: int = 0
+}
+
+model Bookmark {
+  id: int primary
+  postId: int
+  owner: string
+}
+
+api "/forum/users" {
+  list User
+  create User
+}
+
+api "/forum/users/:id" {
+  get User
+  update User
+}
+
+api "/forum/boards" {
+  list Board
+  create Board
+}
+
+api "/forum/posts" {
+  list Post
+  create Post
+}
+
+api "/forum/posts/:id" {
+  get Post
+  update Post
+  delete Post
+}
+
+api "/forum/posts/:id/comments" {
+  list Comment
+  create Comment
+}
+
+api "/forum/comments/:id" {
+  update Comment
+  delete Comment
+}
+
+api "/forum/bookmarks" {
+  list Bookmark
+  create Bookmark
+}
+
+api "/forum/bookmarks/:id" {
+  delete Bookmark
+}
+
+

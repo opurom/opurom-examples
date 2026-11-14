@@ -1,0 +1,33 @@
+// Forum view state: the values every screen reads. A module declares only
+// state, model, api, theme and imports, so the entry file owns all components
+// and the app tree. Flags model navigation because `if` guards one bool state.
+state sessionActive = false
+state role = "member"
+state page = 1
+state pageSize = 10
+
+state boardFilter = "general"
+state searchText = ""
+state draftTitle = ""
+state draftBody = ""
+state commentDraft = ""
+
+state selectedPost = "1"
+state selectedAuthor = "ada"
+state selectedBody = "Welcome to the OPUROM community forum."
+state selectedLikes = 0
+
+state profileHandle = "ada"
+state profileName = "Ada Lovelace"
+state profileBio = "Building declarative full-stack apps."
+
+state viewList = true
+state viewDetail = false
+state viewCompose = false
+state viewProfile = false
+state showModeration = false
+
+state showComposer = false
+state showCommentBox = false
+state bookmarked = false
+state liked = false

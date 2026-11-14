@@ -1,0 +1,288 @@
+import "models/forum.opu";
+import "views/state.opu";
+
+// Reusable nodes stay in the entry file: an imported module may declare only
+// state, model, api, theme and imports, so components live here.
+
+component BoardChip(label: string, slug: string) {
+  Button("{label}", p: 10, rounded: 12, shadow: 2, bg: "#EEF2FF") {
+    boardFilter = slug
+    page = 1
+    viewList = true
+    viewDetail = false
+    viewCompose = false
+    viewProfile = false
+  }
+}
+
+component PostCard(title: string, author: string, meta: string) {
+  Card(p: 16, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 6, bg: "#FFFFFF") {
+      Text("{title}", size: 16, color: "#0F172A")
+      Row(gap: 8, align: center) {
+        Avatar(label: "{author}")
+        Text("by {author}", size: 12, color: "#64748B")
+        Badge(label: "{meta}")
+      }
+      Row(gap: 8, align: center) {
+        Button("Open", p: 8, rounded: 10, shadow: 1, bg: "#4F46E5") {
+          selectedPost = "1"
+          selectedAuthor = author
+          selectedBody = title
+          viewList = false
+          viewDetail = true
+        }
+        Button("Like", p: 8, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+          selectedLikes += 1
+        }
+        Button("Save", p: 8, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+          bookmarked = true
+        }
+      }
+    }
+  }
+}
+
+component CommentRow(author: string, body: string) {
+  Card(p: 12, rounded: 12, shadow: 1, bg: "#F8FAFC", border: "#E2E8F0") {
+    Column(gap: 4, bg: "#F8FAFC") {
+      Row(gap: 6, align: center) {
+        Avatar(label: "{author}")
+        Text("{author}", size: 12, color: "#0F172A")
+      }
+      Text("{body}", size: 13, color: "#334155")
+      Button("Like comment", p: 6, rounded: 8, shadow: 1, bg: "#EEF2FF") {
+        liked = true
+      }
+    }
+  }
+}
+
+component StatTile(label: string, metric: string) {
+  Card(p: 14, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+    Column(gap: 4, bg: "#FFFFFF") {
+      Text("{label}", size: 11, color: "#64748B")
+      Text("{metric}", size: 22, color: "#0F172A")
+    }
+  }
+}
+
+app Forum {
+  theme { mode: light, accent: "#4F46E5", radius: 14, fontScale: 1.0 }
+
+  // One shell for every width: the outer Row lays out a sidebar and the main
+  // column on a wide viewport and stacks them vertically on a compact one.
+  Column(p: 0, gap: 0) {
+    Container(p: 20, shadow: 4, gradient: "#4F46E5,#312E81",
+              particles: "count=40,seed=17,radius=2,alpha=780,color=#C7D2FE") {
+      Column(gap: 4, bg: "#4F46E5") {
+        Text("OPUROM Community Forum", size: 24, color: "#FFFFFF")
+        Text("board {boardFilter} - page {page} - role {role}", size: 12, color: "#C7D2FE")
+      }
+    }
+
+    Row(gap: 16, p: 16) {
+      // Navigation and session controls: a fixed-width rail on desktop, a
+      // stacked section on phones.
+      Column(width: 240, gap: 12, p: 14) {
+        Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#E2E8F0") {
+          Column(gap: 8, bg: "#FFFFFF") {
+            Text("Boards", size: 14, color: "#0F172A")
+            BoardChip("General", "general")
+            BoardChip("Showcase", "showcase")
+            BoardChip("Help", "help")
+            Input(bind: searchText, placeholder: "search posts")
+            Button("Search", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+              page = 1
+              viewList = true
+              viewDetail = false
+              viewCompose = false
+              viewProfile = false
+            }
+          }
+        }
+
+        Card(p: 14, rounded: 12, shadow: 2, bg: "#EEF2FF") {
+          Column(gap: 8, bg: "#EEF2FF") {
+            Text("Session", size: 12, color: "#4338CA")
+            if (sessionActive) {
+              Text("Signed in as {profileName}", size: 12, color: "#0F172A")
+              Button("Log out", p: 10, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+                sessionActive = false
+                viewList = true
+                viewDetail = false
+                viewCompose = false
+                viewProfile = false
+              }
+            }
+            Button("Register / Log in", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+              sessionActive = true
+              role = "member"
+              viewList = false
+              viewDetail = false
+              viewCompose = false
+              viewProfile = true
+              showModeration = false
+            }
+            Button("Admin mode", p: 10, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+              role = "admin"
+              showModeration = true
+            }
+          }
+        }
+
+        if (showModeration) {
+          Card(p: 14, rounded: 12, shadow: 2, bg: "#FEF2F2", border: "#FECACA") {
+            Column(gap: 6, bg: "#FEF2F2") {
+              Text("Moderation", size: 12, color: "#B91C1C")
+              Button("Remove post", p: 8, rounded: 8, shadow: 1, bg: "#FEE2E2") {
+                viewDetail = false
+                viewList = true
+              }
+              Button("Mute author", p: 8, rounded: 8, shadow: 1, bg: "#FEE2E2") {
+                viewDetail = false
+                viewList = true
+              }
+            }
+          }
+        }
+      }
+
+      // Main column: the list, detail, composer and profile views switch on one
+      // navigation flag each, so one tree serves every screen.
+      Column(width: 820, gap: 14) {
+        if (viewList) {
+          Column(gap: 12) {
+            Row(gap: 10, align: center) {
+              Text("Latest in {boardFilter}", size: 20, color: "#0F172A")
+              Spacer(width: 8)
+              Button("New post", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+                showComposer = true
+                viewCompose = true
+                viewList = false
+              }
+            }
+            Grid(columns: 3) {
+              StatTile("Posts", "128")
+              StatTile("Members", "42")
+              StatTile("Replies", "317")
+            }
+            Scroll(height: 620, bg: "#F5F3FF", border: "#E2E8F0", rounded: 16) {
+              Column(width: 788, gap: 12) {
+                PostCard("Welcome to the community", "ada", "pinned")
+                PostCard("Show your OPUROM build", "linus", "12 replies")
+                PostCard("How do I model relations?", "grace", "5 replies")
+                PostCard("Design feedback wanted", "alan", "8 replies")
+                Row(gap: 8, align: center) {
+                  Button("Prev page", p: 10, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+                    page -= 1
+                  }
+                  Text("Page {page}", size: 12, color: "#64748B")
+                  Button("Next page", p: 10, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+                    page += 1
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (viewDetail) {
+          Column(gap: 12) {
+            Button("Back", p: 8, rounded: 10, shadow: 1, bg: "#FFFFFF") {
+              viewDetail = false
+              viewList = true
+            }
+            Card(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+              Column(gap: 8, bg: "#FFFFFF") {
+                Text("{selectedBody}", size: 18, color: "#0F172A")
+                Row(gap: 8, align: center) {
+                  Avatar(label: "{selectedAuthor}")
+                  Text("by {selectedAuthor}", size: 12, color: "#64748B")
+                  Badge(label: "{selectedLikes} likes")
+                }
+                Row(gap: 8, align: center) {
+                  Button("Like", p: 8, rounded: 10, shadow: 1, bg: "#4F46E5") {
+                    selectedLikes += 1
+                  }
+                  Button("Bookmark", p: 8, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+                    bookmarked = true
+                  }
+                  Button("Comment", p: 8, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+                    showCommentBox = true
+                  }
+                }
+              }
+            }
+            if (showCommentBox) {
+              Row(gap: 8, align: center) {
+                Input(bind: commentDraft, placeholder: "write a comment")
+                Button("Post", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+                  commentDraft = ""
+                }
+              }
+            }
+            Text("Comments", size: 14, color: "#0F172A")
+            CommentRow("grace", "This is exactly what I needed.")
+            CommentRow("linus", "The layout reflow works well.")
+          }
+        }
+
+        if (viewCompose) {
+          Card(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Column(gap: 10, bg: "#FFFFFF") {
+              Text("New post", size: 18, color: "#0F172A")
+              Input(bind: draftTitle, placeholder: "title")
+              Input(bind: draftBody, placeholder: "body")
+              Row(gap: 8, align: center) {
+                Button("Publish", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+                  showComposer = false
+                  viewCompose = false
+                  viewList = true
+                }
+                Button("Cancel", p: 10, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+                  showComposer = false
+                  viewCompose = false
+                  viewList = true
+                }
+              }
+            }
+          }
+        }
+
+        if (viewProfile) {
+          Card(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E2E8F0") {
+            Column(gap: 10, bg: "#FFFFFF") {
+              Row(gap: 10, align: center) {
+                Avatar(label: "{profileName}")
+                Column(gap: 2, bg: "#FFFFFF") {
+                  Text("{profileName}", size: 18, color: "#0F172A")
+                  Text("@{profileHandle}", size: 12, color: "#64748B")
+                }
+                Spacer(width: 8)
+                Badge(label: "{role}")
+              }
+              Text("{profileBio}", size: 13, color: "#334155")
+              Input(bind: profileName, placeholder: "display name")
+              Input(bind: profileBio, placeholder: "bio")
+              Row(gap: 8, align: center) {
+                Button("Save profile", p: 10, rounded: 10, shadow: 2, bg: "#4F46E5") {
+                  viewProfile = true
+                }
+                Button("My bookmarks", p: 10, rounded: 10, shadow: 1, bg: "#F1F5F9") {
+                  viewProfile = false
+                  viewList = true
+                }
+              }
+            }
+          }
+          Row(gap: 12, align: center) {
+            StatTile("Posts", "6")
+            StatTile("Likes", "{selectedLikes}")
+            StatTile("Bookmarks", "3")
+          }
+        }
+      }
+    }
+  }
+}
