@@ -1,11 +1,11 @@
 import "theme/default.opu";
 
-// Icon system showcase: the canonical named icons rendered in a labelled grid,
-// plus IconButton examples that drive state. Every value is a literal, so the
-// frame is deterministic (no clock, no randomness).
+// Icon system showcase: the opurom-icons package (Phosphor geometry) rendered
+// in a labelled grid, plus IconButton examples that drive state. Every value is
+// a literal, so the frame is deterministic (no clock, no randomness).
 //
-// The theme comes from the opurom-ui package, resolved through opurom.lock
-// dependencies: the default UI system is imported, not restated.
+// The theme and the icon geometry come from the opurom-ui and opurom-icons
+// packages, resolved through opurom.lock dependencies: imported, not restated.
 
 component IconTile(name: string, label: string) {
   Card(p: 12, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#DCE4F2") {
@@ -29,7 +29,7 @@ app Icons {
               particles: "count=36,seed=11,radius=2,alpha=720,color=#DBE6FF") {
       Column(gap: 4, bg: "#1D4ED8") {
         Text("Icon System", size: 26, color: "#FFFFFF")
-        Text("31 canonical names on 100 drawn primitives", size: 12, color: "#DBE6FF")
+        Text("32 icons from the opurom-icons package", size: 12, color: "#DBE6FF")
       }
     }
 
@@ -63,24 +63,26 @@ app Icons {
         }
       }
 
-      // Gallery: the canonical icons in a reflowing labelled grid.
+      // Gallery: the package icons in a reflowing labelled grid. Every name
+      // resolves from opurom-icons at compile time and renders the vendored
+      // Phosphor geometry.
       Column(width: 1000, gap: 14) {
         Text("Navigation", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("home", "home")
-          IconTile("settings", "setup")
+          IconTile("house", "home")
+          IconTile("magnifying-glass", "search")
+          IconTile("gear", "settings")
+          IconTile("plus", "add")
+          IconTile("minus", "remove")
           IconTile("star", "star")
-          IconTile("search", "search")
-          IconTile("plus", "plus")
-          IconTile("minus", "minus")
         }
 
         Text("State and media", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("check", "check")
-          IconTile("close", "close")
-          IconTile("refresh", "sync")
-          IconTile("lock", "lock")
+          IconTile("check", "done")
+          IconTile("x", "close")
+          IconTile("arrow-clockwise", "sync")
+          IconTile("lock-key", "lock")
           IconTile("user", "user")
           IconTile("bell", "bell")
         }
@@ -92,31 +94,32 @@ app Icons {
           IconTile("warning", "alert")
           IconTile("play", "play")
           IconTile("pause", "pause")
-          IconTile("edit", "edit")
+          IconTile("pencil-simple", "edit")
         }
 
         Text("Files and places", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("delete", "delete")
+          IconTile("trash", "delete")
           IconTile("eye", "eye")
           IconTile("calendar", "date")
-          IconTile("location", "place")
+          IconTile("map-pin", "place")
           IconTile("folder", "folder")
-          IconTile("mail", "mail")
+          IconTile("envelope", "mail")
         }
 
         Text("Direction", size: 16, color: "#111827")
         Grid(columns: 6) {
-          IconTile("arrow_back", "back")
-          IconTile("arrow_forward", "forward")
-          IconTile("chevron_right", "right")
-          IconTile("chevron_down", "down")
-          IconTile("download", "save")
-          IconTile("upload", "upload")
+          IconTile("arrow-left", "back")
+          IconTile("arrow-right", "forward")
+          IconTile("caret-right", "right")
+          IconTile("caret-down", "down")
+          IconTile("download-simple", "save")
+          IconTile("upload-simple", "upload")
         }
 
-        Grid(columns: 1) {
-          IconTile("chat", "chat")
+        Grid(columns: 2) {
+          IconTile("chat-circle", "chat")
+          IconTile("list", "list")
         }
 
         Container(p: 16, rounded: 16, shadow: 3, gradient: "#1D4ED8,#0B1F4B",
@@ -126,7 +129,7 @@ app Icons {
               Icon(name: "star", color: "#1D4ED8")
             }
             Column(gap: 2, bg: "#1D4ED8") {
-              Text("Every icon is a named primitive", size: 14, color: "#FFFFFF")
+              Text("Every icon is package geometry", size: 14, color: "#FFFFFF")
               Text("count {count} / {selected}", size: 11, color: "#DBE6FF")
             }
           }
