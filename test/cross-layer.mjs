@@ -81,9 +81,13 @@ for (const repo of REPOS) {
     const author = ok(run('git', ['log', '-1', '--format=%an <%ae>'], { cwd: d }), 'git author').trim();
     assert.ok(!/Opurom Team/.test(author), `wrong author: ${author}`);
     const tags = ok(run('git', ['tag', '--list', 'v*'], { cwd: d }), 'git tags').trim();
-    // Prerelease iterations start at 1; numeric fields carry no leading zeros.
-    assert.match(tags, /^v0\.1\.0-dev\.1$/m, 'SemVer version tags missing');
-    assert.ok(!/^v\d+\.\d+\.\d{4}$/m.test(tags), 'legacy zero-padded version tags remain');
+    // The release train is the sole tag authority, so a repository may have no
+    // tag before the first train runs. When tags exist, they must be clean
+    // SemVer: prerelease iterations start at 1 and carry no leading zeros.
+    if (tags) {
+      assert.match(tags, /^v0\.1\.0-dev\.1$/m, 'SemVer version tags missing');
+      assert.ok(!/^v\d+\.\d+\.\d{4}$/m.test(tags), 'legacy zero-padded version tags remain');
+    }
   });
 }
 
