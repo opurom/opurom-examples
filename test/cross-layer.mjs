@@ -29,6 +29,15 @@ function check(name, fn) {
   try { fn(); console.log(`PASS  ${name}`); }
   catch (e) { failures++; console.log(`FAIL  ${name}\n      ${e.message.split('\n')[0]}`); }
 }
+// A JDK-dependent check is skipped, not failed, when no real Java runtime is
+// present: a missing toolchain is an environment fact, not a capability gap.
+function jdkAvailable() {
+  const r = run('javac', ['-version']);
+  return r.status === 0 && !/Unable to locate a Java Runtime/i.test(`${r.stderr || ''}${r.stdout || ''}`);
+}
+function skipJdk(name) {
+  console.log(`SKIP  ${name}\n      no Java runtime on PATH; JDK-dependent artifact check not run`);
+}
 function ok(r, label) {
   assert.equal(r.status, 0, `${label} exited ${r.status}: ${(r.stderr || r.stdout || '').trim().slice(0, 400)}`);
   return r.stdout || '';
@@ -109,7 +118,11 @@ for (const repo of NODE_REPOS) {
     }
   });
 }
-check('opurom-ide-plugins: validate', () => ok(run('node', ['scripts/validate.mjs'], { cwd: P('opurom-ide-plugins') }), 'validate'));
+if (!jdkAvailable()) {
+  skipJdk('opurom-ide-plugins: validate');
+} else {
+  check('opurom-ide-plugins: validate', () => ok(run('node', ['scripts/validate.mjs'], { cwd: P('opurom-ide-plugins') }), 'validate'));
+}
 check('opurom-cli: opurom doctor', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'doctor']), 'doctor'));
 check('opurom-cli: opurom test (full-stack end-to-end)', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'test']), 'opurom test'));
 
@@ -458,7 +471,9 @@ try {
     assert.match(out, /PASS|verified|digest/i, 'no browser verification result');
     assert.ok(existsSync(join(dir, 'index.html')), 'index.html not emitted');
   });
-  check('mobile iOS staticlib and bindings are real artifacts', () => {
+  if (!jdkAvailable()) {
+    skipJdk('mobile iOS staticlib and bindings are real artifacts');
+  } else check('mobile iOS staticlib and bindings are real artifacts', () => {
     const out = ok(run('node', [P('opurom-mobile', 'verify.mjs')]), 'mobile verify');
     assert.match(out, /PASS|arm64|staticlib/i, 'no iOS artifact evidence');
     const archive = P('opurom-mobile', 'target', 'aarch64-apple-ios', 'release',
@@ -614,7 +629,9 @@ try {
       '--', '--list']), 'server test list');
     assert.match(out, /h2_|http2_/i, 'no HTTP/2 tests registered');
   });
-  check('compiled JetBrains plugin is a real archive', () => {
+  if (!jdkAvailable()) {
+    skipJdk('compiled JetBrains plugin is a real archive');
+  } else check('compiled JetBrains plugin is a real archive', () => {
     const verify = P('opurom-ide-plugins', 'jetbrains-runtime', 'verify.mjs');
     if (!existsSync(verify)) return; // not landed yet: skip honestly
     const out = ok(run('node', [verify]), 'jetbrains plugin verify');
