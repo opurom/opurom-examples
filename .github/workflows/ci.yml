@@ -70,10 +70,12 @@ jobs:
               git clone --depth 1 "https://github.com/opurom/opurom-examples.git" opurom-examples
               ;;
             opurom-examples)
-              for repo in opurom-core opurom-lang opurom-render opurom-cli opurom-web \
-                opurom-db opurom-debug opurom-gpu opurom-ide-plugins opurom-lsp \
-                opurom-mobile opurom-pkg opurom-platform opurom-plugins \
-                opurom-runtime-adapters opurom-server opurom-icons; do
+              # This repository's own tests need the language front end, the
+              # CLI and the web emitter. Do not clone opurom-render: its
+              # presence would switch the runner into the full cross-layer
+              # harness, which exercises macOS/Metal/Android paths unavailable
+              # on a Linux runner.
+              for repo in opurom-cli opurom-lang opurom-web; do
                 git clone --depth 1 "https://github.com/opurom/${repo}.git" "$repo"
               done
               ;;
