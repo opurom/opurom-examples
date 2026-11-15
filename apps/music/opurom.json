@@ -1,0 +1,9 @@
+{
+  "name": "music",
+  "version": "0.1.0",
+  "moduleRoots": ["registry"],
+  "dependencies": {
+    "opurom-ui": "0.1.0",
+    "opurom-icons": "0.1.0"
+  }
+}

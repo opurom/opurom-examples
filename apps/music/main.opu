@@ -1,0 +1,188 @@
+import "theme/dark.opu";
+
+// Desktop music player MVP. One source file describes the whole surface: a
+// library list scanned from a local folder, the now-playing bar with transport
+// controls, a playlist panel and the metadata of the selected track.
+//
+// The desktop native work this drives lives in opurom-platform: the recursive
+// audio scan (`filesystem`), the playback transport (`audio`), the tray menu
+// (`tray`) and the media hotkeys (`global_hotkey`). This file only binds the
+// state those capabilities read and write; the host supplies the real values.
+app MusicPlayer {
+  state tracks = 6
+  state current = 0
+  state playing = false
+  state position = 42
+  state duration = 214
+  state volume = 80
+  state repeat = "off"
+  state shuffle = false
+  state showLibrary = true
+  state showPlaylist = false
+  state showDetails = false
+  state selected = "Nightfall"
+  state artist = "Rivera"
+  state album = "Dusk"
+  state bits = "24 bit"
+  state folder = "~/Music"
+
+  computed percent = position + 42
+  computed elapsed = position + 42
+
+  ScrollView(p: 16) {
+    Column(gap: 14) {
+      // Header: library folder and the scan summary the filesystem capability fills.
+      Column(gap: 8) {
+        Container(p: 10, rounded: 12, bg: "#0A84FF", width: 44) {
+          Icon(name: "music")
+        }
+        Text("Music", size: 22, color: "#E5E7EB")
+        Text("{tracks} tracks in {folder}", size: 11, color: "#8A94A6")
+        Button("Scan", width: 120, p: 10, rounded: 10, bg: "#2C2C2E", animate: ease) {
+          showLibrary = true
+          showPlaylist = false
+          showDetails = false
+        }
+      }
+
+      // Tab switch between the library scan, the playlist and the metadata card.
+      Row(gap: 8) {
+        Button("Library", p: 10, rounded: 10, bg: "#2C2C2E") {
+          showLibrary = true
+          showPlaylist = false
+          showDetails = false
+        }
+        Button("Playlist", p: 10, rounded: 10, bg: "#2C2C2E") {
+          showLibrary = false
+          showPlaylist = true
+          showDetails = false
+        }
+        Button("Details", p: 10, rounded: 10, bg: "#2C2C2E") {
+          showLibrary = false
+          showPlaylist = false
+          showDetails = true
+        }
+      }
+
+      if (showLibrary) {
+        Container(p: 14, rounded: 16, bg: "#1E1E1E", border: "#2C2C2E") {
+          Column(gap: 10) {
+            Text("Local library", size: 15, color: "#E5E7EB")
+            List {
+              Card(p: 12, rounded: 12, bg: "#262628") {
+                Row(gap: 10, align: center) {
+                  Icon(name: "disc")
+                  Column(gap: 2) {
+                    Text("Nightfall", size: 14, color: "#E5E7EB")
+                    Text("Rivera - Dusk", size: 11, color: "#8A94A6")
+                  }
+                  Spacer(width: 8)
+                  Badge(label: "FLAC")
+                }
+              }
+              Card(p: 12, rounded: 12, bg: "#262628") {
+                Row(gap: 10, align: center) {
+                  Icon(name: "disc")
+                  Column(gap: 2) {
+                    Text("First Light", size: 14, color: "#E5E7EB")
+                    Text("Ada - Dawn", size: 11, color: "#8A94A6")
+                  }
+                  Spacer(width: 8)
+                  Badge(label: "MP3")
+                }
+              }
+              Card(p: 12, rounded: 12, bg: "#262628") {
+                Row(gap: 10, align: center) {
+                  Icon(name: "disc")
+                  Column(gap: 2) {
+                    Text("Tide", size: 14, color: "#E5E7EB")
+                    Text("Noor - Coast", size: 11, color: "#8A94A6")
+                  }
+                  Spacer(width: 8)
+                  Badge(label: "WAV")
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (showPlaylist) {
+        Container(p: 14, rounded: 16, bg: "#1E1E1E", border: "#2C2C2E") {
+          Column(gap: 10) {
+            Row(gap: 8, align: center) {
+              Text("Now playing", size: 15, color: "#E5E7EB")
+              Spacer(width: 8)
+              Icon(name: "list-music")
+            }
+            Row(gap: 10, align: center) {
+              Icon(name: "shuffle")
+              Text("Shuffle", size: 12, color: "#8A94A6")
+              Switch(bind: shuffle)
+            }
+            Row(gap: 10, align: center) {
+              Icon(name: "repeat")
+              Text("Repeat mode", size: 12, color: "#8A94A6")
+              Button("Mode", p: 8, rounded: 8, bg: "#2C2C2E") {
+                repeat = "all"
+              }
+            }
+          }
+        }
+      }
+
+      if (showDetails) {
+        Container(p: 16, rounded: 16, bg: "#1E1E1E", border: "#2C2C2E") {
+          Column(gap: 8) {
+            Text("{selected}", size: 18, color: "#E5E7EB")
+            Row(gap: 6, align: center) {
+              Icon(name: "headphones")
+              Text("Artist: {artist}", size: 12, color: "#8A94A6")
+            }
+            Row(gap: 6, align: center) {
+              Icon(name: "album")
+              Text("Album: {album}", size: 12, color: "#8A94A6")
+            }
+            Row(gap: 6, align: center) {
+              Icon(name: "folder")
+              Text("Quality: {bits}", size: 12, color: "#8A94A6")
+            }
+            Divider()
+            Progress(value: 42)
+            Text("{elapsed}", size: 11, color: "#8A94A6")
+          }
+        }
+      }
+
+      // Now-playing bar: transport, seek and volume, the audio capability surface.
+      Container(p: 14, rounded: 16, gradient: "#0A84FF,#0B3E86", animate: ease) {
+        Column(gap: 10) {
+          Row(gap: 12, align: center) {
+            Column(gap: 2) {
+              Text("{selected}", size: 16, color: "#FFFFFF")
+              Text("{artist}", size: 11, color: "#CFE0FF")
+            }
+            Spacer(width: 8)
+            Icon(name: "music")
+          }
+          Slider(min: 0, max: 100, bind: position)
+          Row(gap: 12, align: center) {
+            IconButton(label: "Previous skip")
+            Icon(name: "skip-back")
+            Button("Toggle", p: 12, rounded: 14, bg: "#FFFFFF", animate: spring) {
+              playing.toggle()
+            }
+            Icon(name: "skip-forward")
+            Spacer(width: 8)
+            IconButton(label: "Mute")
+            Icon(name: "volume-off")
+          }
+          Row(gap: 10, align: center) {
+            Text("Vol", size: 11, color: "#CFE0FF")
+            Slider(min: 0, max: 100, bind: volume)
+          }
+        }
+      }
+    }
+  }
+}
