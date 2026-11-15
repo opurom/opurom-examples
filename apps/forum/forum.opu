@@ -1,0 +1,249 @@
+// Community forum MVP: accounts, posts, comments, pagination and moderation
+// in one full-stack source file. Four route pages (Feed, Thread, Compose,
+// Profile) navigate with push/pop; the models and api blocks lower to the
+// HTTP service and its SQL migrations.
+app Forum {
+  model User {
+    id: int primary
+    username: string
+    password: string
+    role: string = "member"
+  }
+
+  model Post {
+    id: int primary
+    user_id: int
+    title: string
+    body: string
+    pinned: bool = false
+  }
+
+  model Comment {
+    id: int primary
+    post_id: int
+    user_id: int
+    body: string
+  }
+
+  api "/users" {
+    list User
+    create User
+  }
+  api "/users/:id" {
+    get User
+    update User
+    delete User
+  }
+  api "/posts" {
+    list Post
+    create Post
+  }
+  api "/posts/:id" {
+    get Post
+    update Post
+    delete Post
+  }
+  api "/comments" {
+    list Comment
+    create Comment
+  }
+  api "/comments/:id" {
+    get Comment
+    delete Comment
+  }
+
+  // Session surfaced in the UI: the signed-in identity and its role gate the
+  // moderation surface. Real enforcement lives behind the api blocks.
+  state me = "guest"
+  state signedIn = false
+  state admin = false
+
+  state draftTitle = ""
+  state draftBody = ""
+  state comment = ""
+  state loginName = ""
+  state loginPassword = ""
+
+  // One page of the deterministic post feed, newest first. List state is not
+  // supported by the web emitter yet, so the feed is expressed as scalar
+  // titles selected by mutually exclusive page gates, like photos.opu.
+  state heroTitle = "Welcome to the forum"
+  state feedPage = 1
+  state postA = true
+  state postB = true
+  state postC = true
+
+  theme { mode: light, accent: "#097FEB", radius: 14 }
+
+  route Feed {
+    Column(p: 14, gap: 12) {
+      Container(p: 16, rounded: 16, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+        Row(gap: 10, align: center, bg: "#097FEB") {
+          Icon(name: "chat", label: "nav/Icon")
+          Text("Opurom Forum", size: 20, color: "#FFFFFF")
+          Text("{me}", size: 11, color: "#D6E8FF")
+        }
+        Text("Posts, comments and moderation in one source file", size: 11, color: "#D6E8FF")
+      }
+      Input(placeholder: "Search posts", bind: draftTitle)
+      Container(p: 12, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Text("Latest posts", size: 13, color: "#101828")
+        ListView() {
+          if (postA) {
+            ListTile(label: "Welcome to the forum", rounded: 10, shadow: 1) {
+              Column(gap: 2) {
+                Text("Welcome to the forum", size: 14, color: "#101828")
+                Text("by ada", size: 11, color: "#667085")
+              }
+              Chip(label: "open", tone: "info")
+              Icon(name: "chevron_right", label: "nav/Icon")
+            }
+          }
+          if (postB) {
+            ListTile(label: "Forum MVP shipped", rounded: 10, shadow: 1) {
+              Column(gap: 2) {
+                Text("Forum MVP shipped", size: 14, color: "#101828")
+                Text("by linus", size: 11, color: "#667085")
+              }
+              Chip(label: "open", tone: "info")
+              Icon(name: "chevron_right", label: "nav/Icon")
+            }
+          }
+          if (postC) {
+            ListTile(label: "Moderation guide", rounded: 10, shadow: 1) {
+              Column(gap: 2) {
+                Text("Moderation guide", size: 14, color: "#101828")
+                Text("by grace", size: 11, color: "#667085")
+              }
+              Chip(label: "open", tone: "info")
+              Icon(name: "chevron_right", label: "nav/Icon")
+            }
+          }
+        }
+      }
+      Pagination(value: 1, segments: 3)
+      Row(gap: 10) {
+        Button("Compose", p: 10, rounded: 10, shadow: 2, bg: "#097FEB", fontScale: 1.0, animate: spring) {
+          push: Compose
+        }
+        Button("Profile", p: 10, rounded: 10, shadow: 2, bg: "#F4F7FB", fontScale: 1.0, animate: spring) {
+          push: Profile
+        }
+        Button("Open thread", p: 10, rounded: 10, shadow: 2, bg: "#043B70", fontScale: 1.0, animate: spring) {
+          push: Thread
+        }
+      }
+    }
+  }
+
+  route Thread {
+    Column(p: 14, gap: 12) {
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Row(gap: 10, align: center, bg: "#FFFFFF") {
+          Button("Back", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+            pop
+          }
+          Icon(name: "arrow_back", label: "nav/Icon")
+          Text("{heroTitle}", size: 15, color: "#101828")
+          if (admin) {
+            Badge(label: "pinned", tone: "info")
+          }
+        }
+        Text("Thread body and replies live here", size: 12, color: "#667085")
+      }
+      Container(p: 12, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+        Text("Replies", size: 13, color: "#101828")
+        ListView() {
+          ListTile(label: "reply", rounded: 8, shadow: 0) {
+            Row(gap: 8, align: center) {
+              Avatar(label: "ada")
+              Text("ada: great work", size: 12, color: "#101828")
+            }
+          }
+          ListTile(label: "reply", rounded: 8, shadow: 0) {
+            Row(gap: 8, align: center) {
+              Avatar(label: "linus")
+              Text("linus: agreed", size: 12, color: "#101828")
+            }
+          }
+        }
+        Input(placeholder: "Write a reply", bind: comment)
+        Button("Reply", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") {
+          comment = ""
+        }
+      }
+      if (admin) {
+        Row(gap: 10) {
+          Button("Pin thread", p: 8, rounded: 8, shadow: 1, bg: "#043B70") {
+            pop
+          }
+          Button("Delete thread", p: 8, rounded: 8, shadow: 1, bg: "#781C40") {
+            pop
+          }
+        }
+      }
+    }
+  }
+
+  route Compose {
+    Column(p: 14, gap: 12) {
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Text("New post", size: 15, color: "#101828")
+        Input(placeholder: "Title", bind: draftTitle)
+        TextArea(placeholder: "Body", bind: draftBody)
+      }
+      Container(p: 12, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+        Text("Image attachment", size: 13, color: "#101828")
+        UploadZone(value: 60, segments: 4)
+      }
+      Row(gap: 10) {
+        Button("Publish", p: 10, rounded: 10, shadow: 2, bg: "#097FEB", animate: spring) {
+          draftTitle = ""
+          draftBody = ""
+          pop
+        }
+        Button("Cancel", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+          pop
+        }
+      }
+    }
+  }
+
+  route Profile {
+    Column(p: 14, gap: 12) {
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Row(gap: 10, align: center, bg: "#FFFFFF") {
+          Avatar(label: "{me}")
+          Column(gap: 2) {
+            Text("{me}", size: 16, color: "#101828")
+            if (admin) {
+              Badge(label: "admin", tone: "info")
+            } else {
+              Badge(label: "guest", tone: "neutral")
+            }
+          }
+        }
+        Text("Account surface: sign in switches role-gated actions on", size: 11, color: "#667085")
+      }
+      Container(p: 12, rounded: 14, shadow: 3, bg: "#F4F7FB") {
+        Input(placeholder: "Username", bind: loginName)
+        Input(placeholder: "Password", bind: loginPassword)
+        Row(gap: 10) {
+          Button("Sign in", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+            me = loginName
+            signedIn = true
+            loginPassword = ""
+          }
+          Button("Sign out", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+            me = "guest"
+            signedIn = false
+            admin = false
+          }
+        }
+      }
+      Button("Back to feed", p: 10, rounded: 10, shadow: 2, bg: "#043B70") {
+        pop
+      }
+    }
+  }
+}

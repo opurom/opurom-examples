@@ -719,6 +719,62 @@
           "description": "render the player to a deterministic PPM frame"
         }
       ]
+    },
+    {
+      "name": "forum",
+      "source": "apps/forum/forum.opu",
+      "required": true,
+      "multipage": true,
+      "targets": [
+        "native",
+        "full"
+      ],
+      "tests": [
+        {
+          "id": "forum.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the forum full-stack source"
+        },
+        {
+          "id": "forum.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "lower models, api routes and the four route pages into one IR"
+        },
+        {
+          "id": "forum.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "360",
+            "740",
+            "{tmp}/feed.ppm"
+          ],
+          "description": "render the initial Feed route"
+        },
+        {
+          "id": "forum.admin",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "360",
+            "740",
+            "{tmp}/admin.ppm",
+            "--state",
+            "admin=true"
+          ],
+          "description": "render the moderation surface with the admin role on"
+        }
+      ]
     }
   ]
 }
