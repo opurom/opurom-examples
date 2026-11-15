@@ -590,6 +590,18 @@ try {
     assert.match(listing, /lib\/arm64-v8a\/libopurom_mobile\.so/, 'arm64 lib missing from APK');
     assert.match(listing, /lib\/x86_64\/libopurom_mobile\.so/, 'x86_64 lib missing from APK');
   });
+  // On-device smoke: installs the debug APK on a running emulator, launches
+  // MainActivity, proves the process stays alive and captures a screenshot. It
+  // SKIPs honestly when adb or an online device is absent, so CI without an
+  // emulator stays green while a device-equipped host verifies launch.
+  check('Android APK installs, launches and renders on a device', () => {
+    const out = `${run('node', [P('opurom-mobile', 'smoke-emulator.mjs')]).stdout || ''}`;
+    for (const line of out.split('\n')) {
+      if (/^(PASS|SKIP|FAIL):/.test(line)) console.log(`      ${line}`);
+    }
+    assert.match(out, /^PASS:/m, 'smoke test produced no PASS line');
+    assert.ok(!/^FAIL:/m.test(out), 'smoke test reported a failure');
+  });
   check('repeat profiling excludes warmup and states the environment', () => {
     const out = ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'profile',
       '--src', P('opurom-examples', 'counter.opu'), '--repeat', '3']), 'profile --repeat');
