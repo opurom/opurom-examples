@@ -2,6 +2,8 @@
 // Next/Prev switch the selected image by setting string/int state and
 // mutually exclusive bool gates; the software raster draws Image as a
 // gradient placeholder (it does not decode PNG resources).
+import "pkg-theme/default.opu";
+
 component Nav(label: string, t: string, src: string, n: int, b1: bool, b2: bool, b3: bool, b4: bool, b5: bool) {
   Button(label, p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
          fontScale: 1.1, animate: spring) {
@@ -17,8 +19,6 @@ component Nav(label: string, t: string, src: string, n: int, b1: bool, b2: bool,
 }
 
 app PhotoWall {
-  theme { accent: "#097FEB", radius: 14 }
-
   state title = "Dawn"
   state hero = "assets/photo1.png"
   state sel = 1
@@ -30,11 +30,11 @@ app PhotoWall {
 
   // Scroll keeps children at natural size and clips, so compact frames
   // show a clean top slice instead of squeezing the whole layout.
-  Scroll(height: 640, bg: "#EDF2FA", border: "#EDF2FA", rounded: 14, animate: ease) {
+  Scroll(height: 640, bg: "#F9FAFB", border: "#F9FAFB", rounded: 14, animate: ease) {
   Column(p: 18, gap: 14, width: 800) {
-    Container(p: 22, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+    Container(p: 22, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
       Text("Opurom Photo Wall", size: 22, color: "#FFFFFF")
-      Text("Selected: {title} - photo {sel} of 5", size: 12, color: "#D6E8FF")
+      Text("Selected: {title} - photo {sel} of 5", size: 12, color: "#FFFFFF")
     }
     Card(p: 10, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2", animate: ease) {
       Column(gap: 10, align: center) {
@@ -53,12 +53,12 @@ app PhotoWall {
         if (s5) {
           Image(src: "assets/photo5.png", width: 360, height: 270, gradient: "#FF7848,#781C40", rounded: 14, shadow: 2, animate: ease, label: "media/Image")
         }
-        Text("{title}", size: 20, color: "#101828")
+        Text("{title}", size: 20, color: "#111827")
       }
     }
-    Container(p: 14, rounded: 14, shadow: 3, bg: "#F4F7FB") {
-      Text("Gallery", size: 15, color: "#101828")
-      Row(gap: 10, bg: "#F4F7FB") {
+    Container(p: 14, rounded: 14, shadow: 3, bg: "#F9FAFB") {
+      Text("Gallery", size: 15, color: "#111827")
+      Row(gap: 10, bg: "#F9FAFB") {
         Image(src: "assets/photo1.png", width: 112, height: 84, gradient: "#FFBE5A,#D6486E", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
         Image(src: "assets/photo2.png", width: 112, height: 84, gradient: "#40E0D0,#0B488C", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
         Image(src: "assets/photo3.png", width: 112, height: 84, gradient: "#A878FF,#242060", rounded: 10, shadow: 2, animate: ease, label: "media/Image")

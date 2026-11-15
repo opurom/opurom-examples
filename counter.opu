@@ -1,23 +1,23 @@
 // A minimal full-stack Opurom program.
+import "pkg-theme/default.opu";
+
 app Counter {
   state count = 0
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
-
   ScrollView(p: 16) {
     Column(gap: 14) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 20, rounded: 18, shadow: 4, bg: "#097FEB", animate: ease) {
         Text("Opurom Counter", size: 22, color: "#FFFFFF")
-        Text("Deterministic integer state, tap to change", size: 12, color: "#D6E8FF")
+        Text("Deterministic integer state, tap to change", size: 12, color: "#FFFFFF")
       }
       Container(p: 20, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
         Column(gap: 6, align: center, bg: "#FFFFFF") {
-          Text("Count", size: 12, color: "#667085")
-          Text("{count}", size: 40, color: "#101828")
+          Text("Count", size: 12, color: "#6B7280")
+          Text("{count}", size: 40, color: "#111827")
         }
       }
-      Container(p: 13, rounded: 16, shadow: 3, bg: "#F4F7FB") {
-        Row(gap: 12, align: center, bg: "#F4F7FB") {
+      Container(p: 13, rounded: 16, shadow: 3, bg: "#F9FAFB") {
+        Row(gap: 12, align: center, bg: "#F9FAFB") {
           Button("-", p: 12, rounded: 12, shadow: 2, bg: "#097FEB", fontScale: 1.25, animate: spring) {
             count -= 1
           }

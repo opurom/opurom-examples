@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "manifestSha256": "7d04863cf4b131921f5554eaf1770259e0cdf4b8712dda8f308047fddcda380f",
+  "packages": [
+    {
+      "name": "opurom-icons",
+      "version": "0.1.0",
+      "path": "registry/opurom-icons/0.1.0",
+      "sha256": "db8060e3479a5e513afa8e8e80360a272345e48c0b3b3ee757dcced72886efa8",
+      "files": [
+        {
+          "path": "registry/opurom-icons/0.1.0/LICENSE",
+          "sha256": "4c66305ddc1acd5dc21896b704702e7937448cef3768b69c14fd9327a47925b7"
+        },
+        {
+          "path": "registry/opurom-icons/0.1.0/NOTICE",
+          "sha256": "62e1c9bc50cf761e035dc4f43ce307f514614f9f28a3bac21d1bc0872ac0ac0d"
+        },
+        {
+          "path": "registry/opurom-icons/0.1.0/icons/icons.json",
+          "sha256": "4be9860919954453713ee71a18ea73b4ef0be19a49b0f57e10367972b2b7f750"
+        },
+        {
+          "path": "registry/opurom-icons/0.1.0/opurom-pkg.json",
+          "sha256": "8cfceafdd12e19f17271323c41ed7778ce3d270e9612278debafd78fb888a60e"
+        }
+      ]
+    },
+    {
+      "name": "opurom-ui",
+      "version": "0.1.0",
+      "path": "registry/opurom-ui/0.1.0",
+      "sha256": "cf53f460250897d5f1a93ba562ea5881b26aa4f1a6df2d1ece337c2516f3af61",
+      "files": [
+        {
+          "path": "registry/opurom-ui/0.1.0/opurom-pkg.json",
+          "sha256": "7985f15889d20284d8cc4b918c55f8c9ed3c23afa1078119dc1273936fb0d3ca"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/pkg-theme/dark.opu",
+          "sha256": "a8c26a26cb25a9d872646ee062e10fdbb520ab083f1baa842461c6df455f9646"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/pkg-theme/default.opu",
+          "sha256": "258264bc5944ef1c1f76680c80a9a256f6113d6df98923ab29de23b2acc532d2"
+        }
+      ]
+    }
+  ]
+}

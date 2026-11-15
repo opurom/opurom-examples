@@ -24,6 +24,7 @@ the smallest program to the richest multi-device application.
 | [typography.opu](typography.opu) | Global theme `fontScale` with a per-node override, showing how one scale rule and one local exception coexist. |
 | [particles.opu](particles.opu) | A seeded particle field: a two-stop gradient panel scattered with deterministic dots, no wall clock and no randomness. |
 | [field-service.opu](field-service.opu) | The multi-device full-stack board: `model`, `api`, computed values, an adaptive `Grid` and device breakpoints, so one IR reflows between phone and tablet. |
+| [apps/forum/forum.opu](apps/forum/forum.opu) | The community forum MVP: users, posts and comments with CRUD api routes, four `route` pages (feed, thread, compose, profile) navigated with `push`/`pop`, role-gated moderation UI and an image upload surface. |
 
 The canonical frontend IR lives in
 [counter.opuir.json](golden/counter.opuir.json); the
@@ -111,6 +112,27 @@ host with the toolchain installed.
 
 Adding an application means adding its source file and one registry entry; the CLI then includes
 it in `examples` and `test --examples` without further configuration.
+
+## UI and icon conventions
+
+Every new demo, test fixture and benchmark project uses the official `opurom-ui` design system and
+the official `opurom-icons` set. Hand-written base UI styling and hand-drawn icons are not allowed.
+
+- Declare both packages in `opurom.json` and lock them with `opurom-pkg`. The vendored packages live
+  under `registry/`, so `opuromc` resolves them offline.
+- Import the theme once, before the `app` block: `import "theme/default.opu";`. Do not redeclare a
+  `theme { ... }` block to restyle surfaces; the imported package owns the token baseline (accent,
+  radius, surface/on-surface/stage). A program overrides a token only when it has a documented,
+  app-specific reason.
+- Draw icons with `Icon(name: "...")` names from `opurom-icons`. Do not paint glyph text (`+`, `x`,
+  arrows, stars) or custom vector paths in place of an icon. Package names are kebab-case
+  (`chevron-right`, `play`, `search`); the compiler embeds the referenced path data into the IR.
+- Components come from the `opurom-ui` / catalog surface (`Button`, `Card`, `Input`, `Switch`,
+  `Progress`, `Icon`, ...). Do not hand-roll a component from `Container` + border/shadow/colour or
+  a native primitive when a catalog component already covers it.
+
+Brand-specific showcase apps (for example the dashboard and workbench) that deliberately present
+their own palette are the exception; they still use `opurom-icons` for icons.
 
 ## Reference
 

@@ -1,6 +1,8 @@
 // Full-stack field-service board: UI, data model and HTTP API in one source file.
 // The same IR adapts to phone and tablet widths: the header Row collapses to a
 // column on compact viewports and the task Grid reflows its fluid columns.
+import "pkg-theme/default.opu";
+
 app FieldService {
   model Task {
     id: int primary
@@ -25,7 +27,6 @@ app FieldService {
 
   computed remaining = open * 2
 
-  theme { accent: "#097FEB", radius: 14, fontScale: 1.0 }
 
   ScrollView(p: 14) {
     Column(gap: 12) {
@@ -34,7 +35,7 @@ app FieldService {
           Avatar(label: "R")
           Column(gap: 2, bg: "#0B3E86") {
             Text("Field Service", size: 20, color: "#FFFFFF")
-            Text("Crew {crew} - open cases: {open}", size: 11, color: "#D6E8FF")
+            Text("Crew {crew} - open cases: {open}", size: 11, color: "#FFFFFF")
           }
           Spacer(width: 8)
           Badge(label: "{remaining} due")
@@ -48,21 +49,21 @@ app FieldService {
 
       Grid(columns: 2) {
         Card(p: 12, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
-          Text("triage", size: 15, color: "#101828")
+          Text("triage", size: 15, color: "#111827")
         }
-        Card(p: 12, rounded: 14, shadow: 3, bg: "#F4F7FB") {
-          Text("dispatch", size: 15, color: "#101828")
+        Card(p: 12, rounded: 14, shadow: 3, bg: "#F9FAFB") {
+          Text("dispatch", size: 15, color: "#111827")
         }
-        Card(p: 12, rounded: 14, shadow: 3, bg: "#F4F7FB") {
-          Text("close", size: 15, color: "#101828")
+        Card(p: 12, rounded: 14, shadow: 3, bg: "#F9FAFB") {
+          Text("close", size: 15, color: "#111827")
         }
         Card(p: 12, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
-          Text("review", size: 15, color: "#101828")
+          Text("review", size: 15, color: "#111827")
         }
       }
 
-      Container(p: 12, rounded: 16, shadow: 3, bg: "#F4F7FB") {
-        Row(gap: 10, bg: "#F4F7FB") {
+      Container(p: 12, rounded: 16, shadow: 3, bg: "#F9FAFB") {
+        Row(gap: 10, bg: "#F9FAFB") {
           Button("Dispatch crew", p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
                  fontScale: 1.1, animate: spring) {
             open += 1
@@ -71,7 +72,7 @@ app FieldService {
       }
 
       if (dark) {
-        Container(p: 14, rounded: 14, shadow: 3, bg: "#101828", animate: ease) {
+        Container(p: 14, rounded: 14, shadow: 3, bg: "#111827", animate: ease) {
           Text("Night shift active for {crew}", size: 15, color: "#FFFFFF")
         }
       }

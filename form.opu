@@ -1,28 +1,29 @@
 // Input binding, computed values and conditional rendering in one program.
+import "pkg-theme/default.opu";
+
 app Form {
   state name = "Ada"
   state age = 36
   state subscribed = false
 
-  theme { accent: "#097FEB", radius: 14 }
 
   ScrollView(p: 16) {
     Column(gap: 14) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
         Text("Opurom Form", size: 22, color: "#FFFFFF")
-        Text("Bound inputs update state on every edit", size: 12, color: "#D6E8FF")
+        Text("Bound inputs update state on every edit", size: 12, color: "#FFFFFF")
       }
       Container(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
         Column(gap: 12, bg: "#FFFFFF") {
-          Text("Account setup", size: 15, color: "#101828")
+          Text("Account setup", size: 15, color: "#111827")
           Input(placeholder: "Display name", bind: name)
           Slider(min: 0, max: 100, bind: age)
-          Text("Name: {name}", size: 16, color: "#101828")
-          Text("Years: {age}", size: 16, color: "#101828")
+          Text("Name: {name}", size: 16, color: "#111827")
+          Text("Years: {age}", size: 16, color: "#111827")
         }
       }
-      Container(p: 13, rounded: 16, shadow: 3, bg: "#F4F7FB") {
-        Row(gap: 10, bg: "#F4F7FB") {
+      Container(p: 13, rounded: 16, shadow: 3, bg: "#F9FAFB") {
+        Row(gap: 10, bg: "#F9FAFB") {
           Button("Toggle subscription", p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
                  fontScale: 1.1, animate: spring) {
             subscribed.toggle()
@@ -31,7 +32,7 @@ app Form {
       }
       if (subscribed) {
         Container(p: 18, rounded: 16, shadow: 3,
-                  gradient: "#097FEB,#043B70", bg: "#043B70", animate: ease) {
+                  gradient: "#097FEB,#005FCC", bg: "#005FCC", animate: ease) {
           Text("Subscribed as {name}", size: 17, color: "#FFFFFF")
         }
       }

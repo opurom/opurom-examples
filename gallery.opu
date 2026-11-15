@@ -2,18 +2,18 @@
 // Derived from opurom-examples/golden/components.json: 216 named components lower onto 100
 // distinct primitive kinds, grouped here by catalog family. Each exhibit carries
 // an a11y label of the form "family/Kind" so roles and bounds can be asserted.
+import "pkg-theme/default.opu";
+
 app Gallery {
   state dark = false
   state level = 40
   state choice = "a"
 
-  theme { mode: light, accent: "#097FEB", radius: 8 }
-
   Scroll(height: 7600, p: 12) {
     Column(gap: 10) {
-      Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
         Text("Opurom primitive gallery", size: 22, color: "#FFFFFF", role: "heading")
-        Text("216 named components, 100 distinct primitive kinds", size: 12, color: "#D6E8FF")
+        Text("216 named components, 100 distinct primitive kinds", size: 12, color: "#FFFFFF")
       }
       // family: layout (17 kinds)
       Container(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
@@ -82,7 +82,7 @@ app Gallery {
           Text("media / 13 kinds", size: 15, role: "heading")
           Grid(columns: 4) {
             Image(src: "opurom-logo.png", width: 64, height: 64, label: "media/Image")
-            Icon(name: "star", label: "media/Icon")
+            Icon(name: "eye", label: "media/Icon")
             Avatar(label: "media/Avatar")
             Player(src: "clip.mp4", width: 120, height: 80, label: "media/Player")
             Map(center: "0,0", zoom: 3, height: 100, label: "media/Map")

@@ -1,0 +1,3 @@
+// Shared design palette for multi-file examples. Imported modules accept only
+// state, model, api, theme and imports, so this is the single theme source.
+theme { mode: light, accent: "#097FEB", radius: 14, fontScale: 1.0 }

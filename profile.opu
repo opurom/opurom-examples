@@ -1,20 +1,20 @@
 // Second golden: strings, booleans, input binding, set and toggle.
+import "pkg-theme/default.opu";
+
 app Profile {
   state name = "world"
   state dark = false
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
-
   ScrollView(p: 16) {
     Column(gap: 14) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 20, rounded: 18, shadow: 4, bg: "#097FEB", animate: ease) {
         Text("Opurom Profile", size: 22, color: "#FFFFFF")
-        Text("Bound input, set and toggle state", size: 12, color: "#D6E8FF")
+        Text("Bound input, set and toggle state", size: 12, color: "#FFFFFF")
       }
       Container(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
         Column(gap: 8, bg: "#FFFFFF") {
-          Text("Greeting", size: 12, color: "#667085")
-          Text("Hello, {name}", size: 24, color: "#101828")
+          Text("Greeting", size: 12, color: "#6B7280")
+          Text("Hello, {name}", size: 24, color: "#111827")
           Input(placeholder: "Your name", bind: name)
         }
       }
@@ -22,13 +22,13 @@ app Profile {
         Button("Toggle theme", p: 12, rounded: 12, shadow: 2, bg: "#097FEB", fontScale: 1.1, animate: spring) {
           dark.toggle()
         }
-        Button("Reset", p: 12, rounded: 12, shadow: 2, bg: "#04509B", fontScale: 1.1, animate: spring) {
+        Button("Reset", p: 12, rounded: 12, shadow: 2, bg: "#005FCC", fontScale: 1.1, animate: spring) {
           name = "world"
         }
       }
       if (dark) {
-        Container(p: 18, rounded: 16, shadow: 3, gradient: "#101828,#043B70", animate: ease) {
-          Text("Dark surface", size: 13, color: "#D6E8FF")
+        Container(p: 18, rounded: 16, shadow: 3, bg: "#111827", animate: ease) {
+          Text("Dark surface", size: 13, color: "#D1D5DB")
           Text("Hello, {name}", size: 22, color: "#FFFFFF")
         }
       }

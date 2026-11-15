@@ -1,23 +1,24 @@
 // Deterministic entry animation: the same tick always yields the same frame.
+import "pkg-theme/default.opu";
+
 app Animation {
-  theme { accent: "#097FEB", radius: 14 }
 
   ScrollView(p: 16) {
     Column(gap: 14, align: center) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
         Text("Animation", size: 22, color: "#FFFFFF")
-        Text("Spring, ease and static share one fixed-timestep clock", size: 11, color: "#D6E8FF")
+        Text("Spring, ease and static share one fixed-timestep clock", size: 11, color: "#FFFFFF")
       }
       Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
-                gradient: "#097FEB,#043B70", bg: "#043B70", animate: spring) {
+                gradient: "#097FEB,#005FCC", bg: "#005FCC", animate: spring) {
         Text("spring", size: 18, color: "#FFFFFF")
       }
       Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
-                gradient: "#4FA8FF,#097FEB", bg: "#097FEB", animate: ease) {
+                gradient: "#097FEB,#005FCC", bg: "#097FEB", animate: ease) {
         Text("ease", size: 18, color: "#FFFFFF")
       }
       Container(width: 260, height: 58, p: 14, rounded: 14, shadow: 3,
-                gradient: "#101828,#101828", bg: "#101828", animate: none) {
+                gradient: "#101828,#101828", bg: "#111827", animate: none) {
         Text("static", size: 18, color: "#FFFFFF")
       }
     }

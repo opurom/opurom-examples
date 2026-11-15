@@ -2,6 +2,8 @@
 // Opurom actions are only set/add-literal/toggle; computed supplies +, - and *.
 // One int selector per pending op turns "applied" into one branch-free formula.
 // shortcut: division is one subtraction per "=" press; stop when remainder is below the divisor.
+import "pkg-theme/default.opu";
+
 component Digit(d: int) {
   Button("{d}", p: 18, rounded: 14, shadow: 2, bg: "#097FEB",
          fontScale: 1.25, animate: spring) {
@@ -12,7 +14,7 @@ component Digit(d: int) {
 }
 
 component OpKey(sym: string, sa: int, ss: int, sm: int, sd: int, dm: bool, nm: bool) {
-  Button(sym, p: 18, rounded: 14, shadow: 3, bg: "#04509B",
+  Button(sym, p: 18, rounded: 14, shadow: 3, bg: "#005FCC",
          fontScale: 1.25, animate: spring) {
     acc = applied
     rest = acc
@@ -32,8 +34,6 @@ component OpKey(sym: string, sa: int, ss: int, sm: int, sd: int, dm: bool, nm: b
 }
 
 app Calculator {
-  theme { accent: "#097FEB", radius: 14 }
-
   state cur = 0
   state digit = 0
   state acc = 0
@@ -58,13 +58,13 @@ app Calculator {
   // show a clean top slice instead of squeezing the whole layout.
   Scroll(height: 640, bg: "#EDF2FA", border: "#EDF2FA", rounded: 14, animate: ease) {
   Column(p: 28, gap: 28, width: 800) {
-    Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+    Container(p: 24, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
       Text("Opurom Calculator", size: 24, color: "#FFFFFF")
-      Text("Integer arithmetic with computed state", size: 12, color: "#D6E8FF")
+      Text("Integer arithmetic with computed state", size: 12, color: "#FFFFFF")
     }
-    Container(p: 30, rounded: 18, shadow: 3, gradient: "#043B70,#097FEB", bg: "#043B70", animate: ease) {
+    Container(p: 30, rounded: 18, shadow: 3, gradient: "#005FCC,#097FEB", bg: "#005FCC", animate: ease) {
       Text("{out}", size: 44, color: "#FFFFFF")
-      Text("Pending {opLabel}   |   Quotient {q}   |   Remainder {rest}", size: 14, color: "#D6E8FF")
+      Text("Pending {opLabel}   |   Quotient {q}   |   Remainder {rest}", size: 14, color: "#FFFFFF")
     }
     if (divMode) {
       Text("Divide: = subtracts once; stop when remainder < divisor", size: 12, color: "#097FEB")
@@ -88,7 +88,7 @@ app Calculator {
       OpKey("-", 0, 1, 0, 0, false, true)
     }
     Row(gap: 10) {
-      Button("C", p: 18, rounded: 14, shadow: 2, bg: "#101828",
+      Button("C", p: 18, rounded: 14, shadow: 2, bg: "#111827",
              fontScale: 1.25, animate: spring) {
         cur = 0
         digit = 0
@@ -108,7 +108,7 @@ app Calculator {
       }
       Digit(0)
       if (divMode) {
-        Button("=", p: 18, rounded: 14, shadow: 3, bg: "#04509B",
+        Button("=", p: 18, rounded: 14, shadow: 3, bg: "#005FCC",
                fontScale: 1.25, animate: spring) {
           rest = nextRest
           q += 1
@@ -116,7 +116,7 @@ app Calculator {
         }
       }
       if (normalMode) {
-        Button("=", p: 18, rounded: 14, shadow: 3, bg: "#04509B",
+        Button("=", p: 18, rounded: 14, shadow: 3, bg: "#005FCC",
                fontScale: 1.25, animate: spring) {
           acc = applied
           res = acc

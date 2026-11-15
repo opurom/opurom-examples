@@ -1,12 +1,13 @@
 // Seeded particle field: a gradient panel scattered with deterministic dots.
+import "pkg-theme/default.opu";
+
 app Particles {
-  theme { mode: light, accent: "#097FEB", radius: 14 }
 
   ScrollView(p: 16) {
     Column(gap: 14) {
-      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+      Container(p: 20, rounded: 18, shadow: 4, gradient: "#097FEB,#005FCC", animate: ease) {
         Text("Particle field", size: 22, color: "#FFFFFF")
-        Text("64 seeded dots over a two-stop gradient", size: 12, color: "#D6E8FF")
+        Text("64 seeded dots over a two-stop gradient", size: 12, color: "#FFFFFF")
       }
       Container(height: 150, p: 14, rounded: 16, shadow: 3,
                 gradient: "#097FEB,#101828",

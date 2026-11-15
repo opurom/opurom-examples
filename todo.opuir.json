@@ -1,44 +1,197 @@
 {
-  "ir": "0.1.0",
-  "app": "TodoApp",
-  "state": [
-    { "name": "remaining", "type": "int", "init": 0 }
-  ],
-  "models": [
+  "api": [
     {
-      "name": "Todo",
-      "fields": [
-        { "name": "id", "type": "int", "primary": true, "default": null },
-        { "name": "title", "type": "string", "primary": false, "default": null },
-        { "name": "done", "type": "bool", "primary": false, "default": false }
-      ]
+      "handlers": [
+        "list",
+        "create"
+      ],
+      "model": "Todo",
+      "path": "/todos"
+    },
+    {
+      "handlers": [
+        "get",
+        "update",
+        "delete"
+      ],
+      "model": "Todo",
+      "path": "/todos/:id"
     }
   ],
-  "api": [
-    { "path": "/todos", "model": "Todo", "handlers": ["list", "create"] },
-    { "path": "/todos/:id", "model": "Todo", "handlers": ["get", "update", "delete"] }
+  "app": "TodoApp",
+  "imports": [
+    "pkg-theme/default.opu"
   ],
+  "ir": "0.1.0",
+  "models": [
+    {
+      "fields": [
+        {
+          "default": null,
+          "name": "id",
+          "primary": true,
+          "type": "int"
+        },
+        {
+          "default": null,
+          "name": "title",
+          "primary": false,
+          "type": "string"
+        },
+        {
+          "default": false,
+          "name": "done",
+          "primary": false,
+          "type": "bool"
+        }
+      ],
+      "name": "Todo"
+    }
+  ],
+  "state": [
+    {
+      "init": 0,
+      "name": "remaining",
+      "type": "int"
+    }
+  ],
+  "theme": {
+    "accent": "#007AFF",
+    "fontScale": 1.0,
+    "mode": "light",
+    "radius": 12,
+    "tokens": {
+      "onSurface": "#111827",
+      "stage": "#F9FAFB",
+      "surface": "#FFFFFF"
+    }
+  },
   "tree": {
-    "id": 0,
-    "kind": "Column",
-    "props": { "padding": 16, "gap": 8 },
     "children": [
       {
+        "children": [
+          {
+            "children": [],
+            "events": {},
+            "id": 2,
+            "kind": "Text",
+            "props": {
+              "color": "#FFFFFF",
+              "size": 20,
+              "value": "Opurom Todo"
+            }
+          },
+          {
+            "children": [],
+            "events": {},
+            "id": 3,
+            "kind": "Text",
+            "props": {
+              "color": "#FFFFFF",
+              "size": 11,
+              "value": "UI, model and API in one source file"
+            }
+          }
+        ],
+        "events": {},
         "id": 1,
-        "kind": "Text",
-        "props": { "value": "Opurom Todo - remaining: {remaining}", "size": 20 },
-        "children": [],
-        "events": {}
+        "kind": "Container",
+        "props": {
+          "animate": "ease",
+          "color": "#097FEB",
+          "padding": 16,
+          "radius": 16,
+          "shadow": 4
+        }
       },
       {
-        "id": 2,
-        "kind": "Button",
-        "props": { "label": "Refresh" },
-        "children": [],
-        "events": { "tap": { "op": "add", "target": "remaining", "value": 1 } }
+        "children": [
+          {
+            "children": [],
+            "events": {},
+            "id": 5,
+            "kind": "Text",
+            "props": {
+              "color": "#6B7280",
+              "size": 11,
+              "value": "Remaining"
+            }
+          },
+          {
+            "children": [],
+            "events": {},
+            "id": 6,
+            "kind": "Text",
+            "props": {
+              "color": "#097FEB",
+              "size": 30,
+              "value": "{remaining}"
+            }
+          }
+        ],
+        "events": {},
+        "id": 4,
+        "kind": "Container",
+        "props": {
+          "border": "#E4E9F2",
+          "color": "#FFFFFF",
+          "padding": 14,
+          "radius": 14,
+          "shadow": 3
+        }
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [],
+                "events": {
+                  "tap": {
+                    "op": "add",
+                    "target": "remaining",
+                    "value": 1
+                  }
+                },
+                "id": 9,
+                "kind": "Button",
+                "props": {
+                  "animate": "spring",
+                  "color": "#097FEB",
+                  "fontScale": 1.0,
+                  "label": "Refresh",
+                  "padding": 10,
+                  "radius": 10,
+                  "shadow": 2
+                }
+              }
+            ],
+            "events": {},
+            "id": 8,
+            "kind": "Row",
+            "props": {
+              "color": "#F9FAFB",
+              "gap": 10
+            }
+          }
+        ],
+        "events": {},
+        "id": 7,
+        "kind": "Container",
+        "props": {
+          "color": "#F9FAFB",
+          "padding": 10,
+          "radius": 14,
+          "shadow": 3
+        }
       }
     ],
-    "events": {}
-  },
-  "theme": { "mode": "system", "accent": "#097FEB", "radius": 12 }
+    "events": {},
+    "id": 0,
+    "kind": "Column",
+    "props": {
+      "gap": 10,
+      "padding": 14
+    }
+  }
 }

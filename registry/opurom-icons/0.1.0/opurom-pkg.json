@@ -1,0 +1,26 @@
+{
+  "name": "opurom-icons",
+  "version": "0.1.0",
+  "kind": "icons",
+  "entry": "icons/icons.json",
+  "license": "MIT",
+  "attribution": "Tabler Icons (https://tabler.io/icons), MIT. Full text in LICENSE and NOTICE.",
+  "iconSource": {
+    "site": "https://tabler.io/icons",
+    "repository": "https://github.com/tabler/tabler-icons",
+    "version": "3.52.0",
+    "redistributed": true
+  },
+  "viewBox": "0 0 24 24",
+  "styles": [
+    "outline",
+    "filled"
+  ],
+  "count": 5491,
+  "files": [
+    "LICENSE",
+    "NOTICE",
+    "icons/icons.json",
+    "opurom-pkg.json"
+  ]
+}

@@ -1,4 +1,6 @@
 // Full-stack Todo: UI, data model and HTTP API in one source file.
+import "pkg-theme/default.opu";
+
 app TodoApp {
   model Todo {
     id: int primary
@@ -19,19 +21,17 @@ app TodoApp {
 
   state remaining = 0
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
-
   Column(p: 14, gap: 10) {
-    Container(p: 16, rounded: 16, shadow: 4, gradient: "#097FEB,#043B70", animate: ease) {
+    Container(p: 16, rounded: 16, shadow: 4, bg: "#097FEB", animate: ease) {
       Text("Opurom Todo", size: 20, color: "#FFFFFF")
-      Text("UI, model and API in one source file", size: 11, color: "#D6E8FF")
+      Text("UI, model and API in one source file", size: 11, color: "#FFFFFF")
     }
     Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
-      Text("Remaining", size: 11, color: "#667085")
+      Text("Remaining", size: 11, color: "#6B7280")
       Text("{remaining}", size: 30, color: "#097FEB")
     }
-    Container(p: 10, rounded: 14, shadow: 3, bg: "#F4F7FB") {
-      Row(gap: 10, bg: "#F4F7FB") {
+    Container(p: 10, rounded: 14, shadow: 3, bg: "#F9FAFB") {
+      Row(gap: 10, bg: "#F9FAFB") {
         Button("Refresh", p: 10, rounded: 10, shadow: 2, bg: "#097FEB", fontScale: 1.0, animate: spring) {
           remaining += 1
         }
