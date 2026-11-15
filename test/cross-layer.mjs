@@ -994,7 +994,7 @@ try {
     // The package icons the player references are embedded, deduped, by name.
     assert.ok(doc.icons && Object.keys(doc.icons).length > 0, 'music IR carries no package icons');
     const iconNames = new Set(Object.values(doc.icons).map(i => i.name));
-    for (const want of ['play', 'pause', 'disc', 'skip-forward']) {
+    for (const want of ['player-play', 'player-pause', 'disc', 'player-skip-forward']) {
       assert.ok(iconNames.has(want), `package icon '${want}' not embedded from opurom-icons`);
     }
     // The player binds audio + filesystem state: transport, seek, volume, tracks.

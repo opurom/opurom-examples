@@ -113,10 +113,10 @@ app MusicPlayer {
             Row(gap: 8, align: center) {
               Text("Now playing", size: 15, color: "#E5E7EB")
               Spacer(width: 8)
-              Icon(name: "list-music")
+              Icon(name: "playlist")
             }
             Row(gap: 10, align: center) {
-              Icon(name: "shuffle")
+              Icon(name: "arrows-shuffle")
               Text("Shuffle", size: 12, color: "#8A94A6")
               Switch(bind: shuffle)
             }
@@ -167,13 +167,13 @@ app MusicPlayer {
           }
           Slider(min: 0, max: 100, bind: position)
           Row(gap: 12, align: center) {
-            Icon(name: "skip-back")
-            Icon(name: "pause")
+            Icon(name: "player-skip-back")
+            Icon(name: "player-pause")
             Button("Play", p: 12, rounded: 14, bg: "#FFFFFF", animate: spring) {
               playing.toggle()
             }
-            Icon(name: "play")
-            Icon(name: "skip-forward")
+            Icon(name: "player-play")
+            Icon(name: "player-skip-forward")
             Spacer(width: 8)
             Icon(name: "volume-off")
           }
