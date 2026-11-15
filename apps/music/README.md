@@ -38,13 +38,13 @@ each with its per-build status.
 
 ## Packages
 
-- `opurom-ui` — the dark theme (`theme/dark.opu`) is imported once.
+- `opurom-ui` — the dark theme is imported once as `pkg-theme/dark.opu`.
 - `opurom-icons` — media glyphs (`play`, `pause`, `disc`, `music`,
   `skip-back`, `skip-forward`, `volume-off`, `repeat`, `shuffle`,
-  `list-music`, `headphone`, `album`, `folder`) come from the icon package.
+  `list-music`, `headphones`, `album`, `folder`) come from the icon package.
 
-Both are vendored under `registry/` and declared in `opurom.json`, so the
-source resolves and compiles offline.
+Both are declared in the repository-root `opurom.json` and locked in
+`opurom.lock` under `registry/`, so the source resolves and compiles offline.
 
 ## Verify
 

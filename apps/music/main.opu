@@ -1,4 +1,4 @@
-import "theme/dark.opu";
+import "pkg-theme/dark.opu";
 
 // Desktop music player MVP. One source file describes the whole surface: a
 // library list scanned from a local folder, the now-playing bar with transport
