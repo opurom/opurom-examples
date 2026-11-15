@@ -1,45 +1,78 @@
 {
-  "ir": "0.1.0",
   "app": "Counter",
+  "ir": "0.1.0",
   "state": [
-    { "name": "count", "type": "int", "init": 0 }
+    {
+      "init": 0,
+      "name": "count",
+      "type": "int"
+    }
   ],
+  "theme": {
+    "accent": "#097FEB",
+    "mode": "system",
+    "radius": 12
+  },
   "tree": {
-    "id": 0,
-    "kind": "Column",
-    "props": { "gap": 8, "padding": 16, "align": "center" },
     "children": [
       {
+        "children": [],
+        "events": {},
         "id": 1,
         "kind": "Text",
-        "props": { "value": "Count: {count}", "size": 24 },
-        "children": [],
-        "events": {}
+        "props": {
+          "size": 24,
+          "value": "Count: {count}"
+        }
       },
       {
-        "id": 2,
-        "kind": "Row",
-        "props": { "gap": 8 },
         "children": [
           {
+            "children": [],
+            "events": {
+              "tap": {
+                "op": "add",
+                "target": "count",
+                "value": -1
+              }
+            },
             "id": 3,
             "kind": "Button",
-            "props": { "label": "-" },
-            "children": [],
-            "events": { "tap": { "op": "add", "target": "count", "value": -1 } }
+            "props": {
+              "label": "-"
+            }
           },
           {
+            "children": [],
+            "events": {
+              "tap": {
+                "op": "add",
+                "target": "count",
+                "value": 1
+              }
+            },
             "id": 4,
             "kind": "Button",
-            "props": { "label": "+" },
-            "children": [],
-            "events": { "tap": { "op": "add", "target": "count", "value": 1 } }
+            "props": {
+              "label": "+"
+            }
           }
         ],
-        "events": {}
+        "events": {},
+        "id": 2,
+        "kind": "Row",
+        "props": {
+          "gap": 8
+        }
       }
     ],
-    "events": {}
-  },
-  "theme": { "mode": "system", "accent": "#097FEB", "radius": 12 }
+    "events": {},
+    "id": 0,
+    "kind": "Column",
+    "props": {
+      "align": "center",
+      "gap": 8,
+      "padding": 16
+    }
+  }
 }

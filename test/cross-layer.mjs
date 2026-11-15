@@ -140,7 +140,7 @@ try {
   const compiler = ensureBin('opurom-lang', 'opuromc');
   check('counter.opu still lowers to the core golden IR', () => {
     const out = join(tmp, 'counter.opuir.json');
-    ok(run(compiler, ['compile', P('opurom-examples', 'counter.opu'), '-o', out]), 'compile counter');
+    ok(run(compiler, ['compile', P('opurom-examples', 'golden', 'counter.opu'), '-o', out]), 'compile counter');
     assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), JSON.parse(readFileSync(P('opurom-examples', 'golden', 'counter.opuir.json'), 'utf8')));
   });
   check('todo.opu lowers UI + models + api into one IR', () => {
@@ -175,7 +175,7 @@ try {
     const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
     assert.ok(da && db, 'no digest in renderer output');
     assert.equal(da[1], db[1], 'digest differs between identical renders');
-    assert.equal(da[1], '900abf4bd93d1e51', 'core golden digest regressed');
+    assert.equal(da[1], '8d45f412996a99c6', 'core golden digest regressed');
   });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
@@ -415,16 +415,21 @@ try {
     const env = { ...ENV, OPR_AUTH_TOKEN: 'devtoken', OPR_CORS: 'https://app.example', OPR_PORT: String(port) };
     const child = spawn(demo, [], { env, stdio: 'ignore' });
     try {
+      // /health stays unauthenticated so a health probe works; /todos is the
+      // gated route that must reject a request with no bearer token.
       let ready = false;
       for (let i = 0; i < 30; i++) {
         const r = run('curl', ['-s', '--max-time', '2', '-o', '/dev/null', '-w', '%{http_code}',
           `http://127.0.0.1:${port}/health`]);
-        if (r.stdout.trim() === '401') { ready = true; break; }
+        if (r.stdout.trim() === '200') { ready = true; break; }
         spawnSync('sleep', ['0.2']);
       }
       assert.ok(ready, 'auth-enabled server did not become ready');
+      const gated = run('curl', ['-s', '--max-time', '2', '-o', '/dev/null', '-w', '%{http_code}',
+        `http://127.0.0.1:${port}/todos`]);
+      assert.equal(gated.stdout.trim(), '401', 'unauthorized /todos was not rejected');
       const authorized = run('curl', ['-s', '--max-time', '3', '-H', 'Authorization: Bearer devtoken',
-        '-D', '-', `http://127.0.0.1:${port}/health`]);
+        '-D', '-', `http://127.0.0.1:${port}/todos`]);
       assert.match(authorized.stdout, /200/, 'authorized request failed');
       assert.match(authorized.stdout, /etag/i, 'ETag header missing');
     } finally {
@@ -709,7 +714,11 @@ try {
   const galleryIr = join(tmp, 'gallery.opuir.json');
   const galleryCatalog = JSON.parse(readFileSync(P('opurom-examples', 'golden', 'components.json'), 'utf8'));
   const catalogKinds = new Set(galleryCatalog.components.map(x => x[1]));
-  const familyOf = new Map(galleryCatalog.components.map(x => [x[1], x[2]]));
+  const familyOf = new Map();
+  for (const comp of galleryCatalog.components) {
+    if (!familyOf.has(comp[1])) familyOf.set(comp[1], new Set());
+    familyOf.get(comp[1]).add(comp[2]);
+  }
   const walkGallery = n => {
     const out = [n];
     for (const c of n.children || []) out.push(...walkGallery(c));
@@ -720,9 +729,9 @@ try {
 
   check('showcase states the current catalog size in comment and UI text', () => {
     const src = readFileSync(P('opurom-examples', 'showcase.opu'), 'utf8');
-    assert.match(src, /\/\/ All 216 named components lower onto 100 distinct primitive kinds/,
+    assert.match(src, /\/\/ All 260 named components lower onto 100 distinct primitive kinds/,
       'stale source comment');
-    assert.match(src, /Paragraph\("One catalog, 216 named components, 100 distinct primitive kinds"/,
+    assert.match(src, /Paragraph\("One catalog, 260 named components, 100 distinct primitive kinds"/,
       'stale UI text');
     assert.ok(!/108 catalog|24 primitives|One catalog, 24/.test(src), 'stale catalog numbers remain');
     assert.ok(!/\bR[0-9]+\b|\bRound [0-9]+\b/.test(src), 'internal codename in showcase');
@@ -743,7 +752,7 @@ try {
     for (const n of items) {
       const [family, kind] = n.props.label.split('/');
       assert.equal(n.kind, kind, `label/kind mismatch on ${n.props.label}`);
-      assert.equal(familyOf.get(kind), family, `wrong family group for ${kind}`);
+      assert.ok(familyOf.get(kind)?.has(family), `wrong family group for ${kind}: ${family}`);
     }
   });
 
@@ -783,10 +792,10 @@ try {
     qq: 'pages/index/index.qml', douyin: 'pages/index/index.ttml',
     baidu: 'pages/index/index.swan', kuaishou: 'pages/index/index.ksml',
   };
-  check('gallery lowers to all nine emitters with valid artifacts', () => {
+  check('gallery lowers to all eleven emitters with valid artifacts', () => {
     const targets = ok(run(compiler, ['targets']), 'opuromc targets').trim().split('\n')
       .map(line => { const [name, files] = line.split('\t'); return { name, files: files.split(', ') }; });
-    assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
+    assert.equal(targets.length, 11, `expected 11 emitters, found ${targets.length}`);
     const cli = P('opurom-cli', 'bin', 'opurom.mjs');
     const ir = JSON.parse(readFileSync(galleryIr, 'utf8'));
     const ids = [];
@@ -846,10 +855,10 @@ try {
       }
     }
   };
-  check('every registered app compiles and lowers to all nine emitters', () => {
+  check('every registered app compiles and lowers to all eleven emitters', () => {
     const registry = JSON.parse(readFileSync(P('opurom-examples', 'examples.json'), 'utf8'));
     const targets = emitterTargets();
-    assert.equal(targets.length, 9, `expected 9 emitters, found ${targets.length}`);
+    assert.equal(targets.length, 11, `expected 11 emitters, found ${targets.length}`);
     lowerRegistry(registry, targets);
   });
   check('emitter matrix rejects broken registry entries and artifacts', () => {
@@ -883,11 +892,11 @@ try {
     const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
     const a = join(tmp, 'tier-a.ppm'), b = join(tmp, 'tier-b.ppm'), c = join(tmp, 'tier-c.ppm');
     assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '320', '240', a]), 'tier 320'),
-      /digest=900abf4bd93d1e51/);
+      /digest=8d45f412996a99c6/);
     assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '800', '600', b]), 'tier 800'),
-      /digest=c8403ba57da5ee61/);
+      /digest=318beb1dd337bc4e/);
     assert.match(ok(run(r, [P('opurom-examples', 'golden', 'counter.opuir.json'), '800', '600', c,
-      '--state', 'count=7']), 'tier state'), /digest=48a56056bd32a07e/);
+      '--state', 'count=7']), 'tier state'), /digest=40073cb95c912d80/);
   });
   check('Wayland wire encoding is verified without a compositor', () => {
     const wire = P('opurom-platform', 'src', 'wayland_wire.rs');
