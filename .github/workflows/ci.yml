@@ -70,7 +70,7 @@ jobs:
               git clone --depth 1 "https://github.com/opurom/opurom-examples.git" opurom-examples
               ;;
             opurom-examples)
-              for repo in opurom-core opurom-lang opurom-render opurom-cli; do
+              for repo in opurom-core opurom-lang opurom-render opurom-cli opurom-web; do
                 git clone --depth 1 "https://github.com/opurom/${repo}.git" "$repo"
               done
               ;;
