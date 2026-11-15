@@ -923,6 +923,49 @@ try {
     assert.match(out, /wayland/i, 'no Wayland wire tests registered');
   });
 
+  console.log('== desktop music player and native capability contracts ==');
+  check('music app compiles, embeds package icons and renders deterministically', () => {
+    const src = P('opurom-examples', 'apps', 'music', 'main.opu');
+    assert.ok(existsSync(src), 'apps/music/main.opu is missing');
+    const ir = join(tmp, 'music.opuir.json');
+    ok(run(compiler, ['compile', src, '-o', ir]), 'compile music');
+    const doc = JSON.parse(readFileSync(ir, 'utf8'));
+    assert.equal(doc.app, 'MusicPlayer');
+    // The package icons the player references are embedded, deduped, by name.
+    assert.ok(doc.icons && Object.keys(doc.icons).length > 0, 'music IR carries no package icons');
+    const iconNames = new Set(Object.values(doc.icons).map(i => i.name));
+    for (const want of ['play', 'pause', 'disc', 'skip-forward']) {
+      assert.ok(iconNames.has(want), `package icon '${want}' not embedded from opurom-icons`);
+    }
+    // The player binds audio + filesystem state: transport, seek, volume, tracks.
+    const names = doc.state.map(s => s.name);
+    for (const want of ['playing', 'position', 'volume', 'repeat', 'tracks', 'selected']) {
+      assert.ok(names.includes(want), `music state missing '${want}'`);
+    }
+    const r = bin('opurom-render', 'opurom-render') || ensureBin('opurom-render', 'opurom-render');
+    const ppm = join(tmp, 'music.ppm');
+    const out = ok(run(r, [ir, '390', '844', ppm]), 'render music');
+    assert.match(out, /digest=[0-9a-f]+/i, 'music render produced no digest');
+    assert.ok(statSync(ppm).size > 0, 'music render is empty');
+  });
+  check('platform reports the four desktop capabilities per build', () => {
+    const out = ok(run(platform, ['--desktop']), 'platform --desktop');
+    for (const cap of ['tray', 'global_hotkey', 'filesystem', 'audio']) {
+      assert.match(out, new RegExp(`^${cap} \\| (native|headless|unavailable)$`, 'm'),
+        `missing or malformed desktop capability row: ${cap}`);
+    }
+    // The filesystem scanner parses real files on every host, so it is always
+    // native; a build must never claim it is unavailable.
+    assert.match(out, /^filesystem \| native$/m, 'filesystem must be native everywhere');
+  });
+  check('desktop capability tests are registered and honest about skips', () => {
+    const out = ok(run('cargo', ['test', '--manifest-path', P('opurom-platform', 'Cargo.toml'),
+      '--test', 'desktop', '--', '--list']), 'platform desktop test list');
+    for (const name of ['tray', 'hotkey', 'audio', 'scan_library', 'transport', 'chord']) {
+      assert.match(out, new RegExp(name), `no desktop test mentions ${name}`);
+    }
+  });
+
   console.log('== responsive web build ==');
   check('responsive web page and multi-file project are verified end to end', () => {
     const r = run('node', [P('opurom-examples', 'test', 'responsive-web-build.test.mjs')]);

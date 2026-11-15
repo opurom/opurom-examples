@@ -677,6 +677,48 @@
           "description": "render the sidebar plus content wide layout"
         }
       ]
+    },
+    {
+      "name": "music",
+      "source": "apps/music/main.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "music.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the music player source"
+        },
+        {
+          "id": "music.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the player UI and package icons into one IR"
+        },
+        {
+          "id": "music.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "390",
+            "844",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the player to a deterministic PPM frame"
+        }
+      ]
     }
   ]
 }
