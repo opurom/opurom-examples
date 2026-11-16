@@ -185,7 +185,7 @@ try {
     assert.equal(ir.initialRoute, 'Feed', 'Feed must be the initial route');
     assert.ok(ir.tree === undefined, 'multi-page IR has no top-level tree');
     const routes = Object.keys(ir.routes || {}).sort();
-    assert.deepEqual(routes, ['Compose', 'Feed', 'Profile', 'Thread'], 'four forum route pages missing');
+    assert.deepEqual(routes, ['Admin', 'Compose', 'Feed', 'Login', 'Profile', 'Register', 'Thread'], 'forum route pages missing');
     const collect = (node, out) => {
       for (const action of Object.values(node.events || {})) out.push(action);
       (node.children || []).forEach(child => collect(child, out));
