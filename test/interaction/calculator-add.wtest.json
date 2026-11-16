@@ -3,10 +3,18 @@
   "width": 320,
   "height": 640,
   "steps": [
-    { "tap": 18 },
-    { "tap": 43 },
-    { "tap": 20 },
-    { "tap": 52 }
+    {
+      "tap": 27
+    },
+    {
+      "tap": 52
+    },
+    {
+      "tap": 29
+    },
+    {
+      "tap": 61
+    }
   ],
   "expect": {
     "state": {
@@ -15,6 +23,6 @@
       "out": 15,
       "normalMode": true
     },
-    "digest": "9dba22f66a0819b7"
+    "digest": "5ffb36496e452d1f"
   }
 }
