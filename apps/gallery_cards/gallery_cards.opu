@@ -1,5 +1,7 @@
 // Standardized Material 3 Cards page. All colours are token values.
 app GalleryCards {
+  // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
+  quality { msaa: 4 }
   // md-sys-color-surface
   Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
     Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {

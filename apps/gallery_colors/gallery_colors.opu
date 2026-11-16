@@ -12,6 +12,8 @@ component Swatch(tone: string, bg: string, hexText: string, safeGap: int, ink: s
 }
 
 app GalleryColors {
+  // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
+  quality { msaa: 4 }
   // Dynamic tabs: 'if' takes a bare bool state; IR has no int equality.
   state tabRed = true
   state tabPink = false

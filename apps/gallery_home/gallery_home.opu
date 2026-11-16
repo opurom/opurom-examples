@@ -1,6 +1,8 @@
 // Live-text replica of the Flutter Gallery home screen.
 // Graphics are cropped only where no display text appears.
 app GalleryHome {
+  // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
+  quality { msaa: 4 }
   Container(width: 1080, height: 2200, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
     Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
       Spacer(height: 66)
