@@ -66,7 +66,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Display Large", size: 171, fontPx: 171, weight: "normal", color: "#000000", label: "typography/sample_1")
+              Text("Display Large", size: 224, fontPx: 224, weight: "normal", color: "#000000", label: "typography/sample_1")
               Spacer(height: 72)
               // md-type-display-medium
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -79,7 +79,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Display Medium", size: 135, fontPx: 135, weight: "normal", color: "#000000", label: "typography/sample_2")
+              Text("Display Medium", size: 140, fontPx: 140, weight: "normal", color: "#000000", label: "typography/sample_2")
               Spacer(height: 72)
               // md-type-display-small
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -92,7 +92,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Display Small", size: 108, fontPx: 108, weight: "normal", color: "#000000", label: "typography/sample_3")
+              Text("Display Small", size: 113, fontPx: 113, weight: "normal", color: "#000000", label: "typography/sample_3")
               Spacer(height: 72)
               // md-type-headline-large
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -105,7 +105,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Headline Large", size: 96, fontPx: 96, weight: "normal", color: "#000000", label: "typography/sample_4")
+              Text("Headline Large", size: 80, fontPx: 80, weight: "normal", color: "#000000", label: "typography/sample_4")
               Spacer(height: 72)
               // md-type-headline-medium
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -118,7 +118,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Headline Medium", size: 84, fontPx: 84, weight: "normal", color: "#000000", label: "typography/sample_5")
+              Text("Headline Medium", size: 58, fontPx: 58, weight: "normal", color: "#000000", label: "typography/sample_5")
               Spacer(height: 72)
               // md-type-headline-small
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -131,7 +131,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Headline Small", size: 72, fontPx: 72, weight: "normal", color: "#000000", label: "typography/sample_6")
+              Text("Headline Small", size: 47, fontPx: 47, weight: "normal", color: "#000000", label: "typography/sample_6")
               Spacer(height: 72)
               // md-type-title-large
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -144,7 +144,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Title Large", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "typography/sample_7")
+              Text("Title Large", size: 52, fontPx: 52, weight: "bold", color: "#000000", label: "typography/sample_7")
               Spacer(height: 72)
               // md-type-title-medium
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -157,13 +157,13 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Title Medium", size: 48, fontPx: 48, weight: "bold", color: "#000000", label: "typography/sample_8")
+              Text("Title Medium", size: 38, fontPx: 38, weight: "bold", color: "#000000", label: "typography/sample_8")
               Spacer(height: 72)
               // md-type-title-small
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
               Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
                 // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
-                Text("Title Small", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_9")
+                Text("Title Small", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_9")
                 Spacer(width: 48)
                 // md-sys-color-on-surface-variant
                 Text("14 / 500 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_9")
@@ -183,13 +183,13 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Body Large", size: 48, fontPx: 48, weight: "normal", color: "#000000", label: "typography/sample_10")
+              Text("Body Large", size: 38, fontPx: 38, weight: "normal", color: "#000000", label: "typography/sample_10")
               Spacer(height: 72)
               // md-type-body-medium
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
               Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
                 // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
-                Text("Body Medium", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_11")
+                Text("Body Medium", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_11")
                 Spacer(width: 48)
                 // md-sys-color-on-surface-variant
                 Text("14 / 400 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_11")
@@ -209,13 +209,13 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Body Small", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "typography/sample_12")
+              Text("Body Small", size: 28, fontPx: 28, weight: "normal", color: "#000000", label: "typography/sample_12")
               Spacer(height: 72)
               // md-type-label-large
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
               Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
                 // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
-                Text("Label Large", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_13")
+                Text("Label Large", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_13")
                 Spacer(width: 48)
                 // md-sys-color-on-surface-variant
                 Text("14 / 500 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_13")
@@ -235,7 +235,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Label Medium", size: 36, fontPx: 36, weight: "bold", color: "#000000", label: "typography/sample_14")
+              Text("Label Medium", size: 28, fontPx: 28, weight: "bold", color: "#000000", label: "typography/sample_14")
               Spacer(height: 72)
               // md-type-label-small
               // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
@@ -248,7 +248,7 @@ app GalleryTypography {
               }
               Spacer(height: 24)
               // md-sys-color-on-surface
-              Text("Label Small", size: 33, fontPx: 33, weight: "bold", color: "#000000", label: "typography/sample_15")
+              Text("Label Small", size: 26, fontPx: 26, weight: "bold", color: "#000000", label: "typography/sample_15")
               Spacer(height: 72)
               Spacer(height: 72)
             }
