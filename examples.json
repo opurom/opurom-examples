@@ -307,7 +307,7 @@
             "opurom-render",
             "{tmp}/app.opuir.json",
             "1080",
-            "2200",
+            "2400",
             "{tmp}/frame.ppm"
           ],
           "description": "render the colors replica to a PPM frame"

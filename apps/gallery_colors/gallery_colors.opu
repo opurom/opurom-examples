@@ -1,214 +1,213 @@
-// Live-text replica of the Flutter Gallery Colors screen.
-// Color swatches are flat IR fills; every string is a live Text node.
+// Standardized Material 3 Colors page. Red palette is demo data.
 app GalleryColors {
-  Container(width: 1080, height: 2200, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-    Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-      Container(width: 1080, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-          Spacer(width: 53)
-          Container(width: 41, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-              Spacer(height: 44)
-              Icon(name: "arrow-left", width: 41, height: 41, color: "#B93C5D", label: "colors/actionbar_back")
+  // md-sys-color-surface
+  Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+    Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      // md-sys-color-surface
+      Container(width: 1080, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "arrow-left", width: 72, height: 72, color: "#000000", label: "colors/topbar_back")
             }
           }
-          Spacer(width: 645)
-          Container(width: 51, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-              Spacer(height: 39)
-              Icon(name: "info-circle", width: 51, height: 51, color: "#241E30", label: "colors/actionbar_info")
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "info-circle", width: 72, height: 72, color: "#000000", label: "colors/topbar_info")
             }
           }
-          Spacer(width: 75)
-          Container(width: 52, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-              Spacer(height: 49)
-              Icon(name: "code", width: 52, height: 32, color: "#241E30", label: "colors/actionbar_code")
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "code", width: 72, height: 72, color: "#000000", label: "colors/topbar_code")
             }
           }
-          Spacer(width: 74)
-          Container(width: 52, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
-            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-              Spacer(height: 39)
-              Icon(name: "devices", width: 52, height: 51, color: "#241E30", label: "colors/actionbar_devices")
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "devices", width: 72, height: 72, color: "#000000", label: "colors/topbar_devices")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 648, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              // engLike2021 uses w400, brief says 500
+              Text("Colors", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "colors/title")
+            }
+          }
+        }
+      }
+      // md-sys-color-surface; TabBar static: B3/A3/A4 gaps
+      Container(width: 1080, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 228, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              // md-sys-color-primary
+              Text("RED", size: 42, fontPx: 42, weight: "bold", opacity: 1.0, color: "#6200EE", label: "colors/tab_red")
+            }
+          }
+          // md-sys-color-primary
+          Container(width: 228, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+          Container(width: 228, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              // md-sys-color-on-surface-variant
+              Text("PINK", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "colors/tab_pink")
+            }
+          }
+          Container(width: 228, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              // md-sys-color-on-surface-variant
+              Text("PURPLE", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "colors/tab_purple")
+            }
+          }
+          Container(width: 228, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              // md-sys-color-on-surface-variant
+              Text("DEEP PURPLE", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "colors/tab_deep")
             }
           }
         }
       }
-      Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-        Spacer(width: 42)
-        Container(width: 996, height: 273, color: "#6200EE", border: "#6200EE", rounded: 24, p: 0) {
-          Column(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
-            Spacer(height: 50)
-            Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
-              Spacer(width: 45)
-              Text("Colors", size: 56, fontPx: 56, weight: "bold", color: "#FFFFFF", label: "colors/title")
+      Scroll(height: 2088) {
+        Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          // material red palette, demo data 50 #FFEBEE
+          Container(width: 1080, height: 156, color: "#FFEBEE", border: "#FFCDD2", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#EF9A9A", border: "#E57373") {
+              Spacer(width: 48)
+              Text("50", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_50")
+              Spacer(width: 430)
+              Text("#FFFFEBEE", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_50")
             }
-            Spacer(height: 80)
-            Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
-              Spacer(width: 46)
-              Text("RED", size: 40, fontPx: 40, weight: "normal", color: "#D0B2FA", label: "colors/tab_red")
-              Spacer(width: 120)
-              Text("PINK", size: 40, fontPx: 40, weight: "normal", color: "#D0B2FA", label: "colors/tab_pink")
-              Spacer(width: 73)
-              Text("PURPLE", size: 40, fontPx: 40, weight: "normal", color: "#D0B2FA", label: "colors/tab_purple")
-              Spacer(width: 66)
-              Text("DEEP PURPLE", size: 40, fontPx: 40, weight: "normal", color: "#D0B2FA", label: "colors/tab_deep_purple")
-            }
-            Spacer(height: 42)
-            Container(width: 165, height: 5, color: "#FFFFFF", border: "#FFFFFF", p: 0)
           }
-        }
-      }
-      Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-        Spacer(width: 42)
-        Container(width: 996, height: 1663, color: "#FFEBEE", border: "#FFEBEE", p: 0) {
-          Column(p: 0, gap: 0, align: start, color: "#FFEBEE", border: "#FFEBEE") {
-            Container(width: 996, height: 106, color: "#FFEBEE", border: "#FFEBEE", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#FFEBEE", border: "#FFEBEE") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#FFEBEE", border: "#FFEBEE") {
-                  Spacer(width: 44)
-                  Text("50", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_50")
-                  Spacer(width: 714)
-                  Text("#FFFFEBEE", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_50")
-                }
-              }
+          // material red palette, demo data 100 #FFCDD2
+          Container(width: 1080, height: 156, color: "#EF5350", border: "#F44336", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#E53935", border: "#D32F2F") {
+              Spacer(width: 48)
+              Text("100", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_100")
+              Spacer(width: 430)
+              Text("#FFFFCDD2", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_100")
             }
-            Container(width: 996, height: 126, color: "#FFCDD2", border: "#FFCDD2", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#FFCDD2", border: "#FFCDD2") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#FFCDD2", border: "#FFCDD2") {
-                  Spacer(width: 44)
-                  Text("100", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_100")
-                  Spacer(width: 694)
-                  Text("#FFFFCDD2", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_100")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#EF9A9A", border: "#EF9A9A", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#EF9A9A", border: "#EF9A9A") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#EF9A9A", border: "#EF9A9A") {
-                  Spacer(width: 44)
-                  Text("200", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_200")
-                  Spacer(width: 694)
-                  Text("#FFEF9A9A", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_200")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#E57373", border: "#E57373", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#E57373", border: "#E57373") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#E57373", border: "#E57373") {
-                  Spacer(width: 44)
-                  Text("300", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_300")
-                  Spacer(width: 694)
-                  Text("#FFE57373", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_300")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#EF5350", border: "#EF5350", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#EF5350", border: "#EF5350") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#EF5350", border: "#EF5350") {
-                  Spacer(width: 44)
-                  Text("400", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_400")
-                  Spacer(width: 694)
-                  Text("#FFEF5350", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_400")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#F44336", border: "#F44336", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#F44336", border: "#F44336") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#F44336", border: "#F44336") {
-                  Spacer(width: 44)
-                  Text("500", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_500")
-                  Spacer(width: 694)
-                  Text("#FFF44336", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_500")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#E53935", border: "#E53935", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#E53935", border: "#E53935") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#E53935", border: "#E53935") {
-                  Spacer(width: 44)
-                  Text("600", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_600")
-                  Spacer(width: 694)
-                  Text("#FFE53935", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_600")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#D32F2F", border: "#D32F2F", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#D32F2F", border: "#D32F2F") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#D32F2F", border: "#D32F2F") {
-                  Spacer(width: 44)
-                  Text("700", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_700")
-                  Spacer(width: 694)
-                  Text("#FFD32F2F", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_700")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#C62828", border: "#C62828", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#C62828", border: "#C62828") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#C62828", border: "#C62828") {
-                  Spacer(width: 44)
-                  Text("800", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_800")
-                  Spacer(width: 694)
-                  Text("#FFC62828", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_800")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#B71C1C", border: "#B71C1C", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#B71C1C", border: "#B71C1C") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#B71C1C", border: "#B71C1C") {
-                  Spacer(width: 44)
-                  Text("900", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_900")
-                  Spacer(width: 694)
-                  Text("#FFB71C1C", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_900")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#FF8A80", border: "#FF8A80", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#FF8A80", border: "#FF8A80") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#FF8A80", border: "#FF8A80") {
-                  Spacer(width: 44)
-                  Text("A100", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_A100")
-                  Spacer(width: 674)
-                  Text("#FFFF8A80", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_A100")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#FF5252", border: "#FF5252", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#FF5252", border: "#FF5252") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#FF5252", border: "#FF5252") {
-                  Spacer(width: 44)
-                  Text("A200", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/name_A200")
-                  Spacer(width: 674)
-                  Text("#FFFF5252", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "colors/hex_A200")
-                }
-              }
-            }
-            Container(width: 996, height: 126, color: "#FF1744", border: "#FF1744", p: 0) {
-              Column(p: 0, gap: 0, align: start, color: "#FF1744", border: "#FF1744") {
-                Spacer(height: 27)
-                Row(p: 0, gap: 0, align: start, color: "#FF1744", border: "#FF1744") {
-                  Spacer(width: 44)
-                  Text("A400", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/name_A400")
-                  Spacer(width: 674)
-                  Text("#FFFF1744", size: 36, fontPx: 36, weight: "normal", color: "#FFFFFF", label: "colors/hex_A400")
-                }
-              }
-            }
-            Container(width: 996, height: 46, color: "#D50000", border: "#D50000", p: 0)
           }
+          // material red palette, demo data 200 #EF9A9A
+          Container(width: 1080, height: 156, color: "#C62828", border: "#B71C1C", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#FF8A80", border: "#FF5252") {
+              Spacer(width: 48)
+              Text("200", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_200")
+              Spacer(width: 430)
+              Text("#FFEF9A9A", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_200")
+            }
+          }
+          // material red palette, demo data 300 #E57373
+          Container(width: 1080, height: 156, color: "#FF1744", border: "#FFEBEE", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#FFEBEE", border: "#FFEBEE") {
+              Spacer(width: 48)
+              Text("300", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_300")
+              Spacer(width: 430)
+              Text("#FFE57373", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_300")
+            }
+          }
+          // material red palette, demo data 400 #EF5350
+          Container(width: 1080, height: 156, color: "#FFEBEE", border: "#FFCDD2", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#FFCDD2", border: "#FFCDD2") {
+              Spacer(width: 48)
+              Text("400", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_400")
+              Spacer(width: 430)
+              Text("#FFEF5350", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_400")
+            }
+          }
+          // material red palette, demo data 500 #F44336
+          Container(width: 1080, height: 156, color: "#FFCDD2", border: "#EF9A9A", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#EF9A9A", border: "#EF9A9A") {
+              Spacer(width: 48)
+              Text("500", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_500")
+              Spacer(width: 430)
+              Text("#FFF44336", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_500")
+            }
+          }
+          // material red palette, demo data 600 #E53935
+          Container(width: 1080, height: 156, color: "#EF9A9A", border: "#E57373", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#E57373", border: "#E57373") {
+              Spacer(width: 48)
+              Text("600", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_600")
+              Spacer(width: 430)
+              Text("#FFE53935", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_600")
+            }
+          }
+          // material red palette, demo data 700 #D32F2F
+          Container(width: 1080, height: 156, color: "#E57373", border: "#EF5350", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#EF5350", border: "#EF5350") {
+              Spacer(width: 48)
+              Text("700", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_700")
+              Spacer(width: 430)
+              Text("#FFD32F2F", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_700")
+            }
+          }
+          // material red palette, demo data 800 #C62828
+          Container(width: 1080, height: 156, color: "#EF5350", border: "#F44336", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#F44336", border: "#F44336") {
+              Spacer(width: 48)
+              Text("800", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_800")
+              Spacer(width: 430)
+              Text("#FFC62828", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_800")
+            }
+          }
+          // material red palette, demo data 900 #B71C1C
+          Container(width: 1080, height: 156, color: "#F44336", border: "#E53935", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#E53935", border: "#E53935") {
+              Spacer(width: 48)
+              Text("900", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_900")
+              Spacer(width: 430)
+              Text("#FFB71C1C", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_900")
+            }
+          }
+          // material red palette, demo data A100 #FF8A80
+          Container(width: 1080, height: 156, color: "#E53935", border: "#D32F2F", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#D32F2F", border: "#D32F2F") {
+              Spacer(width: 48)
+              Text("A100", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_A100")
+              Spacer(width: 430)
+              Text("#FFFF8A80", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_A100")
+            }
+          }
+          // material red palette, demo data A200 #FF5252
+          Container(width: 1080, height: 156, color: "#D32F2F", border: "#C62828", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#C62828", border: "#C62828") {
+              Spacer(width: 48)
+              Text("A200", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/name_A200")
+              Spacer(width: 430)
+              Text("#FFFF5252", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "colors/hex_A200")
+            }
+          }
+          // material red palette, demo data A400 #FF1744
+          Container(width: 1080, height: 156, color: "#C62828", border: "#B71C1C", p: 0, gesture: "tap") {
+            Row(p: 0, gap: 0, align: start, color: "#B71C1C", border: "#B71C1C") {
+              Spacer(width: 48)
+              Text("A400", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/name_A400")
+              Spacer(width: 430)
+              Text("#FFFF1744", size: 42, fontPx: 42, weight: "normal", color: "#FFFFFF", label: "colors/hex_A400")
+            }
+          }
+          // golden shows A700 viewport-clipped; full row = taller list if brief insists
+          // material red palette, demo data A700 #D50000
+          Container(width: 1080, height: 44, color: "#D50000", border: "#D50000", p: 0)
+          Spacer(height: 72)
         }
       }
     }
