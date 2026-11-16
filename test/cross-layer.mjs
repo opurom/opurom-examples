@@ -236,6 +236,39 @@ try {
     assert.equal(da[1], db[1], 'digest differs between identical renders');
     assert.equal(da[1], '8d45f412996a99c6', 'core golden digest regressed');
   });
+  check('glass catalog covers five literal states in light and dark themes', () => {
+    const states = ['default', 'hover', 'active', 'focus', 'disabled'];
+    const walk = n => [n, ...(n.children || []).flatMap(walk)];
+    for (const [mode, name] of [['light', 'main'], ['dark', 'dark']]) {
+      const src = P('opurom-examples', 'apps', 'uicatalog', `${name}.opu`);
+      const out = join(tmp, `uicatalog-${mode}.opuir.json`);
+      ok(run(compiler, ['check', src]), `check ${mode} catalog`);
+      ok(run(compiler, ['compile', src, '-o', out]), `compile ${mode} catalog`);
+      const doc = JSON.parse(readFileSync(out, 'utf8'));
+      assert.equal(doc.theme.mode, mode, `${mode} catalog theme missing`);
+      const glass = walk(doc.tree).filter(n => n.props?.glass === true);
+      assert.ok(glass.length >= 40, `${mode} catalog glass exhibits missing`);
+      for (const state of states) {
+        assert.ok(glass.filter(n => n.props.state === state).length >= 8,
+          `${mode} catalog lacks eight ${state} glass exhibits`);
+      }
+    }
+    const text = readFileSync(P('opurom-examples', 'apps', 'uicatalog', 'main.opu'), 'utf8');
+    for (const call of ['ConfirmDialog(', 'Drawer(', 'SidebarNav(', 'TabsBar(', 'TipCallout(', 'GlassStateMatrix(']) {
+      assert.ok(text.includes(call), `catalog is missing ${call.slice(0, -1)} exhibit`);
+    }
+    const ir = JSON.parse(readFileSync(join(tmp, 'uicatalog-light.opuir.json'), 'utf8'));
+    const kinds = new Set(walk(ir.tree).map(n => n.kind));
+    for (const kind of ['Dialog', 'Tooltip', 'TabStrip']) {
+      assert.ok(kinds.has(kind), `catalog IR is missing ${kind}`);
+    }
+    const darkIr = join(tmp, 'uicatalog-dark.opuir.json');
+    const a = ok(run(renderer, [darkIr, '390', '844', join(tmp, 'dark-a.ppm')]), 'render dark catalog a');
+    const b = ok(run(renderer, [darkIr, '390', '844', join(tmp, 'dark-b.ppm')]), 'render dark catalog b');
+    const da = a.match(/digest=([0-9a-f]+)/i), db = b.match(/digest=([0-9a-f]+)/i);
+    assert.ok(da && db, 'dark catalog render produced no digest');
+    assert.equal(da[1], db[1], 'dark catalog digest differs between identical renders');
+  });
   const core = ensureBin('opurom-core', 'opurom-core');
   check('kernel applies the golden IR tap event', () => {
     const out = ok(run(core, [P('opurom-examples', 'golden', 'counter.opuir.json')], { input: 'tap 4\nstate\nquit\n' }), 'core run');

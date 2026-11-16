@@ -877,6 +877,48 @@
       ]
     },
     {
+      "name": "uicatalog-dark",
+      "source": "apps/uicatalog/dark.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "uicatalog-dark.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the dark glass catalog"
+        },
+        {
+          "id": "uicatalog-dark.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "lower the dark catalog into one IR"
+        },
+        {
+          "id": "uicatalog-dark.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "390",
+            "844",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the dark catalog deterministically"
+        }
+      ]
+    },
+    {
       "name": "circle",
       "source": "apps/circle/circle.opu",
       "required": true,

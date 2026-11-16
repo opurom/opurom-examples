@@ -1,0 +1,11 @@
+import "pkg-theme/dark.opu";
+import "components/section_header.opu";
+import "apps/uicatalog/glass_matrix.opu";
+app UiCatalogDark {
+  ScrollView(p: 16) {
+    Column(gap: 14) {
+      SectionHeader("Dark glass catalog")
+      GlassStateMatrix()
+    }
+  }
+}
