@@ -1,0 +1,4 @@
+// Badge: a compact count pill.
+component BadgePill(count: string) {
+  Badge(label: "{count}")
+}

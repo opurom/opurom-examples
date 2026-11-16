@@ -5,8 +5,17 @@
   "entry": "pkg-theme/default.opu",
   "license": "MIT",
   "files": [
+    "components/avatar.opu",
+    "components/badge.opu",
+    "components/button.opu",
+    "components/card.opu",
+    "components/dialog.opu",
+    "components/list.opu",
+    "components/navbar.opu",
+    "components/text.opu",
+    "components/toast.opu",
     "opurom-pkg.json",
-    "pkg-theme/default.opu",
-    "pkg-theme/dark.opu"
+    "pkg-theme/dark.opu",
+    "pkg-theme/default.opu"
   ]
 }

@@ -1,5 +1,8 @@
 // Full-stack Todo: UI, data model and HTTP API in one source file.
 import "pkg-theme/default.opu";
+import "components/card.opu";
+import "components/text.opu";
+import "components/button.opu";
 
 app TodoApp {
   model Todo {
@@ -23,11 +26,11 @@ app TodoApp {
 
   Column(p: 14, gap: 10) {
     Container(p: 16, rounded: 16, shadow: 4, bg: "#097FEB", animate: ease) {
-      Text("Opurom Todo", size: 20, color: "#FFFFFF")
-      Text("UI, model and API in one source file", size: 11, color: "#FFFFFF")
+      TitleHeading("Opurom Todo")
+      CaptionText("UI, model and API in one source file")
     }
+    SurfaceCard("Remaining")
     Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
-      Text("Remaining", size: 11, color: "#6B7280")
       Text("{remaining}", size: 30, color: "#097FEB")
     }
     Container(p: 10, rounded: 14, shadow: 3, bg: "#F9FAFB") {

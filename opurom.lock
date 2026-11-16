@@ -6,23 +6,23 @@
       "name": "opurom-icons",
       "version": "0.1.0",
       "path": "registry/opurom-icons/0.1.0",
-      "sha256": "db8060e3479a5e513afa8e8e80360a272345e48c0b3b3ee757dcced72886efa8",
+      "sha256": "c15177ba546c0191dc81c6ebf261bbce7cffb76589e2c1ffce59b6f047fd7c18",
       "files": [
         {
           "path": "registry/opurom-icons/0.1.0/LICENSE",
-          "sha256": "4c66305ddc1acd5dc21896b704702e7937448cef3768b69c14fd9327a47925b7"
+          "sha256": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
         },
         {
           "path": "registry/opurom-icons/0.1.0/NOTICE",
-          "sha256": "62e1c9bc50cf761e035dc4f43ce307f514614f9f28a3bac21d1bc0872ac0ac0d"
+          "sha256": "637f8de47ad619a515b039b4f1b11a4f079761467fe0fc1d6879afd4d5e1a30c"
         },
         {
           "path": "registry/opurom-icons/0.1.0/icons/icons.json",
-          "sha256": "4be9860919954453713ee71a18ea73b4ef0be19a49b0f57e10367972b2b7f750"
+          "sha256": "92f4def61d0291632ba5a36bd82629319bd51c20b6b9f1e51c3ad120c26d64af"
         },
         {
           "path": "registry/opurom-icons/0.1.0/opurom-pkg.json",
-          "sha256": "8cfceafdd12e19f17271323c41ed7778ce3d270e9612278debafd78fb888a60e"
+          "sha256": "a6f4b2c54ae3d72838a74da508f80fb8fd34621d675445b12f1241db6de6fad0"
         }
       ]
     },
@@ -30,11 +30,47 @@
       "name": "opurom-ui",
       "version": "0.1.0",
       "path": "registry/opurom-ui/0.1.0",
-      "sha256": "cf53f460250897d5f1a93ba562ea5881b26aa4f1a6df2d1ece337c2516f3af61",
+      "sha256": "ca56000e4ad2bd04e900661b6870b96aa05f2b29b9e02e5926ac8737f3b3fec4",
       "files": [
         {
+          "path": "registry/opurom-ui/0.1.0/components/avatar.opu",
+          "sha256": "cfab966fc7f49dbafb6296f703d0338358403aa989d1d4f7116a85699fb99629"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/badge.opu",
+          "sha256": "4318e7c405f266b92b0ec2915a9d6d81a41b34e96f9d241914d190bb7062055b"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/button.opu",
+          "sha256": "022d03cd4026c3af43ab1b76a3f01c79668f187e9660a2482770c5674690e1b2"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/card.opu",
+          "sha256": "af9ccd462c652e77e521c43540606318419daaef470644e9040592bc05584859"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/dialog.opu",
+          "sha256": "78620fe70b535ba825b0e4ab51dffa75fc1399832c4a53d6820806ee7820c135"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/list.opu",
+          "sha256": "65df3042b0a689c7932d0b8b689f545bcf1b12f1c25de6c89484be323d9c228c"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/navbar.opu",
+          "sha256": "76c81b5786e62e4eb0b8e3da11b4726f6f973edb4e2adb5af277b73660e19603"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/text.opu",
+          "sha256": "07a7a04fb58686e2f25d585bc770d567be8f3a82acb46e6b9dc87d15b382947a"
+        },
+        {
+          "path": "registry/opurom-ui/0.1.0/components/toast.opu",
+          "sha256": "12fa3a049933cab789913facae3e2572fff6260374389b493cb13c858f5f3603"
+        },
+        {
           "path": "registry/opurom-ui/0.1.0/opurom-pkg.json",
-          "sha256": "7985f15889d20284d8cc4b918c55f8c9ed3c23afa1078119dc1273936fb0d3ca"
+          "sha256": "5981bff029a4278fc5abc459db2b671071f020642dcca2d4073e496b6f468b75"
         },
         {
           "path": "registry/opurom-ui/0.1.0/pkg-theme/dark.opu",

@@ -1,0 +1,10 @@
+// NavBar: a top bar with a leading title and a trailing action label.
+component NavBar(title: string, action: string) {
+  Container(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4EF") {
+    Row(gap: 12, align: center) {
+      Text("{title}", size: 18, color: "#132C5A")
+      Spacer()
+      Text("{action}", size: 13, color: "#0A71FC")
+    }
+  }
+}

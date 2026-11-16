@@ -1,0 +1,6 @@
+// Card: raised surface with the token radius and soft elevation.
+component SurfaceCard(title: string) {
+  Container(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#DCE4EF") {
+    Text("{title}", size: 16, color: "#132C5A")
+  }
+}

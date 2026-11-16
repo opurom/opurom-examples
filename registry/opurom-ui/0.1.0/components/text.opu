@@ -1,0 +1,11 @@
+// Text hierarchy. Each component pins one scale level so a caller never
+// hand-writes a size: TitleHeading, BodyText, CaptionText.
+component TitleHeading(content: string) {
+  Text("{content}", size: 20, color: "#132C5A")
+}
+component BodyText(content: string) {
+  Text("{content}", size: 14, color: "#132C5A")
+}
+component CaptionText(content: string) {
+  Text("{content}", size: 11, color: "#5A6478")
+}

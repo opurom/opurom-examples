@@ -1,0 +1,4 @@
+// Avatar: initials disc with the token radius.
+component AvatarDisc(initials: string) {
+  Avatar(label: "{initials}")
+}
