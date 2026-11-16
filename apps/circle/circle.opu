@@ -1,0 +1,564 @@
+// Circle: a community-of-circles starter app in one full-stack source file.
+// Three models (Circle, Post, Member) with a member/moderator/banned role
+// ladder lower to the HTTP service, SQL migrations and every target. Five
+// route pages navigate with push/pop; the Moderate page mirrors the service
+// ladder (401 guest / banned read-only / moderator controls) in page state,
+// and the fetch effect (GET only) pulls the live envelopes into state.
+import "pkg-theme/default.opu"
+import "components/navbar.opu"
+import "components/text.opu"
+import "components/list.opu"
+import "components/card.opu"
+import "components/avatar.opu"
+import "components/avatar_group.opu"
+import "components/badge.opu"
+import "components/toast.opu"
+import "components/stat_card.opu"
+import "components/section_header.opu"
+import "components/chip.opu"
+import "components/form_field.opu"
+import "components/banner.opu"
+import "components/empty_state.opu"
+import "components/pagination.opu"
+import "components/progress.opu"
+import "components/confirm_dialog.opu"
+import "components/stepper.opu"
+
+component CircleRow(name: string, topic: string, members: string) {
+  SurfaceCard("{name}") {
+    Row(gap: 10, align: center) {
+      Icon(name: "folder")
+      Column(gap: 2) {
+        Text("{name}", size: 14)
+        CaptionText("{topic}")
+      }
+      Spacer()
+      BadgePill("{members}")
+    }
+  }
+}
+
+component MemberRow(name: string, initials: string, role: string) {
+  Row(gap: 10, align: center) {
+    AvatarDisc("{initials}")
+    Column(gap: 2) {
+      Text("{name}", size: 14)
+      CaptionText("active this week")
+    }
+    Spacer()
+    FilterChip("{role}", "primary")
+  }
+}
+
+app Circle {
+  // Identity and role ladder: guest -> member -> moderator, with banned as a
+  // hard read-only floor. The Moderate page mirrors the service checks.
+  state me = "guest"
+  state signedIn = false
+  state moderator = false
+  state banned = false
+
+  // Circle membership and counters surfaced from state.
+  state joined = false
+  state role = "member"
+  state memberCount = 42
+  state postCount = 128
+  state acted = false
+  state displayName = ""
+  state intro = ""
+  state loginName = ""
+
+  // Browse and form state.
+  state search = ""
+  state newTitle = ""
+  state newTopic = ""
+  state created = false
+  state showForm = false
+
+  // Fetch targets: the envelopes land here as text on the native target.
+  state circlesJson = ""
+  state postsJson = ""
+  state membersJson = ""
+
+  // Per-member moderation flags for the static roster rows.
+  state pinTop = false
+  state banGrace = false
+  state promoteLinus = false
+  state lastAction = ""
+
+  // Deterministic page data for the compile-time static expansion.
+  state circleRows = ["Astro — night sky shots", "Film — grain and gates", "Street — corners at dusk", "Macro — one inch world"]
+  state postTitles = ["Night sky stacking guide", "Grain looks best in daylight", "Corners: five frames one street"]
+  state postAuthors = ["ada", "linus", "grace"]
+  state members = ["ada", "linus", "grace"]
+
+  model Circle {
+    id: int primary
+    title: string
+    topic: string
+    member_count: int = 0
+    post_count: int = 0
+  }
+
+  model Post {
+    id: int primary
+    circle_id: int
+    author_id: int
+    title: string
+    body: string
+    pinned: bool = false
+  }
+
+  model Member {
+    id: int primary
+    circle_id: int
+    username: string
+    // member | moderator | banned: the Moderate page mirrors this ladder.
+    role: string = "member"
+  }
+
+  api "/circles" {
+    list Circle
+    create Circle
+  }
+  api "/circles/:id" {
+    get Circle
+    update Circle
+    delete Circle
+  }
+  api "/posts" {
+    list Post
+    create Post
+  }
+  api "/posts/:id" {
+    get Post
+    update Post
+    delete Post
+  }
+  api "/members" {
+    list Member
+    create Member
+  }
+  api "/members/:id" {
+    get Member
+    update Member
+    delete Member
+  }
+
+  route CircleList {
+    Column(p: 14, gap: 12) {
+      NavBar("Circles", "{me}")
+      if (signedIn) {
+        CaptionText("signed in as {me}")
+      } else {
+        CaptionText("browsing as guest")
+      }
+
+      Grid(columns: 3) {
+        MetricCard("Members", "{memberCount}", "+3 this week", "success")
+        MetricCard("Posts", "{postCount}", "12 today", "info")
+        MetricCard("Circles", "4", "1 in review", "warning")
+      }
+
+      SectionHeader("Browse circles")
+      Row(gap: 8, align: center) {
+        Input(placeholder: "Search circles", bind: search, maxLength: 40)
+        Button("Sync from api", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") async {
+          await fetch("/circles?limit=5", circlesJson)
+        }
+      }
+      Text("{circlesJson}", size: 10, color: "#667085")
+
+      // GET /circles answers this envelope; rows below are the expanded view.
+      for (row in circleRows) {
+        CircleRow("{row}", "weekly threads", "members")
+      }
+
+      Row(gap: 10, align: center) {
+        PaginationBar(1, 4)
+        Button("Newer", p: 8, rounded: 8, shadow: 1, bg: "#F4F6F9") {
+          memberCount += 1
+        }
+      }
+
+      if (created) {
+        ToastNote("circle queued: {newTitle}")
+      }
+
+      Row(gap: 10) {
+        Button("Open circle", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+          push: CircleDetail
+        }
+        Button("Join", p: 10, rounded: 10, shadow: 2, bg: "#F4F6F9") {
+          push: Join
+        }
+        Button("Moderate", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+          push: Moderate
+        }
+        Button("Settings", p: 10, rounded: 10, shadow: 2, bg: "#F4F6F9") {
+          push: Settings
+        }
+      }
+
+      if (showForm) {
+        Dialog(title: "New circle") {
+          Column(gap: 10) {
+            FormField("Circle name", "e.g. Astro")
+            Input(placeholder: "Circle name", bind: newTitle, required: true, minLength: 3)
+            FormField("Topic", "what the circle talks about")
+            Input(placeholder: "Topic", bind: newTopic, required: true)
+            Row(gap: 10) {
+              Button("Create", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+                created = true
+                showForm = false
+              }
+              Button("Cancel", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+                showForm = false
+                newTitle = ""
+                newTopic = ""
+              }
+            }
+          }
+        }
+      } else {
+        Button("New circle", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+          showForm = true
+        }
+      }
+    }
+  }
+
+  route CircleDetail {
+    Column(p: 14, gap: 12) {
+      NavBar("Astro", "{me}")
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Row(gap: 10, align: center) {
+          AvatarDisc("AS")
+          Column(gap: 2) {
+            TitleHeading("Astro")
+            CaptionText("night sky shots, weekly threads")
+          }
+          Spacer()
+          FilterChip("open", "primary")
+        }
+        Row(gap: 10, align: center) {
+          ProgressTrack(64)
+          CaptionText("{memberCount} members, {postCount} posts")
+        }
+        AvatarGroup("ada", "linus", "grace")
+      }
+
+      SectionHeader("Posts")
+      Row(gap: 8, align: center) {
+        Button("Sync posts from api", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") async {
+          await fetch("/posts?limit=5&offset=0", postsJson)
+        }
+      }
+      Text("{postsJson}", size: 10, color: "#667085")
+
+      // GET /posts answers this envelope; the pinned flag renders a pill.
+      ListPanel("Latest threads")
+      Column(gap: 6) {
+        for (title in postTitles) {
+          Row(gap: 8, align: center) {
+            Icon(name: "chat")
+            Text("{title}", size: 13, color: "#101828")
+            if (pinTop) {
+              Badge(label: "pinned", tone: "warning")
+            } else {
+              Badge(label: "open", tone: "info")
+            }
+          }
+        }
+      }
+
+      SectionHeader("Members")
+      AvatarGroup("ada", "linus", "grace")
+      Row(gap: 8, align: center) {
+        Button("Sync members from api", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") async {
+          await fetch("/members?limit=5", membersJson)
+        }
+      }
+      Text("{membersJson}", size: 10, color: "#667085")
+
+      Row(gap: 10) {
+        Button("Join circle", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+          push: Join
+        }
+        Button("Moderate", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+          push: Moderate
+        }
+        Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+          pop
+        }
+      }
+    }
+  }
+
+  route Join {
+    Column(p: 14, gap: 12) {
+      NavBar("Join", "{me}")
+      TitleHeading("Membership")
+      StepBar(3, 1)
+      CaptionText("browse, join, moderate: the ladder the service enforces")
+
+      if (signedIn) {
+        if (banned) {
+          Banner("Banned", "posting and joining are disabled for this account", "error")
+          EmptyState("lock", "No actions available", "a moderator lifted nothing yet")
+        }
+        if (joined) {
+          Banner("You are a member", "welcome back, {me}", "success")
+          if (moderator) {
+            FilterChip("moderator", "primary")
+            CaptionText("you can pin posts and moderate members")
+          } else {
+            FilterChip("member", "ghost")
+            Button("Apply as moderator", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              moderator = true
+              lastAction = "moderator application sent"
+            }
+          }
+          Button("Leave circle", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+            joined = false
+            memberCount -= 1
+          }
+        } else {
+          FormField("Introduce yourself", "one line about your shots")
+          Input(placeholder: "Introduction", bind: intro, maxLength: 80)
+          Button("Join as member", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+            joined = true
+            role = "member"
+            memberCount += 1
+            acted = true
+            lastAction = "joined as member"
+          }
+          if (acted) {
+            ToastNote("{lastAction}")
+          }
+        }
+      } else {
+        Banner("No session", "the service answers 401 for anonymous joins", "error")
+        Button("Sign in first", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+          push: Login
+        }
+      }
+
+      Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+        pop
+      }
+    }
+  }
+
+  route Moderate {
+    Column(p: 14, gap: 12) {
+      NavBar("Moderate", "{me}")
+      TitleHeading("Moderation desk")
+      // The ladder mirrors the service checks: 401 guest, banned read-only,
+      // member read-only, moderator controls.
+      if (signedIn) {
+        if (banned) {
+          Banner("Banned account", "moderation is disabled for banned members", "error")
+          EmptyState("lock", "Read only", "a moderator restored nothing yet")
+        }
+        if (moderator) {
+            CaptionText("moderator session: controls unlocked")
+            Row(gap: 8, align: center) {
+              Button("Sync roster from api", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") async {
+                await fetch("/members?limit=5", membersJson)
+              }
+            }
+            Text("{membersJson}", size: 10, color: "#667085")
+
+            SurfaceCard("Roster actions") {
+              Column(gap: 8) {
+                for (name in members) {
+                  MemberRow("{name}", "AD", "member")
+                }
+              }
+            }
+
+            SurfaceCard("Post actions") {
+              Column(gap: 8) {
+                Row(gap: 8, align: center) {
+                  Icon(name: "chat")
+                  Text("{postTitles[0]}", size: 13)
+                  if (pinTop) {
+                    Badge(label: "pinned", tone: "warning")
+                  } else {
+                    Badge(label: "open", tone: "info")
+                  }
+                  if (pinTop) {
+                    Button("Unpin", p: 6, rounded: 8, shadow: 1, bg: "#F4F6F9") {
+                      pinTop = false
+                    }
+                  } else {
+                    Button("Pin top post", p: 6, rounded: 8, shadow: 1, bg: "#097FEB") {
+                      pinTop = true
+                    }
+                  }
+                }
+                Row(gap: 8, align: center) {
+                  Icon(name: "user")
+                  Text("linus", size: 13)
+                  if (promoteLinus) {
+                    Badge(label: "moderator", tone: "info")
+                    Button("Demote", p: 6, rounded: 8, shadow: 1, bg: "#F4F6F9") {
+                      promoteLinus = false
+                    }
+                  } else {
+                    Badge(label: "member", tone: "neutral")
+                    Button("Promote linus", p: 6, rounded: 8, shadow: 1, bg: "#097FEB") {
+                      promoteLinus = true
+                    }
+                  }
+                }
+                Row(gap: 8, align: center) {
+                  Icon(name: "user")
+                  Text("grace", size: 13)
+                  if (banGrace) {
+                    Badge(label: "banned", tone: "error")
+                    Button("Unban grace", p: 6, rounded: 8, shadow: 1, bg: "#F4F6F9") {
+                      banGrace = false
+                    }
+                  } else {
+                    Badge(label: "member", tone: "neutral")
+                    Button("Ban grace", p: 6, rounded: 8, shadow: 1, bg: "#781C40") {
+                      banGrace = true
+                    }
+                  }
+                }
+              }
+            }
+
+            if (banGrace) {
+              Banner("Grace banned", "the service rejects her posts with the role check", "warning")
+            } else {
+              CaptionText("bans and promotions ride the member role field")
+            }
+        } else {
+          Banner("Member session", "moderation needs the moderator role (service answers 403)", "warning")
+          Button("Apply as moderator first", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+            push: Join
+          }
+        }
+      } else {
+        Banner("No session", "the service answers 401 for anonymous moderation", "error")
+        Button("Sign in first", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+          push: Login
+        }
+      }
+
+      Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+        pop
+      }
+    }
+  }
+
+  route Settings {
+    Column(p: 14, gap: 12) {
+      NavBar("Settings", "{me}")
+      SectionHeader("Profile")
+      SurfaceCard("Profile form") {
+        Column(gap: 10) {
+          FormField("Display name", "shown on posts")
+          Input(placeholder: "Display name", bind: displayName, required: true, minLength: 2, maxLength: 32)
+          FormField("Contact email", "for digest mail")
+          Input(placeholder: "mail@example.com", bind: newTopic, pattern: "^[^@]+@[^@]+$")
+          CaptionText("required and format checks ride the input validators")
+        }
+      }
+
+      SectionHeader("Notifications")
+      SurfaceCard("Digest") {
+        Row(gap: 12, align: center) {
+          Icon(name: "mail")
+          Text("Weekly digest", size: 14)
+          Switch(bind: joined)
+          if (joined) {
+            Badge(label: "on", tone: "success")
+          } else {
+            Badge(label: "off", tone: "neutral")
+          }
+        }
+      }
+
+      SectionHeader("Danger zone")
+      if (signedIn) {
+        ConfirmDialog("Leave circle", "leaving removes your membership row", "Leave")
+        Button("Confirm leave", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+          joined = false
+          memberCount -= 1
+          acted = true
+          lastAction = "left the circle"
+        }
+        if (acted) {
+          ToastNote("{lastAction}")
+        }
+      } else {
+        Banner("No session", "membership actions need a session", "error")
+      }
+
+      SectionHeader("About")
+      SurfaceCard("About") {
+        Column(gap: 6) {
+          Row(gap: 8, align: center) {
+            Icon(name: "info")
+            CaptionText("circle build 0.4.0, three models, six api routes")
+          }
+          Row(gap: 8, align: center) {
+            Icon(name: "refresh")
+            CaptionText("envelopes sync on demand from the list apis")
+          }
+        }
+      }
+
+      Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+        pop
+      }
+    }
+  }
+
+  route Login {
+    Column(p: 14, gap: 12) {
+      NavBar("Sign in", "{me}")
+      TitleHeading("Account session")
+      // POST /sessions verifies credentials service-side (401 on mismatch);
+      // the fetch effect is GET-only, so the form mirrors the outcome here.
+      SurfaceCard("Credentials") {
+        Column(gap: 10) {
+          FormField("Username", "your handle")
+          Input(placeholder: "Username", bind: loginName, required: true, minLength: 3)
+          FormField("Password", "checked at POST /sessions")
+          Input(placeholder: "Password", bind: displayName, required: true, minLength: 4)
+          Row(gap: 10) {
+            Button("Sign in as member", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              me = loginName
+              signedIn = true
+              banned = false
+              moderator = false
+              acted = true
+              lastAction = "session issued: member"
+            }
+            Button("Sign in as moderator", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+              me = loginName
+              signedIn = true
+              banned = false
+              moderator = true
+              acted = true
+              lastAction = "session issued: moderator"
+            }
+          }
+          if (acted) {
+            ToastNote("{lastAction}")
+          }
+        }
+      }
+      Row(gap: 10) {
+        Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F6F9") {
+          pop
+        }
+      }
+    }
+  }
+}

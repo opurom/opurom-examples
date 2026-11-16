@@ -875,6 +875,64 @@
           "description": "render the catalog demo deterministically"
         }
       ]
+    },
+    {
+      "name": "circle",
+      "source": "apps/circle/circle.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native",
+        "full"
+      ],
+      "tests": [
+        {
+          "id": "circle.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the circle community source"
+        },
+        {
+          "id": "circle.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "lower three models, six api routes and six pages into one IR"
+        },
+        {
+          "id": "circle.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "390",
+            "844",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the initial CircleList page deterministically"
+        },
+        {
+          "id": "circle.full",
+          "cmd": [
+            "node",
+            "opurom-cli/bin/opurom.mjs",
+            "build",
+            "--src",
+            "{source}",
+            "--target",
+            "full",
+            "--out",
+            "{tmp}/full"
+          ],
+          "description": "lower to the full-stack service, web and migrations"
+        }
+      ]
     }
   ]
 }
