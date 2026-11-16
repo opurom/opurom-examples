@@ -1,6 +1,5 @@
 // TabsBar(selected, segments): segmented tab strip where selected is the
 // highlighted zero-based index and segments the total count.
-import "pkg-theme/default.opu";
 
 component TabsBar(selected: int, segments: int) {
   TabStrip(value: selected, segments: segments)

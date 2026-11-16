@@ -6,7 +6,7 @@
 // the surfaces; TaskCard and MemberRow stay local because the registry has no
 // board/row equivalent yet. Component arguments are literals, so dynamic text
 // renders through state interpolation at the call site.
-import "pkg-theme/default.opu"
+import "pkg-theme/dark.opu"
 import "components/navbar.opu"
 import "components/text.opu"
 import "components/list.opu"

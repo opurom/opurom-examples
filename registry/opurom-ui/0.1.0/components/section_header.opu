@@ -1,5 +1,4 @@
 // SectionHeader(title): section heading with a trailing action affordance.
-import "pkg-theme/default.opu";
 
 component SectionHeader(title: string) {
   Row(gap: 8, align: center) {

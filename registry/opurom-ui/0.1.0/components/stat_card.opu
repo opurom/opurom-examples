@@ -1,6 +1,5 @@
 // MetricCard(label, value, trend, tone): statistics card with a large value and
 // a trend line; pass a design tone such as success, warning or error.
-import "pkg-theme/default.opu";
 
 component MetricCard(label: string, value: string, trend: string, tone: string) {
   Container(p: 16, rounded: 14, shadow: 3, variant: "secondary") {

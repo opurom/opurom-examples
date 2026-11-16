@@ -1,7 +1,6 @@
 // FormField(label, placeholder): label above a single-line field; bind real
 // input at the call site with Input(bind: state) - a component argument cannot
 // carry a state name.
-import "pkg-theme/default.opu";
 
 component FormField(label: string, placeholder: string) {
   Column(gap: 6) {

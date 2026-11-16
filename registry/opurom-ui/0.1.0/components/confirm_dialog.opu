@@ -1,7 +1,6 @@
 // ConfirmDialog(title, body, confirm): titled dialog with body copy and a
 // primary confirm action; attach the real action at the call site, since a
 // component body cannot hold tap handlers.
-import "pkg-theme/default.opu";
 
 component ConfirmDialog(title: string, body: string, confirm: string) {
   Dialog(title: "{title}") {
