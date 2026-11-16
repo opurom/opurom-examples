@@ -1,0 +1,7 @@
+// GlassGhostButton(label, state): T3 flat glass button with no outer shadow;
+// state is default/hover/active/focus/disabled.
+component GlassGhostButton(label: string, state: string) {
+  Container(p: 12, rounded: 12, glass: true, variant: "ghost", state: "{state}", animate: "ease") {
+    Text("{label}", size: 16)
+  }
+}

@@ -1,11 +1,17 @@
-// Opurom default UI system: light theme package.
+// Opurom default UI system: light glass theme package.
 // One theme declaration per program; import this module once.
+// The two brand gradient stops ride on the consumed semantic tokens:
+// secondary = top cyan #2DD8FF, primary = bottom blue #006EFF.
 theme {
   mode: light,
-  accent: "#007AFF",
+  accent: "#006EFF",
   radius: 12,
   fontScale: 1.0,
   surface: "#FFFFFF",
   onSurface: "#111827",
   stage: "#F9FAFB",
+  tokens {
+    primary: "#006EFF",
+    secondary: "#2DD8FF",
+  }
 }

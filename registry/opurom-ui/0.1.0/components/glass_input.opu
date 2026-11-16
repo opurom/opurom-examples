@@ -1,0 +1,7 @@
+// GlassInput(placeholder, state): T2 text field with glass lamina and soft
+// shadow; bind real input state at the call site. State is one of five values.
+component GlassInput(placeholder: string, state: string) {
+  Container(p: 12, rounded: 12, shadow: 1, glass: true, state: "{state}", animate: "ease") {
+    Input(placeholder: "{placeholder}")
+  }
+}

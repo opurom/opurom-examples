@@ -1,0 +1,10 @@
+// GlassSwitchOn(state): 48x24 track (radius 12), 20x20 thumb (radius 10) at
+// x=26 after the 24px slide; track clips inside the parent shape.
+component GlassSwitchOn(state: string) {
+  Container(width: 48, height: 24, rounded: 12, glass: true, gradient: "#2DD8FF,#006EFF", state: "{state}") {
+    Row(gap: 0, padding: 2) {
+      Spacer(width: 24)
+      Container(width: 20, height: 20, rounded: 10, variant: "ghost")
+    }
+  }
+}

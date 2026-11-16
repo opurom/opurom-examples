@@ -1,0 +1,7 @@
+// GlassFab(label, state): circular 56x56 primary FAB, radius half the height;
+// the gradient runs top to bottom; state is one of the five states.
+component GlassFab(label: string, state: string) {
+  Container(width: 56, height: 56, rounded: 28, shadow: 3, glass: true, gradient: "#2DD8FF,#006EFF", state: "{state}", animate: "ease") {
+    Text("{label}", size: 16)
+  }
+}

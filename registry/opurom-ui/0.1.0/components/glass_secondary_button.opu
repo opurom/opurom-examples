@@ -1,0 +1,7 @@
+// GlassSecondaryButton(label, state): T2 outlined button; glass lamina and
+// secondary variant carry the neutral surface; state is one of the five states.
+component GlassSecondaryButton(label: string, state: string) {
+  Container(p: 12, rounded: 12, shadow: 2, glass: true, variant: "secondary", state: "{state}", animate: "ease") {
+    Text("{label}", size: 16)
+  }
+}

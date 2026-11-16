@@ -1,0 +1,10 @@
+// GlassSwitchOff(state): 48x24 track (radius 12), 20x20 thumb (radius 10) at
+// inset 2; the thumb sits at x=2. Track width = 2*2 + 20 + 24 = 48 exactly.
+component GlassSwitchOff(state: string) {
+  Container(width: 48, height: 24, rounded: 12, glass: true, variant: "secondary", state: "{state}") {
+    Row(gap: 0, padding: 2) {
+      Container(width: 20, height: 20, rounded: 10, variant: "ghost")
+      Spacer(width: 24)
+    }
+  }
+}

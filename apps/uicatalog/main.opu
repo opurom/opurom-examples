@@ -38,6 +38,14 @@ import "components/toolbar.opu";
 import "components/secure_field.opu";
 import "components/status_pill.opu";
 import "components/grid_tile.opu";
+import "components/glass_input.opu";
+import "components/glass_switch_on.opu";
+import "components/glass_switch_off.opu";
+import "components/glass_card.opu";
+import "components/glass_fab.opu";
+import "components/glass_ghost_button.opu";
+import "components/glass_secondary_button.opu";
+import "components/glass_primary_button.opu";
 
 app UiCatalog {
   state page: int = 3
@@ -117,6 +125,18 @@ app UiCatalog {
       Row(gap: 12) {
         GridTile("assets/photo1.png", "Dawn")
         GridTile("assets/photo2.png", "Tide")
+
+      SectionHeader("Premium glass")
+      GlassPrimaryButton("Deploy", "default")
+      GlassSecondaryButton("Cancel", "hover")
+      GlassGhostButton("Skip", "focus")
+      GlassFab("+", "active")
+      GlassCard("Surface", "disabled")
+      Row(gap: 12) {
+        GlassSwitchOff("default")
+        GlassSwitchOn("default")
+      }
+      GlassInput("Search", "default")
       }
     }
   }
