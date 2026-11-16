@@ -7,7 +7,7 @@ app GalleryHome {
       Container(width: 1080, height: 70, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(width: 84)
-          Text("Gallery", size: 56, color: "#117378", label: "gallery/title")
+          Text("Gallery", size: 56, fontPx: 45, weight: "bold", color: "#117378", label: "gallery/title")
         }
       }
       Spacer(height: 38)
@@ -43,7 +43,7 @@ app GalleryHome {
                   Spacer(width: 45)
                   Container(width: 509, height: 54, color: "#314754", border: "#314754", p: 0) {
                     Row(p: 0, gap: 0, align: center, color: "#314754", border: "#314754") {
-                      Text("Reply", size: 49, color: "#FFFFFF", label: "hero/reply_title")
+                      Text("Reply", size: 49, fontPx: 39, weight: "bold", color: "#FFFFFF", label: "hero/reply_title")
                     }
                   }
                   Image(src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWYAAAA2CAIAAAB7vaQCAAAA7klEQVR42u3csQ3CMBBAUWMTHMZhChZg/zWQSHxHg+iQ0lAQ3utcOid92S5yuFxvZUemaZr7qbVWgC+oPgEgGYBkAJIB/JDj/2w1M0dEjDB1kIxNyViW5bGspg6SsSEZpWRkhlMGFG8ZgGQAkgFIBiAZAJIBSAYgGYBkAJIBSAaAZACSAUgGIBmAZACSAVB2/VeuyFjHiMxXEWttVRZBMj4Y67iv473svZ/nbszgYgJIBiAZgGQAkgEgGYBkAJIBSAYgGYBkAEgGIBmAZACSAUgGIBkAkgFIBiAZgGQAkgFIBoBkAJIBSAYgGcBuPAEw/SlAWP00UQAAAABJRU5ErkJggg==", width: 358, height: 54, border: "#314754", label: "hero/right_3")
@@ -54,7 +54,7 @@ app GalleryHome {
                   Spacer(width: 45)
                   Container(width: 509, height: 74, color: "#314754", border: "#314754", p: 0) {
                     Row(p: 0, gap: 0, align: start, color: "#314754", border: "#314754") {
-                      Text("An efficient, focused email app", size: 35, color: "#FFFFFF", label: "hero/reply_subtitle")
+                      Text("An efficient, focused email app", size: 35, fontPx: 28, weight: "normal", color: "#FFFFFF", label: "hero/reply_subtitle")
                     }
                   }
                   Image(src: "data:image/png;base64,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", width: 358, height: 74, border: "#314754", label: "hero/right_4")
@@ -70,7 +70,7 @@ app GalleryHome {
       Container(width: 1080, height: 72, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(width: 84)
-          Text("Categories", size: 56, color: "#B93C5D", label: "gallery/categories")
+          Text("Categories", size: 56, fontPx: 48, weight: "bold", color: "#B93C5D", label: "gallery/categories")
         }
       }
       Spacer(height: 32)
@@ -90,7 +90,7 @@ app GalleryHome {
                       Spacer(height: 12)
                       Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
                         Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
-                          Text("MATERIAL", size: 40, color: "#241E30", label: "category/material_label")
+                          Text("MATERIAL", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "category/material_label")
                         }
                       }
                     }
@@ -118,7 +118,7 @@ app GalleryHome {
                       Spacer(height: 12)
                       Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
                         Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
-                          Text("CUPERTINO", size: 40, color: "#241E30", label: "category/cupertino_label")
+                          Text("CUPERTINO", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "category/cupertino_label")
                         }
                       }
                     }
@@ -146,7 +146,7 @@ app GalleryHome {
                       Spacer(height: 12)
                       Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
                         Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
-                          Text("STYLES & OTHER", size: 40, color: "#241E30", label: "category/styles_label")
+                          Text("STYLES & OTHER", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "category/styles_label")
                         }
                       }
                     }
