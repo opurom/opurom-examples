@@ -11,11 +11,11 @@ import "components/glass_ghost_button.opu";
 
 component GlassDigit0(unused: int) {
   if (sMul) {
-    Button("0", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("0", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = mulProd; err = false; dReady = false; dZero = sDiv
     }
   } else {
-    Button("0", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("0", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = cur; err = false; dReady = false; dZero = sDiv
     }
   }
@@ -23,11 +23,11 @@ component GlassDigit0(unused: int) {
 
 component GlassDigit1(unused: int) {
   if (sMul) {
-    Button("1", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("1", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 1; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("1", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("1", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 1; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -35,11 +35,11 @@ component GlassDigit1(unused: int) {
 
 component GlassDigit2(unused: int) {
   if (sMul) {
-    Button("2", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("2", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 2; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("2", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("2", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 2; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -47,11 +47,11 @@ component GlassDigit2(unused: int) {
 
 component GlassDigit3(unused: int) {
   if (sMul) {
-    Button("3", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("3", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 3; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("3", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("3", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 3; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -59,11 +59,11 @@ component GlassDigit3(unused: int) {
 
 component GlassDigit4(unused: int) {
   if (sMul) {
-    Button("4", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("4", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 4; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("4", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("4", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 4; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -71,11 +71,11 @@ component GlassDigit4(unused: int) {
 
 component GlassDigit5(unused: int) {
   if (sMul) {
-    Button("5", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("5", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 5; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("5", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("5", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 5; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -83,11 +83,11 @@ component GlassDigit5(unused: int) {
 
 component GlassDigit6(unused: int) {
   if (sMul) {
-    Button("6", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("6", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 6; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("6", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("6", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 6; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -95,11 +95,11 @@ component GlassDigit6(unused: int) {
 
 component GlassDigit7(unused: int) {
   if (sMul) {
-    Button("7", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("7", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 7; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("7", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("7", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 7; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -107,11 +107,11 @@ component GlassDigit7(unused: int) {
 
 component GlassDigit8(unused: int) {
   if (sMul) {
-    Button("8", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("8", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 8; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("8", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("8", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 8; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
@@ -119,38 +119,38 @@ component GlassDigit8(unused: int) {
 
 component GlassDigit9(unused: int) {
   if (sMul) {
-    Button("9", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("9", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 9; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   } else {
-    Button("9", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+    Button("9", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
       h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 9; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
     }
   }
 }
 
 component GlassClear(unused: int) {
-  Container(p: 2, glass: true, variant: "ghost", rounded: 12) {
-    Icon(name: "refresh")
-    Button("AC", variant: "ghost", glass: true, state: "default", width: 72, p: 12, rounded: 12, fontScale: 1.0, animate: "spring") {
+  Column(p: 0, gap: 4, align: center, glass: true, variant: "ghost", rounded: 12) {
+    if (err) { Icon(name: "refresh") }
+    Button("AC", variant: "ghost", glass: true, state: "default", width: 9999, margin: 8, p: 12, rounded: 18, fontScale: 1.0, animate: "spring") {
       cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; tmp = 0; acc = 0; mulProd = 0; divRem = 0; divQ = 0; out = 0; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false; opLabel = ""
     }
   }
 }
 
 component GlassDelete(unused: int) {
-  Container(p: 2, glass: true, variant: "ghost", rounded: 12) {
-    Icon(name: "backspace")
-    Button("DEL", variant: "ghost", glass: true, state: "default", width: 72, p: 12, rounded: 12, fontScale: 1.0, animate: "spring") {
+  Column(p: 0, gap: 4, align: center, glass: true, variant: "ghost", rounded: 12) {
+    if (err) { Icon(name: "backspace") }
+    Button("DEL", variant: "ghost", glass: true, state: "default", width: 9999, margin: 8, p: 12, rounded: 18, fontScale: 1.0, animate: "spring") {
       cur = h1; h1 = h2; h2 = h3; h3 = h4; h4 = h5; h5 = h6; h6 = 0; out = cur; err = false
     }
   }
 }
 
 component GlassPercent(unused: int) {
-  Container(p: 2, glass: true, variant: "ghost", rounded: 12) {
-    Icon(name: "percentage")
-    Button("%", variant: "ghost", glass: true, state: "default", width: 72, p: 12, rounded: 12, fontScale: 1.0, animate: "spring") {
+  Column(p: 0, gap: 4, align: center, glass: true, variant: "ghost", rounded: 12) {
+    if (err) { Icon(name: "percentage") }
+    Button("%", variant: "ghost", glass: true, state: "default", width: 9999, margin: 8, p: 12, rounded: 18, fontScale: 1.0, animate: "spring") {
       cur = h2; out = cur; err = false
     }
   }
@@ -158,22 +158,22 @@ component GlassPercent(unused: int) {
 
 component GlassOpPlus(unused: int) {
   if (normalMode) {
-    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sAdd) {
-    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc += cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sSub) {
-    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc -= cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sMul) {
-    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("+", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = mulProd; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
@@ -181,22 +181,22 @@ component GlassOpPlus(unused: int) {
 
 component GlassOpMinus(unused: int) {
   if (normalMode) {
-    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sAdd) {
-    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc += cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sSub) {
-    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc -= cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sMul) {
-    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("-", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = mulProd; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
@@ -204,22 +204,22 @@ component GlassOpMinus(unused: int) {
 
 component GlassOpMul(unused: int) {
   if (normalMode) {
-    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sAdd) {
-    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc += cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sSub) {
-    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc -= cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
   if (sMul) {
-    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("x", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = mulProd; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
     }
   }
@@ -227,11 +227,11 @@ component GlassOpMul(unused: int) {
 
 component GlassDivide(unused: int) {
   if (nz) {
-    Button("/", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("/", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.0, animate: "spring") {
       acc = cur; divRem = acc; divQ = 0; out = acc; sAdd = false; sSub = false; sMul = false; sDiv = true; normalMode = false; opLabel = "/"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = true
     }
   } else {
-    Button("/", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("/", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.0, animate: "spring") {
       err = true; opLabel = "/"; dReady = false; dZero = true
     }
   }
@@ -239,39 +239,39 @@ component GlassDivide(unused: int) {
 
 component GlassEquals(unused: int) {
   if (sAdd) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc += cur; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
     }
   }
   if (sSub) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc -= cur; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
     }
   }
   if (sMul) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       acc = mulProd; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
     }
   }
   if (dReady) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       divQ += 1; divRem -= cur; out = divQ; opLabel = "/"; err = false; dReady = true; dZero = false
     }
   }
   if (dZero) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       err = true; opLabel = "/ error"; dReady = false; dZero = true
     }
   }
   if (normalMode) {
-    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring") {
+    Button("=", variant: "primary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 3, fontScale: 1.2, animate: "spring") {
       out = cur
     }
   }
 }
 
 component GlassDot(unused: int) {
-  Button(".", variant: "secondary", glass: true, state: "default", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring") {
+  Button(".", variant: "secondary", glass: true, state: "default", p: 26, rounded: 18, margin: 8, shadow: 2, fontScale: 1.2, animate: "spring") {
     dot = true
   }
 }
@@ -308,16 +308,16 @@ app Calculator {
       Icon(name: "calculator")
       GlassCard("Opurom Calculator", "default")
     }
-    Container(p: 8, glass: true, variant: "secondary", rounded: 14, shadow: 2) {
+    Column(p: 160, align: end, glass: true, variant: "secondary", rounded: 14, shadow: 2, gap: 8) {
       Icon(name: "equal")
       GlassPrimaryButton("Result", "default")
-      Text("{out}", size: 44)
+      Text("{out}", size: 160)
       Text("Process: {acc} {opLabel}", size: 12)
       if (sDiv) { Text("Quotient {divQ}   Remainder {divRem}", size: 11) }
       if (err) { Text("Error: divide by zero", size: 12) }
-      if (dot) { Text("Decimal entry", size: 11) }
+      Icon(name: "refresh")
     }
-    Grid(columns: 4, compactColumns: 4) {
+    Grid(columns: 4, compactColumns: 4, fillHeight: true) {
       GlassClear(0)
       GlassDelete(0)
       GlassPercent(0)
