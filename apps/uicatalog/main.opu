@@ -54,6 +54,18 @@ app UiCatalog {
 
   ScrollView(p: 16) {
     Column(gap: 14) {
+      SectionHeader("Premium glass")
+      GlassPrimaryButton("Deploy", "default")
+      GlassCard("Surface", "disabled")
+      GlassInput("Search", "default")
+      Row(gap: 8) {
+        GlassSwitchOff("default")
+        GlassSwitchOn("default")
+      }
+      GlassSecondaryButton("Cancel", "hover")
+      GlassGhostButton("Skip", "focus")
+      GlassFab("+", "active")
+
       SectionHeader("Overview")
       MetricCard("Deploys", "128", "+12%", "success")
       MetricCard("Failures", "3", "-2", "warning")
@@ -125,18 +137,6 @@ app UiCatalog {
       Row(gap: 12) {
         GridTile("assets/photo1.png", "Dawn")
         GridTile("assets/photo2.png", "Tide")
-
-      SectionHeader("Premium glass")
-      GlassPrimaryButton("Deploy", "default")
-      GlassSecondaryButton("Cancel", "hover")
-      GlassGhostButton("Skip", "focus")
-      GlassFab("+", "active")
-      GlassCard("Surface", "disabled")
-      Row(gap: 12) {
-        GlassSwitchOff("default")
-        GlassSwitchOn("default")
-      }
-      GlassInput("Search", "default")
       }
     }
   }
