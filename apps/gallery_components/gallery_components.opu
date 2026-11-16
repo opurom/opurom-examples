@@ -98,7 +98,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "layout-navbar", variant: "ghost", color: "#FAFBFB", label: "components/icon_1")
+                  Icon(name: "layout-navbar", width: 48, height: 48, color: "#B93C5D", label: "components/icon_1")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 222, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -126,7 +126,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "layout-list", variant: "ghost", color: "#FAFBFB", label: "components/icon_2")
+                  Icon(name: "layout-list", width: 48, height: 48, color: "#B93C5D", label: "components/icon_2")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 182, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -152,7 +152,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "layout-bottombar", variant: "ghost", color: "#FAFBFB", label: "components/icon_3")
+                  Icon(name: "layout-bottombar", width: 48, height: 48, color: "#B93C5D", label: "components/icon_3")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 222, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -180,7 +180,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "navigation", variant: "ghost", color: "#FAFBFB", label: "components/icon_4")
+                  Icon(name: "navigation", width: 48, height: 48, color: "#B93C5D", label: "components/icon_4")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 222, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -208,7 +208,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "box-align-bottom", variant: "ghost", color: "#FAFBFB", label: "components/icon_5")
+                  Icon(name: "box-align-bottom", width: 48, height: 48, color: "#B93C5D", label: "components/icon_5")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 154, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -234,7 +234,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "square-rounded", variant: "ghost", color: "#FAFBFB", label: "components/icon_6")
+                  Icon(name: "square-rounded", width: 48, height: 48, color: "#B93C5D", label: "components/icon_6")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -260,7 +260,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "cards", variant: "ghost", color: "#FAFBFB", label: "components/icon_7")
+                  Icon(name: "cards", width: 48, height: 48, color: "#B93C5D", label: "components/icon_7")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -286,7 +286,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "checklist", variant: "ghost", color: "#FAFBFB", label: "components/icon_8")
+                  Icon(name: "checklist", width: 48, height: 48, color: "#B93C5D", label: "components/icon_8")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -312,7 +312,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "table", variant: "ghost", color: "#FAFBFB", label: "components/icon_9")
+                  Icon(name: "table", width: 48, height: 48, color: "#B93C5D", label: "components/icon_9")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -338,7 +338,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "alert-square", variant: "ghost", color: "#FAFBFB", label: "components/icon_10")
+                  Icon(name: "alert-square", width: 48, height: 48, color: "#B93C5D", label: "components/icon_10")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -364,7 +364,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "border-horizontal", variant: "ghost", color: "#FAFBFB", label: "components/icon_11")
+                  Icon(name: "border-horizontal", width: 48, height: 48, color: "#B93C5D", label: "components/icon_11")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -390,7 +390,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "layout-grid", variant: "ghost", color: "#FAFBFB", label: "components/icon_12")
+                  Icon(name: "layout-grid", width: 48, height: 48, color: "#B93C5D", label: "components/icon_12")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -416,7 +416,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "list", variant: "ghost", color: "#FAFBFB", label: "components/icon_13")
+                  Icon(name: "list", width: 48, height: 48, color: "#B93C5D", label: "components/icon_13")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -442,7 +442,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "menu-2", variant: "ghost", color: "#FAFBFB", label: "components/icon_14")
+                  Icon(name: "menu-2", width: 48, height: 48, color: "#B93C5D", label: "components/icon_14")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -468,7 +468,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "menu", variant: "ghost", color: "#FAFBFB", label: "components/icon_15")
+                  Icon(name: "menu", width: 48, height: 48, color: "#B93C5D", label: "components/icon_15")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -494,7 +494,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "navigation", variant: "ghost", color: "#FAFBFB", label: "components/icon_16")
+                  Icon(name: "navigation", width: 48, height: 48, color: "#B93C5D", label: "components/icon_16")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -520,7 +520,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "calendar-event", variant: "ghost", color: "#FAFBFB", label: "components/icon_17")
+                  Icon(name: "calendar-event", width: 48, height: 48, color: "#B93C5D", label: "components/icon_17")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -546,7 +546,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "progress", variant: "ghost", color: "#FAFBFB", label: "components/icon_18")
+                  Icon(name: "progress", width: 48, height: 48, color: "#B93C5D", label: "components/icon_18")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -572,7 +572,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "checkbox", variant: "ghost", color: "#FAFBFB", label: "components/icon_19")
+                  Icon(name: "checkbox", width: 48, height: 48, color: "#B93C5D", label: "components/icon_19")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -598,7 +598,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "adjustments", variant: "ghost", color: "#FAFBFB", label: "components/icon_20")
+                  Icon(name: "adjustments", width: 48, height: 48, color: "#B93C5D", label: "components/icon_20")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -624,7 +624,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "message", variant: "ghost", color: "#FAFBFB", label: "components/icon_21")
+                  Icon(name: "message", width: 48, height: 48, color: "#B93C5D", label: "components/icon_21")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -650,7 +650,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "tabs", variant: "ghost", color: "#FAFBFB", label: "components/icon_22")
+                  Icon(name: "tabs", width: 48, height: 48, color: "#B93C5D", label: "components/icon_22")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -676,7 +676,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "cursor-text", variant: "ghost", color: "#FAFBFB", label: "components/icon_23")
+                  Icon(name: "cursor-text", width: 48, height: 48, color: "#B93C5D", label: "components/icon_23")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -702,7 +702,7 @@ app GalleryHome {
               Row(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 92)
                 Container(width: 48, height: 48, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-                  Icon(name: "help-circle", variant: "ghost", color: "#FAFBFB", label: "components/icon_24")
+                  Icon(name: "help-circle", width: 48, height: 48, color: "#B93C5D", label: "components/icon_24")
                 }
                 Spacer(width: 113)
                 Container(width: 730, height: 183, color: "#FAFBFB", border: "#FAFBFB", p: 0) {

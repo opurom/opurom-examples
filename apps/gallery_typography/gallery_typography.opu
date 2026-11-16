@@ -3,7 +3,38 @@
 app GalleryTypography {
   Container(width: 1080, height: 2200, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
     Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
-      Spacer(height: 138)
+      Container(width: 1080, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+          Spacer(width: 53)
+          Container(width: 41, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+              Spacer(height: 44)
+              Icon(name: "arrow-left", width: 41, height: 41, color: "#B93C5D", label: "typography/actionbar_back")
+            }
+          }
+          Spacer(width: 645)
+          Container(width: 51, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+              Spacer(height: 39)
+              Icon(name: "info-circle", width: 51, height: 51, color: "#241E30", label: "typography/actionbar_info")
+            }
+          }
+          Spacer(width: 75)
+          Container(width: 52, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+              Spacer(height: 49)
+              Icon(name: "code", width: 52, height: 32, color: "#241E30", label: "typography/actionbar_code")
+            }
+          }
+          Spacer(width: 74)
+          Container(width: 52, height: 138, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+              Spacer(height: 39)
+              Icon(name: "devices", width: 52, height: 51, color: "#241E30", label: "typography/actionbar_devices")
+            }
+          }
+        }
+      }
       Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
         Spacer(width: 42)
         Container(width: 996, height: 147, color: "#6200EE", border: "#6200EE", rounded: 12, p: 0) {
