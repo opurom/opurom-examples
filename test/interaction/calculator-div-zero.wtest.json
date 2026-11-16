@@ -1,0 +1,20 @@
+{
+  "src": "../../calculator.opu",
+  "width": 320,
+  "height": 640,
+  "steps": [
+    { "tap": 18 },
+    { "tap": 15 },
+    { "tap": 48 },
+    { "tap": 56 }
+  ],
+  "expect": {
+    "state": {
+      "err": true,
+      "out": 0,
+      "sDiv": true,
+      "dZero": true
+    },
+    "digest": "28022e0477f8bdbd"
+  }
+}
