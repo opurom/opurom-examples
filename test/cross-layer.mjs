@@ -130,9 +130,26 @@ if (!jdkAvailable()) {
 check('opurom-cli: opurom doctor', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'doctor']), 'doctor'));
 check('opurom-cli: opurom test (full-stack end-to-end)', () => ok(run('node', [P('opurom-cli', 'bin', 'opurom.mjs'), 'test']), 'opurom test'));
 
+// The registry is shared: concurrent writers can hand back a truncated or
+// momentarily-missing file, so reads and parses retry with a short backoff
+// (three attempts) before the check reports the failure with the file name.
+function readRegistry() {
+  const file = P('opurom-examples', 'examples.json');
+  let lastError = null;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      return JSON.parse(readFileSync(file, 'utf8'));
+    } catch (error) {
+      lastError = new Error(`invalid examples registry JSON in ${file}: ${error.message}`);
+      if (attempt < 3) spawnSync('sleep', ['0.2']);
+    }
+  }
+  throw lastError;
+}
+
 console.log('== examples registry ==');
 check('examples registry and runner cover every sample app', () => {
-  const registry = JSON.parse(readFileSync(P('opurom-examples', 'examples.json'), 'utf8'));
+  const registry = readRegistry();
   const registered = new Set(registry.apps.map(app => app.source));
   const onDisk = readdirSync(P('opurom-examples')).filter(file => file.endsWith('.opu'));
   for (const file of onDisk) {
@@ -933,7 +950,7 @@ try {
     }
   };
   check('every registered app compiles and lowers to all eleven emitters', () => {
-    const registry = JSON.parse(readFileSync(P('opurom-examples', 'examples.json'), 'utf8'));
+    const registry = readRegistry();
     const targets = emitterTargets();
     assert.equal(targets.length, 11, `expected 11 emitters, found ${targets.length}`);
     lowerRegistry(registry, targets);
