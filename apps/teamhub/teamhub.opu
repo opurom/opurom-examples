@@ -1,43 +1,27 @@
 // TeamHub: a full-stack team collaboration console in one source file.
 // Models, api routes and five navigable pages lower to the shared service,
 // its SQL migrations and the web/native targets from one declaration.
-// Row components (ProjectRow, TaskCard, MemberRow) are the swap points where
-// a future registry DataTable/Sidebar/FormField plugs in one-for-one.
-import "pkg-theme/dark.opu"
+// Registry components (MetricCard, DataTable, SidebarNav, TabsBar,
+// ProgressTrack, FilterChip, SectionHeader, FormField, ConfirmDialog) provide
+// the surfaces; TaskCard and MemberRow stay local because the registry has no
+// board/row equivalent yet. Component arguments are literals, so dynamic text
+// renders through state interpolation at the call site.
+import "pkg-theme/default.opu"
 import "components/navbar.opu"
-import "components/card.opu"
 import "components/text.opu"
-import "components/button.opu"
 import "components/list.opu"
 import "components/avatar.opu"
 import "components/badge.opu"
 import "components/toast.opu"
-import "components/dialog.opu"
-
-// One KPI tile: label, big number and a caption line.
-component KpiCard(label: string, value: string, note: string) {
-  Card {
-    Column(gap: 4) {
-      Text("{label}", size: 12, color: "#9AA4B2")
-      Text("{value}", size: 30, color: "#0A84FF")
-      Text("{note}", size: 11, color: "#9AA4B2")
-    }
-  }
-}
-
-// One projects-table row: name, owner, status pill and progress line.
-// Future swap: replace this body with DataTable row bindings.
-component ProjectRow(name: string, owner: string, status: string, pct: string) {
-  Container(p: 12, rounded: 10, shadow: 1, bg: "#1E1E1E", border: "#2C2C2C") {
-    Row(gap: 10, align: center) {
-      Icon(name: "folder")
-      Text("{name}", size: 14, color: "#E5E7EB")
-      Text("owner {owner}", size: 12, color: "#9AA4B2")
-      Badge(label: "{status}", tone: "info")
-      Text("{pct}", size: 12, color: "#0A84FF")
-    }
-  }
-}
+import "components/stat_card.opu"
+import "components/data_table.opu"
+import "components/sidebar.opu"
+import "components/tabs.opu"
+import "components/progress.opu"
+import "components/confirm_dialog.opu"
+import "components/section_header.opu"
+import "components/chip.opu"
+import "components/form_field.opu"
 
 // One board card: title, assignee initials and its status pill.
 component TaskCard(title: string, assignee: string, status: string) {
@@ -63,7 +47,7 @@ component MemberRow(name: string, initials: string, role: string, status: string
         CaptionText("{status}")
       }
       Spacer()
-      Badge(label: "{role}", tone: "info")
+      BadgePill("{role}")
     }
   }
 }
@@ -190,12 +174,12 @@ app TeamHub {
         CaptionText("Browsing as guest")
       }
 
-      Text("Workspace pulse", size: 20, color: "#E5E7EB")
+      SectionHeader("Workspace pulse")
       Grid(columns: 4) {
-        KpiCard("Requests", "964", "12% above baseline")
-        KpiCard("Capacity", "64%", "8 slots open")
-        KpiCard("Projects", "5", "2 active reviews")
-        KpiCard("Open tasks", "11", "3 due this week")
+        MetricCard("Requests", "964", "12% above baseline", "success")
+        MetricCard("Capacity", "64%", "8 slots open", "info")
+        MetricCard("Projects", "5", "2 active reviews", "info")
+        MetricCard("Open tasks", "11", "3 due this week", "warning")
       }
 
       Container(p: 14, rounded: 14, shadow: 3, bg: "#1E1E1E", border: "#2C2C2C") {
@@ -207,7 +191,7 @@ app TeamHub {
           Column(gap: 6) {
             TitleHeading("Latency")
             Sparkline(value: 72, segments: 7)
-            Progress(value: 64)
+            ProgressTrack(64)
             CaptionText("p95 latency 182ms across 7 days")
           }
         }
@@ -267,17 +251,24 @@ app TeamHub {
         CaptionText("Sign in with the admin account to unlock moderation")
       }
 
+      SidebarNav("Workspace", "{activePage}", "Projects", "Board", "Team")
+      CaptionText("sidebar open: {sidebarOpen}")
+
       Row(gap: 10) {
         Button("Projects") {
+          activePage = "projects"
           push: Projects
         }
         Button("Board") {
+          activePage = "board"
           push: ProjectDetail
         }
         Button("Team") {
+          activePage = "team"
           push: Team
         }
         Button("Settings") {
+          activePage = "settings"
           push: Settings
         }
       }
@@ -305,9 +296,9 @@ app TeamHub {
 
       Row(gap: 10) {
         if (filterActive) {
-          Badge(label: "active only", tone: "info")
+          FilterChip("active only", "primary")
         } else {
-          Badge(label: "all statuses", tone: "neutral")
+          FilterChip("all statuses", "ghost")
         }
         Button("Toggle filter") {
           filterActive.toggle()
@@ -317,37 +308,39 @@ app TeamHub {
         }
       }
 
-      Container(p: 10, rounded: 10, shadow: 1, bg: "#121212", border: "#2C2C2C") {
-        Row(gap: 10, align: center) {
-          Text("Project", size: 12, color: "#9AA4B2")
-          Text("Owner", size: 12, color: "#9AA4B2")
-          Text("Status", size: 12, color: "#9AA4B2")
-          Text("Progress", size: 12, color: "#9AA4B2")
-        }
+      CaptionText("filter: {search}")
+
+      // Registry DataTable renders the current sort view; component arguments
+      // are literals, so both directions spell their rows out explicitly.
+      if (sortAsc) {
+        DataTable("Project registry", "Name / Owner / Status / Progress",
+          "Apollo ada active 64%", "Beacon linus active 55%",
+          "Corvid grace paused 78%", "Apollo ada active 64%")
+      } else {
+        DataTable("Project registry", "Name / Owner / Status / Progress",
+          "Everest sam active 12%", "Delta grace paused 78%",
+          "Corvid linus active 64%", "Everest sam active 12%")
       }
 
-      // Future swap: each ProjectRow lowers into one DataTable row binding.
-      if (sortAsc) {
+      SectionHeader("All projects")
+      Column(gap: 6) {
         for (name in projectNames) {
-          ProjectRow("{name}", "ada", "active", "64%")
-          Row(gap: 6) {
-            Button("Open") {
+          Row(gap: 8, align: center) {
+            Icon(name: "folder")
+            Text("{name}", size: 13, color: "#E5E7EB")
+            BadgePill("active")
+            Button("open") {
+              activePage = "board"
               push: ProjectDetail
             }
-            Button("Edit") {
+            Button("edit") {
               showForm = true
             }
-            Button("Duplicate") {
+            Button("duplicate") {
               created = true
             }
           }
         }
-      } else {
-        ProjectRow("Everest", "sam", "active", "12%")
-        ProjectRow("Delta", "grace", "paused", "78%")
-        ProjectRow("Corvid", "linus", "active", "64%")
-        ProjectRow("Beacon", "ada", "active", "55%")
-        ProjectRow("Apollo", "ada", "review", "91%")
       }
 
       Row(gap: 10, align: center) {
@@ -422,12 +415,17 @@ app TeamHub {
             Badge(label: "active", tone: "info")
             AvatarDisc("AD")
           }
-          Progress(value: 64)
+          ProgressTrack(64)
           Row(gap: 8, align: center) {
             CaptionText("Progress {progressPct}% complete")
             CaptionText("Board progress {boardProgress}%")
           }
         }
+      }
+
+      Row(gap: 10, align: center) {
+        TabsBar(1, 3)
+        CaptionText("board sections")
       }
 
       Row(gap: 10) {
@@ -492,10 +490,7 @@ app TeamHub {
 
       Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
         Column(gap: 8) {
-          Row(gap: 8, align: center) {
-            Icon(name: "list-check")
-            Text("Release checklist", size: 13, color: "#9AA4B2")
-          }
+          SectionHeader("Release checklist")
           Row(gap: 8, align: center) {
             Checkbox(bind: checklistContract)
             Text("Contract frozen", size: 13, color: "#E5E7EB")
@@ -513,7 +508,7 @@ app TeamHub {
 
       Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
         Column(gap: 8) {
-          Text("Task actions", size: 13, color: "#9AA4B2")
+          SectionHeader("Task actions")
           Row(gap: 8) {
             Button("Assign") {
               actionMade = true
@@ -558,9 +553,9 @@ app TeamHub {
       CaptionText("Four seats, roles shown as pills")
 
       Grid(columns: 3) {
-        KpiCard("Seats", "4 of 6", "2 invites left")
-        KpiCard("Admins", "1", "root session")
-        KpiCard("Online", "3", "one away")
+        MetricCard("Seats", "4 of 6", "2 invites left", "info")
+        MetricCard("Admins", "1", "root session", "warning")
+        MetricCard("Online", "3", "one away", "success")
       }
 
       for (name in members) {
@@ -657,6 +652,7 @@ app TeamHub {
       TitleHeading("Account")
       Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
         Column(gap: 10) {
+          FormField("Workspace ID", "teamhub-7c1")
           Row(gap: 10) {
             Icon(name: "user")
             if (signedIn) {
@@ -713,7 +709,7 @@ app TeamHub {
         }
       }
 
-      TitleHeading("Profile form")
+      SectionHeader("Profile form")
       Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
         Column(gap: 10) {
           Input(placeholder: "Display name", bind: displayName, required: true, minLength: 2, maxLength: 32)
@@ -735,7 +731,7 @@ app TeamHub {
         }
       }
 
-      TitleHeading("Attachments")
+      SectionHeader("Attachments")
       Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
         Column(gap: 8) {
           UploadZone(value: 40, segments: 4)
@@ -752,7 +748,7 @@ app TeamHub {
         }
       }
 
-      TitleHeading("Notifications")
+      SectionHeader("Notifications")
       Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
         Row(gap: 12, align: center) {
           Icon(name: "mail")
@@ -767,19 +763,33 @@ app TeamHub {
       }
 
       if (admin) {
-        Dialog(title: "Danger zone") {
-          Column(gap: 8) {
-            CaptionText("Deleting the workspace removes every project row")
-            Row(gap: 10) {
-              Button("Delete workspace") {
-                actionMade = true
-              lastAction = "workspace deletion requested"
-              }
-              Button("Keep it") {
-                actionMade = true
-              lastAction = ""
-              }
-            }
+        ConfirmDialog("Danger zone", "Deleting the workspace removes every project row", "Delete workspace")
+        Row(gap: 10) {
+          Button("Confirm deletion") {
+            actionMade = true
+            lastAction = "workspace deletion requested"
+          }
+          Button("Keep it") {
+            actionMade = false
+            lastAction = ""
+          }
+        }
+      }
+
+      SectionHeader("About")
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+        Column(gap: 6) {
+          Row(gap: 8, align: center) {
+            Icon(name: "info")
+            CaptionText("workspace build 0.4.0, schema v3")
+          }
+          Row(gap: 8, align: center) {
+            Icon(name: "folder")
+            CaptionText("storage 1.8GB of 10GB used")
+          }
+          Row(gap: 8, align: center) {
+            Icon(name: "refresh")
+            CaptionText("last sync two minutes ago")
           }
         }
       }
