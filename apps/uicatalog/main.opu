@@ -22,6 +22,15 @@ import "components/avatar_group.opu";
 import "components/number_flow.opu";
 import "components/rating.opu";
 import "components/code_block.opu";
+import "components/button.opu";
+import "components/card.opu";
+import "components/text.opu";
+import "components/list.opu";
+import "components/navbar.opu";
+import "components/dialog.opu";
+import "components/toast.opu";
+import "components/badge.opu";
+import "components/avatar.opu";
 
 app UiCatalog {
   state page: int = 3
@@ -67,6 +76,25 @@ app UiCatalog {
       Timeline("Pipeline", "09:12 Queued", "09:14 Building", "09:20 Shipped")
       FileTree("src", "main.opu", "render.opu", "theme.opu")
       CodeSnippet("Build", "opurom build --src app.opu", "--target web", "--out dist")
+
+      SectionHeader("Legacy primitives")
+      NavBar("Console", "Edit")
+      Row(gap: 8) {
+        ActionButton("Deploy", "primary")
+        ActionButton("Promote", "secondary")
+        ActionButton("Archive", "ghost")
+      }
+      SurfaceCard("Runner pool")
+      TitleHeading("Workspace")
+      BodyText("Every surface below draws from the same token baseline.")
+      CaptionText("Catalog build 35")
+      ListPanel("Queued jobs")
+      Row(gap: 8) {
+        BadgePill("7")
+        AvatarDisc("OP")
+      }
+      ToastNote("Catalog refreshed")
+      DialogPanel("Run details")
     }
   }
 }
