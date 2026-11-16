@@ -926,10 +926,6 @@ try {
       const ir = join(tmp, `matrix-${app.name}.opuir.json`);
       ok(run(compiler, ['compile', P('opurom-examples', app.source), '-o', ir]), `compile ${app.name}`);
       for (const { name, files } of targets) {
-        // Multi-page apps (route blocks) lower to ten of the eleven emitters;
-        // the responsive web-dom emitter does not yet understand `routes`, so
-        // it is skipped for those apps and the gap is asserted separately.
-        if (app.multipage && name === 'web-dom') continue;
         const dir = join(tmp, `matrix-${app.name}-${name}`);
         ok(run(compiler, ['target', ir, '--target', name, '-o', dir]), `lower ${app.name} to ${name}`);
         assertArtifacts(dir, files, `${app.name}/${name}`);
