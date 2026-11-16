@@ -1,0 +1,804 @@
+// TeamHub: a full-stack team collaboration console in one source file.
+// Models, api routes and five navigable pages lower to the shared service,
+// its SQL migrations and the web/native targets from one declaration.
+// Row components (ProjectRow, TaskCard, MemberRow) are the swap points where
+// a future registry DataTable/Sidebar/FormField plugs in one-for-one.
+import "pkg-theme/dark.opu"
+import "components/navbar.opu"
+import "components/card.opu"
+import "components/text.opu"
+import "components/button.opu"
+import "components/list.opu"
+import "components/avatar.opu"
+import "components/badge.opu"
+import "components/toast.opu"
+import "components/dialog.opu"
+
+// One KPI tile: label, big number and a caption line.
+component KpiCard(label: string, value: string, note: string) {
+  Card {
+    Column(gap: 4) {
+      Text("{label}", size: 12, color: "#9AA4B2")
+      Text("{value}", size: 30, color: "#0A84FF")
+      Text("{note}", size: 11, color: "#9AA4B2")
+    }
+  }
+}
+
+// One projects-table row: name, owner, status pill and progress line.
+// Future swap: replace this body with DataTable row bindings.
+component ProjectRow(name: string, owner: string, status: string, pct: string) {
+  Container(p: 12, rounded: 10, shadow: 1, bg: "#1E1E1E", border: "#2C2C2C") {
+    Row(gap: 10, align: center) {
+      Icon(name: "folder")
+      Text("{name}", size: 14, color: "#E5E7EB")
+      Text("owner {owner}", size: 12, color: "#9AA4B2")
+      Badge(label: "{status}", tone: "info")
+      Text("{pct}", size: 12, color: "#0A84FF")
+    }
+  }
+}
+
+// One board card: title, assignee initials and its status pill.
+component TaskCard(title: string, assignee: string, status: string) {
+  Container(p: 10, rounded: 10, shadow: 1, bg: "#121212", border: "#2C2C2C") {
+    Column(gap: 6) {
+      Text("{title}", size: 13, color: "#E5E7EB")
+      Row(gap: 8, align: center) {
+        AvatarDisc("{assignee}")
+        Badge(label: "{status}", tone: "warning")
+      }
+    }
+  }
+}
+
+// One team row: initials disc, display name, role pill and status caption.
+// Future swap: replace the trailing controls with FormField bindings.
+component MemberRow(name: string, initials: string, role: string, status: string) {
+  Container(p: 12, rounded: 10, shadow: 1, bg: "#1E1E1E", border: "#2C2C2C") {
+    Row(gap: 12, align: center) {
+      AvatarDisc("{initials}")
+      Column(gap: 2) {
+        Text("{name}", size: 14, color: "#E5E7EB")
+        CaptionText("{status}")
+      }
+      Spacer()
+      Badge(label: "{role}", tone: "info")
+    }
+  }
+}
+
+app TeamHub {
+  // Session and role: the UI gates privileged controls on `admin`.
+  state me = "guest"
+  state signedIn = false
+  state admin = false
+  state loginName = ""
+  state loginPassword = ""
+
+  // Shell: sidebar and dark preview switch.
+  state sidebarOpen = true
+  state darkMode = true
+  state activePage = "overview"
+
+  // Projects table interaction state.
+  state search = ""
+  state tablePage = 1
+  state sortAsc = true
+  state filterActive = true
+  state filterPaused = false
+  state showForm = false
+  state formTitle = ""
+  state formOwner = ""
+  state created = false
+
+  // Board state: one toggle pair per task plus the shared progress figure.
+  state task1Started = false
+  state task1Done = false
+  state task2Started = false
+  state task2Done = false
+  state task3Started = false
+  state task3Done = false
+  state progressPct = 45
+
+  // Team page: invite form and role choice.
+  state inviteEmail = ""
+  state inviteAdmin = false
+  state invited = false
+  state lastAction = ""
+  state actionMade = false
+
+  // Settings: profile form, validation flags and upload state.
+  state displayName = ""
+  state workEmail = ""
+  state saveAttempted = false
+  state uploaded = false
+  state notified = true
+
+  // Deterministic page data for the compile-time static expansion.
+  state recentActivity = ["ada merged 12 tasks", "linus opened release 0.4", "grace commented on Apollo", "sam pinned the roadmap"]
+  state projectNames = ["Apollo", "Beacon", "Corvid", "Delta", "Everest"]
+  state tasksTodo = ["Design review", "API contract", "Load testing"]
+  state tasksDoing = ["Wire navigation", "Audit sessions"]
+  state tasksDone = ["Scaffold service", "Theme tokens"]
+  state members = ["ada", "linus", "grace", "sam"]
+  state goalNames = ["Cut p95 in half", "Ship board view", "Close 20 tasks", "Audit session gates"]
+  state pendingInvites = ["kim@example.com", "rui@example.com"]
+  state checklistContract = true
+  state checklistTests = false
+  state checklistDocs = false
+
+  model User {
+    id: int primary
+    username: string
+    email: string
+    role: string = "member"
+  }
+
+  model Project {
+    id: int primary
+    owner_id: int
+    title: string
+    status: string = "active"
+    progress: int = 0
+  }
+
+  model Task {
+    id: int primary
+    project_id: int
+    assignee_id: int
+    title: string
+    done: bool = false
+  }
+
+  api "/users" {
+    list User
+    create User
+  }
+  api "/users/:id" {
+    get User
+    update User
+    delete User
+  }
+  api "/projects" {
+    list Project
+    create Project
+  }
+  api "/projects/:id" {
+    get Project
+    update Project
+    delete Project
+  }
+  api "/tasks" {
+    list Task
+    create Task
+  }
+  api "/tasks/:id" {
+    get Task
+    update Task
+    delete Task
+  }
+
+  computed boardProgress = progressPct
+
+  route Overview {
+    Column(p: 14, gap: 14) {
+      NavBar("TeamHub Overview", "{me}")
+      if (signedIn) {
+        CaptionText("Signed in as {me}")
+      } else {
+        CaptionText("Browsing as guest")
+      }
+
+      Text("Workspace pulse", size: 20, color: "#E5E7EB")
+      Grid(columns: 4) {
+        KpiCard("Requests", "964", "12% above baseline")
+        KpiCard("Capacity", "64%", "8 slots open")
+        KpiCard("Projects", "5", "2 active reviews")
+        KpiCard("Open tasks", "11", "3 due this week")
+      }
+
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#1E1E1E", border: "#2C2C2C") {
+        Row(gap: 16, align: center) {
+          Column(gap: 6) {
+            TitleHeading("Throughput")
+            Chart(type: "bar", width: 240, height: 120)
+          }
+          Column(gap: 6) {
+            TitleHeading("Latency")
+            Sparkline(value: 72, segments: 7)
+            Progress(value: 64)
+            CaptionText("p95 latency 182ms across 7 days")
+          }
+        }
+      }
+
+      ListPanel("Recent activity")
+      Column(gap: 6) {
+        for (line in recentActivity) {
+          Row(gap: 8, align: center) {
+            Icon(name: "activity")
+            Text("{line}", size: 13, color: "#E5E7EB")
+          }
+        }
+      }
+
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#1E1E1E", border: "#2C2C2C") {
+        Column(gap: 8) {
+          Row(gap: 8, align: center) {
+            Icon(name: "target")
+            TitleHeading("Sprint goals")
+            Badge(label: "4 open", tone: "warning")
+          }
+          for (goal in goalNames) {
+            Row(gap: 8, align: center) {
+              Icon(name: "check")
+              Text("{goal}", size: 13, color: "#E5E7EB")
+              Spacer()
+              CaptionText("due friday")
+            }
+          }
+          Row(gap: 10) {
+            Button("Add goal") {
+              lastAction = "goal added"
+              actionMade = true
+            }
+            Button("Close sprint") {
+              lastAction = "sprint closed"
+              actionMade = true
+            }
+          }
+        }
+      }
+
+      if (admin) {
+        Container(p: 12, rounded: 12, shadow: 2, bg: "#2C1212", border: "#781C40") {
+          Row(gap: 10, align: center) {
+            Icon(name: "alert-triangle")
+            Text("Moderation desk", size: 14, color: "#FFB4B4")
+            Badge(label: "admin only", tone: "error")
+            Button("Clear flags") {
+              actionMade = true
+              lastAction = "flags cleared"
+            }
+          }
+        }
+      } else {
+        CaptionText("Sign in with the admin account to unlock moderation")
+      }
+
+      Row(gap: 10) {
+        Button("Projects") {
+          push: Projects
+        }
+        Button("Board") {
+          push: ProjectDetail
+        }
+        Button("Team") {
+          push: Team
+        }
+        Button("Settings") {
+          push: Settings
+        }
+      }
+      if (actionMade) {
+        ToastNote("{lastAction}")
+      }
+    }
+  }
+
+  route Projects {
+    Column(p: 14, gap: 12) {
+      NavBar("Projects", "{me}")
+      TitleHeading("Project registry")
+
+      Row(gap: 10) {
+        Input(placeholder: "Search projects", bind: search, maxLength: 40)
+        Button("Sort") {
+          sortAsc.toggle()
+        }
+        Button("Refresh") {
+          tablePage = 1
+          created = false
+        }
+      }
+
+      Row(gap: 10) {
+        if (filterActive) {
+          Badge(label: "active only", tone: "info")
+        } else {
+          Badge(label: "all statuses", tone: "neutral")
+        }
+        Button("Toggle filter") {
+          filterActive.toggle()
+        }
+        Button("Page {tablePage}") {
+          tablePage += 1
+        }
+      }
+
+      Container(p: 10, rounded: 10, shadow: 1, bg: "#121212", border: "#2C2C2C") {
+        Row(gap: 10, align: center) {
+          Text("Project", size: 12, color: "#9AA4B2")
+          Text("Owner", size: 12, color: "#9AA4B2")
+          Text("Status", size: 12, color: "#9AA4B2")
+          Text("Progress", size: 12, color: "#9AA4B2")
+        }
+      }
+
+      // Future swap: each ProjectRow lowers into one DataTable row binding.
+      if (sortAsc) {
+        for (name in projectNames) {
+          ProjectRow("{name}", "ada", "active", "64%")
+          Row(gap: 6) {
+            Button("Open") {
+              push: ProjectDetail
+            }
+            Button("Edit") {
+              showForm = true
+            }
+            Button("Duplicate") {
+              created = true
+            }
+          }
+        }
+      } else {
+        ProjectRow("Everest", "sam", "active", "12%")
+        ProjectRow("Delta", "grace", "paused", "78%")
+        ProjectRow("Corvid", "linus", "active", "64%")
+        ProjectRow("Beacon", "ada", "active", "55%")
+        ProjectRow("Apollo", "ada", "review", "91%")
+      }
+
+      Row(gap: 10, align: center) {
+        Pagination(value: 64, segments: 5)
+        Button("Prev") {
+          tablePage -= 1
+        }
+        Button("Next") {
+          tablePage += 1
+        }
+      }
+
+      if (created) {
+        ToastNote("Project created and queued for sync")
+      }
+
+      Row(gap: 10) {
+        Button("New project") {
+          showForm = true
+        }
+        Button("Open board") {
+          push: ProjectDetail
+        }
+      }
+
+      if (showForm) {
+        Dialog(title: "New project") {
+          Column(gap: 10) {
+            Input(placeholder: "Project title", bind: formTitle, required: true, minLength: 3)
+            Input(placeholder: "Owner handle", bind: formOwner, required: true)
+            Row(gap: 10) {
+              Button("Create") {
+                created = true
+                showForm = false
+                formTitle = ""
+                formOwner = ""
+              }
+              Button("Cancel") {
+                showForm = false
+                formTitle = ""
+              }
+            }
+          }
+        }
+      }
+
+      if (admin) {
+        Row(gap: 10) {
+          Icon(name: "trash")
+          Text("Admin tools", size: 13, color: "#FFB4B4")
+          Button("Archive project") {
+            actionMade = true
+              lastAction = "project archived"
+          }
+        }
+      }
+      Button("Back") {
+        pop
+      }
+    }
+  }
+
+  route ProjectDetail {
+    Column(p: 14, gap: 12) {
+      NavBar("Apollo", "board")
+
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#1E1E1E", border: "#2C2C2C") {
+        Column(gap: 8) {
+          Row(gap: 10, align: center) {
+            Icon(name: "target")
+            TitleHeading("Apollo")
+            Badge(label: "active", tone: "info")
+            AvatarDisc("AD")
+          }
+          Progress(value: 64)
+          Row(gap: 8, align: center) {
+            CaptionText("Progress {progressPct}% complete")
+            CaptionText("Board progress {boardProgress}%")
+          }
+        }
+      }
+
+      Row(gap: 10) {
+        Grid(columns: 3) {
+          Column(gap: 8) {
+            Row(gap: 6, align: center) {
+              Icon(name: "list-check")
+              Text("To do", size: 14, color: "#E5E7EB")
+              Badge(label: "3", tone: "neutral")
+            }
+            for (title in tasksTodo) {
+              TaskCard("{title}", "AD", "queued")
+            }
+            Button("Start design review") {
+              task1Started = true
+            }
+            if (task1Started) {
+              Badge(label: "design review started", tone: "success")
+            } else {
+              CaptionText("waiting on owner")
+            }
+          }
+          Column(gap: 8) {
+            Row(gap: 6, align: center) {
+              Icon(name: "disc")
+              Text("In progress", size: 14, color: "#E5E7EB")
+              Badge(label: "2", tone: "warning")
+            }
+            for (title in tasksDoing) {
+              TaskCard("{title}", "LN", "doing")
+            }
+            Button("Complete wire navigation") {
+              task2Done = true
+              progressPct += 10
+            }
+            if (task2Done) {
+              ToastNote("Wire navigation moved to done")
+            } else {
+              CaptionText("ship target friday")
+            }
+          }
+          Column(gap: 8) {
+            Row(gap: 6, align: center) {
+              Icon(name: "check")
+              Text("Done", size: 14, color: "#E5E7EB")
+              Badge(label: "2", tone: "success")
+            }
+            for (title in tasksDone) {
+              TaskCard("{title}", "GR", "done")
+            }
+            Button("Reopen scaffold service") {
+              task3Done = false
+            }
+            if (task3Done) {
+              CaptionText("reopened by you")
+            } else {
+              CaptionText("closed last sprint")
+            }
+          }
+        }
+      }
+
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
+        Column(gap: 8) {
+          Row(gap: 8, align: center) {
+            Icon(name: "list-check")
+            Text("Release checklist", size: 13, color: "#9AA4B2")
+          }
+          Row(gap: 8, align: center) {
+            Checkbox(bind: checklistContract)
+            Text("Contract frozen", size: 13, color: "#E5E7EB")
+          }
+          Row(gap: 8, align: center) {
+            Checkbox(bind: checklistTests)
+            Text("Integration suite green", size: 13, color: "#E5E7EB")
+          }
+          Row(gap: 8, align: center) {
+            Checkbox(bind: checklistDocs)
+            Text("Notes published", size: 13, color: "#E5E7EB")
+          }
+        }
+      }
+
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
+        Column(gap: 8) {
+          Text("Task actions", size: 13, color: "#9AA4B2")
+          Row(gap: 8) {
+            Button("Assign") {
+              actionMade = true
+              lastAction = "task assigned"
+            }
+            Button("Comment") {
+              actionMade = true
+              lastAction = "comment posted"
+            }
+            Button("Priority") {
+              actionMade = true
+              lastAction = "priority raised"
+            }
+          }
+        }
+      }
+
+      if (admin) {
+        Row(gap: 10) {
+          Badge(label: "admin", tone: "error")
+          Button("Delete task") {
+            actionMade = true
+              lastAction = "task deleted"
+          }
+          Button("Pin project") {
+            actionMade = true
+              lastAction = "project pinned"
+          }
+        }
+      }
+
+      Button("Back") {
+        pop
+      }
+    }
+  }
+
+  route Team {
+    Column(p: 14, gap: 12) {
+      NavBar("Team", "{me}")
+      TitleHeading("Members")
+      CaptionText("Four seats, roles shown as pills")
+
+      Grid(columns: 3) {
+        KpiCard("Seats", "4 of 6", "2 invites left")
+        KpiCard("Admins", "1", "root session")
+        KpiCard("Online", "3", "one away")
+      }
+
+      for (name in members) {
+        MemberRow("{name}", "AD", "member", "active now")
+      }
+
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
+        Column(gap: 8) {
+          Text("Invite a teammate", size: 14, color: "#E5E7EB")
+          Input(placeholder: "email@example.com", bind: inviteEmail, required: true, pattern: "^[^@]+@[^@]+$")
+          Row(gap: 10) {
+            if (inviteAdmin) {
+              Badge(label: "will join as admin", tone: "warning")
+            } else {
+              Badge(label: "will join as member", tone: "info")
+            }
+            Button("Grant admin") {
+              inviteAdmin = true
+            }
+            Button("Member only") {
+              inviteAdmin = false
+            }
+            Button("Send invite") {
+              invited = true
+            }
+          }
+          if (invited) {
+            ToastNote("Invite queued for {inviteEmail}")
+          }
+        }
+      }
+
+      ListPanel("Pending invites")
+      Column(gap: 6) {
+        for (address in pendingInvites) {
+          Row(gap: 8, align: center) {
+            Icon(name: "mail")
+            Text("{address}", size: 13, color: "#E5E7EB")
+            Spacer()
+            Button("Revoke") {
+              lastAction = "invite revoked"
+              actionMade = true
+            }
+          }
+        }
+      }
+
+      if (admin) {
+        Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+          Column(gap: 8) {
+            Row(gap: 8, align: center) {
+              Icon(name: "lock")
+              Text("Role management", size: 14, color: "#E5E7EB")
+              Badge(label: "admin gate", tone: "error")
+            }
+            Row(gap: 8) {
+              Button("Promote grace") {
+                actionMade = true
+              lastAction = "grace promoted"
+              }
+              Button("Demote sam") {
+                actionMade = true
+              lastAction = "sam demoted"
+              }
+              Button("Suspend linus") {
+                actionMade = true
+              lastAction = "linus suspended"
+              }
+            }
+          }
+        }
+      } else {
+        Container(p: 12, rounded: 12, shadow: 1, bg: "#121212", border: "#2C2C2C") {
+          Row(gap: 8, align: center) {
+            Icon(name: "user")
+            CaptionText("Role changes need an admin session")
+            Button("Sign in as admin") {
+              me = "root"
+              signedIn = true
+              admin = true
+            }
+          }
+        }
+      }
+      Button("Back") {
+        pop
+      }
+    }
+  }
+
+  route Settings {
+    Column(p: 14, gap: 12) {
+      NavBar("Settings", "{me}")
+      TitleHeading("Account")
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+        Column(gap: 10) {
+          Row(gap: 10) {
+            Icon(name: "user")
+            if (signedIn) {
+              Badge(label: "{me} signed in", tone: "success")
+            } else {
+              Badge(label: "guest", tone: "neutral")
+            }
+          }
+          Input(placeholder: "Username", bind: loginName, required: true, minLength: 3)
+          Input(placeholder: "Password", bind: loginPassword, required: true)
+          Row(gap: 10) {
+            Button("Sign in") {
+              me = loginName
+              signedIn = true
+              loginPassword = ""
+            }
+            Button("Sign in as admin") {
+              me = "root"
+              signedIn = true
+              admin = true
+              loginPassword = ""
+            }
+            Button("Sign out") {
+              me = "guest"
+              signedIn = false
+              admin = false
+            }
+          }
+        }
+      }
+
+      TitleHeading("Appearance")
+
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#1E1E1E", border: "#2C2C2C") {
+        Row(gap: 12, align: center) {
+          Icon(name: "moon")
+          Text("Dark surface", size: 14, color: "#E5E7EB")
+          Switch(bind: darkMode)
+          if (darkMode) {
+            Badge(label: "dark", tone: "info")
+          } else {
+            Badge(label: "light", tone: "neutral")
+          }
+        }
+        Row(gap: 12, align: center) {
+          Icon(name: "layout-grid")
+          Text("Sidebar open", size: 14, color: "#E5E7EB")
+          Switch(bind: sidebarOpen)
+          if (sidebarOpen) {
+            CaptionText("rail expanded")
+          } else {
+            CaptionText("rail collapsed")
+          }
+        }
+      }
+
+      TitleHeading("Profile form")
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+        Column(gap: 10) {
+          Input(placeholder: "Display name", bind: displayName, required: true, minLength: 2, maxLength: 32)
+          Input(placeholder: "Work email", bind: workEmail, required: true, pattern: "^[^@]+@[^@]+$")
+          CaptionText("required and format checks ride the input validators")
+          Row(gap: 10) {
+            Button("Save profile") {
+              saveAttempted = true
+            }
+            Button("Reset") {
+              displayName = ""
+              workEmail = ""
+              saveAttempted = false
+            }
+          }
+          if (saveAttempted) {
+            ToastNote("Profile saved for {displayName}")
+          }
+        }
+      }
+
+      TitleHeading("Attachments")
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+        Column(gap: 8) {
+          UploadZone(value: 40, segments: 4)
+          Row(gap: 10, align: center) {
+            Button("Attach screenshot") {
+              uploaded = true
+            }
+            if (uploaded) {
+              Badge(label: "1 file ready", tone: "success")
+            } else {
+              CaptionText("png up to 8MB")
+            }
+          }
+        }
+      }
+
+      TitleHeading("Notifications")
+      Container(p: 12, rounded: 12, shadow: 2, bg: "#121212", border: "#2C2C2C") {
+        Row(gap: 12, align: center) {
+          Icon(name: "mail")
+          Text("Weekly digest", size: 14, color: "#E5E7EB")
+          Switch(bind: notified)
+          if (notified) {
+            Badge(label: "on", tone: "success")
+          } else {
+            Badge(label: "off", tone: "neutral")
+          }
+        }
+      }
+
+      if (admin) {
+        Dialog(title: "Danger zone") {
+          Column(gap: 8) {
+            CaptionText("Deleting the workspace removes every project row")
+            Row(gap: 10) {
+              Button("Delete workspace") {
+                actionMade = true
+              lastAction = "workspace deletion requested"
+              }
+              Button("Keep it") {
+                actionMade = true
+              lastAction = ""
+              }
+            }
+          }
+        }
+      }
+
+      Row(gap: 10) {
+        Button("Overview") {
+          pop
+        }
+        Button("Sign out") {
+          me = "guest"
+          signedIn = false
+          admin = false
+        }
+      }
+      if (signedIn) {
+        ToastNote("Session active for {me}")
+      } else {
+        CaptionText("guest session")
+      }
+    }
+  }
+}
