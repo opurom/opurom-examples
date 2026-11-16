@@ -16,6 +16,8 @@ app Forum {
     title: string
     body: string
     pinned: bool = false
+    // Stored upload name returned by POST /uploads; empty when no file.
+    attachment: string = ""
   }
 
   model Comment {
@@ -122,6 +124,17 @@ app Forum {
         }
       }
       Pagination(value: 1, segments: 3)
+      // The list api answers {items,total,count,limit,offset}; limit and offset
+      // ride the query string, and this state mirrors the visible page.
+      Row(gap: 10, align: center) {
+        Text("Page {feedPage}", size: 12, color: "#667085")
+        Button("Older", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+          feedPage += 1
+        }
+        Button("First page", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+          feedPage = 1
+        }
+      }
       Row(gap: 10) {
         Button("Compose", p: 10, rounded: 10, shadow: 2, bg: "#097FEB", fontScale: 1.0, animate: spring) {
           push: Compose
