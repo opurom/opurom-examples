@@ -1,0 +1,19 @@
+{
+  "ir": "../../todo.opuir.json",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "tap": 10
+    },
+    {
+      "tap": 10
+    }
+  ],
+  "expect": {
+    "state": {
+      "remaining": 2
+    },
+    "digest": "b42cc494b5c7939c"
+  }
+}

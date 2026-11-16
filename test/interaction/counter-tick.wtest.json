@@ -1,0 +1,19 @@
+{
+  "ir": "../../golden/counter.opuir.json",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "tap": 4
+    },
+    {
+      "tick": 96
+    }
+  ],
+  "expect": {
+    "state": {
+      "count": 1
+    },
+    "digest": "a74775b3d2d663ba"
+  }
+}
