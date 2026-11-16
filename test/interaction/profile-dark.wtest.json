@@ -1,0 +1,17 @@
+{
+  "src": "../../profile.opu",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "tap": 11
+    }
+  ],
+  "expect": {
+    "state": {
+      "name": "world",
+      "dark": true
+    },
+    "digest": "f71fb024d479e4d7"
+  }
+}

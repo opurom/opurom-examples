@@ -1,0 +1,17 @@
+{
+  "src": "../../field-service.opu",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "tap": 10
+    }
+  ],
+  "expect": {
+    "state": {
+      "open": 3,
+      "dark": true
+    },
+    "digest": "7ff4f82f1f704854"
+  }
+}

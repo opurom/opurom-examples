@@ -1,0 +1,23 @@
+{
+  "src": "../../form.opu",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "input": 8,
+      "value": "Grace"
+    },
+    {
+      "input": 9,
+      "value": "42"
+    }
+  ],
+  "expect": {
+    "state": {
+      "name": "Grace",
+      "age": 42,
+      "subscribed": false
+    },
+    "digest": "3c5b874b97d577e2"
+  }
+}

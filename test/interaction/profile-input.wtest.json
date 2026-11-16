@@ -1,0 +1,18 @@
+{
+  "src": "../../profile.opu",
+  "width": 320,
+  "height": 240,
+  "steps": [
+    {
+      "input": 9,
+      "value": "Ada"
+    }
+  ],
+  "expect": {
+    "state": {
+      "name": "Ada",
+      "dark": false
+    },
+    "digest": "493276aa90ea76d7"
+  }
+}
