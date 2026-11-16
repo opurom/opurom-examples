@@ -724,8 +724,8 @@
       "name": "forum",
       "source": "apps/forum/forum.opu",
       "required": true,
-      "multipage": true,
       "targets": [
+        "web",
         "native",
         "full"
       ],
