@@ -265,7 +265,7 @@
             "opurom-render",
             "{tmp}/app.opuir.json",
             "1080",
-            "2200",
+            "2400",
             "{tmp}/frame.ppm"
           ],
           "description": "render the typography replica to a PPM frame"
@@ -349,7 +349,7 @@
             "opurom-render",
             "{tmp}/app.opuir.json",
             "1080",
-            "2200",
+            "2400",
             "{tmp}/frame.ppm"
           ],
           "description": "render the cards replica to a PPM frame"
