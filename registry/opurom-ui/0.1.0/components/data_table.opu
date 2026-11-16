@@ -1,0 +1,19 @@
+// DataTable(title, headers, rowA, rowB, rowC, selected): bordered table panel
+// with a header row, three zebra rows and the current row highlighted below.
+import "pkg-theme/default.opu";
+
+component DataTable(title: string, headers: string, rowA: string, rowB: string, rowC: string, selected: string) {
+  Container(p: 14, rounded: 14, shadow: 2, variant: "secondary") {
+    Column(gap: 8) {
+      Text("{title}", size: 16)
+      Row(gap: 8) {
+        Text("{headers}", size: 11)
+      }
+      Divider()
+      Container(p: 8, variant: "ghost") { Text("{rowA}", size: 13) }
+      Container(p: 8) { Text("{rowB}", size: 13) }
+      Container(p: 8, variant: "ghost") { Text("{rowC}", size: 13) }
+      Container(p: 8, tone: "info") { Text("{selected}", size: 13) }
+    }
+  }
+}

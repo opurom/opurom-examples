@@ -1,6 +1,6 @@
 // Toast: a transient confirmation strip with a fixed tone.
 component ToastNote(message: string) {
-  Container(p: 12, rounded: 12, shadow: 3, bg: "#F4F6F9", border: "#1FB14C", tone: "success") {
-    Text("{message}", size: 13, color: "#132C5A")
+  Container(p: 12, rounded: 12, shadow: 3, tone: "success") {
+    Text("{message}", size: 13)
   }
 }

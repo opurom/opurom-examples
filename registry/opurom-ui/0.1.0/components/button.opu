@@ -1,9 +1,9 @@
 // Button surfaces. variant is a design prop the primitive resolves to the
 // matching fill: primary is solid, secondary is outlined, ghost is a tint.
 component ActionButton(label: string, variant: string) {
-  Container(p: 12, rounded: 12, shadow: 2, bg: "#097FEB", variant: "{variant}") {
+  Container(p: 12, rounded: 12, shadow: 2, variant: "{variant}") {
     Row(gap: 8, align: center) {
-      Text("{label}", size: 16, color: "#FFFFFF")
+      Text("{label}", size: 16)
     }
   }
 }

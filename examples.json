@@ -833,6 +833,48 @@
           "description": "lower to the full-stack service, web and migrations"
         }
       ]
+    },
+    {
+      "name": "uicatalog",
+      "source": "apps/uicatalog/main.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "uicatalog.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the ui component catalog demo"
+        },
+        {
+          "id": "uicatalog.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "lower the catalog demo into one IR"
+        },
+        {
+          "id": "uicatalog.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "390",
+            "844",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the catalog demo deterministically"
+        }
+      ]
     }
   ]
 }

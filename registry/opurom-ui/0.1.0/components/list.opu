@@ -1,9 +1,9 @@
 // List surface: a titled column of items. Item rows are added by the consumer
 // inside the list body; this pins the container chrome.
 component ListPanel(title: string) {
-  Container(p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", border: "#DCE4EF") {
+  Container(p: 12, rounded: 12, shadow: 2, variant: "secondary") {
     Column(gap: 8) {
-      Text("{title}", size: 13, color: "#5A6478")
+      Text("{title}", size: 13)
     }
   }
 }

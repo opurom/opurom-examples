@@ -1,0 +1,12 @@
+// SearchField(placeholder): search box chrome with a leading glyph; bind the
+// query state at the call site with Input(bind: query).
+import "pkg-theme/default.opu";
+
+component SearchField(placeholder: string) {
+  Container(p: 8, rounded: 12, variant: "ghost") {
+    Row(gap: 8, align: center) {
+      Icon(name: "search")
+      Input(placeholder: "{placeholder}")
+    }
+  }
+}

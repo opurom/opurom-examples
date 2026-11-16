@@ -1,0 +1,16 @@
+// SidebarNav(title, active, itemA, itemB, itemC): stacked navigation panel
+// whose active item is highlighted; the rest read as plain rows.
+import "pkg-theme/default.opu";
+
+component SidebarNav(title: string, active: string, itemA: string, itemB: string, itemC: string) {
+  Container(p: 12, rounded: 12, shadow: 2, variant: "secondary") {
+    Column(gap: 8) {
+      Text("{title}", size: 13)
+      Divider()
+      Container(p: 8, tone: "info") { Text("{active}", size: 14) }
+      Container(p: 8) { Text("{itemA}", size: 14) }
+      Container(p: 8) { Text("{itemB}", size: 14) }
+      Container(p: 8) { Text("{itemC}", size: 14) }
+    }
+  }
+}

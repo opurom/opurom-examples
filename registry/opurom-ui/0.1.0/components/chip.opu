@@ -1,0 +1,10 @@
+// FilterChip(label, variant): pill filter; selected comes from the variant
+// argument - pass "primary" for active and "ghost" for idle, because a bool
+// parameter cannot drive an 'if' (conditions may only read state).
+import "pkg-theme/default.opu";
+
+component FilterChip(label: string, variant: string) {
+  Container(p: 8, rounded: 16, variant: "{variant}") {
+    Text("{label}", size: 13)
+  }
+}

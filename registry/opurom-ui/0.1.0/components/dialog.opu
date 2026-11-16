@@ -1,6 +1,6 @@
 // Dialog: a titled modal panel. Uses the Dialog primitive with a fixed title.
 component DialogPanel(title: string) {
   Dialog(title: "{title}") {
-    Text("Dialog body", size: 14, color: "#132C5A")
+    Text("Dialog body", size: 14)
   }
 }

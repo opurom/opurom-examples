@@ -1,0 +1,10 @@
+// SectionHeader(title): section heading with a trailing action affordance.
+import "pkg-theme/default.opu";
+
+component SectionHeader(title: string) {
+  Row(gap: 8, align: center) {
+    Text("{title}", size: 18)
+    Spacer()
+    Icon(name: "chevron_right")
+  }
+}
