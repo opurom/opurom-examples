@@ -1,0 +1,50 @@
+// Live feed demo: note CRUD and a row list refreshed by model change events.
+// The WebSocket subscriber lives in subscribe.mjs: it patches only the row
+// named by each model/op/id event and never polls the api.
+import "pkg-theme/default.opu"
+import "components/navbar.opu"
+import "components/text.opu"
+import "components/list.opu"
+import "components/status_pill.opu"
+
+component LiveRow(title: string) {
+  Row(gap: 8, align: center) {
+    Icon(name: "activity")
+    BodyText("{title}")
+  }
+}
+
+app LiveFeed {
+  model Note {
+    id: int primary
+    title: string
+    done: bool = false
+  }
+
+  api "/notes" {
+    list Note
+    create Note
+  }
+  api "/notes/:id" {
+    get Note
+    update Note
+    delete Note
+  }
+
+  // The subscriber updates the row region and these labels from WS events.
+  state status = "offline"
+  state lastEvent = "none"
+  state rows = ["seed one", "seed two"]
+
+  route Feed {
+    NavBar("Live Feed", "{status}")
+    StatusPill("{status}", "info")
+    ListPanel("Notes")
+    Column(gap: 6) {
+      for (row in rows) {
+        LiveRow("{row}")
+      }
+    }
+    CaptionText("last event: {lastEvent}")
+  }
+}

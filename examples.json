@@ -933,6 +933,73 @@
           "description": "lower to the full-stack service, web and migrations"
         }
       ]
+    },
+    {
+      "name": "live",
+      "source": "apps/live/live.opu",
+      "required": true,
+      "targets": [
+        "web",
+        "native",
+        "full"
+      ],
+      "tests": [
+        {
+          "id": "live.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the live feed source"
+        },
+        {
+          "id": "live.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "lower models, api routes and the route page into one IR"
+        },
+        {
+          "id": "live.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "360",
+            "640",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the live feed deterministically"
+        },
+        {
+          "id": "live.full",
+          "cmd": [
+            "node",
+            "opurom-cli/bin/opurom.mjs",
+            "build",
+            "--src",
+            "{source}",
+            "--target",
+            "full",
+            "--out",
+            "{tmp}/full"
+          ],
+          "description": "lower to the full-stack service, web and migrations"
+        },
+        {
+          "id": "live.sync",
+          "cmd": [
+            "node",
+            "--test",
+            "opurom-examples/test/live-subscribe.test.mjs"
+          ],
+          "description": "verify subscription and incremental row refresh"
+        }
+      ]
     }
   ]
 }
