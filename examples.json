@@ -272,6 +272,48 @@
         }
       ]
     },
+    {
+      "name": "gallery-colors",
+      "source": "apps/gallery_colors/gallery_colors.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-colors.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the colors replica source"
+        },
+        {
+          "id": "gallery-colors.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the colors replica to IR"
+        },
+        {
+          "id": "gallery-colors.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2200",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the colors replica to a PPM frame"
+        }
+      ]
+    },
         {
           "id": "gallery.compile",
           "cmd": [
