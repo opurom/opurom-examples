@@ -1,0 +1,10 @@
+// DetailRow(icon, title, value): settings-style row with a leading built-in
+// icon, a label and a trailing value; pass an icon name such as "lock".
+component DetailRow(icon: string, title: string, value: string) {
+  Row(gap: 10, align: center) {
+    Icon(name: "{icon}")
+    Text("{title}", size: 14)
+    Spacer()
+    Text("{value}", size: 13)
+  }
+}

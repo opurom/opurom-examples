@@ -1,0 +1,8 @@
+// GridTile(src, title): media tile with a caption; src is an asset path and the
+// raster draws the image placeholder gradient for it.
+component GridTile(src: string, title: string) {
+  Column(gap: 6) {
+    Image(src: "{src}", width: 160, height: 120, rounded: 12)
+    Text("{title}", size: 13)
+  }
+}

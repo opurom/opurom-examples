@@ -1,0 +1,10 @@
+// HeroHeader(title, subtitle): solid-accent hero panel; the variant supplies
+// the accent fill, so no hex lives here.
+component HeroHeader(title: string, subtitle: string) {
+  Container(p: 20, rounded: 18, shadow: 4, variant: "primary", animate: ease) {
+    Column(gap: 6) {
+      Text("{title}", size: 22)
+      Text("{subtitle}", size: 12)
+    }
+  }
+}

@@ -1,0 +1,5 @@
+// SecureField(placeholder): masked single-line input chrome; bind the secret
+// state at the call site with Input(bind: secret) as in FormField.
+component SecureField(placeholder: string) {
+  Input(placeholder: "{placeholder}", secure: true)
+}

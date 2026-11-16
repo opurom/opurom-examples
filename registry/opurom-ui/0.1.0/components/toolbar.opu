@@ -1,0 +1,8 @@
+// Toolbar(confirm, cancel): bottom action bar chrome with a primary and a
+// secondary action; attach the real handlers to Buttons at the call site.
+component Toolbar(confirm: string, cancel: string) {
+  Row(gap: 10, align: center) {
+    Button("{confirm}", variant: "primary")
+    Button("{cancel}", variant: "secondary")
+  }
+}

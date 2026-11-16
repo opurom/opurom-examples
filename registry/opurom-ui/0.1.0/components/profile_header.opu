@@ -1,0 +1,11 @@
+// ProfileHeader(initials, name, meta): avatar identity row for detail pages;
+// pass initials for the disc, the display name and one metadata line.
+component ProfileHeader(initials: string, name: string, meta: string) {
+  Row(gap: 10, align: center) {
+    Avatar(label: "{initials}")
+    Column(gap: 2) {
+      Text("{name}", size: 16)
+      Text("{meta}", size: 12)
+    }
+  }
+}

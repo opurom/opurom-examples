@@ -31,6 +31,13 @@ import "components/dialog.opu";
 import "components/toast.opu";
 import "components/badge.opu";
 import "components/avatar.opu";
+import "components/hero_header.opu";
+import "components/profile_header.opu";
+import "components/detail_row.opu";
+import "components/toolbar.opu";
+import "components/secure_field.opu";
+import "components/status_pill.opu";
+import "components/grid_tile.opu";
 
 app UiCatalog {
   state page: int = 3
@@ -87,7 +94,7 @@ app UiCatalog {
       SurfaceCard("Runner pool")
       TitleHeading("Workspace")
       BodyText("Every surface below draws from the same token baseline.")
-      CaptionText("Catalog build 35")
+      CaptionText("Catalog build 42")
       ListPanel("Queued jobs")
       Row(gap: 8) {
         BadgePill("7")
@@ -95,6 +102,22 @@ app UiCatalog {
       }
       ToastNote("Catalog refreshed")
       DialogPanel("Run details")
+
+      SectionHeader("Fourth batch")
+      HeroHeader("Opurom Console", "Ship from one place")
+      ProfileHeader("OP", "Opurom Team", "Release engineering")
+      DetailRow("lock", "Access", "Admin only")
+      DetailRow("calendar", "Window", "Tue 09:00-11:00")
+      Toolbar("Deploy", "Cancel")
+      SecureField("Access token")
+      Row(gap: 8) {
+        StatusPill("Healthy", "success")
+        StatusPill("Degraded", "warning")
+      }
+      Row(gap: 12) {
+        GridTile("assets/photo1.png", "Dawn")
+        GridTile("assets/photo2.png", "Tide")
+      }
     }
   }
 }

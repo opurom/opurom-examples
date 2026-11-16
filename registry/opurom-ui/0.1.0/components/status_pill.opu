@@ -1,0 +1,5 @@
+// StatusPill(label, tone): semantic status badge; pass a design tone such as
+// success, warning, error or info.
+component StatusPill(label: string, tone: string) {
+  Badge(label: "{label}", tone: "{tone}")
+}
