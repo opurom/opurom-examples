@@ -230,6 +230,48 @@
         }
       ]
     },
+    {
+      "name": "gallery-typography",
+      "source": "apps/gallery_typography/gallery_typography.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-typography.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the typography replica source"
+        },
+        {
+          "id": "gallery-typography.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the typography replica to IR"
+        },
+        {
+          "id": "gallery-typography.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2200",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the typography replica to a PPM frame"
+        }
+      ]
+    },
         {
           "id": "gallery.compile",
           "cmd": [
