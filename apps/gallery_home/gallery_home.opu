@@ -77,7 +77,7 @@ app GalleryHome {
       Container(width: 1080, height: 201, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(width: 84)
-          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
+          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0, animate: "ease", animClock: "home", duration: 800, animInterval: [0, 400]) {
             Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
               Spacer(height: 29)
               Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
@@ -105,7 +105,7 @@ app GalleryHome {
       Container(width: 1080, height: 201, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(width: 84)
-          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
+          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0, animate: "ease", animClock: "home", duration: 800, animInterval: [50, 450]) {
             Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
               Spacer(height: 29)
               Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
@@ -133,7 +133,7 @@ app GalleryHome {
       Container(width: 1080, height: 201, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(width: 84)
-          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
+          Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0, animate: "ease", animClock: "home", duration: 800, animInterval: [100, 500]) {
             Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
               Spacer(height: 29)
               Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
