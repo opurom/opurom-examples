@@ -1,0 +1,9 @@
+// EmptyState(icon, title, body): placeholder for an empty list or view; icon
+// takes a built-in icon name such as "folder" or "search".
+component EmptyState(icon: string, title: string, body: string) {
+  Column(gap: 8, align: center) {
+    Icon(name: "{icon}")
+    Text("{title}", size: 16)
+    Text("{body}", size: 12)
+  }
+}

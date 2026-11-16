@@ -1,0 +1,5 @@
+// TipCallout(text, placement): floating hint bubble; no show/hide state lives
+// here - reveal it from the call site with `if (tipOpen) { TipCallout(...) }`.
+component TipCallout(text: string, placement: string) {
+  Tooltip(text: "{text}", placement: "{placement}")
+}

@@ -1,0 +1,11 @@
+// PaginationBar(page, total): static page readout with leading and trailing
+// chevrons; navigation wiring belongs to the surrounding list at the call site.
+component PaginationBar(page: int, total: int) {
+  Row(gap: 8, align: center) {
+    Icon(name: "arrow_back")
+    Container(p: 4, rounded: 8, tone: "info") {
+      Text("{page} of {total}", size: 13)
+    }
+    Icon(name: "arrow_forward")
+  }
+}

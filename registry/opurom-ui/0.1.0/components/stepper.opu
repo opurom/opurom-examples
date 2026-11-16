@@ -1,0 +1,5 @@
+// StepBar(steps, current): step progress strip; steps is the total and current
+// the zero-based index of the step in progress.
+component StepBar(steps: int, current: int) {
+  ProgressSteps(value: current, segments: steps)
+}

@@ -1,0 +1,12 @@
+// SegmentedControl(first, second, third, selected): three-way segment picker;
+// selected is the zero-based index of the active segment.
+component SegmentedControl(first: string, second: string, third: string, selected: int) {
+  Column(gap: 6) {
+    SegmentedInput(value: selected, segments: 3, labels: "{first},{second},{third}")
+    Row(gap: 12) {
+      Text("{first}", size: 13)
+      Text("{second}", size: 13)
+      Text("{third}", size: 13)
+    }
+  }
+}

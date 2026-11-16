@@ -1,0 +1,5 @@
+// Skeleton(width, height): dimmed loading block; size it in logical pixels to
+// match the content it stands in for.
+component Skeleton(width: int, height: int) {
+  Container(width: width, height: height, p: 8, rounded: 8, variant: "ghost", opacity: 0.6)
+}

@@ -1,0 +1,11 @@
+// Breadcrumb(root, section, page): three-segment path trail separated by
+// chevrons; the page segment reads as the current location.
+component Breadcrumb(root: string, section: string, page: string) {
+  Row(gap: 6, align: center) {
+    Text("{root}", size: 13)
+    Icon(name: "chevron_right")
+    Text("{section}", size: 13)
+    Icon(name: "chevron_right")
+    Text("{page}", size: 13)
+  }
+}

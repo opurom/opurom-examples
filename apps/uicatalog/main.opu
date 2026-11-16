@@ -1,28 +1,54 @@
 // UI component catalog demo: one screen exercising the opurom-ui library.
+// Batch 1 covers forms, data and layout; batch 2 covers navigation and states.
 import "pkg-theme/default.opu";
-import "components/stat_card.opu";
+import "components/data_table.opu";
 import "components/section_header.opu";
 import "components/form_field.opu";
 import "components/chip.opu";
 import "components/progress.opu";
-import "components/data_table.opu";
+import "components/stat_card.opu";
+import "components/breadcrumb.opu";
+import "components/segmented.opu";
+import "components/stepper.opu";
+import "components/pagination.opu";
+import "components/empty_state.opu";
+import "components/skeleton.opu";
+import "components/search.opu";
 
 app UiCatalog {
+  state page: int = 3
+  state loading: bool = true
+  state active: bool = true
+
   ScrollView(p: 16) {
     Column(gap: 14) {
-      SectionHeader("Workspace overview")
-      Row(gap: 12) {
-        MetricCard("Open tasks", "42", "+12% this week", "success")
-        MetricCard("Blocked", "3", "-1 since Monday", "warning")
-      }
-      Row(gap: 8) {
-        FilterChip("All", "primary")
-        FilterChip("Active", "ghost")
-        FilterChip("Done", "ghost")
-      }
+      SectionHeader("Overview")
+      MetricCard("Deploys", "128", "+12%", "success")
+      MetricCard("Failures", "3", "-2", "warning")
       ProgressTrack(64)
-      FormField("Assignee", "Search people")
-      DataTable("Recent runs", "JOB / STATUS / TIME", "build-12 / ok / 4s", "build-11 / ok / 5s", "build-10 / failed / 2s", "build-12 / ok / 4s")
+
+      SectionHeader("Filters")
+      Row(gap: 8) {
+        SearchField("Search runs")
+        FilterChip("Passed", "primary")
+        FilterChip("Flaky", "ghost")
+      }
+
+      SectionHeader("Form")
+      FormField("Workspace ID", "acme-prod")
+
+      SectionHeader("Data")
+      DataTable("Recent runs", "Branch,Status,Time", "main,ok,1m", "dev,ok,2m", "fix,fail,3m", "main,ok,1m")
+
+      SectionHeader("Navigation")
+      Breadcrumb("Home", "Workspace", "Catalog")
+      SegmentedControl("Day", "Week", "Month", 1)
+      StepBar(4, 2)
+      PaginationBar(3, 12)
+
+      SectionHeader("States")
+      Skeleton(280, 64)
+      EmptyState("folder", "No runs yet", "Trigger a build to see it here")
     }
   }
 }

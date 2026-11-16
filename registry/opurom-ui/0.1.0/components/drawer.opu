@@ -1,0 +1,13 @@
+// Drawer(title, itemA, itemB, itemC): side panel with a heading and three
+// entries; toggle it from the call site: `if (drawerOpen) { Drawer(...) }`.
+component Drawer(title: string, itemA: string, itemB: string, itemC: string) {
+  Container(width: 240, p: 12, rounded: 12, shadow: 4, variant: "secondary") {
+    Column(gap: 8) {
+      Text("{title}", size: 13)
+      Divider()
+      Text("{itemA}", size: 14)
+      Text("{itemB}", size: 14)
+      Text("{itemC}", size: 14)
+    }
+  }
+}
