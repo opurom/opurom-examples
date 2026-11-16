@@ -2,9 +2,9 @@
 app GalleryCards {
   // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
   quality { msaa: 4 }
-  // md-sys-color-surface
-  Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-    Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+  // golden app background measured 230,235,235; M3 surface top bar below
+  Container(width: 1080, height: 2400, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+    Column(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
       // md-sys-color-surface
       Container(width: 1080, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
@@ -45,8 +45,9 @@ app GalleryCards {
           Text("Cards", size: 66, fontPx: 66, weight: "normal", color: "#000000", label: "cards/title")
         }
       }
-      Scroll(height: 2232) {
-        Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      // explicit fill: Scroll falls back to pal.surface (dark under device night mode)
+      Scroll(height: 2232, color: "#E6EBEB", border: "#E6EBEB") {
+        Column(p: 0, gap: 0, align: center, width: 1080, color: "#E6EBEB", border: "#E6EBEB") {
           Spacer(height: 48)
           // kElevToShadow three-layer, single-layer = gap M2
           Container(width: 984, color: "#FFFFFF", border: "#FFFFFF", rounded: 36, shadow: 1, p: 48, gesture: "tap") {
