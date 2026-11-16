@@ -1,0 +1,8 @@
+// StarRating(label, value, stars): rating readout under a caption; value is the
+// fill percentage from 0 to 100 and stars the total segment count.
+component StarRating(label: string, value: int, stars: int) {
+  Column(gap: 4) {
+    Text("{label}", size: 11)
+    Rating(value: value, segments: stars)
+  }
+}

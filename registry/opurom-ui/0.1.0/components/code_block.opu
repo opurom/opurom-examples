@@ -1,0 +1,13 @@
+// CodeSnippet(title, lineA, lineB, lineC): preformatted snippet block; it draws
+// in the app typeface, so set theme fontFamily for a monospace face. String
+// arguments cannot hold bare braces - write {{ and }} for literal ones.
+component CodeSnippet(title: string, lineA: string, lineB: string, lineC: string) {
+  Container(p: 12, rounded: 8, variant: "ghost") {
+    Column(gap: 4) {
+      Text("{title}", size: 11)
+      Text("{lineA}", size: 12)
+      Text("{lineB}", size: 12)
+      Text("{lineC}", size: 12)
+    }
+  }
+}

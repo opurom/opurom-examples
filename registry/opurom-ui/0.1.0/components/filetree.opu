@@ -1,0 +1,24 @@
+// FileTree(root, childA, childB, childC): indented file listing under one
+// folder root; children are indented two levels in the static layout.
+component FileTree(root: string, childA: string, childB: string, childC: string) {
+  Container(p: 12, rounded: 12, shadow: 2, variant: "secondary") {
+    Column(gap: 6) {
+      Row(gap: 6, align: center) {
+        Icon(name: "folder")
+        Text("{root}", size: 13)
+      }
+      Row(gap: 6, align: center) {
+        Spacer(width: 24)
+        Text("{childA}", size: 13)
+      }
+      Row(gap: 6, align: center) {
+        Spacer(width: 24)
+        Text("{childB}", size: 13)
+      }
+      Row(gap: 6, align: center) {
+        Spacer(width: 24)
+        Text("{childC}", size: 13)
+      }
+    }
+  }
+}

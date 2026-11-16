@@ -1,0 +1,10 @@
+// ChartCard(title, kind): titled card wrapping the chart primitive; kind is the
+// chart type string the primitive draws, such as "line" or "bar".
+component ChartCard(title: string, kind: string) {
+  Container(p: 12, rounded: 14, shadow: 3, variant: "secondary") {
+    Column(gap: 8) {
+      Text("{title}", size: 13)
+      Chart(type: "{kind}", width: 240, height: 96)
+    }
+  }
+}

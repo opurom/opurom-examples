@@ -1,0 +1,22 @@
+// Timeline(title, first, second, third): vertical event trail with a marker dot
+// per entry; each entry reads as one plain string such as "09:12 Build ok".
+component Timeline(title: string, first: string, second: string, third: string) {
+  Container(p: 12, rounded: 12, shadow: 2, variant: "secondary") {
+    Column(gap: 8) {
+      Text("{title}", size: 13)
+      Divider()
+      Row(gap: 8, align: center) {
+        Container(width: 8, height: 8, rounded: 999, tone: "info")
+        Text("{first}", size: 13)
+      }
+      Row(gap: 8, align: center) {
+        Container(width: 8, height: 8, rounded: 999, tone: "info")
+        Text("{second}", size: 13)
+      }
+      Row(gap: 8, align: center) {
+        Container(width: 8, height: 8, rounded: 999, tone: "info")
+        Text("{third}", size: 13)
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+// AvatarGroup(first, second, third): a row of three member avatars; pass
+// initials for each member.
+component AvatarGroup(first: string, second: string, third: string) {
+  Row(gap: 6, align: center) {
+    Avatar(label: "{first}")
+    Avatar(label: "{second}")
+    Avatar(label: "{third}")
+  }
+}

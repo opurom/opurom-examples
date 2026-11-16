@@ -1,0 +1,8 @@
+// NumberFlow(value, unit): large numeric readout with a trailing unit; keep the
+// card chrome off - wrap it in SurfaceCard when you need a panel.
+component NumberFlow(value: string, unit: string) {
+  Row(gap: 4, align: center) {
+    Text("{value}", size: 36)
+    Text("{unit}", size: 14)
+  }
+}

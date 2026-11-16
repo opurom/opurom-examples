@@ -1,7 +1,13 @@
-// Community forum MVP: accounts, posts, comments, pagination and moderation
-// in one full-stack source file. Four route pages (Feed, Thread, Compose,
-// Profile) navigate with push/pop; the models and api blocks lower to the
-// HTTP service and its SQL migrations.
+// Community forum MVP: accounts, posts, comments, pagination, moderation and
+// the identity pages (Login, Register, Admin) in one full-stack source file.
+// Seven route pages navigate with push/pop; the models and api blocks lower to
+// the HTTP service and its SQL migrations. Identity pages replicate the
+// service session ladder (401 guest / 403 member / admin allowed) in page
+// state; the fetch effect is GET-only, so POST login stays service-side.
+import "components/navbar.opu"
+import "components/text.opu"
+import "components/toast.opu"
+
 app Forum {
   model User {
     id: int primary
@@ -66,6 +72,20 @@ app Forum {
   state loginName = ""
   state loginPassword = ""
 
+  // Identity page state: the service answers 401/403 for real credentials and
+  // roles; these pages mirror the outcome so the ladder is visible in the UI.
+  state authOk = false
+  state authMsg = ""
+  state regUser = ""
+  state regPass = ""
+  state registered = false
+  state feedJson = ""
+  state roster = ""
+  state banAda = false
+  state banLinus = false
+  state banGrace = false
+  state elevatedGrace = false
+
   // One page of the deterministic post feed, newest first. List state is not
   // supported by the web emitter yet, so the feed is expressed as scalar
   // titles selected by mutually exclusive page gates, like photos.opu.
@@ -124,6 +144,15 @@ app Forum {
         }
       }
       Pagination(value: 1, segments: 3)
+      // GET the paged envelope into state: on the native target the tap
+      // renders the live response; web-dom is still wiring state-to-text.
+      Row(gap: 8, align: center) {
+        Button("Sync feed from api", p: 8, rounded: 8, shadow: 1, bg: "#043B70") async {
+          await fetch("/posts?limit=3&offset=0", feedJson)
+        }
+        Text("{feedJson}", size: 10, color: "#667085")
+      }
+
       // The list api answers {items,total,count,limit,offset}; limit and offset
       // ride the query string, and this state mirrors the visible page.
       Row(gap: 10, align: center) {
@@ -144,6 +173,17 @@ app Forum {
         }
         Button("Open thread", p: 10, rounded: 10, shadow: 2, bg: "#043B70", fontScale: 1.0, animate: spring) {
           push: Thread
+        }
+      }
+      Row(gap: 10) {
+        Button("Sign in", p: 10, rounded: 10, shadow: 2, bg: "#043B70", fontScale: 1.0, animate: spring) {
+          push: Login
+        }
+        Button("Create account", p: 10, rounded: 10, shadow: 2, bg: "#F4F7FB", fontScale: 1.0, animate: spring) {
+          push: Register
+        }
+        Button("Admin panel", p: 10, rounded: 10, shadow: 2, bg: "#781C40", fontScale: 1.0, animate: spring) {
+          push: Admin
         }
       }
     }
@@ -254,7 +294,202 @@ app Forum {
           }
         }
       }
+      Button("Admin panel", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+        push: Admin
+      }
       Button("Back to feed", p: 10, rounded: 10, shadow: 2, bg: "#043B70") {
+        pop
+      }
+    }
+  }
+
+  route Login {
+    Column(p: 14, gap: 12) {
+      NavBar("Sign in", "{me}")
+      TitleHeading("Account session")
+      // The service verifies credentials at POST /sessions (401 on a mismatch)
+      // and sets an HttpOnly cookie; the fetch effect issues GET only, so this
+      // form mirrors the outcome in page state instead of replaying the POST.
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Column(gap: 10, bg: "#FFFFFF") {
+          Input(placeholder: "Username", bind: loginName, required: true, minLength: 3)
+          Input(placeholder: "Password", bind: loginPassword, required: true, minLength: 4)
+          Row(gap: 10) {
+            Button("Sign in", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              me = loginName
+              signedIn = true
+              admin = false
+              authOk = true
+              authMsg = "session issued: member"
+              loginPassword = ""
+            }
+            Button("Use admin account", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+              me = "root"
+              signedIn = true
+              admin = true
+              authOk = true
+              authMsg = "session issued: admin"
+              loginPassword = ""
+            }
+          }
+          if (authOk) {
+            ToastNote("{authMsg}")
+          } else {
+            CaptionText("no session: the service answers 401 until credentials match")
+          }
+        }
+      }
+      Row(gap: 10) {
+        Button("Create account", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+          push: Register
+        }
+        Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+          pop
+        }
+      }
+    }
+  }
+
+  route Register {
+    Column(p: 14, gap: 12) {
+      NavBar("Create account", "guest")
+      TitleHeading("Registration")
+      // POST /users stores a SHA-256 digest of the password (never the raw
+      // value) and answers 201; the account then signs in at POST /sessions.
+      Container(p: 14, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+        Column(gap: 10, bg: "#FFFFFF") {
+          Input(placeholder: "Choose username", bind: regUser, required: true, minLength: 3, maxLength: 32)
+          Input(placeholder: "Choose password", bind: regPass, required: true, minLength: 8)
+          Row(gap: 10) {
+            Button("Create account", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              registered = true
+              loginName = regUser
+            }
+            Button("Clear", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+              registered = false
+              regUser = ""
+              regPass = ""
+            }
+          }
+          if (registered) {
+            ToastNote("account queued for {regUser}: sign in to continue")
+          } else {
+            CaptionText("the service stores a digest, never the raw password")
+          }
+        }
+      }
+      Row(gap: 10) {
+        Button("Go to sign in", p: 10, rounded: 10, shadow: 2, bg: "#043B70") {
+          push: Login
+        }
+        Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+          pop
+        }
+      }
+    }
+  }
+
+  route Admin {
+    Column(p: 14, gap: 12) {
+      NavBar("Admin panel", "{me}")
+      TitleHeading("Members and roles")
+      // The ladder mirrors the service: guest hits 401, a member session hits
+      // 403 on role changes, and only an admin session reaches the controls.
+      if (signedIn) {
+        if (admin) {
+          Container(p: 12, rounded: 12, shadow: 2, bg: "#F4F7FB") {
+            Row(gap: 8, align: center) {
+              Icon(name: "user", label: "nav/Icon")
+              Text("Roster from GET /users", size: 13, color: "#101828")
+              Button("Sync roster", p: 8, rounded: 8, shadow: 1, bg: "#043B70") async {
+                await fetch("/users?limit=5", roster)
+              }
+            }
+            Text("{roster}", size: 10, color: "#667085")
+          }
+          Container(p: 12, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
+            Column(gap: 8, bg: "#FFFFFF") {
+              Row(gap: 8, align: center) {
+                Avatar(label: "ada")
+                Text("ada", size: 14, color: "#101828")
+                Badge(label: "admin", tone: "info")
+                if (banAda) {
+                  Button("Unban", p: 6, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+                    banAda = false
+                  }
+                } else {
+                  Button("Ban ada", p: 6, rounded: 8, shadow: 1, bg: "#781C40") {
+                    banAda = true
+                  }
+                }
+              }
+              Row(gap: 8, align: center) {
+                Avatar(label: "ln")
+                Text("linus", size: 14, color: "#101828")
+                if (banLinus) {
+                  Badge(label: "banned", tone: "error")
+                } else {
+                  Badge(label: "member", tone: "neutral")
+                }
+                if (banLinus) {
+                  Button("Unban", p: 6, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+                    banLinus = false
+                  }
+                } else {
+                  Button("Ban linus", p: 6, rounded: 8, shadow: 1, bg: "#781C40") {
+                    banLinus = true
+                  }
+                }
+              }
+              Row(gap: 8, align: center) {
+                Avatar(label: "gr")
+                Text("grace", size: 14, color: "#101828")
+                if (elevatedGrace) {
+                  Badge(label: "admin", tone: "info")
+                } else {
+                  Badge(label: "member", tone: "neutral")
+                }
+                if (elevatedGrace) {
+                  Button("Demote", p: 6, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+                    elevatedGrace = false
+                  }
+                } else {
+                  Button("Promote grace", p: 6, rounded: 8, shadow: 1, bg: "#097FEB") {
+                    elevatedGrace = true
+                  }
+                }
+              }
+            }
+          }
+          if (banAda) {
+            ToastNote("ada banned: the service mirrors this with role checks")
+          } else {
+            CaptionText("role changes answer 403 at the service without an admin session")
+          }
+        } else {
+          Container(p: 14, rounded: 14, shadow: 3, bg: "#FBE9E9", border: "#781C40") {
+            Column(gap: 8) {
+              Text("403: role changes require an admin session", size: 14, color: "#781C40")
+              CaptionText("this member session may read, but not moderate")
+              Button("Use admin account", p: 10, rounded: 10, shadow: 2, bg: "#781C40") {
+                me = "root"
+                admin = true
+              }
+            }
+          }
+        }
+      } else {
+        Container(p: 14, rounded: 14, shadow: 3, bg: "#FBE9E9", border: "#781C40") {
+          Column(gap: 8) {
+            Text("401: no session on this request", size: 14, color: "#781C40")
+            CaptionText("sign in first; the service rejects anonymous moderation")
+            Button("Sign in", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              push: Login
+            }
+          }
+        }
+      }
+      Button("Back", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
         pop
       }
     }

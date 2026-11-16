@@ -14,6 +14,14 @@ import "components/pagination.opu";
 import "components/empty_state.opu";
 import "components/skeleton.opu";
 import "components/search.opu";
+import "components/banner.opu";
+import "components/timeline.opu";
+import "components/filetree.opu";
+import "components/chart_card.opu";
+import "components/avatar_group.opu";
+import "components/number_flow.opu";
+import "components/rating.opu";
+import "components/code_block.opu";
 
 app UiCatalog {
   state page: int = 3
@@ -49,6 +57,16 @@ app UiCatalog {
       SectionHeader("States")
       Skeleton(280, 64)
       EmptyState("folder", "No runs yet", "Trigger a build to see it here")
+
+      SectionHeader("Insights")
+      Banner("Deploys paused", "Pipelines resume after the incident review", "warning")
+      ChartCard("Throughput", "bar")
+      NumberFlow("42", "builds")
+      StarRating("Release quality", 80, 5)
+      AvatarGroup("ada", "linus", "grace")
+      Timeline("Pipeline", "09:12 Queued", "09:14 Building", "09:20 Shipped")
+      FileTree("src", "main.opu", "render.opu", "theme.opu")
+      CodeSnippet("Build", "opurom build --src app.opu", "--target web", "--out dist")
     }
   }
 }

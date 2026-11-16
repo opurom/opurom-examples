@@ -1,0 +1,10 @@
+// Banner(title, body, tone): persistent inline notice; pass a design tone such
+// as info, success, warning or error for the semantic border and dot.
+component Banner(title: string, body: string, tone: string) {
+  Container(p: 12, rounded: 12, shadow: 2, tone: "{tone}") {
+    Column(gap: 4) {
+      Text("{title}", size: 13)
+      Text("{body}", size: 12)
+    }
+  }
+}
