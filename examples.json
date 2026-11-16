@@ -188,6 +188,48 @@
           ],
           "description": "type-check the source with opuromc"
         },
+    {
+      "name": "gallery-components",
+      "source": "apps/gallery_components/gallery_components.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-components.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the components replica source"
+        },
+        {
+          "id": "gallery-components.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the components replica to IR"
+        },
+        {
+          "id": "gallery-components.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2200",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the components replica to a PPM frame"
+        }
+      ]
+    },
         {
           "id": "gallery.compile",
           "cmd": [
