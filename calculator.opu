@@ -42,221 +42,221 @@ app Calculator {
         if (sDiv) { Text("Quotient {divQ}   Remainder {divRem}", size: 11) }
         if (dot) { Text("Decimal entry", size: 11) }
         if (err) { Text("Error: divide by zero", size: 12) }
-        Text("{out}", size: 36)
+        Text("{out}", size: 56)
       }
     }
     Grid(columns: 4, compactColumns: 4) {
-      Button("AC", variant: "ghost", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
+      Button("AC", variant: "ghost", p: 26, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
         cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; tmp = 0; acc = 0; mulProd = 0; divRem = 0; divQ = 0; out = 0; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false; opLabel = ""
       }
-      Button("DEL", variant: "ghost", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
+      Button("DEL", variant: "ghost", p: 26, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
         cur = h1; h1 = h2; h2 = h3; h3 = h4; h4 = h5; h5 = h6; h6 = 0; out = cur; err = false
       }
-      Button("%", variant: "ghost", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
+      Button("%", variant: "ghost", p: 26, rounded: 12, shadow: 2, fontScale: 1.1, animate: "spring", margin: 3) {
         cur = h2; out = cur; err = false
       }
       if (nz) {
-        Button("/", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("/", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = cur; divRem = acc; divQ = 0; out = acc; sAdd = false; sSub = false; sMul = false; sDiv = true; normalMode = false; opLabel = "/"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false; dReady = false; dZero = true
         }
       } else {
-        Button("/", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("/", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           err = true; opLabel = "/"; dReady = false; dZero = true
         }
       }
 
       if (sMul) {
-        Button("7", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("7", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 7; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("7", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("7", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 7; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("8", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("8", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 8; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("8", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("8", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 8; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("9", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("9", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 9; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("9", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("9", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 9; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (normalMode) {
-        Button("x", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("x", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sAdd) {
-        Button("x", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("x", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc += cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sSub) {
-        Button("x", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("x", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc -= cur; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sMul) {
-        Button("x", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("x", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = mulProd; out = acc; sAdd = false; sSub = false; sMul = true; sDiv = false; normalMode = false; opLabel = "x"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
 
       if (sMul) {
-        Button("4", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("4", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 4; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("4", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("4", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 4; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("5", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("5", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 5; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("5", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("5", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 5; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("6", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("6", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 6; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("6", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("6", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 6; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (normalMode) {
-        Button("-", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("-", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sAdd) {
-        Button("-", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("-", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc += cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sSub) {
-        Button("-", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("-", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc -= cur; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sMul) {
-        Button("-", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("-", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = mulProd; out = acc; sAdd = false; sSub = true; sMul = false; sDiv = false; normalMode = false; opLabel = "-"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
 
       if (sMul) {
-        Button("1", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("1", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 1; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("1", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("1", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 1; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("2", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("2", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 2; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("2", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("2", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 2; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (sMul) {
-        Button("3", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("3", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; mulProd += acc; mulProd += acc; mulProd += acc; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 3; out = mulProd; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       } else {
-        Button("3", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("3", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; cur += 3; out = cur; nz = true; z = false; err = false; dReady = sDiv; dZero = false
         }
       }
       if (normalMode) {
-        Button("+", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("+", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sAdd) {
-        Button("+", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("+", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc += cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sSub) {
-        Button("+", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("+", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc -= cur; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
       if (sMul) {
-        Button("+", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("+", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = mulProd; out = acc; sAdd = true; sSub = false; sMul = false; sDiv = false; normalMode = false; opLabel = "+"; cur = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; mulProd = 0; dReady = false; dZero = false
         }
       }
 
       if (sMul) {
-        Button("", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = mulProd
         }
       } else {
-        Button("0", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("0", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = cur; err = false; dReady = false; dZero = sDiv
         }
       }
       if (sMul) {
-        Button("0", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("0", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           tmp = mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += mulProd; mulProd += tmp; mulProd += tmp; h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = mulProd; err = false; dReady = false; dZero = sDiv
         }
       } else {
-        Button("0", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("0", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
           h6 = h5; h5 = h4; h4 = h3; h3 = h2; h2 = h1; h1 = cur; tmp = cur; cur += cur; cur += cur; cur += cur; cur += tmp; cur += tmp; out = cur; err = false; dReady = false; dZero = sDiv
         }
       }
-      Button(".", variant: "secondary", width: 64, p: 13, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
+      Button(".", variant: "secondary", p: 26, rounded: 12, shadow: 2, fontScale: 1.2, animate: "spring", margin: 3) {
         dot = true
       }
       if (sAdd) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc += cur; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
         }
       }
       if (sSub) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc -= cur; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
         }
       }
       if (sMul) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           acc = mulProd; out = acc; cur = acc; sAdd = false; sSub = false; sMul = false; sDiv = false; normalMode = true; opLabel = "="; mulProd = 0; h1 = 0; h2 = 0; h3 = 0; h4 = 0; h5 = 0; h6 = 0; nz = false; z = true; err = false; dReady = false; dZero = false; dot = false
         }
       }
       if (dReady) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           divQ += 1; divRem -= cur; out = divQ; opLabel = "/"; err = false; dReady = true; dZero = false
         }
       }
       if (dZero) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           err = true; opLabel = "/ error"; dReady = false; dZero = true
         }
       }
       if (normalMode) {
-        Button("=", variant: "primary", width: 64, p: 13, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
+        Button("=", variant: "primary", p: 26, rounded: 12, shadow: 3, fontScale: 1.2, animate: "spring", margin: 3) {
           out = cur
         }
       }
