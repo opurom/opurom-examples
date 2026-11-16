@@ -1,42 +1,47 @@
+// Standardized Material 3 Telemetry Console dashboard.
 import "models/metrics.opu";
 import "views/cards.opu";
 
-// Components stay in the entry file: an imported module may declare only
-// state, model, api, theme and imports.
-component KpiCard(label: string, metric: string, trend: string) {
-  Card(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#D7E3E0") {
-    Column(gap: 6, bg: "#FFFFFF") {
-      Text("{label}", size: 12, color: "#4B6B67")
-      Text("{metric}", size: 26, color: "#0B2E2A")
-      Text("{trend}", size: 11, color: "#0F766E")
-    }
-  }
-}
-
-component ServiceRow(name: string, role: string, rate: int, state: string) {
-  Card(p: 14, rounded: 14, shadow: 2, bg: "#FFFFFF", border: "#D7E3E0") {
-    Grid(columns: 4) {
-      Container(width: 26, height: 26) {
-        Avatar(label: "{name}")
-      }
-      Column(gap: 2, bg: "#FFFFFF") {
-        Text("{name}", size: 14, color: "#0B2E2A")
-        Text("{role}", size: 11, color: "#4B6B67")
-      }
-      Container(width: 62) {
-        Badge(label: "{state}")
-      }
-      Container(width: 190) {
-        Progress(value: rate)
+component KpiCard(label: string, metric: string, delta: string, icon: string, tone: string) {
+  // md-sys-color-surface-container-low; two-layer elevation = gap M2
+  Card(p: 48, rounded: 36, shadow: 1, bg: "#FFFFFF", border: "#FFFFFF") {
+    Column(gap: 12, bg: "#FFFFFF") {
+      // md-sys-color-on-surface-variant
+      Text("{label}", size: 36, fontPx: 36, weight: "normal", color: "#000000", label: "dash/kpi_label")
+      // md-sys-color-on-surface
+      Text("{metric}", size: 72, fontPx: 72, weight: "bold", color: "#000000", label: "dash/kpi_value")
+      Row(gap: 12, align: start) {
+        Icon(name: "{icon}", width: 33, height: 33, color: "{tone}", label: "dash/kpi_trend_icon")
+        // md-sys-color-success / md-sys-color-error by tone
+        Text("{delta}", size: 33, fontPx: 33, weight: "normal", color: "{tone}", label: "dash/kpi_delta")
       }
     }
   }
 }
 
-component SectionTitle(title: string, note: string) {
-  Row(gap: 8, align: center) {
-    Text("{title}", size: 18, color: "#0B2E2A")
-    Text("{note}", size: 11, color: "#4B6B67")
+component StatusPill(text: string, tone: string) {
+  Container(p: 12, rounded: 24, color: "{tone}", border: "{tone}") {
+    Text("{text}", size: 33, fontPx: 33, weight: "normal", color: "#FFFFFF", label: "dash/status_pill")
+  }
+}
+
+component ServiceRow(name: string, role: string, state: string, tone: string) {
+  Column(gap: 12, bg: "#FFFFFF") {
+    Row(gap: 24, align: center) {
+      Container(width: 48, height: 48, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Icon(name: "server", width: 48, height: 48, color: "#000000", label: "dash/service_icon")
+      }
+      Column(gap: 6, bg: "#FFFFFF") {
+        // md-sys-color-on-surface
+        Text("{name}", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "dash/service_name")
+        // md-sys-color-on-surface-variant
+        Text("{role}", size: 33, fontPx: 33, weight: "normal", color: "#000000", opacity: 0.6, label: "dash/service_role")
+      }
+      Spacer(width: 120)
+      StatusPill("{state}", "{tone}")
+    }
+    // md-sys-color-outline-variant
+    Container(width: 984, height: 3, color: "#000000", border: "#000000", opacity: 0.12, p: 0)
   }
 }
 
@@ -50,95 +55,123 @@ app Dashboard {
   computed throughput = doneTasks - openTasks
   computed health = 100 - errorRate
 
-  // One shell for every width: the outer Row lays out a sidebar and a content
-  // column on a wide viewport and stacks them on a compact one.
-  Column(p: 0, gap: 0) {
-    Container(height: 92, p: 20, shadow: 4, gradient: "#0F766E,#053D38",
-              particles: "count=40,seed=13,radius=2,alpha=760,color=#CFF3EE") {
-      Column(gap: 4, bg: "#0F766E") {
-        Text("Telemetry Console", size: 26, color: "#FFFFFF")
-        Text("crew {crew} - feed {liveFeed} - {window} window", size: 12, color: "#CFF3EE")
+  // md-sys-color-surface
+  Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+    Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      // md-sys-color-surface
+      Container(width: 1080, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "arrow-left", width: 72, height: 72, color: "#000000", label: "dash/topbar_back")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "info-circle", width: 72, height: 72, color: "#000000", label: "dash/topbar_info")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "code", width: 72, height: 72, color: "#000000", label: "dash/topbar_code")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "devices", width: 72, height: 72, color: "#000000", label: "dash/topbar_devices")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 648, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Text("Telemetry Console", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "dash/title")
+            }
+          }
+        }
       }
-    }
-
-    Row(gap: 16, p: 16) {
-      // Sidebar: filter controls that only make sense beside the content.
-      Column(width: 240, gap: 12, p: 14) {
-        Card(p: 16, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#D7E3E0") {
-          Column(gap: 10, bg: "#FFFFFF") {
-            Text("Filters", size: 16, color: "#0B2E2A")
-            Input(bind: window, placeholder: "time window")
-            Slider(bind: load, min: 0, max: 100)
-            Text("load {load}%", size: 12, color: "#4B6B67")
-            Switch(bind: autoscaling)
-            Text("autoscaling on", size: 12, color: "#4B6B67")
-            Switch(bind: alerts)
-            Text("alerts on", size: 12, color: "#4B6B67")
-          }
-        }
-        Card(p: 16, rounded: 14, shadow: 2, bg: "#EAF6F4") {
-          Column(gap: 6, bg: "#EAF6F4") {
-            Text("Refreshed", size: 12, color: "#4B6B67")
-            Text("{refreshed} cycles", size: 18, color: "#0B2E2A")
-          }
-        }
-      }
-
-      // Content: KPI cards, a status panel, a service list and a footer action.
-      Column(width: 1000, gap: 14) {
-        SectionTitle("Overview", "live telemetry")
-        Grid(columns: 4) {
-          KpiCard("Requests", "{doneTasks}", "up 12%")
-          KpiCard("Open", "{openTasks}", "up 4%")
-          KpiCard("Throughput", "{throughput}", "steady")
-          KpiCard("Health", "{health}", "nominal")
-        }
-
-        Card(p: 18, rounded: 16, shadow: 3, bg: "#FFFFFF", border: "#D7E3E0") {
-          Column(gap: 12, bg: "#FFFFFF") {
-            SectionTitle("Service status", "{liveFeed}")
-            Row(gap: 12, align: center) {
-              Progress(value: 64)
-              Text("{load}% capacity - {incidents} incidents", size: 12, color: "#4B6B67")
+      Scroll(height: 2232) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 984, height: 2232, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-surface-container-low; two-layer elevation = gap M2
+              Card(p: 48, rounded: 36, shadow: 1, bg: "#FFFFFF", border: "#FFFFFF", gesture: "tap") {
+                Row(gap: 24, align: center) {
+                  // md-sys-color-primary
+                  Text("Filters", size: 42, fontPx: 42, weight: "bold", color: "#6200EE", label: "dash/filters")
+                  Spacer(width: 180)
+                  Switch(bind: autoscaling)
+                  Switch(bind: alerts)
+                }
+              }
+              // A4/overlay gap: bottom-sheet filter drawer is a static placeholder
+              Spacer(height: 72)
+              // md-sys-color-on-surface
+              Text("Overview", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "dash/overview")
+              Spacer(height: 36)
+              Grid(columns: 2) {
+                KpiCard("Requests", "{doneTasks}", "12%", "trending-up", "#386E38")
+                KpiCard("Open", "{openTasks}", "4%", "trending-up", "#386E38")
+                KpiCard("Errors", "{errorRate}", "2%", "trending-down", "#B00020")
+                KpiCard("Health", "{health}", "steady", "activity", "#6200EE")
+              }
+              Spacer(height: 72)
+              // md-sys-color-surface-container-low; two-layer elevation = gap M2
+              Card(p: 48, rounded: 36, shadow: 1, bg: "#FFFFFF", border: "#FFFFFF") {
+                Column(gap: 24, bg: "#FFFFFF") {
+                  Text("Service status", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "dash/status_title")
+                  // B2 gap: scroll inertia is not implemented; static drag only
+                  Progress(value: 64, rounded: 6, color: "#386E38")
+                  StatusPill("healthy", "#386E38")
+                  StatusPill("degraded", "#7A5900")
+                  StatusPill("error", "#B00020")
+                }
+              }
+              Spacer(height: 72)
+              ServiceRow("Edge", "gateway", "healthy", "#386E38")
+              Spacer(height: 36)
+              ServiceRow("Ingest", "collector", "healthy", "#386E38")
+              Spacer(height: 36)
+              ServiceRow("Warehouse", "storage", "degraded", "#7A5900")
+              Spacer(height: 72)
+              // md-sys-color-surface-container-low; two-layer elevation = gap M2
+              Card(p: 48, rounded: 36, shadow: 1, bg: "#FFFFFF", border: "#FFFFFF") {
+                Column(gap: 24, bg: "#FFFFFF") {
+                  // md-sys-color-on-surface
+                  Text("Run a deploy", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "dash/deploy_title")
+                  Button("Deploy now", rounded: 60, bg: "#6200EE", gesture: "tap") {
+                    refreshed += 1
+                    load += 4
+                    doneTasks += 3
+                  }
+                  Button("Cancel", rounded: 60, border: "#000000", gesture: "tap") { }
+                }
+              }
+              Spacer(height: 72)
+              // md-sys-color-error-container; on-error-container text
+              Container(width: 984, height: 120, color: "#B00020", border: "#B00020", rounded: 24, p: 24) {
+                Row(gap: 24, align: center) {
+                  Icon(name: "alert-triangle", width: 48, height: 48, color: "#FFFFFF", label: "dash/alert_icon")
+                  Text("{incidents} incidents need attention", size: 33, fontPx: 33, weight: "normal", color: "#FFFFFF", label: "dash/alert_text")
+                }
+              }
+              Spacer(height: 72)
             }
-            Divider()
-            Row(gap: 10, align: center) {
-              Badge(label: "{openTasks} open")
-              Badge(label: "{doneTasks} done")
-              Badge(label: "{errorRate}% errors")
-            }
-          }
-        }
-
-        SectionTitle("Services", "{crew} on call")
-        ServiceRow("Edge", "gateway", 82, "healthy")
-        ServiceRow("Ingest", "collector", 64, "healthy")
-        ServiceRow("Warehouse", "storage", 41, "degraded")
-
-        Card(p: 18, rounded: 16, shadow: 3, gradient: "#0F766E,#053D38",
-              particles: "count=24,seed=5,radius=2,alpha=880,color=#FFFFFF") {
-          Row(gap: 12, align: center) {
-            Column(gap: 4, bg: "#0F766E") {
-              Text("Run a deploy", size: 16, color: "#FFFFFF")
-              Text("{refreshed} cycles elapsed", size: 11, color: "#CFF3EE")
-            }
-            Spacer(width: 12)
-            Button("Deploy now", p: 12, rounded: 12, shadow: 2, bg: "#FFFFFF", animate: spring) {
-              refreshed += 1
-              load += 4
-              doneTasks += 3
-            }
-          }
-        }
-
-        if (autoscaling) {
-          Container(p: 16, rounded: 14, shadow: 2, bg: "#EAF6F4") {
-            Text("Autoscaling is on for {crew}", size: 14, color: "#0B2E2A")
-          }
-        }
-        if (alerts) {
-          Container(p: 16, rounded: 14, shadow: 3, gradient: "#7C2D12,#3B1206") {
-            Text("{incidents} incidents need attention", size: 14, color: "#FFFFFF")
           }
         }
       }

@@ -1,7 +1,9 @@
 // Dashboard presentation state and the shared palette. An imported module may
 // declare only state, model, api, theme and imports, so the components that
 // use these values live in the importing entry file.
-theme { mode: light, accent: "#0F766E", radius: 14, fontScale: 1.0 }
+// md-sys-color-primary
+// md-shape-large = 16dp -> 48px; card radius 36px set per page spec
+theme { mode: light, accent: "#6200EE", radius: 36, fontScale: 1.0 }
 
 model ServiceTarget {
   id: int primary
