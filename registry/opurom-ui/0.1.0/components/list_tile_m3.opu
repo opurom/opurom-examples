@@ -1,0 +1,20 @@
+// M3 two-line list tile over the theme surface: title 16/400, subtitle 14/400.
+// Selected overlay, leading/trailing slots, exact 56/72/88 metrics and a
+// per-widget overflow assert need A3, M7 and B12; all stay reserved, no widget
+// tree is built. The tap event is a no-op fallback and never crashes.
+// API   R: title. O: subtitle, state, animate.
+//       X: selected flag, leading/trailing slots, isThreeLine/dense height,
+//       exact state-layer alpha (A3, M7, B12, M4).
+// State default/hover/active/focus/disabled; normal maps to default, pressed to active.
+// Events gesture = tap, empty action until a state binding exists.
+// Bounds padding 16, title clipped to 1 line, subtitle to 2; empty subtitle
+//       renders without panic; bad state is compiler-rejected.
+// Example ListTileM3("Inbox", "3 unread messages", "default", "ease")
+component ListTileM3(title: string, subtitle: string, state: string, animate: string) {
+  Container(p: 16, state: "{state}", animate: "{animate}", gesture: tap, label: "list tile") {
+    Column(gap: 4) {
+      Text("{title}", size: 16, maxLines: 1)
+      Text("{subtitle}", size: 14, maxLines: 2)
+    }
+  }
+}

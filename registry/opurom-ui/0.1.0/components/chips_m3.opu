@@ -1,0 +1,25 @@
+// M3 chips in two static appearances: outline (unselected) and filled
+// (selected). Flutter toggles selection at runtime, which a bool parameter
+// cannot drive here; A3 state binding is reserved. Tap is a no-op fallback.
+// API   R: label. O: state, animate.
+//       X: delete affordance, checkmark, runtime selection toggle, exact
+//       state-layer alpha (A3/M4).
+// State default/hover/active/focus/disabled; normal maps to default, pressed to active.
+// Motion select 195 ms, fastOutSlowIn (chip.dart:42,1039).
+// Events gesture = tap, empty action until a state binding exists.
+// Bounds radius 8, height 32, width 160, padding 8; label clipped to 1 line;
+//       empty label renders an empty chip; bad state is compiler-rejected.
+// Example AssistChipM3("Filter", "default", "ease")
+component AssistChipM3(label: string, state: string, animate: string) {
+  Container(width: 160, height: 32, p: 8, rounded: 8, variant: "secondary", state: "{state}", animate: "{animate}", duration: 195, curve: "fastOutSlowIn", gesture: tap, label: "assist chip") {
+    Text("{label}", size: 14, maxLines: 1)
+  }
+}
+
+// Filled chip: primary fill for the selected appearance, same M3 chip metrics.
+// Example SelectedChipM3("Passed", "default", "ease")
+component SelectedChipM3(label: string, state: string, animate: string) {
+  Container(width: 160, height: 32, p: 8, rounded: 8, variant: "primary", state: "{state}", animate: "{animate}", duration: 195, curve: "fastOutSlowIn", gesture: tap, label: "selected chip") {
+    Text("{label}", size: 14, maxLines: 1)
+  }
+}

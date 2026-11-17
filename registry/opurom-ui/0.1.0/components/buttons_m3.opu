@@ -1,0 +1,51 @@
+// Material 3 button family — state-complete shells over the Button primitive.
+// Geometry: 40dp tall stadium (radius 20 = height / 2). The wrapper sets the
+// height and stays transparent through the no-fill "text" role; the Button
+// primitive carries the variant fill, the state and the implicit transition.
+// Five design states map to the renderer's state transform: default/hover/
+// active/focus/disabled. Colours come from the variant token, never a literal hex.
+// API   R: label. O: state, animate, variant-keyword. X: 24dp horizontal inset
+//       (uniform padding cannot set axes separately, so the Button's built-in
+//       12dp per side renders), 64dp minimum width (natural label width is the
+//       fallback), exact M3 state-layer alpha 0.10/0.08/0.10 and press scale
+//       (kernel gaps A3/M4); style resolver.
+// Boundary: empty label renders an empty 40dp stadium; overlong label clips
+//       inside the stadium; disabled selects the disabled paint and drops tap.
+// Example ElevatedActionButton("Save", "default", "ease")
+component ElevatedActionButton(label: string, state: string, animate: string) {
+  Container(height: 40, rounded: 20, variant: "text") {
+    Button("{label}", p: 12, rounded: 20, shadow: 2, variant: "primary", state: "{state}", animate: "{animate}")
+  }
+}
+
+// Filled button: same filled M3 role as elevated minus the shadow.
+// Example FilledActionButton("Confirm", "default", "ease")
+component FilledActionButton(label: string, state: string, animate: string) {
+  Container(height: 40, rounded: 20, variant: "text") {
+    Button("{label}", p: 12, rounded: 20, variant: "primary", state: "{state}", animate: "{animate}")
+  }
+}
+
+// Outlined button: 1px primary border, transparent fill.
+// Example OutlinedActionButton("Cancel", "default", "ease")
+component OutlinedActionButton(label: string, state: string, animate: string) {
+  Container(height: 40, rounded: 20, variant: "text") {
+    Button("{label}", p: 12, rounded: 20, variant: "secondary", state: "{state}", animate: "{animate}")
+  }
+}
+
+// Text button: no fill, primary label.
+// Example TextActionButton("Learn more", "default", "ease")
+component TextActionButton(label: string, state: string, animate: string) {
+  Container(height: 40, rounded: 20, variant: "text") {
+    Button("{label}", p: 12, rounded: 20, variant: "text", state: "{state}", animate: "{animate}")
+  }
+}
+
+// Danger/destructive variant of the filled button.
+// Example DangerActionButton("Delete", "default", "ease")
+component DangerActionButton(label: string, state: string, animate: string) {
+  Container(height: 40, rounded: 20, variant: "text") {
+    Button("{label}", p: 12, rounded: 20, shadow: 2, variant: "danger", state: "{state}", animate: "{animate}")
+  }
+}
