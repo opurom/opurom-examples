@@ -1329,30 +1329,30 @@ app OpuromGallery {
         Spacer(height: 329)
         // md-sys-color-surface; onNavSelected bound via navComments/... bool states.
         // onIndicatorMoved follows the active state; onDragUpdate/onDragEnd await A2/B3 gesture lerp.
-        Container(width: 1080, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+        Container(width: 1080, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+          Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
             // md-sys-color-surface; Comments nav item
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
                 if (navComments) {
                   // md-sys-color-primary; selected icon
-                  Icon(name: "bubble-plus", width: 48, height: 48, color: "#6200EE", label: "bottomnav/nav_comments_icon_on")
+                  Icon(name: "bubble-plus", width: 48, height: 48, color: "#FFFFFF", label: "bottomnav/nav_comments_icon_on")
                 } else {
                   // md-sys-color-on-surface-variant; unselected icon
-                  Icon(name: "bubble-plus", width: 48, height: 48, color: "#000000", opacity: 0.6, label: "bottomnav/nav_comments_icon_off")
+                  Icon(name: "bubble-plus", width: 48, height: 48, color: "#FFFFFF", opacity: 0.6, label: "bottomnav/nav_comments_icon_off")
                 }
                 Spacer(height: 8)
                 if (navComments) {
                   // md-sys-color-primary; native Button five-state press feedback
-                  Button("Comments", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  Button("Comments", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = true
                     navCalendar = false
                     navAccount = false
                   }
                 } else {
                   // md-sys-color-on-surface-variant
-                  Button("Comments", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  Button("Comments", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = true
                     navCalendar = false
                     navAccount = false
@@ -1360,34 +1360,34 @@ app OpuromGallery {
                 }
                 if (navComments) {
                   // md-sys-color-primary; indicator width = label text width
-                  Container(width: 240, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 } else {
-                  Container(width: 240, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 }
               }
             }
             // md-sys-color-surface; Calendar nav item
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
                 if (navCalendar) {
                   // md-sys-color-primary; selected icon
-                  Icon(name: "calendar", width: 48, height: 48, color: "#6200EE", label: "bottomnav/nav_calendar_icon_on")
+                  Icon(name: "calendar", width: 48, height: 48, color: "#FFFFFF", label: "bottomnav/nav_calendar_icon_on")
                 } else {
                   // md-sys-color-on-surface-variant; unselected icon
-                  Icon(name: "calendar", width: 48, height: 48, color: "#000000", opacity: 0.6, label: "bottomnav/nav_calendar_icon_off")
+                  Icon(name: "calendar", width: 48, height: 48, color: "#FFFFFF", opacity: 0.6, label: "bottomnav/nav_calendar_icon_off")
                 }
                 Spacer(height: 8)
                 if (navCalendar) {
                   // md-sys-color-primary; native Button five-state press feedback
-                  Button("Calendar", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  Button("Calendar", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = false
                     navCalendar = true
                     navAccount = false
                   }
                 } else {
                   // md-sys-color-on-surface-variant
-                  Button("Calendar", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  Button("Calendar", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = false
                     navCalendar = true
                     navAccount = false
@@ -1395,34 +1395,34 @@ app OpuromGallery {
                 }
                 if (navCalendar) {
                   // md-sys-color-primary; indicator width = label text width
-                  Container(width: 240, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 } else {
-                  Container(width: 240, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 }
               }
             }
             // md-sys-color-surface; Account nav item
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
                 if (navAccount) {
                   // md-sys-color-primary; selected icon
-                  Icon(name: "user-circle", width: 48, height: 48, color: "#6200EE", label: "bottomnav/nav_account_icon_on")
+                  Icon(name: "user-circle", width: 48, height: 48, color: "#FFFFFF", label: "bottomnav/nav_account_icon_on")
                 } else {
                   // md-sys-color-on-surface-variant; unselected icon
-                  Icon(name: "user-circle", width: 48, height: 48, color: "#000000", opacity: 0.6, label: "bottomnav/nav_account_icon_off")
+                  Icon(name: "user-circle", width: 48, height: 48, color: "#FFFFFF", opacity: 0.6, label: "bottomnav/nav_account_icon_off")
                 }
                 Spacer(height: 8)
                 if (navAccount) {
                   // md-sys-color-primary; native Button five-state press feedback
-                  Button("Account", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  Button("Account", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = false
                     navCalendar = false
                     navAccount = true
                   }
                 } else {
                   // md-sys-color-on-surface-variant
-                  Button("Account", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  Button("Account", fontScale: 2.6, color: "#6200EE", variant: "text") {
                     navComments = false
                     navCalendar = false
                     navAccount = true
@@ -1430,9 +1430,9 @@ app OpuromGallery {
                 }
                 if (navAccount) {
                   // md-sys-color-primary; indicator width = label text width
-                  Container(width: 210, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 } else {
-                  Container(width: 210, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+                  Container(width: 120, height: 2, color: "#FFFFFF", border: "#FFFFFF", p: 0)
                 }
               }
             }
@@ -1551,14 +1551,14 @@ app OpuromGallery {
           }
         }
         Spacer(height: 329)
-        Container(width: 1080, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+        Container(width: 1080, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+          Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
-                Icon(name: "bubble-plus", width: 48, height: 48, color: "#000000", opacity: 0.6, label: "bottomnav_cal/nav_comments_icon_off")
+                Icon(name: "bubble-plus", width: 48, height: 48, color: "#FFFFFF", opacity: 0.6, label: "bottomnav_cal/nav_comments_icon_off")
                 Spacer(height: 8)
-                Button("Comments", width: 360, fontScale: 2.6, color: "#000000", variant: "ghost") {
+                Button("Comments", fontScale: 2.6, color: "#6200EE", variant: "text") {
                   navComments = true
                   navCalendar = false
                   navAccount = false
@@ -1566,30 +1566,30 @@ app OpuromGallery {
                 Container(width: 240, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
             }
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
-                Icon(name: "calendar", width: 48, height: 48, color: "#6200EE", label: "bottomnav_cal/nav_calendar_icon_on")
+                Icon(name: "calendar", width: 48, height: 48, color: "#FFFFFF", label: "bottomnav_cal/nav_calendar_icon_on")
                 Spacer(height: 8)
-                Button("Calendar", width: 360, fontScale: 2.6, color: "#FFFFFF", variant: "primary") {
+                Button("Calendar", fontScale: 2.6, color: "#6200EE", variant: "text") {
                   navComments = false
                   navCalendar = true
                   navAccount = false
                 }
-                Container(width: 240, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                Container(width: 240, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
             }
-            Container(width: 360, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+            Container(width: 360, height: 147, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
                 Spacer(height: 18)
-                Icon(name: "user-circle", width: 48, height: 48, color: "#000000", opacity: 0.6, label: "bottomnav_cal/nav_account_icon_off")
+                Icon(name: "user-circle", width: 48, height: 48, color: "#FFFFFF", opacity: 0.6, label: "bottomnav_cal/nav_account_icon_off")
                 Spacer(height: 8)
-                Button("Account", width: 360, fontScale: 2.6, color: "#000000", variant: "ghost") {
+                Button("Account", fontScale: 2.6, color: "#6200EE", variant: "text") {
                   navComments = false
                   navCalendar = false
                   navAccount = true
                 }
-                Container(width: 210, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+                Container(width: 210, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
               }
             }
           }
@@ -1684,34 +1684,30 @@ app OpuromGallery {
         }
         Spacer(height: 35)
         Spacer(height: 107)
-        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
-          Spacer(width: 42)
-          GalleryAppBar("Settings", "#6200EE", "#FFFFFF", 25, 147, "default")
-        }
-        Spacer(height: 40)
-        Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
-          Column(p: 0, gap: 0, align: start, color: "#ECEFF1", border: "#ECEFF1") {
+        Spacer(height: 51)
+        Container(width: 900, height: 144, radius: 28, color: "#EFF3F3", border: "#EFF3F3", p: 24) {
+          Column(p: 0, gap: 0, align: start, color: "#EFF3F3", border: "#EFF3F3") {
             Text("Text scaling", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/text_scaling")
             Text("{textScaling}", size: 36, fontPx: 36, weight: "normal", color: "#B00020", label: "theme/text_scaling_value")
           }
         }
-        Spacer(height: 24)
-        Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
-          Column(p: 0, gap: 0, align: start, color: "#ECEFF1", border: "#ECEFF1") {
+        Spacer(height: 32)
+        Container(width: 900, height: 144, radius: 28, color: "#EFF3F3", border: "#EFF3F3", p: 24) {
+          Column(p: 0, gap: 0, align: start, color: "#EFF3F3", border: "#EFF3F3") {
             Text("Text direction", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/text_direction")
             Text("{textDirection}", size: 36, fontPx: 36, weight: "normal", color: "#B00020", label: "theme/text_direction_value")
           }
         }
-        Spacer(height: 24)
-        Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
-          Column(p: 0, gap: 0, align: start, color: "#ECEFF1", border: "#ECEFF1") {
+        Spacer(height: 32)
+        Container(width: 900, height: 144, radius: 28, color: "#EFF3F3", border: "#EFF3F3", p: 24) {
+          Column(p: 0, gap: 0, align: start, color: "#EFF3F3", border: "#EFF3F3") {
             Text("Locale", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/locale")
             Text("{localeValue}", size: 36, fontPx: 36, weight: "normal", color: "#B00020", label: "theme/locale_value")
           }
         }
-        Spacer(height: 24)
-        Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
-          Column(p: 0, gap: 0, align: start, color: "#ECEFF1", border: "#ECEFF1") {
+        Spacer(height: 32)
+        Container(width: 900, height: 144, radius: 28, color: "#EFF3F3", border: "#EFF3F3", p: 24) {
+          Column(p: 0, gap: 0, align: start, color: "#EFF3F3", border: "#EFF3F3") {
             Text("Platform mechanics", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/platform")
             Text("{platformMechanics}", size: 36, fontPx: 36, weight: "normal", color: "#B00020", label: "theme/platform_value")
           }
@@ -1764,8 +1760,8 @@ app OpuromGallery {
           }
         }
         Spacer(height: 60)
-        Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
-          Row(p: 0, gap: 0, align: center, color: "#ECEFF1", border: "#ECEFF1") {
+        Container(width: 900, height: 144, radius: 28, color: "#EFF3F3", border: "#EFF3F3", p: 24) {
+          Row(p: 0, gap: 0, align: center, color: "#EFF3F3", border: "#EFF3F3") {
             Text("Slow motion", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/slow_motion")
           }
         }
@@ -2005,11 +2001,11 @@ app OpuromGallery {
         GalleryAppBar("Colors", "#6200EE", "#FFFFFF", 25, 147, "default")
       }
       // Tabs now live inside the purple band region: white labels on #6200EE.
-      Container(width: 1080, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+      Container(width: 1080, height: 126, color: "#6200EE", border: "#6200EE", p: 0) {
         Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
           Spacer(width: 48)
           // md-sys-color-surface; selected RED tab
-          Container(width: 200, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+          Container(width: 200, height: 126, color: "#6200EE", border: "#6200EE", p: 0) {
             Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabRed) {
@@ -2038,7 +2034,7 @@ app OpuromGallery {
             }
           }
           // md-sys-color-surface; unselected PINK tab
-          Container(width: 220, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+          Container(width: 220, height: 126, color: "#6200EE", border: "#6200EE", p: 0) {
             Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabPink) {
@@ -2067,7 +2063,7 @@ app OpuromGallery {
             }
           }
           // md-sys-color-surface; unselected PURPLE tab
-          Container(width: 250, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+          Container(width: 250, height: 126, color: "#6200EE", border: "#6200EE", p: 0) {
             Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabPurple) {
@@ -2096,7 +2092,7 @@ app OpuromGallery {
             }
           }
           // md-sys-color-surface; unselected DEEP PURPLE tab
-          Container(width: 362, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+          Container(width: 362, height: 126, color: "#6200EE", border: "#6200EE", p: 0) {
             Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabDeep) {
