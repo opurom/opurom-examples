@@ -1,0 +1,28 @@
+{
+  "src": "../../calculator.opu",
+  "width": 320,
+  "height": 640,
+  "steps": [
+    {
+      "tap": 27
+    },
+    {
+      "tap": 52
+    },
+    {
+      "tap": 29
+    },
+    {
+      "tap": 61
+    }
+  ],
+  "expect": {
+    "state": {
+      "cur": 15,
+      "acc": 15,
+      "out": 15,
+      "normalMode": true
+    },
+    "digest": "5ffb36496e452d1f"
+  }
+}
