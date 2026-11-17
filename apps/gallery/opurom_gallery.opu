@@ -265,25 +265,89 @@ app OpuromGallery {
             Text("Categories", size: 56, fontPx: 48, weight: "bold", color: "#B93C5D", label: "gallery/categories")
           }
         }
-        Spacer(height: 11)
-        Container(width: 1080, height: 209, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
-            Spacer(width: 84)
-            Container(width: 150, height: 140, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-              Icon(name: "layout-grid", width: 150, height: 140, color: "#B93C5D", label: "category/material_icon")
-            }
-            Spacer(width: 42)
-            Button("MATERIAL", width: 600) { push: MaterialList }
-          }
-        }
-        Spacer(height: 52)
-        Container(width: 1080, height: 201, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+        // Golden gallery-home.png: cards y=1000..1208 / 1252..1460 / 1504..1712
+        // (h=209, gap=43). Icons reuse the measured diamond / Cupertino / styles bitmaps.
+        Spacer(height: 36)
+        Container(width: 1080, height: 209, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
           Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
             Spacer(width: 84)
-            Container(width: 912, height: 201, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
-              Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
-                Spacer(width: 26)
-                Text("STYLES & OTHER", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "category/styles_label")
+            Container(width: 912, height: 209, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0, gesture: "tap") {
+              Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                Spacer(height: 29)
+                Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                  Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+                    Spacer(width: 28)
+                    Image(src: "data:image/png;base64,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", width: 156, height: 150, border: "#FFFFFF", label: "home/material_icon")
+                    Spacer(width: 42)
+                    Container(width: 600, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                      Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                        Spacer(height: 12)
+                        Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                            Text("MATERIAL", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "home/material_label")
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              Button(" ", variant: "ghost", color: "#FFFFFF", p: 0) { push: MaterialList }
+            }
+          }
+        }
+        Spacer(height: 43)
+        Container(width: 1080, height: 209, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+          Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+            Spacer(width: 84)
+            Container(width: 912, height: 209, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
+              Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                Spacer(height: 29)
+                Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                  Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+                    Spacer(width: 26)
+                    Image(src: "data:image/png;base64,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", width: 168, height: 154, border: "#FFFFFF", label: "home/cupertino_icon")
+                    Spacer(width: 42)
+                    Container(width: 600, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                      Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                        Spacer(height: 12)
+                        Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                            Text("CUPERTINO", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "home/cupertino_label")
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        Spacer(height: 43)
+        Container(width: 1080, height: 209, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+          Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+            Spacer(width: 84)
+            Container(width: 912, height: 209, color: "#FFFFFF", border: "#FFFFFF", rounded: 20, p: 0) {
+              Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                Spacer(height: 29)
+                Container(width: 912, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                  Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+                    Spacer(width: 23)
+                    Image(src: "data:image/png;base64,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", width: 163, height: 109, border: "#FFFFFF", label: "home/styles_icon")
+                    Spacer(width: 42)
+                    Container(width: 600, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                      Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                        Spacer(height: 12)
+                        Container(width: 600, height: 138, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+                          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                            Text("STYLES & OTHER", size: 40, fontPx: 32, weight: "bold", color: "#241E30", label: "home/styles_other_label")
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -308,7 +372,7 @@ app OpuromGallery {
       }
       Container(width: 1080, height: 1900, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
         Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -319,8 +383,14 @@ app OpuromGallery {
                 Text("Displays information and actions relating to the current screen", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -331,8 +401,14 @@ app OpuromGallery {
                 Text("Displaying a banner within a list", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -343,8 +419,14 @@ app OpuromGallery {
                 Text("Displays navigation and actions at the bottom", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -356,8 +438,14 @@ app OpuromGallery {
               }
             }
             Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: BottomNav }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -368,8 +456,14 @@ app OpuromGallery {
                 Text("Persistent and modal bottom sheets", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -381,8 +475,14 @@ app OpuromGallery {
               }
             }
             Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Buttons }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -394,8 +494,14 @@ app OpuromGallery {
               }
             }
             Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Cards }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -406,8 +512,14 @@ app OpuromGallery {
                 Text("Compact elements that represent an input, attribute, or action", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -418,8 +530,14 @@ app OpuromGallery {
                 Text("Rows and columns of information", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -431,8 +549,14 @@ app OpuromGallery {
               }
             }
             Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Dialogs }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -443,8 +567,14 @@ app OpuromGallery {
                 Text("A divider is a thin line that groups content in lists and layouts.", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -455,8 +585,14 @@ app OpuromGallery {
                 Text("Row and column layout", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -467,8 +603,14 @@ app OpuromGallery {
                 Text("Scrolling list layouts", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -479,8 +621,14 @@ app OpuromGallery {
                 Text("Menu buttons and simple menus", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -492,8 +640,14 @@ app OpuromGallery {
               }
             }
             Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: DrawerClosed }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -504,8 +658,14 @@ app OpuromGallery {
                 Text("Displaying a Navigation Rail within an app", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -516,8 +676,14 @@ app OpuromGallery {
                 Text("Date and time selection", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -528,8 +694,14 @@ app OpuromGallery {
                 Text("Linear, circular, indeterminate", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -540,8 +712,14 @@ app OpuromGallery {
                 Text("Checkboxes, radio buttons, and switches", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -552,8 +730,14 @@ app OpuromGallery {
                 Text("Widgets for selecting a value by swiping", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -564,8 +748,14 @@ app OpuromGallery {
                 Text("Snackbars show messages at the bottom of the screen", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -576,8 +766,14 @@ app OpuromGallery {
                 Text("Tabs with independently scrollable views", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -588,8 +784,14 @@ app OpuromGallery {
                 Text("Single line of editable text and numbers", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
-          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+
+          Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
             Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
               Spacer(width: 84)
               Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -600,7 +802,13 @@ app OpuromGallery {
                 Text("Short message displayed on long press or hover", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
               }
             }
+          }          Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 252)
+              Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+            }
           }
+
           Row(gap: 10, bg: "#FAFBFB") {
             Button("Buttons") { push: Buttons }
             Button("Cards") { push: Cards }
@@ -615,7 +823,7 @@ app OpuromGallery {
   route MaterialListScroll1 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
           for (i in 4) {
-            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
               Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 84)
                 Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -626,7 +834,13 @@ app OpuromGallery {
                   Text("{scroll1Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll1/subtitle")
                 }
               }
+            }            Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 252)
+                Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+              }
             }
+
           }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Next") { push: MaterialListScroll2 }
@@ -638,7 +852,7 @@ app OpuromGallery {
   route MaterialListScroll2 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
           for (i in 6) {
-            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
               Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 84)
                 Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -649,7 +863,13 @@ app OpuromGallery {
                   Text("{scroll2Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll2/subtitle")
                 }
               }
+            }            Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 252)
+                Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+              }
             }
+
           }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Next") { push: MaterialListScroll3 }
@@ -661,7 +881,7 @@ app OpuromGallery {
   route MaterialListScroll3 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
           for (i in 8) {
-            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Container(width: 1080, height: 196, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
               Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
                 Spacer(width: 84)
                 Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
@@ -672,7 +892,13 @@ app OpuromGallery {
                   Text("{scroll3Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll3/subtitle")
                 }
               }
+            }            Container(width: 1080, height: 2, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 252)
+                Container(width: 806, height: 2, color: "#E6EBEB", border: "#E6EBEB", p: 0)
+              }
             }
+
           }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Back") { pop }
