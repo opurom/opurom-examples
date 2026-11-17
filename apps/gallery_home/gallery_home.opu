@@ -1,4 +1,4 @@
-// Live-text replica of the Flutter Gallery home screen.
+// Live-text replica of the Opurom Gallery home screen.
 // Graphics are cropped only where no display text appears.
 app GalleryHome {
   // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.

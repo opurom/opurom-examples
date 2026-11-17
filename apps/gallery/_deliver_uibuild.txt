@@ -1,5 +1,5 @@
 // DELIVERABLE: uibuild / Navigation Drawer group (3 golden screens).
-// Paste into apps/gallery/flutter_gallery.opu app block. Pure text, not compiled here.
+// Paste into apps/gallery/opurom_gallery.opu app block. Pure text, not compiled here.
 //
 // GLOBAL STATE DECLARATIONS (add to the app root state list):
 //   state drawerOpen = false
