@@ -2,6 +2,12 @@
 // The same IR adapts to phone and tablet widths: the header Row collapses to a
 // column on compact viewports and the task Grid reflows its fluid columns.
 import "pkg-theme/default.opu";
+// The task list is served by /tasks; show loading, empty and error states for
+// its async fetch, as Flutter's photo search sample does around its model:
+// flutter-samples/desktop_photo_search/material/lib/src/model/photo_search_model.dart:33-46.
+import "components/empty_state.opu";
+import "components/skeleton.opu";
+import "components/banner.opu";
 
 app FieldService {
   model Task {
@@ -24,6 +30,10 @@ app FieldService {
   state open = 3
   state crew = "Rivera"
   state dark = false
+  // Mutually exclusive boundary states for the /tasks list.
+  state loading: bool = false
+  state empty: bool = false
+  state failed: bool = false
 
   computed remaining = open * 2
 
@@ -75,6 +85,18 @@ app FieldService {
         Container(p: 14, rounded: 14, shadow: 3, bg: "#111827", animate: ease) {
           Text("Night shift active for {crew}", size: 15, color: "#FFFFFF")
         }
+      }
+
+      // Boundary states of the task board.
+      if (loading) {
+        Skeleton(240, 20)
+        Skeleton(240, 20)
+      }
+      if (empty) {
+        EmptyState("folder", "No open cases", "New assignments appear here when dispatched")
+      }
+      if (failed) {
+        Banner("Tasks unavailable", "The task service did not answer the last request", "error")
       }
     }
   }

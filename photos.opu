@@ -3,10 +3,19 @@
 // mutually exclusive bool gates; the software raster draws Image as a
 // gradient placeholder (it does not decode PNG resources).
 import "pkg-theme/default.opu";
+import "components/empty_state.opu";
+import "components/skeleton.opu";
+import "components/banner.opu";
 
+// Flutter photo apps show a placeholder while the images load, a message when
+// the list is empty and an error banner when the fetch fails. Source:
+// flutter-samples/desktop_photo_search/material/lib/src/model/photo_search_model.dart:33-46
+// (async search fills the list, then notifies) and
+// flutter-samples/desktop_photo_search/material/lib/src/widgets/unsplash_search_content.dart:47-74
+// (empty selection renders a placeholder container instead of content).
 component Nav(label: string, t: string, src: string, n: int, b1: bool, b2: bool, b3: bool, b4: bool, b5: bool) {
   Button(label, p: 12, rounded: 12, shadow: 2, bg: "#097FEB",
-         fontScale: 1.1, animate: spring) {
+         fontScale: 1.1, animate: spring, gesture: "tap") {
     title = t
     hero = src
     sel = n
@@ -27,6 +36,13 @@ app PhotoWall {
   state s3 = false
   state s4 = false
   state s5 = false
+  // Three states of the photo list: loading before the assets resolve, empty
+  // when nothing was picked and error when the source folder is unreadable.
+  state loading: bool = false
+  state empty: bool = false
+  state failed: bool = false
+  // Mutually exclusive gate for the loaded, non-empty, non-failed grid.
+  state idle: bool = true
 
   // Scroll keeps children at natural size and clips, so compact frames
   // show a clean top slice instead of squeezing the whole layout.
@@ -58,12 +74,24 @@ app PhotoWall {
     }
     Container(p: 14, rounded: 14, shadow: 3, bg: "#F9FAFB") {
       Text("Gallery", size: 15, color: "#111827")
-      Row(gap: 10, bg: "#F9FAFB") {
-        Image(src: "assets/photo1.png", width: 112, height: 84, gradient: "#FFBE5A,#D6486E", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
-        Image(src: "assets/photo2.png", width: 112, height: 84, gradient: "#40E0D0,#0B488C", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
-        Image(src: "assets/photo3.png", width: 112, height: 84, gradient: "#A878FF,#242060", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
-        Image(src: "assets/photo4.png", width: 112, height: 84, gradient: "#7EE896,#0C4060", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
-        Image(src: "assets/photo5.png", width: 112, height: 84, gradient: "#FF7848,#781C40", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+      if (failed) {
+        Banner("Cannot read the photo folder", "The gallery source is not readable on this device", "error")
+      }
+      if (loading) {
+        Skeleton(112, 84)
+        Skeleton(112, 84)
+      }
+      if (empty) {
+        EmptyState("folder", "No photos yet", "Add images to the gallery folder to see them here")
+      }
+      if (idle) {
+        Row(gap: 10, bg: "#F9FAFB") {
+          Image(src: "assets/photo1.png", width: 112, height: 84, gradient: "#FFBE5A,#D6486E", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+          Image(src: "assets/photo2.png", width: 112, height: 84, gradient: "#40E0D0,#0B488C", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+          Image(src: "assets/photo3.png", width: 112, height: 84, gradient: "#A878FF,#242060", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+          Image(src: "assets/photo4.png", width: 112, height: 84, gradient: "#7EE896,#0C4060", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+          Image(src: "assets/photo5.png", width: 112, height: 84, gradient: "#FF7848,#781C40", rounded: 10, shadow: 2, animate: ease, label: "media/Image")
+        }
       }
     }
     Row(gap: 10) {

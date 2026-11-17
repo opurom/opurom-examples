@@ -1,5 +1,11 @@
 import "models/tasks.opu";
 import "views/panels.opu";
+// Workbench panels carry loading/empty/error placeholders for their data grid,
+// mirroring Flutter's async list handling (photo_search_model.dart:33-46,
+// unsplash_search_content.dart:47-74).
+import "components/empty_state.opu";
+import "components/skeleton.opu";
+import "components/banner.opu";
 
 // Reusable nodes stay in the entry file: imported modules accept only state,
 // model, api, theme and imports, so a component declaration there is rejected.
@@ -34,6 +40,10 @@ app Workbench {
   state dark = false
   state focus = "Build pipeline"
   state progress = 68
+  // Mutually exclusive boundary states; default is the loaded workbench.
+  state loading: bool = false
+  state empty: bool = false
+  state failed: bool = false
 
   computed backlog = openTasks + queueDepth
 
@@ -120,6 +130,16 @@ app Workbench {
               Container(p: 16, rounded: 14, shadow: 3, gradient: "#101828,#2A5BD7") {
                 Text("Dark session active for {crew}", size: 14, color: "#FFFFFF")
               }
+            }
+            if (loading) {
+              Skeleton(788, 24)
+              Skeleton(788, 24)
+            }
+            if (empty) {
+              EmptyState("folder", "No tasks yet", "Create a task to fill the workbench")
+            }
+            if (failed) {
+              Banner("Tasks unavailable", "The task service did not answer the last request", "error")
             }
           }
         }

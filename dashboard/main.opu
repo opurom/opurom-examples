@@ -1,6 +1,13 @@
 // Standardized Material 3 Telemetry Console dashboard.
 import "models/metrics.opu";
 import "views/cards.opu";
+// Telemetry lists need the three boundary states Flutter's Material widgets
+// expect: a loading skeleton, an empty placeholder and an error notice.
+// Source: flutter-samples/desktop_photo_search/material/lib/src/model/photo_search_model.dart:33-46,
+// widgets/unsplash_search_content.dart:47-74.
+import "components/empty_state.opu";
+import "components/skeleton.opu";
+import "components/banner.opu";
 
 component KpiCard(label: string, metric: string, delta: string, icon: string, tone: string) {
   // md-sys-color-surface-container-low; two-layer elevation = gap M2
@@ -51,6 +58,11 @@ app Dashboard {
   state alerts = true
   state load = 64
   state refreshed = 0
+  // Mutually exclusive boundary states; default is the loaded dashboard.
+  state loading: bool = false
+  state empty: bool = false
+  state failed: bool = false
+  state idle: bool = true
 
   computed throughput = doneTasks - openTasks
   computed health = 100 - errorRate
@@ -169,6 +181,18 @@ app Dashboard {
                   Icon(name: "alert-triangle", width: 48, height: 48, color: "#FFFFFF", label: "dash/alert_icon")
                   Text("{incidents} incidents need attention", size: 33, fontPx: 33, weight: "normal", color: "#FFFFFF", label: "dash/alert_text")
                 }
+              }
+              Spacer(height: 72)
+              // Boundary states follow the Material loading/empty/error contract.
+              if (loading) {
+                Skeleton(984, 24)
+                Skeleton(984, 24)
+              }
+              if (empty) {
+                EmptyState("folder", "No telemetry yet", "Connect a source to populate the console")
+              }
+              if (failed) {
+                Banner("Telemetry unavailable", "The service did not answer the last request", "error")
               }
               Spacer(height: 72)
             }
