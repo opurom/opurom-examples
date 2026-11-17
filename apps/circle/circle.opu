@@ -19,6 +19,7 @@ import "components/chip.opu"
 import "components/form_field.opu"
 import "components/banner.opu"
 import "components/empty_state.opu"
+import "components/skeleton.opu"
 import "components/pagination.opu"
 import "components/progress.opu"
 import "components/confirm_dialog.opu"
@@ -70,6 +71,9 @@ app Circle {
 
   // Browse and form state.
   state search = ""
+  // List loading state: Flutter CircularProgressIndicator
+  // (material/progress_indicator.dart:863) as a Skeleton stand-in.
+  state listLoading = false
   state newTitle = ""
   state newTopic = ""
   state created = false
@@ -164,11 +168,20 @@ app Circle {
       Row(gap: 8, align: center) {
         Input(placeholder: "Search circles", bind: search, maxLength: 40)
         Button("Sync from api", p: 8, rounded: 8, shadow: 1, bg: "#097FEB") async {
+          listLoading = true
           await fetch("/circles?limit=5", circlesJson)
+          listLoading = false
         }
       }
       Text("{circlesJson}", size: 10, color: "#667085")
 
+      if (listLoading) {
+        Column(gap: 6) {
+          Skeleton(320, 48)
+          Skeleton(320, 48)
+          Skeleton(320, 48)
+        }
+      }
       // GET /circles answers this envelope; rows below are the expanded view.
       for (row in circleRows) {
         CircleRow("{row}", "weekly threads", "members")
