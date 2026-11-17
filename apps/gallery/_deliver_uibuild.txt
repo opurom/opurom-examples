@@ -1,0 +1,188 @@
+// DELIVERABLE: uibuild / Navigation Drawer group (3 golden screens).
+// Paste into apps/gallery/flutter_gallery.opu app block. Pure text, not compiled here.
+//
+// GLOBAL STATE DECLARATIONS (add to the app root state list):
+//   state drawerOpen = false
+//   state item = "one"
+//
+// ROOT REQUIREMENTS (owned by the main file, do NOT duplicate in these routes):
+//   quality { msaa: 4 }
+//   theme { ... fontMetrics: proportional ... }   <-- REQUIRED: without
+//       proportional metrics the software raster expands letter spacing and the
+//       hint text width blows up (verified: Fixed ~900px vs golden 690px).
+//
+// NAVIGATION FLOW (real, state/route driven, not baked frames):
+//   DrawerClosed --hamburger push--> DrawerOpen
+//   DrawerOpen --scrim / Item One pop--> DrawerClosed
+//   DrawerOpen --Item Two push--> DrawerItem2
+//   DrawerItem2 --hamburger push--> DrawerOpen
+//
+// ICONS: only compiler built-ins (opurom-icons official names subset):
+//   arrow_back, info, edit, folder, heart, chat. Hamburger is three bars drawn
+//   from Containers because 'menu' is NOT in the 32-name builtin set (gap).
+//
+// KERNEL GAPS (reported, not fabricated):
+//   - L1 / route-level overlay: no stack/overlay primitive; the open drawer is a
+//     separate route frame, not a composited layer over the body.
+//   - Edge-drag to open: gesture:drag has no direction/threshold config (B3);
+//     only tap-to-open is implemented.
+//   - Circular avatar: rounded:94 approximates a disc; true circle is gap M1.
+//   - 'menu' icon name is an opurom-icons official name but NOT in the
+//     compiler's 32-name builtin set, so hamburger is three drawn bars.
+
+  route DrawerClosed {
+    Container(width: 1080, height: 2400, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+      Column(p: 0, gap: 0) {
+        Container(width: 1080, height: 128, color: "#ACB0B0", border: "#ACB0B0", p: 0)
+        Container(width: 1080, height: 147, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+          Row(p: 0, gap: 0, align: start) {
+            Spacer(width: 60)
+            Icon(name: "arrow_back", width: 60, height: 60, color: "#D50000", label: "drawer/topbar_back")
+            Spacer(width: 548)
+            Icon(name: "info", width: 60, height: 60, color: "#202124", label: "drawer/topbar_info")
+            Spacer(width: 60)
+            Icon(name: "edit", width: 60, height: 60, color: "#202124", label: "drawer/topbar_code")
+            Spacer(width: 60)
+            Icon(name: "folder", width: 60, height: 60, color: "#202124", label: "drawer/topbar_copy")
+          }
+        }
+        Row(p: 0, gap: 0, align: start) {
+          Spacer(width: 42)
+          Column(p: 0, gap: 0, align: start) {
+            Container(width: 996, height: 138, rounded: 24, color: "#6200EE", border: "#6200EE", p: 0) {
+              Row(p: 0, gap: 0, align: center) {
+                Spacer(width: 48)
+                Container(width: 72, height: 138, color: "#6200EE", border: "#6200EE", p: 0, gesture: "tap") {
+                  Column(p: 0, gap: 12, align: center) {
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                  }
+                  Button(" ", variant: "ghost", color: "#FFFFFF", p: 0) { push: DrawerOpen }
+                }
+                Spacer(width: 24)
+                Text("Navigation Drawer", size: 60, color: "#FFFFFF", label: "drawer/appbar_title")
+              }
+            }
+            Spacer(height: 33)
+            Container(width: 996, height: 1902, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+              Column(p: 0, gap: 0, align: center) {
+                Spacer(height: 830)
+                Text("Swipe from the edge or tap the upper-left", size: 30, color: "#000000", label: "drawer/hint_1")
+                Text("icon to see the drawer", size: 30, color: "#000000", label: "drawer/hint_2")
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  route DrawerOpen {
+    Container(width: 1080, height: 2400, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+      Column(p: 0, gap: 0) {
+        Container(width: 1080, height: 128, color: "#ACB0B0", border: "#ACB0B0", p: 0)
+        Container(width: 1080, height: 147, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+          Row(p: 0, gap: 0, align: start) {
+            Spacer(width: 60)
+            Icon(name: "arrow_back", width: 60, height: 60, color: "#D50000", label: "drawer/topbar_back")
+            Spacer(width: 548)
+            Icon(name: "info", width: 60, height: 60, color: "#202124", label: "drawer/topbar_info")
+          }
+        }
+        Row(p: 0, gap: 0, align: start) {
+          Spacer(width: 42)
+          Column(p: 0, gap: 0, align: start) {
+            Container(width: 798, height: 421, color: "#6200EE", border: "#6200EE", p: 0) {
+              Column(p: 0, gap: 0, align: start) {
+                Spacer(height: 42)
+                Row(p: 0, gap: 0, align: start) {
+                  Spacer(width: 42)
+                  Container(width: 189, height: 189, rounded: 94, color: "#1976D2", border: "#1976D2", p: 0)
+                }
+                Spacer(height: 18)
+                Row(p: 0, gap: 0, align: start) {
+                  Spacer(width: 46)
+                  Column(p: 0, gap: 0, align: start) {
+                    Text("User Name", size: 54, color: "#FFFFFF", label: "drawer/user_name")
+                    Text("user.name@example.com", size: 45, color: "#FFFFFF", label: "drawer/user_email")
+                  }
+                }
+              }
+            }
+            Container(width: 798, height: 1652, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+              Column(p: 0, gap: 0, align: start) {
+                Spacer(height: 56)
+                Container(width: 798, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+                  Row(p: 0, gap: 0, align: center) {
+                    Spacer(width: 48)
+                    Icon(name: "heart", width: 50, height: 50, color: "#8C8C8C", label: "drawer/item_one_icon")
+                    Spacer(width: 14)
+                    Text("Item One", size: 48, color: "#000000", label: "drawer/item_one")
+                  }
+                  Button(" ", variant: "ghost", color: "#FFFFFF", p: 0) { pop }
+                }
+                Spacer(height: 24)
+                Container(width: 798, height: 150, color: "#FFFFFF", border: "#FFFFFF", p: 0, gesture: "tap") {
+                  Row(p: 0, gap: 0, align: center) {
+                    Spacer(width: 48)
+                    Icon(name: "chat", width: 50, height: 50, color: "#8C8C8C", label: "drawer/item_two_icon")
+                    Spacer(width: 14)
+                    Text("Item Two", size: 48, color: "#000000", label: "drawer/item_two")
+                  }
+                  Button(" ", variant: "ghost", color: "#FFFFFF", p: 0) { item = "two"; push: DrawerItem2 }
+                }
+              }
+            }
+          }
+          Container(width: 240, height: 2073, color: "#747474", border: "#747474", p: 0, gesture: "tap") {
+            Button(" ", variant: "ghost", color: "#747474", p: 0) { pop }
+          }
+        }
+      }
+    }
+  }
+
+  route DrawerItem2 {
+    Container(width: 1080, height: 2400, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+      Column(p: 0, gap: 0) {
+        Container(width: 1080, height: 128, color: "#ACB0B0", border: "#ACB0B0", p: 0)
+        Container(width: 1080, height: 147, color: "#E6EBEB", border: "#E6EBEB", p: 0) {
+          Row(p: 0, gap: 0, align: start) {
+            Spacer(width: 60)
+            Icon(name: "arrow_back", width: 60, height: 60, color: "#D50000", label: "drawer/topbar_back")
+            Spacer(width: 548)
+            Icon(name: "info", width: 60, height: 60, color: "#202124", label: "drawer/topbar_info")
+          }
+        }
+        Row(p: 0, gap: 0, align: start) {
+          Spacer(width: 42)
+          Column(p: 0, gap: 0, align: start) {
+            Container(width: 996, height: 138, rounded: 24, color: "#6200EE", border: "#6200EE", p: 0) {
+              Row(p: 0, gap: 0, align: center) {
+                Spacer(width: 48)
+                Container(width: 72, height: 138, color: "#6200EE", border: "#6200EE", p: 0, gesture: "tap") {
+                  Column(p: 0, gap: 12, align: center) {
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                    Container(width: 48, height: 5, color: "#FFFFFF", p: 0)
+                  }
+                  Button(" ", variant: "ghost", color: "#FFFFFF", p: 0) { push: DrawerOpen }
+                }
+                Spacer(width: 24)
+                Text("Navigation Drawer", size: 60, color: "#FFFFFF", label: "drawer/appbar_title")
+              }
+            }
+            Spacer(height: 33)
+            Container(width: 996, height: 1902, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+              Column(p: 0, gap: 0, align: center) {
+                Spacer(height: 830)
+                Text("Swipe from the edge or tap the upper-left", size: 30, color: "#000000", label: "drawer/hint_1")
+                Text("icon to see the drawer", size: 30, color: "#000000", label: "drawer/hint_2")
+              }
+            }
+          }
+        }
+      }
+    }
+  }

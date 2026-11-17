@@ -188,6 +188,174 @@
           ],
           "description": "type-check the source with opuromc"
         },
+    {
+      "name": "gallery-components",
+      "source": "apps/gallery_components/gallery_components.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-components.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the components replica source"
+        },
+        {
+          "id": "gallery-components.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the components replica to IR"
+        },
+        {
+          "id": "gallery-components.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2200",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the components replica to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "gallery-typography",
+      "source": "apps/gallery_typography/gallery_typography.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-typography.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the typography replica source"
+        },
+        {
+          "id": "gallery-typography.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the typography replica to IR"
+        },
+        {
+          "id": "gallery-typography.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2400",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the typography replica to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "gallery-colors",
+      "source": "apps/gallery_colors/gallery_colors.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-colors.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the colors replica source"
+        },
+        {
+          "id": "gallery-colors.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the colors replica to IR"
+        },
+        {
+          "id": "gallery-colors.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2400",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the colors replica to a PPM frame"
+        }
+      ]
+    },
+    {
+      "name": "gallery-cards",
+      "source": "apps/gallery_cards/gallery_cards.opu",
+      "required": false,
+      "targets": [
+        "web",
+        "native"
+      ],
+      "tests": [
+        {
+          "id": "gallery-cards.check",
+          "cmd": [
+            "opuromc",
+            "check",
+            "{source}"
+          ],
+          "description": "type-check the cards replica source"
+        },
+        {
+          "id": "gallery-cards.compile",
+          "cmd": [
+            "opuromc",
+            "compile",
+            "{source}",
+            "-o",
+            "{tmp}/app.opuir.json"
+          ],
+          "description": "compile the cards replica to IR"
+        },
+        {
+          "id": "gallery-cards.render",
+          "cmd": [
+            "opurom-render",
+            "{tmp}/app.opuir.json",
+            "1080",
+            "2400",
+            "{tmp}/frame.ppm"
+          ],
+          "description": "render the cards replica to a PPM frame"
+        }
+      ]
+    },
         {
           "id": "gallery.compile",
           "cmd": [

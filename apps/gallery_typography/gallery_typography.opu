@@ -1,0 +1,262 @@
+// Standardized Material 3 Typography page. Token values are in 3x canvas px.
+app GalleryTypography {
+  // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
+  quality { msaa: 4 }
+  // md-sys-color-surface
+  Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+    Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      // md-sys-color-surface
+      Container(width: 1080, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "arrow-left", width: 72, height: 72, color: "#000000", label: "typography/topbar_back")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "info-circle", width: 72, height: 72, color: "#000000", label: "typography/topbar_info")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "code", width: 72, height: 72, color: "#000000", label: "typography/topbar_code")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "devices", width: 72, height: 72, color: "#000000", label: "typography/topbar_devices")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 648, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              // engLike2021 uses w400, brief says 500
+              Text("Typography", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "typography/title")
+            }
+          }
+        }
+      }
+      Scroll(height: 2232) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 984, height: 2232, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-type-display-large
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Display Large", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_1")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("57 / 400 / 64", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_1")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Display Large", size: 224, fontPx: 224, weight: "normal", color: "#000000", label: "typography/sample_1")
+              Spacer(height: 72)
+              // md-type-display-medium
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Display Medium", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_2")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("45 / 400 / 52", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_2")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Display Medium", size: 140, fontPx: 140, weight: "normal", color: "#000000", label: "typography/sample_2")
+              Spacer(height: 72)
+              // md-type-display-small
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Display Small", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_3")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("36 / 400 / 44", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_3")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Display Small", size: 113, fontPx: 113, weight: "normal", color: "#000000", label: "typography/sample_3")
+              Spacer(height: 72)
+              // md-type-headline-large
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Headline Large", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_4")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("32 / 400 / 40", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_4")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Headline Large", size: 80, fontPx: 80, weight: "normal", color: "#000000", label: "typography/sample_4")
+              Spacer(height: 72)
+              // md-type-headline-medium
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Headline Medium", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_5")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("28 / 400 / 36", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_5")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Headline Medium", size: 58, fontPx: 58, weight: "normal", color: "#000000", label: "typography/sample_5")
+              Spacer(height: 72)
+              // md-type-headline-small
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Headline Small", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_6")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("24 / 400 / 32", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_6")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Headline Small", size: 47, fontPx: 47, weight: "normal", color: "#000000", label: "typography/sample_6")
+              Spacer(height: 72)
+              // md-type-title-large
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Title Large", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_7")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("22 / 500 / 28", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_7")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Title Large", size: 52, fontPx: 52, weight: "bold", color: "#000000", label: "typography/sample_7")
+              Spacer(height: 72)
+              // md-type-title-medium
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Title Medium", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_8")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("16 / 500 / 24", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_8")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Title Medium", size: 38, fontPx: 38, weight: "bold", color: "#000000", label: "typography/sample_8")
+              Spacer(height: 72)
+              // md-type-title-small
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Title Small", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_9")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("14 / 500 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_9")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Title Small", size: 42, fontPx: 42, weight: "bold", color: "#000000", label: "typography/sample_9")
+              Spacer(height: 72)
+              // md-type-body-large
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Body Large", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_10")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("16 / 400 / 24", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_10")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Body Large", size: 38, fontPx: 38, weight: "normal", color: "#000000", label: "typography/sample_10")
+              Spacer(height: 72)
+              // md-type-body-medium
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Body Medium", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_11")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("14 / 400 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_11")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Body Medium", size: 42, fontPx: 42, weight: "normal", color: "#000000", label: "typography/sample_11")
+              Spacer(height: 72)
+              // md-type-body-small
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Body Small", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_12")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("12 / 400 / 16", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_12")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Body Small", size: 28, fontPx: 28, weight: "normal", color: "#000000", label: "typography/sample_12")
+              Spacer(height: 72)
+              // md-type-label-large
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Label Large", size: 33, fontPx: 33, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_13")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("14 / 500 / 20", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_13")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Label Large", size: 42, fontPx: 42, weight: "bold", color: "#000000", label: "typography/sample_13")
+              Spacer(height: 72)
+              // md-type-label-medium
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Label Medium", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_14")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("12 / 500 / 16", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_14")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Label Medium", size: 28, fontPx: 28, weight: "bold", color: "#000000", label: "typography/sample_14")
+              Spacer(height: 72)
+              // md-type-label-small
+              // lineHeight approx via spacer, gap B12; delta {lh-sp}sp -> {(lh-sp)*3}px
+              Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+                // md-sys-color-on-surface-variant (JSON equals onSurface; opacity gives visible hierarchy)
+                Text("Label Small", size: 42, fontPx: 42, weight: "normal", opacity: 0.6, color: "#000000", label: "typography/name_15")
+                Spacer(width: 48)
+                // md-sys-color-on-surface-variant
+                Text("11 / 500 / 16", size: 33, fontPx: 33, weight: "bold", opacity: 0.6, color: "#000000", label: "typography/param_15")
+              }
+              Spacer(height: 24)
+              // md-sys-color-on-surface
+              Text("Label Small", size: 26, fontPx: 26, weight: "bold", color: "#000000", label: "typography/sample_15")
+              Spacer(height: 72)
+              Spacer(height: 72)
+            }
+          }
+        }
+      }
+    }
+  }
+}

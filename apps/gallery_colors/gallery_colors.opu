@@ -1,0 +1,331 @@
+// Standardized Material 3 Colors page. Palettes are Flutter Material demo data.
+component Swatch(tone: string, bg: string, hexText: string, safeGap: int, ink: string) {
+  // Each swatch carries its own bg and label; 48px right safety margin.
+  Container(width: 1080, height: 144, color: "{bg}", border: "{bg}", p: 0, gesture: "tap") {
+    Row(p: 0, gap: 0, align: start, color: "{bg}", border: "{bg}") {
+      Spacer(width: 48)
+      Text("{tone}", size: 42, fontPx: 42, weight: "normal", color: "{ink}", label: "colors/name_{tone}")
+      Spacer(width: safeGap)
+      Text("{hexText}", size: 42, fontPx: 42, weight: "normal", color: "{ink}", label: "colors/hex_{tone}")
+    }
+  }
+}
+
+app GalleryColors {
+  // msaa: 4 enables the deterministic 4x integer edge coverage on rounded corners.
+  quality { msaa: 4 }
+  // Dynamic tabs: 'if' takes a bare bool state; IR has no int equality.
+  state tabRed = true
+  state tabPink = false
+  state tabPurple = false
+  state tabDeep = false
+
+  // md-sys-color-surface
+  Container(width: 1080, height: 2400, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+    Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      // md-sys-color-surface
+      Container(width: 1080, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "arrow-left", width: 72, height: 72, color: "#000000", label: "colors/topbar_back")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "info-circle", width: 72, height: 72, color: "#000000", label: "colors/topbar_info")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "code", width: 72, height: 72, color: "#000000", label: "colors/topbar_code")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 72, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface
+              Icon(name: "devices", width: 72, height: 72, color: "#000000", label: "colors/topbar_devices")
+            }
+          }
+          Spacer(width: 24)
+          Container(width: 648, height: 168, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 48)
+              // md-sys-color-on-surface; engLike2021 uses w400, brief says 500
+              Text("Colors", size: 66, fontPx: 66, weight: "bold", color: "#000000", label: "colors/title")
+            }
+          }
+        }
+      }
+      // onTabSelected/onIndicatorMoved/onContentChanged bound via tabRed/... bool states.
+      // onDragUpdate/onDragEnd await A2/B3 gesture lerp; no static placeholder.
+      Container(width: 1080, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 48)
+          // md-sys-color-surface; selected RED tab
+          Container(width: 200, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              if (tabRed) {
+                // md-sys-color-primary; native Button five-state press feedback
+                Button("RED", width: 200, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  tabRed = true
+                  tabPink = false
+                  tabPurple = false
+                  tabDeep = false
+                }
+              } else {
+                // md-sys-color-on-surface-variant
+                Button("RED", width: 200, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  tabRed = true
+                  tabPink = false
+                  tabPurple = false
+                  tabDeep = false
+                }
+              }
+              if (tabRed) {
+                // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
+                Container(width: 90, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+              } else {
+                Container(width: 90, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+              }
+            }
+          }
+          // md-sys-color-surface; unselected PINK tab
+          Container(width: 220, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              if (tabPink) {
+                // md-sys-color-primary; native Button five-state press feedback
+                Button("PINK", width: 220, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  tabRed = false
+                  tabPink = true
+                  tabPurple = false
+                  tabDeep = false
+                }
+              } else {
+                // md-sys-color-on-surface-variant
+                Button("PINK", width: 220, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  tabRed = false
+                  tabPink = true
+                  tabPurple = false
+                  tabDeep = false
+                }
+              }
+              if (tabPink) {
+                // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
+                Container(width: 120, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+              } else {
+                Container(width: 120, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+              }
+            }
+          }
+          // md-sys-color-surface; unselected PURPLE tab
+          Container(width: 250, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              if (tabPurple) {
+                // md-sys-color-primary; native Button five-state press feedback
+                Button("PURPLE", width: 250, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  tabRed = false
+                  tabPink = false
+                  tabPurple = true
+                  tabDeep = false
+                }
+              } else {
+                // md-sys-color-on-surface-variant
+                Button("PURPLE", width: 250, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  tabRed = false
+                  tabPink = false
+                  tabPurple = true
+                  tabDeep = false
+                }
+              }
+              if (tabPurple) {
+                // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
+                Container(width: 180, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+              } else {
+                Container(width: 180, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+              }
+            }
+          }
+          // md-sys-color-surface; unselected DEEP PURPLE tab
+          Container(width: 362, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+              Spacer(height: 40)
+              if (tabDeep) {
+                // md-sys-color-primary; native Button five-state press feedback
+                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                  tabRed = false
+                  tabPink = false
+                  tabPurple = false
+                  tabDeep = true
+                }
+              } else {
+                // md-sys-color-on-surface-variant
+                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                  tabRed = false
+                  tabPink = false
+                  tabPurple = false
+                  tabDeep = true
+                }
+              }
+              if (tabDeep) {
+                // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
+                Container(width: 330, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+              } else {
+                Container(width: 330, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
+              }
+            }
+          }
+        }
+      }
+      Scroll(height: 2088) {
+        // 14 full 144px rows per palette; A700 is a complete row, not a viewport-clipped strip.
+        if (tabRed) {
+          Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+            // material red palette, demo data 50 #FFEBEE
+            Swatch("50", "#FFEBEE", "#FFFFEBEE", 654, "#000000")
+            // material red palette, demo data 100 #FFCDD2
+            Swatch("100", "#FFCDD2", "#FFFFCDD2", 624, "#000000")
+            // material red palette, demo data 200 #EF9A9A
+            Swatch("200", "#EF9A9A", "#FFEF9A9A", 624, "#000000")
+            // material red palette, demo data 300 #E57373
+            Swatch("300", "#E57373", "#FFE57373", 624, "#000000")
+            // material red palette, demo data 400 #EF5350
+            Swatch("400", "#EF5350", "#FFEF5350", 624, "#000000")
+            // material red palette, demo data 500 #F44336
+            Swatch("500", "#F44336", "#FFF44336", 624, "#FFFFFF")
+            // material red palette, demo data 600 #E53935
+            Swatch("600", "#E53935", "#FFE53935", 624, "#FFFFFF")
+            // material red palette, demo data 700 #D32F2F
+            Swatch("700", "#D32F2F", "#FFD32F2F", 624, "#FFFFFF")
+            // material red palette, demo data 800 #C62828
+            Swatch("800", "#C62828", "#FFC62828", 624, "#FFFFFF")
+            // material red palette, demo data 900 #B71C1C
+            Swatch("900", "#B71C1C", "#FFB71C1C", 624, "#FFFFFF")
+            // material red palette, demo data A100 #FF8A80
+            Swatch("A100", "#FF8A80", "#FFFF8A80", 594, "#FFFFFF")
+            // material red palette, demo data A200 #FF5252
+            Swatch("A200", "#FF5252", "#FFFF5252", 594, "#FFFFFF")
+            // material red palette, demo data A400 #FF1744
+            Swatch("A400", "#FF1744", "#FFFF1744", 594, "#FFFFFF")
+            // material red palette, demo data A700 #D50000
+            Swatch("A700", "#D50000", "#FFD50000", 594, "#FFFFFF")
+            Spacer(height: 72)
+          }
+        }
+        if (tabPink) {
+          Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+            // material pink palette, demo data 50 #FCE4EC
+            Swatch("50", "#FCE4EC", "#FFFCE4EC", 654, "#000000")
+            // material pink palette, demo data 100 #F8BBD0
+            Swatch("100", "#F8BBD0", "#FFF8BBD0", 624, "#000000")
+            // material pink palette, demo data 200 #F48FB1
+            Swatch("200", "#F48FB1", "#FFF48FB1", 624, "#000000")
+            // material pink palette, demo data 300 #F06292
+            Swatch("300", "#F06292", "#FFF06292", 624, "#000000")
+            // material pink palette, demo data 400 #EC407A
+            Swatch("400", "#EC407A", "#FFEC407A", 624, "#000000")
+            // material pink palette, demo data 500 #E91E63
+            Swatch("500", "#E91E63", "#FFE91E63", 624, "#FFFFFF")
+            // material pink palette, demo data 600 #D81B60
+            Swatch("600", "#D81B60", "#FFD81B60", 624, "#FFFFFF")
+            // material pink palette, demo data 700 #C2185B
+            Swatch("700", "#C2185B", "#FFC2185B", 624, "#FFFFFF")
+            // material pink palette, demo data 800 #AD1457
+            Swatch("800", "#AD1457", "#FFAD1457", 624, "#FFFFFF")
+            // material pink palette, demo data 900 #880E4F
+            Swatch("900", "#880E4F", "#FF880E4F", 624, "#FFFFFF")
+            // material pink palette, demo data A100 #FF80AB
+            Swatch("A100", "#FF80AB", "#FFFF80AB", 594, "#FFFFFF")
+            // material pink palette, demo data A200 #FF4081
+            Swatch("A200", "#FF4081", "#FFFF4081", 594, "#FFFFFF")
+            // material pink palette, demo data A400 #F50057
+            Swatch("A400", "#F50057", "#FFF50057", 594, "#FFFFFF")
+            // material pink palette, demo data A700 #C51162
+            Swatch("A700", "#C51162", "#FFC51162", 594, "#FFFFFF")
+            Spacer(height: 72)
+          }
+        }
+        if (tabPurple) {
+          Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+            // material purple palette, demo data 50 #F3E5F5
+            Swatch("50", "#F3E5F5", "#FFF3E5F5", 654, "#000000")
+            // material purple palette, demo data 100 #E1BEE7
+            Swatch("100", "#E1BEE7", "#FFE1BEE7", 624, "#000000")
+            // material purple palette, demo data 200 #CE93D8
+            Swatch("200", "#CE93D8", "#FFCE93D8", 624, "#000000")
+            // material purple palette, demo data 300 #BA68C8
+            Swatch("300", "#BA68C8", "#FFBA68C8", 624, "#000000")
+            // material purple palette, demo data 400 #AB47BC
+            Swatch("400", "#AB47BC", "#FFAB47BC", 624, "#000000")
+            // material purple palette, demo data 500 #9C27B0
+            Swatch("500", "#9C27B0", "#FF9C27B0", 624, "#FFFFFF")
+            // material purple palette, demo data 600 #8E24AA
+            Swatch("600", "#8E24AA", "#FF8E24AA", 624, "#FFFFFF")
+            // material purple palette, demo data 700 #7B1FA2
+            Swatch("700", "#7B1FA2", "#FF7B1FA2", 624, "#FFFFFF")
+            // material purple palette, demo data 800 #6A1B9A
+            Swatch("800", "#6A1B9A", "#FF6A1B9A", 624, "#FFFFFF")
+            // material purple palette, demo data 900 #4A148C
+            Swatch("900", "#4A148C", "#FF4A148C", 624, "#FFFFFF")
+            // material purple palette, demo data A100 #EA80FC
+            Swatch("A100", "#EA80FC", "#FFEA80FC", 594, "#FFFFFF")
+            // material purple palette, demo data A200 #E040FB
+            Swatch("A200", "#E040FB", "#FFE040FB", 594, "#FFFFFF")
+            // material purple palette, demo data A400 #D500F9
+            Swatch("A400", "#D500F9", "#FFD500F9", 594, "#FFFFFF")
+            // material purple palette, demo data A700 #AA00FF
+            Swatch("A700", "#AA00FF", "#FFAA00FF", 594, "#FFFFFF")
+            Spacer(height: 72)
+          }
+        }
+        if (tabDeep) {
+          Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+            // material deep purple palette, demo data 50 #EDE7F6
+            Swatch("50", "#EDE7F6", "#FFEDE7F6", 654, "#000000")
+            // material deep purple palette, demo data 100 #D1C4E9
+            Swatch("100", "#D1C4E9", "#FFD1C4E9", 624, "#000000")
+            // material deep purple palette, demo data 200 #B39DDB
+            Swatch("200", "#B39DDB", "#FFB39DDB", 624, "#000000")
+            // material deep purple palette, demo data 300 #9575CD
+            Swatch("300", "#9575CD", "#FF9575CD", 624, "#000000")
+            // material deep purple palette, demo data 400 #7E57C2
+            Swatch("400", "#7E57C2", "#FF7E57C2", 624, "#000000")
+            // material deep purple palette, demo data 500 #673AB7
+            Swatch("500", "#673AB7", "#FF673AB7", 624, "#FFFFFF")
+            // material deep purple palette, demo data 600 #5E35B1
+            Swatch("600", "#5E35B1", "#FF5E35B1", 624, "#FFFFFF")
+            // material deep purple palette, demo data 700 #512DA8
+            Swatch("700", "#512DA8", "#FF512DA8", 624, "#FFFFFF")
+            // material deep purple palette, demo data 800 #4527A0
+            Swatch("800", "#4527A0", "#FF4527A0", 624, "#FFFFFF")
+            // material deep purple palette, demo data 900 #311B92
+            Swatch("900", "#311B92", "#FF311B92", 624, "#FFFFFF")
+            // material deep purple palette, demo data A100 #B388FF
+            Swatch("A100", "#B388FF", "#FFB388FF", 594, "#FFFFFF")
+            // material deep purple palette, demo data A200 #7C4DFF
+            Swatch("A200", "#7C4DFF", "#FF7C4DFF", 594, "#FFFFFF")
+            // material deep purple palette, demo data A400 #651FFF
+            Swatch("A400", "#651FFF", "#FF651FFF", 594, "#FFFFFF")
+            // material deep purple palette, demo data A700 #6200EA
+            Swatch("A700", "#6200EA", "#FF6200EA", 594, "#FFFFFF")
+            Spacer(height: 72)
+          }
+        }
+      }
+    }
+  }
+}
