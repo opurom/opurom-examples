@@ -1,5 +1,5 @@
 // DELIVERABLE: ui-migrate / Styles + Typography + dark Home group (7 routes).
-// Contract: opurom-spec/FLUTTER_GALLERY_SINGLE_APP.md. Pure text, not compiled here.
+// Contract: opurom-spec/OPUROM_GALLERY_SINGLE_APP.md. Pure text, not compiled here.
 // All content copied from device-verified apps/gallery_* sources; new rows use
 // golden-measured fontPx and opurom-icons official names. No baked text.
 //

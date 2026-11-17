@@ -1,5 +1,5 @@
-# Route text blocks for app FlutterGallery (mobile-fix group)
-# Deliver text only; Chief merges into apps/gallery/flutter_gallery.opu.
+# Route text blocks for app OpuromGallery (mobile-fix group)
+# Deliver text only; Chief merges into apps/gallery/opurom_gallery.opu.
 # quality { msaa: 4 } is declared at the single app root, not here.
 #
 # Global state keys used by these routes (declare ONCE at app level):
@@ -444,7 +444,7 @@
           Spacer(width: 84)
           Icon(name: "info-circle", width: 56, height: 56, color: "#7A7E8A", label: "settings/about_icon")
           Spacer(width: 28)
-          Text("About Flutter Gallery", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "settings/about")
+          Text("About Opurom Gallery", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "settings/about")
         }
         Spacer(height: 40)
         Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
