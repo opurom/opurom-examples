@@ -22,6 +22,8 @@ import "components/confirm_dialog.opu"
 import "components/section_header.opu"
 import "components/chip.opu"
 import "components/form_field.opu"
+import "components/empty_state.opu"
+import "components/skeleton.opu"
 
 // One board card: title, assignee initials and its status pill.
 component TaskCard(title: string, assignee: string, status: string) {
@@ -68,6 +70,10 @@ app TeamHub {
   // Projects table interaction state.
   state search = ""
   state tablePage = 1
+  // List three-state flags: loading skeleton, error retry, empty placeholder.
+  state tableLoading = false
+  state tableError = false
+  state tableEmpty = false
   state sortAsc = true
   state filterActive = true
   state filterPaused = false
@@ -289,6 +295,8 @@ app TeamHub {
           sortAsc.toggle()
         }
         Button("Refresh") {
+          tableLoading = true
+          tableError = false
           tablePage = 1
           created = false
         }
@@ -306,10 +314,50 @@ app TeamHub {
         Button("Page {tablePage}") {
           tablePage += 1
         }
+        Button("Loaded") {
+          tableLoading = false
+          tableError = false
+          tableEmpty = false
+        }
+        Button("Failed") {
+          tableLoading = false
+          tableError = true
+          tableEmpty = false
+        }
+        Button("Empty") {
+          tableLoading = false
+          tableError = false
+          tableEmpty = true
+        }
       }
 
       CaptionText("filter: {search}")
 
+      // Three-state block for the project list. Flutter: loading uses
+      // CircularProgressIndicator (material/progress_indicator.dart:863),
+      // rendered here as Skeleton stand-ins; error retry follows
+      // RefreshIndicator (material/refresh_indicator.dart:138).
+      // Flat sibling gates: the language rejects nested else and comparisons.
+      if (tableLoading) {
+        Column(gap: 6) {
+          Skeleton(320, 44)
+          Skeleton(320, 44)
+          Skeleton(320, 44)
+        }
+      }
+      if (tableError) {
+        Column(gap: 6) {
+          Text("Could not load projects", size: 13, color: "#B00020")
+          Button("Retry", p: 8, rounded: 8, bg: "#1F1F1F") {
+            tableLoading = true
+            tableError = false
+            tablePage = 1
+          }
+        }
+      }
+      if (tableEmpty) {
+        EmptyState("folder", "No projects", "Create one to get started")
+      }
       // Registry DataTable renders the current sort view; component arguments
       // are literals, so both directions spell their rows out explicitly.
       if (sortAsc) {
