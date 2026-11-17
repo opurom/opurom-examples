@@ -7,6 +7,8 @@
 import "components/navbar.opu"
 import "components/text.opu"
 import "components/toast.opu"
+import "components/empty_state.opu"
+import "components/skeleton.opu"
 
 app Forum {
   model User {
@@ -76,6 +78,8 @@ app Forum {
   // roles; these pages mirror the outcome so the ladder is visible in the UI.
   state authOk = false
   state authMsg = ""
+  state loginInvalid = false
+  state regInvalid = false
   state regUser = ""
   state regPass = ""
   state registered = false
@@ -91,11 +95,20 @@ app Forum {
   // titles selected by mutually exclusive page gates, like photos.opu.
   state heroTitle = "Welcome to the forum"
   state feedPage = 1
+  // Three-state block flags: loading during sync, error after a failed fetch.
+  state feedLoading = false
+  state feedError = false
+  state feedEmpty = false
   state postA = true
   state postB = true
   state postC = true
 
-  theme { mode: light, accent: "#097FEB", radius: 14 }
+  // Page transition: Flutter Material default is 450ms
+  // (material/page_transitions_theme.dart:470) on Curves.easeInOutCubicEmphasized
+  // (page_transitions_theme.dart:484). The IR vocabulary is slide|fade|scale;
+  // scale is the zoom+fade equivalent. Declared here; runtime consumption is a
+  // lang/render/mobile gap reported to Chief.
+  theme { mode: light, accent: "#097FEB", radius: 14, transition: scale }
 
   route Feed {
     Column(p: 14, gap: 12) {
@@ -110,6 +123,31 @@ app Forum {
       Input(placeholder: "Search posts", bind: draftTitle)
       Container(p: 12, rounded: 14, shadow: 3, bg: "#FFFFFF", border: "#E4E9F2") {
         Text("Latest posts", size: 13, color: "#101828")
+        // List three-state block: loading skeleton, error retry, empty
+        // placeholder (material/progress_indicator.dart:863;
+        // material/text_form_field.dart:56). States are flat siblings because
+        // the language rejects nested if/else and comparison conditions.
+        if (feedLoading) {
+          Column(gap: 8) {
+            Skeleton(320, 56)
+            Skeleton(320, 56)
+            Skeleton(320, 56)
+          }
+        }
+        if (feedError) {
+          Column(gap: 8) {
+            Text("Could not load the feed", size: 13, color: "#B00020")
+            Text("Check the service and retry", size: 11, color: "#667085")
+            Button("Retry", p: 8, rounded: 8, shadow: 1, bg: "#043B70") async {
+              feedLoading = true
+              await fetch("/posts?limit=3&offset=0", feedJson)
+              feedLoading = false
+            }
+          }
+        }
+        if (feedEmpty) {
+          EmptyState("search", "No posts yet", "Be the first to publish one")
+        }
         ListView() {
           if (postA) {
             ListTile(label: "Welcome to the forum", rounded: 10, shadow: 1) {
@@ -148,7 +186,10 @@ app Forum {
       // renders the live response; web-dom is still wiring state-to-text.
       Row(gap: 8, align: center) {
         Button("Sync feed from api", p: 8, rounded: 8, shadow: 1, bg: "#043B70") async {
+          feedLoading = true
+          feedError = false
           await fetch("/posts?limit=3&offset=0", feedJson)
+          feedLoading = false
         }
         Text("{feedJson}", size: 10, color: "#667085")
       }
@@ -162,6 +203,12 @@ app Forum {
         }
         Button("First page", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
           feedPage = 1
+        }
+        Button("Clear feed", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+          feedEmpty = true
+        }
+        Button("Restore feed", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+          feedEmpty = false
         }
       }
       Row(gap: 10) {
@@ -314,8 +361,25 @@ app Forum {
         Column(gap: 10, bg: "#FFFFFF") {
           Input(placeholder: "Username", bind: loginName, required: true, minLength: 3)
           Input(placeholder: "Password", bind: loginPassword, required: true, minLength: 4)
+          // Validation feedback mirrors InputDecoration.errorText
+          // (material/input_decorator.dart:299): the message renders under the
+          // field in the error colour once the submit is pressed.
+          if (loginInvalid) {
+            Text("Username needs at least 3 characters", size: 11, color: "#B00020")
+          }
+          if (loginInvalid) {
+            Text("Password needs at least 4 characters", size: 11, color: "#B00020")
+          }
+          // Validation is triggered explicitly because conditions in this
+          // language only name booleans; Flutter's validator runs on submit
+          // (material/text_form_field.dart:56) and the message renders in
+          // InputDecoration.errorText (input_decorator.dart:299).
+          Button("Validate form", p: 8, rounded: 8, shadow: 1, bg: "#781C40") {
+            loginInvalid = true
+          }
           Row(gap: 10) {
             Button("Sign in", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              loginInvalid = false
               me = loginName
               signedIn = true
               admin = false
@@ -360,12 +424,23 @@ app Forum {
         Column(gap: 10, bg: "#FFFFFF") {
           Input(placeholder: "Choose username", bind: regUser, required: true, minLength: 3, maxLength: 32)
           Input(placeholder: "Choose password", bind: regPass, required: true, minLength: 8)
+          if (regInvalid) {
+            Text("Username needs at least 3 characters", size: 11, color: "#B00020")
+          }
+          if (regInvalid) {
+            Text("Password needs at least 8 characters", size: 11, color: "#B00020")
+          }
+          Button("Validate form", p: 8, rounded: 8, shadow: 1, bg: "#781C40") {
+            regInvalid = true
+          }
           Row(gap: 10) {
             Button("Create account", p: 10, rounded: 10, shadow: 2, bg: "#097FEB") {
+              regInvalid = false
               registered = true
               loginName = regUser
             }
             Button("Clear", p: 10, rounded: 10, shadow: 1, bg: "#F4F7FB") {
+              regInvalid = false
               registered = false
               regUser = ""
               regPass = ""
