@@ -16,18 +16,18 @@ component Swatch(tone: string, bg: string, hexText: string, safeGap: int, ink: s
 component DarkHome(stage: string, hero: string, card: string, ink: string, label: string, muted: string, rose: string) {
     Container(width: 1080, height: 2200, color: "{stage}", border: "{stage}", p: 0) {
       Column(p: 0, gap: 0, align: start, color: "{stage}", border: "{stage}") {
-        Spacer(height: 66)
+        Spacer(height: 40)
         Container(width: 1080, height: 70, color: "{stage}", border: "{stage}", p: 0) {
           Row(p: 0, gap: 0, align: start, color: "{stage}", border: "{stage}") {
             Spacer(width: 84)
             Text("Gallery", size: 56, fontPx: 45, weight: "bold", color: "{label}", label: "gallery/title")
           }
         }
-        Spacer(height: 38)
-        Container(width: 1080, height: 524, color: "{stage}", border: "{stage}", p: 0) {
+        Spacer(height: 14)
+        Container(width: 1080, height: 450, color: "{stage}", border: "{stage}", p: 0) {
           Row(p: 0, gap: 0, align: start, color: "{stage}", border: "{stage}") {
             Spacer(width: 84)
-            Container(width: 912, height: 524, color: "{hero}", border: "{hero}", rounded: 26, p: 0) {
+            Container(width: 912, height: 450, color: "{hero}", border: "{hero}", rounded: 26, p: 0) {
               Column(p: 0, gap: 0, align: start, color: "{hero}", border: "{hero}") {
                 Container(width: 912, height: 180, color: "{hero}", border: "{hero}", p: 0) {
                   Row(p: 0, gap: 0, align: start, color: "{hero}", border: "{hero}") {
@@ -170,7 +170,50 @@ component DarkHome(stage: string, hero: string, card: string, ink: string, label
             }
           }
         }
-        Spacer(height: 486)
+        Container(width: 1080, height: 198, color: "#1F1929", border: "#1F1929", p: 0) {
+          Row(gap: 0, align: center, color: "#1F1929", border: "#1F1929") {
+            Spacer(width: 84)
+            Icon(name: "{styleIcons[0]}", width: 60, height: 60, color: "#FF8383", label: "dark/style_icon_0")
+            Spacer(width: 108)
+            Column(gap: 8, align: start, color: "#1F1929", border: "#1F1929") {
+              Text("{styleRows[0]}", size: 48, fontPx: 44, color: "#FFFFFF", label: "dark/style_title_0")
+              Text("{styleSubs[0]}", size: 36, fontPx: 32, color: "#B9B4BE", label: "dark/style_sub_0")
+            }
+          }
+        }
+        Container(width: 1080, height: 198, color: "#1F1929", border: "#1F1929", p: 0) {
+          Row(gap: 0, align: center, color: "#1F1929", border: "#1F1929") {
+            Spacer(width: 84)
+            Icon(name: "{styleIcons[1]}", width: 60, height: 60, color: "#FF8383", label: "dark/style_icon_1")
+            Spacer(width: 108)
+            Column(gap: 8, align: start, color: "#1F1929", border: "#1F1929") {
+              Text("{styleRows[1]}", size: 48, fontPx: 44, color: "#FFFFFF", label: "dark/style_title_1")
+              Text("{styleSubs[1]}", size: 36, fontPx: 32, color: "#B9B4BE", label: "dark/style_sub_1")
+            }
+          }
+        }
+        Container(width: 1080, height: 198, color: "#1F1929", border: "#1F1929", p: 0) {
+          Row(gap: 0, align: center, color: "#1F1929", border: "#1F1929") {
+            Spacer(width: 84)
+            Icon(name: "{styleIcons[2]}", width: 60, height: 60, color: "#FF8383", label: "dark/style_icon_2")
+            Spacer(width: 108)
+            Column(gap: 8, align: start, color: "#1F1929", border: "#1F1929") {
+              Text("{styleRows[2]}", size: 48, fontPx: 44, color: "#FFFFFF", label: "dark/style_title_2")
+              Text("{styleSubs[2]}", size: 36, fontPx: 32, color: "#B9B4BE", label: "dark/style_sub_2")
+            }
+          }
+        }
+        Container(width: 1080, height: 198, color: "#1F1929", border: "#1F1929", p: 0) {
+          Row(gap: 0, align: center, color: "#1F1929", border: "#1F1929") {
+            Spacer(width: 84)
+            Icon(name: "{styleIcons[3]}", width: 60, height: 60, color: "#FF8383", label: "dark/style_icon_3")
+            Spacer(width: 108)
+            Column(gap: 8, align: start, color: "#1F1929", border: "#1F1929") {
+              Text("{styleRows[3]}", size: 48, fontPx: 44, color: "#FFFFFF", label: "dark/style_title_3")
+              Text("{styleSubs[3]}", size: 36, fontPx: 32, color: "#B9B4BE", label: "dark/style_sub_3")
+            }
+          }
+        }
       }
     }
 }
