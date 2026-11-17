@@ -95,7 +95,8 @@ app Forum {
   // titles selected by mutually exclusive page gates, like photos.opu.
   state heroTitle = "Welcome to the forum"
   state feedPage = 1
-  // Three-state block flags: loading during sync, error after a failed fetch.
+  // Three-state flags: loading during sync; feedError is a static demo trigger
+  // (the language has no fetch failure callback), not a real network signal.
   state feedLoading = false
   state feedError = false
   state feedEmpty = false
@@ -139,6 +140,7 @@ app Forum {
             Text("Could not load the feed", size: 13, color: "#B00020")
             Text("Check the service and retry", size: 11, color: "#667085")
             Button("Retry", p: 8, rounded: 8, shadow: 1, bg: "#043B70") async {
+              feedError = false
               feedLoading = true
               await fetch("/posts?limit=3&offset=0", feedJson)
               feedLoading = false
@@ -209,6 +211,11 @@ app Forum {
         }
         Button("Restore feed", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
           feedEmpty = false
+        }
+        // Static demo trigger: no fetch failure callback in the language, so
+        // the error/retry state is driven explicitly, not by network status.
+        Button("Simulate error", p: 8, rounded: 8, shadow: 1, bg: "#F4F7FB") {
+          feedError = true
         }
       }
       Row(gap: 10) {
