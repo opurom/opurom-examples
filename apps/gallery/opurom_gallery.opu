@@ -177,6 +177,7 @@ component DarkHome(stage: string, hero: string, card: string, ink: string, label
 
 app OpuromGallery {
   quality { msaa: 4 }
+  theme { fontMetrics: proportional }
 
   // MATERIAL list rows: one element per row, bound at view time in For nodes.
   state matIcons = ["layout-navbar", "layout-list", "layout-bottombar", "navigation", "box-align-bottom", "square-rounded", "cards", "checklist", "table", "alert-square", "border-horizontal", "layout-grid", "list", "menu-2", "menu", "navigation", "calendar-event", "progress", "checkbox", "adjustments", "message", "tabs", "cursor-text", "help-circle"]
@@ -297,19 +298,297 @@ app OpuromGallery {
       }
       Container(width: 1080, height: 1900, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
         Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
-          for (icon in matIcons) {
-            Container(width: 48, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-              Icon(name: "{icon}", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "layout-navbar", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("App bar", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Displays information and actions relating to the current screen", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
             }
           }
-          for (title in matTitles) {
-            Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-              Text("{title}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "layout-list", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Banner", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Displaying a banner within a list", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
             }
           }
-          for (sub in matSubs) {
-            Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-              Text("{sub}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "layout-bottombar", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Bottom app bar", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Displays navigation and actions at the bottom", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "navigation", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Bottom navigation", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Bottom navigation with cross-fading views", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+            Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: BottomNav }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "box-align-bottom", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Bottom sheet", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Persistent and modal bottom sheets", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "square-rounded", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Buttons", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Text, elevated, outlined, and more", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+            Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Buttons }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "cards", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Cards", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Baseline cards with rounded corners", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+            Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Cards }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "checklist", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Chips", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Compact elements that represent an input, attribute, or action", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "table", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Data Tables", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Rows and columns of information", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "alert-square", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Dialogs", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Simple, alert, and fullscreen", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+            Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: Dialogs }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "border-horizontal", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Divider", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("A divider is a thin line that groups content in lists and layouts.", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "layout-grid", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Grid Lists", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Row and column layout", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "list", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Lists", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Scrolling list layouts", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "menu-2", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Menu", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Menu buttons and simple menus", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0, gesture: "tap") {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "menu", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Navigation Drawer", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Displaying a drawer within appbar", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+            Button(" ", variant: "ghost", color: "#FAFBFB", p: 0) { push: DrawerClosed }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "navigation", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Navigation Rail", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Displaying a Navigation Rail within an app", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "calendar-event", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Pickers", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Date and time selection", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "progress", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Progress indicators", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Linear, circular, indeterminate", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "checkbox", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Selection controls", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Checkboxes, radio buttons, and switches", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "adjustments", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Sliders", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Widgets for selecting a value by swiping", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "message", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Snackbars", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Snackbars show messages at the bottom of the screen", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "tabs", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Tabs", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Tabs with independently scrollable views", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "cursor-text", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Text fields", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Single line of editable text and numbers", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
+            }
+          }
+          Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+            Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+              Spacer(width: 84)
+              Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                Icon(name: "help-circle", width: 48, height: 48, color: "#B93C5D", label: "components/icon")
+              }
+              Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                Text("Tooltips", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "components/title")
+                Text("Short message displayed on long press or hover", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "components/subtitle")
+              }
             }
           }
           Row(gap: 10, bg: "#FAFBFB") {
@@ -325,21 +604,20 @@ app OpuromGallery {
 
   route MaterialListScroll1 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
-      for (icon in scroll1Icons) {
-        Container(width: 48, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Icon(name: "{icon}", width: 48, height: 48, color: "#B93C5D", label: "scroll1/icon")
-        }
-      }
-      for (title in scroll1Titles) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{title}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll1/title")
-        }
-      }
-      for (sub in scroll1Subs) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{sub}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll1/subtitle")
-        }
-      }
+          for (i in 4) {
+            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 84)
+                Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                  Icon(name: "{scroll1Icons[i]}", width: 48, height: 48, color: "#B93C5D", label: "scroll1/icon")
+                }
+                Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                  Text("{scroll1Titles[i]}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll1/title")
+                  Text("{scroll1Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll1/subtitle")
+                }
+              }
+            }
+          }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Next") { push: MaterialListScroll2 }
         Button("Back") { pop }
@@ -349,21 +627,20 @@ app OpuromGallery {
 
   route MaterialListScroll2 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
-      for (icon in scroll2Icons) {
-        Container(width: 48, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Icon(name: "{icon}", width: 48, height: 48, color: "#B93C5D", label: "scroll2/icon")
-        }
-      }
-      for (title in scroll2Titles) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{title}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll2/title")
-        }
-      }
-      for (sub in scroll2Subs) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{sub}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll2/subtitle")
-        }
-      }
+          for (i in 6) {
+            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 84)
+                Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                  Icon(name: "{scroll2Icons[i]}", width: 48, height: 48, color: "#B93C5D", label: "scroll2/icon")
+                }
+                Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                  Text("{scroll2Titles[i]}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll2/title")
+                  Text("{scroll2Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll2/subtitle")
+                }
+              }
+            }
+          }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Next") { push: MaterialListScroll3 }
         Button("Back") { pop }
@@ -373,21 +650,20 @@ app OpuromGallery {
 
   route MaterialListScroll3 {
     Column(p: 0, gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
-      for (icon in scroll3Icons) {
-        Container(width: 48, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Icon(name: "{icon}", width: 48, height: 48, color: "#B93C5D", label: "scroll3/icon")
-        }
-      }
-      for (title in scroll3Titles) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{title}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll3/title")
-        }
-      }
-      for (sub in scroll3Subs) {
-        Container(width: 730, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
-          Text("{sub}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll3/subtitle")
-        }
-      }
+          for (i in 8) {
+            Container(width: 1080, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+              Row(gap: 0, align: center, color: "#FAFBFB", border: "#FAFBFB") {
+                Spacer(width: 84)
+                Container(width: 168, height: 198, color: "#FAFBFB", border: "#FAFBFB", p: 0) {
+                  Icon(name: "{scroll3Icons[i]}", width: 48, height: 48, color: "#B93C5D", label: "scroll3/icon")
+                }
+                Column(gap: 0, align: start, color: "#FAFBFB", border: "#FAFBFB") {
+                  Text("{scroll3Titles[i]}", size: 52, fontPx: 52, weight: "normal", color: "#241E30", label: "scroll3/title")
+                  Text("{scroll3Subs[i]}", size: 28, fontPx: 28, weight: "normal", color: "#8F8C95", label: "scroll3/subtitle")
+                }
+              }
+            }
+          }
       Row(gap: 10, bg: "#FAFBFB") {
         Button("Back") { pop }
       }
@@ -1265,7 +1541,7 @@ app OpuromGallery {
             }
           }
           Container(width: 984, height: 1, color: "#E6EBEB", border: "#E6EBEB", p: 0)
-          Container(width: 984, height: 192, color: "#FAFBFC", border: "#FAFBFC", p: 0) {
+          Container(width: 984, height: 192, color: "#FAFBFC", border: "#FAFBFC", p: 0, gesture: "tap") {
             Row(p: 0, gap: 0, align: center, color: "#FAFBFC", border: "#FAFBFC") {
               Spacer(width: 42)
               Container(width: 60, height: 60, color: "#FAFBFC", border: "#FAFBFC", p: 0) {
@@ -1277,9 +1553,10 @@ app OpuromGallery {
                 Text("{styleSubs[1]}", size: 42, fontPx: 42, weight: "normal", color: "#8F8C95", label: "styles/sub_1")
               }
             }
+            Button(" ", variant: "ghost", color: "#FAFBFC", p: 0) { push: Colors }
           }
           Container(width: 984, height: 1, color: "#E6EBEB", border: "#E6EBEB", p: 0)
-          Container(width: 984, height: 192, color: "#FAFBFC", border: "#FAFBFC", p: 0) {
+          Container(width: 984, height: 192, color: "#FAFBFC", border: "#FAFBFC", p: 0, gesture: "tap") {
             Row(p: 0, gap: 0, align: center, color: "#FAFBFC", border: "#FAFBFC") {
               Spacer(width: 42)
               Container(width: 60, height: 60, color: "#FAFBFC", border: "#FAFBFC", p: 0) {
@@ -1291,6 +1568,7 @@ app OpuromGallery {
                 Text("{styleSubs[2]}", size: 42, fontPx: 42, weight: "normal", color: "#8F8C95", label: "styles/sub_2")
               }
             }
+            Button(" ", variant: "ghost", color: "#FAFBFC", p: 0) { push: Typography }
           }
           Container(width: 984, height: 1, color: "#E6EBEB", border: "#E6EBEB", p: 0)
         }
