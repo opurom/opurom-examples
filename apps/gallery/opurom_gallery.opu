@@ -175,6 +175,16 @@ component DarkHome(stage: string, hero: string, card: string, ink: string, label
     }
 }
 
+// GalleryAppBar: M3 Gallery detail-page title band. Copied from opurom-ui
+// c980040 as a self-contained local component (no package import in this app).
+// Golden geometry: x=42..1037 (996px), y=275..421 (147px), #6200EE band,
+// white bold ~64px title. IR rounds all four corners; top-only is gap M1.
+component GalleryAppBar(title: string, bg: string, textColor: string, radius: int, height: int, state: string) {
+  Container(width: 996, height: height, rounded: radius, color: "{bg}", border: "{bg}", p: 0, state: "{state}", gesture: "tap", label: "gallery app bar") {
+    Text("{title}", size: 64, weight: "bold", color: "{textColor}", label: "gallery/title")
+  }
+}
+
 app OpuromGallery {
   quality { msaa: 4 }
   theme { fontMetrics: proportional }
@@ -684,12 +694,12 @@ app OpuromGallery {
             Icon(name: "devices", width: 72, height: 72, color: "#241E30", label: "buttons/devices_icon")
           }
         }
-        Container(width: 1080, height: 130, color: "#6500D6", border: "#6500D6", p: 0) {
-          Row(p: 0, gap: 0, align: center, color: "#6500D6", border: "#6500D6") {
-            Spacer(width: 84)
-            Text("Text Button", size: 56, fontPx: 48, weight: "bold", color: "#FFFFFF", label: "buttons/header")
-          }
+        Spacer(height: 107)
+        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+          Spacer(width: 42)
+          GalleryAppBar("Text Button", "#6200EE", "#FFFFFF", 25, 147, "default")
         }
+
         Container(width: 990, height: 1750, color: "#FFFFFF", border: "#FFFFFF", rounded: 16, p: 0) {
           Column(gap: 0, align: center, bg: "#FFFFFF") {
             Spacer(height: 700)
@@ -751,8 +761,13 @@ app OpuromGallery {
             Text("Cards", size: 66, fontPx: 66, weight: "normal", color: "#000000", label: "cards/title")
           }
         }
+        Spacer(height: 107)
+        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+          Spacer(width: 42)
+          GalleryAppBar("Cards", "#6200EE", "#FFFFFF", 25, 147, "default")
+        }
         // explicit fill: Scroll falls back to pal.surface (dark under device night mode)
-        Scroll(height: 2232, color: "#E6EBEB", border: "#E6EBEB") {
+        Scroll(height: 1978, color: "#E6EBEB", border: "#E6EBEB") {
           Column(p: 0, gap: 0, align: center, width: 1080, color: "#E6EBEB", border: "#E6EBEB") {
             Spacer(height: 48)
             // kElevToShadow three-layer, single-layer = gap M2
@@ -1181,15 +1196,13 @@ app OpuromGallery {
             Icon(name: "devices", width: 64, height: 64, color: "#202124", label: "dialogs/topbar_devices")
           }
         }
-        Spacer(height: 110)
-        Container(width: 992, height: 1911, radius: 24, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
+        Spacer(height: 107)
+        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+          Spacer(width: 42)
+          GalleryAppBar("Alert", "#6200EE", "#FFFFFF", 25, 147, "default")
+        }
+        Container(width: 992, height: 1763, radius: 24, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
           Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
-            Container(width: 992, height: 148, color: "#6200EE", border: "#6200EE", p: 0) {
-              Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
-                Spacer(width: 48)
-                Text("Alert", size: 66, fontPx: 66, weight: "bold", color: "#FFFFFF", label: "dialogs/band_title")
-              }
-            }
             Spacer(height: 859)
             Row(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
               Spacer(width: 316)
@@ -1251,18 +1264,11 @@ app OpuromGallery {
           }
         }
         Spacer(height: 107)
-        Container(width: 1080, height: 147, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-          Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
-            Spacer(width: 42)
-            Container(width: 993, height: 147, radius: 24, color: "#6200EE", border: "#6200EE", p: 0) {
-              Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
-                Spacer(width: 32)
-                Spacer(height: 34)
-                Text("Persistent labels", size: 66, fontPx: 66, weight: "bold", color: "#FFFFFF", label: "bottomnav_cal/title_band")
-              }
-            }
-          }
+        Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+          Spacer(width: 42)
+          GalleryAppBar("Persistent labels", "#6200EE", "#FFFFFF", 25, 147, "default")
         }
+
         Spacer(height: 323)
         Container(width: 1080, height: 1011, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
           Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
@@ -1407,7 +1413,13 @@ app OpuromGallery {
             pop
           }
         }
-        Spacer(height: 60)
+        Spacer(height: 35)
+        Spacer(height: 107)
+        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+          Spacer(width: 42)
+          GalleryAppBar("Settings", "#6200EE", "#FFFFFF", 25, 147, "default")
+        }
+        Spacer(height: 40)
         Container(width: 900, height: 132, radius: 28, color: "#ECEFF1", border: "#ECEFF1", p: 24) {
           Column(p: 0, gap: 0, align: start, color: "#ECEFF1", border: "#ECEFF1") {
             Text("Text scaling", size: 42, fontPx: 42, weight: "normal", color: "#202124", label: "theme/text_scaling")
@@ -1718,18 +1730,22 @@ app OpuromGallery {
           }
         }
       }
-      // onTabSelected/onIndicatorMoved/onContentChanged bound via tabRed/... bool states.
-      // onDragUpdate/onDragEnd await A2/B3 gesture lerp; no static placeholder.
-      Container(width: 1080, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-        Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+      Spacer(height: 107)
+      Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
+        Spacer(width: 42)
+        GalleryAppBar("Colors", "#6200EE", "#FFFFFF", 25, 147, "default")
+      }
+      // Tabs now live inside the purple band region: white labels on #6200EE.
+      Container(width: 1080, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+        Row(p: 0, gap: 0, align: start, color: "#6200EE", border: "#6200EE") {
           Spacer(width: 48)
           // md-sys-color-surface; selected RED tab
-          Container(width: 200, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+          Container(width: 200, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabRed) {
                 // md-sys-color-primary; native Button five-state press feedback
-                Button("RED", width: 200, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                Button("RED", width: 200, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = true
                   tabPink = false
                   tabPurple = false
@@ -1737,7 +1753,7 @@ app OpuromGallery {
                 }
               } else {
                 // md-sys-color-on-surface-variant
-                Button("RED", width: 200, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                Button("RED", width: 200, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = true
                   tabPink = false
                   tabPurple = false
@@ -1746,19 +1762,19 @@ app OpuromGallery {
               }
               if (tabRed) {
                 // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
-                Container(width: 90, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                Container(width: 90, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               } else {
                 Container(width: 90, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
             }
           }
           // md-sys-color-surface; unselected PINK tab
-          Container(width: 220, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+          Container(width: 220, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabPink) {
                 // md-sys-color-primary; native Button five-state press feedback
-                Button("PINK", width: 220, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                Button("PINK", width: 220, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = true
                   tabPurple = false
@@ -1766,7 +1782,7 @@ app OpuromGallery {
                 }
               } else {
                 // md-sys-color-on-surface-variant
-                Button("PINK", width: 220, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                Button("PINK", width: 220, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = true
                   tabPurple = false
@@ -1775,19 +1791,19 @@ app OpuromGallery {
               }
               if (tabPink) {
                 // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
-                Container(width: 120, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                Container(width: 120, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               } else {
                 Container(width: 120, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
             }
           }
           // md-sys-color-surface; unselected PURPLE tab
-          Container(width: 250, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+          Container(width: 250, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabPurple) {
                 // md-sys-color-primary; native Button five-state press feedback
-                Button("PURPLE", width: 250, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                Button("PURPLE", width: 250, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = false
                   tabPurple = true
@@ -1795,7 +1811,7 @@ app OpuromGallery {
                 }
               } else {
                 // md-sys-color-on-surface-variant
-                Button("PURPLE", width: 250, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                Button("PURPLE", width: 250, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = false
                   tabPurple = true
@@ -1804,19 +1820,19 @@ app OpuromGallery {
               }
               if (tabPurple) {
                 // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
-                Container(width: 180, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                Container(width: 180, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               } else {
                 Container(width: 180, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
             }
           }
           // md-sys-color-surface; unselected DEEP PURPLE tab
-          Container(width: 362, height: 144, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
-            Column(p: 0, gap: 0, align: center, color: "#FFFFFF", border: "#FFFFFF") {
+          Container(width: 362, height: 144, color: "#6200EE", border: "#6200EE", p: 0) {
+            Column(p: 0, gap: 0, align: center, color: "#6200EE", border: "#6200EE") {
               Spacer(height: 40)
               if (tabDeep) {
                 // md-sys-color-primary; native Button five-state press feedback
-                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#FFFFFF", variant: "text") {
+                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = false
                   tabPurple = false
@@ -1824,7 +1840,7 @@ app OpuromGallery {
                 }
               } else {
                 // md-sys-color-on-surface-variant
-                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#FFFFFF", variant: "ghost") {
+                Button("DEEP PURPLE", width: 362, fontScale: 2.6, color: "#6200EE", variant: "primary") {
                   tabRed = false
                   tabPink = false
                   tabPurple = false
@@ -1833,7 +1849,7 @@ app OpuromGallery {
               }
               if (tabDeep) {
                 // md-sys-color-primary; indicator width = label text width (opacity keeps row height stable)
-                Container(width: 330, height: 6, color: "#6200EE", border: "#6200EE", p: 0)
+                Container(width: 330, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               } else {
                 Container(width: 330, height: 6, color: "#FFFFFF", border: "#FFFFFF", p: 0)
               }
@@ -1841,7 +1857,7 @@ app OpuromGallery {
           }
         }
       }
-      Scroll(height: 2088) {
+      Scroll(height: 1834) {
         // 14 full 144px rows per palette; A700 is a complete row, not a viewport-clipped strip.
         if (tabRed) {
           Column(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
@@ -2029,7 +2045,12 @@ app OpuromGallery {
           }
         }
       }
-      Scroll(height: 2232) {
+      Spacer(height: 107)
+      Row(p: 0, gap: 0, align: start, color: "#E6EBEB", border: "#E6EBEB") {
+        Spacer(width: 42)
+        GalleryAppBar("Typography", "#6200EE", "#FFFFFF", 25, 147, "default")
+      }
+      Scroll(height: 1978) {
         Row(p: 0, gap: 0, align: start, color: "#FFFFFF", border: "#FFFFFF") {
           Spacer(width: 48)
           Container(width: 984, height: 2232, color: "#FFFFFF", border: "#FFFFFF", p: 0) {
