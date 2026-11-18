@@ -4,16 +4,16 @@
   "height": 640,
   "steps": [
     {
-      "tap": 27
+      "tap": 20
     },
     {
-      "tap": 52
+      "tap": 17
     },
     {
-      "tap": 29
+      "tap": 23
     },
     {
-      "tap": 61
+      "tap": 26
     }
   ],
   "expect": {
@@ -21,8 +21,8 @@
       "cur": 15,
       "acc": 15,
       "out": 15,
-      "normalMode": true
+      "err": false
     },
-    "digest": "5ffb36496e452d1f"
+    "digest": "cc45e7deca863d85"
   }
 }

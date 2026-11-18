@@ -4,25 +4,21 @@
   "height": 640,
   "steps": [
     {
-      "tap": 27
-    },
-    {
       "tap": 24
     },
     {
-      "tap": 57
+      "tap": 11
     },
     {
-      "tap": 65
+      "tap": 29
     }
   ],
   "expect": {
     "state": {
       "err": true,
       "out": 0,
-      "sDiv": true,
-      "dZero": true
+      "cur": 0
     },
-    "digest": "298f242c547ac865"
+    "digest": "cc45e7deca863d85"
   }
 }
