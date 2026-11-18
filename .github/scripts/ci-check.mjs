@@ -3,6 +3,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, extname, relative } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
 const name = process.argv[2];
@@ -68,6 +69,14 @@ if (name === 'rust-test') {
   if (existsSync(join(ROOT, 'scripts', 'validate.mjs'))) run('node', ['scripts/validate.mjs']);
   else console.log('validate: SKIP');
 
+} else if (name === 'widget') {
+  // Interaction scripts live here; the runner and backend binaries come from
+  // sibling checkouts cloned by the workflow (core/render only for this job).
+  const runner = join(ROOT, '..', 'opurom-cli', 'lib', 'widget_test.mjs');
+  const { discoverScripts, runWidgetTests } = await import(pathToFileURL(runner).href);
+  const files = discoverScripts(join(ROOT, 'test', 'interaction'));
+  const { exitCode } = runWidgetTests(files, { log: console.log, verbose: true });
+  process.exit(exitCode);
 } else {
   console.error(`unknown check: ${name}`);
   process.exit(2);

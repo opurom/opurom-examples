@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        check: [rust-test, rust-fmt, node-test, node-syntax, validate]
+        check: [rust-test, rust-fmt, node-test, node-syntax, validate, widget]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -81,6 +81,17 @@ jobs:
               ;;
             *) ;;
           esac
+      # Widget tests need the core/render binaries for state replay and digest.
+      # Clone them only for the widget job: node-test must not see render's
+      # Cargo.toml or run.mjs would switch to the full cross-layer harness.
+      - name: Checkout widget backends
+        if: matrix.check == 'widget'
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/.."
+          for repo in opurom-core opurom-render; do
+            git clone --depth 1 "https://github.com/opurom/${repo}.git" "$repo"
+          done
       - name: Run ${{ matrix.check }}
         run: node .github/scripts/ci-check.mjs ${{ matrix.check }}
 
