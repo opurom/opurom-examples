@@ -22,8 +22,12 @@ const NODE_REPOS = ['opurom-cli', 'opurom-ide-plugins', 'opurom-plugins', 'opuro
 const ENV = { ...process.env, PATH: `${process.env.HOME}/.cargo/bin:${process.env.PATH}` };
 let failures = 0;
 
+// A bounded child process keeps one hung toolchain from stalling the whole
+// cross-layer suite. The timeout fails the check; it never turns a skip into
+// a pass or relaxes any contract.
+const CHILD_TIMEOUT_MS = 10 * 60 * 1000;
 function run(cmd, args, opts = {}) {
-  return spawnSync(cmd, args, { encoding: 'utf8', env: ENV, ...opts });
+  return spawnSync(cmd, args, { encoding: 'utf8', env: ENV, timeout: CHILD_TIMEOUT_MS, ...opts });
 }
 function check(name, fn) {
   try { fn(); console.log(`PASS  ${name}`); }
