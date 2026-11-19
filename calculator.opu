@@ -2,7 +2,6 @@
 // Kernel (opurom-core/src/ir.rs Op) has no mul/div; computed folds at compile
 // time (typecheck.rs infer_computed): x*10 uses += doubling, quotient is a
 // reported kernel gap, never faked by stepping.
-import "pkg-theme/default.opu";
 
 // Every digit is one component: the int literal drives label, add value and
 // the nz flag. Numeric props live here once; opurom-ui theme exposes color
@@ -81,6 +80,17 @@ app Calculator {
   state mulMode = false
   state divMode = false
   state err = false
+
+  theme {
+    mode: system,
+    accent: "#006EFF",
+    radius: 12,
+    fontScale: 1.0,
+    surface: "#FFFFFF",
+    onSurface: "#111827",
+    stage: "#F9FAFB",
+    tokens { primary: "#006EFF", secondary: "#2DD8FF" }
+  }
 
   Column(p: 8, gap: 8) {
     Container(p: 6, glass: true, variant: "ghost", rounded: 12) {
