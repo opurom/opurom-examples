@@ -8,7 +8,7 @@ import "pkg-theme/default.opu";
 // the nz flag. Numeric props live here once; opurom-ui theme exposes color
 // tokens only (parser.rs THEME_TOKEN_NAMES), no spacing/radius/elevation.
 component DigitKey(digit: int, span: int, nonzero: bool) {
-  Button("{digit}", variant: "secondary", p: 10, rounded: 12, margin: 2,
+  Button("{digit}", variant: "secondary", p: 10, rounded: 12, margin: 2, fontPx: 26,
          columnSpan: span, shadow: 0, fontScale: 1.1, animate: spring) {
     tmp = cur
     cur += cur
@@ -27,7 +27,7 @@ component DigitKey(digit: int, span: int, nonzero: bool) {
 // flags (component params may be int/bool/string literals, lower.rs:2681);
 // no callback or comparison is needed to dispatch.
 component OpKey(glyph: string, add: bool, sub: bool, mul: bool, div: bool) {
-  Button("{glyph}", variant: "primary", p: 10, rounded: 12, margin: 2,
+  Button("{glyph}", variant: "primary", p: 10, rounded: 12, margin: 2, fontPx: 26,
          shadow: 2, fontScale: 1.1, animate: spring) {
     acc = cur
     cur = 0
@@ -42,20 +42,20 @@ component OpKey(glyph: string, add: bool, sub: bool, mul: bool, div: bool) {
 
 // Fn keys: params cannot be `if` conditions (lower.rs:2995), so split.
 component ClearKey(unused: int) {
-  Button("AC", variant: "ghost", p: 10, rounded: 12, margin: 2,
+  Button("AC", variant: "ghost", p: 10, rounded: 12, margin: 2, fontPx: 19,
          shadow: 0, fontScale: 1.0, animate: spring) {
     cur = 0; acc = 0; out = 0; tmp = 0; nz = false
     addMode = false; subMode = false; mulMode = false; divMode = false; err = false
   }
 }
 component DelKey(unused: int) {
-  Button("DEL", variant: "ghost", p: 10, rounded: 12, margin: 2,
+  Button("DEL", variant: "ghost", p: 10, rounded: 12, margin: 2, fontPx: 19,
          shadow: 0, fontScale: 1.0, animate: spring) {
     cur = tmp; out = cur
   }
 }
 component GapKey(glyph: string) {
-  Button("{glyph}", variant: "ghost", p: 10, rounded: 12, margin: 2,
+  Button("{glyph}", variant: "ghost", p: 10, rounded: 12, margin: 2, fontPx: 19,
          shadow: 0, fontScale: 1.0, animate: spring) {
     err = true; out = 0; cur = 0
   }
@@ -64,25 +64,8 @@ component GapKey(glyph: string) {
 // Equals folds a pending op with direct +/- only; no step counter.
 // Repeated operator taps just replace flags (last wins), never crash.
 component EqualsKey(unused: int) {
-  if (addMode) {
-    Button("=", variant: "primary", p: 10, rounded: 12, margin: 2, shadow: 2, fontScale: 1.1, animate: spring) {
-      acc += cur; out = acc; cur = acc; addMode = false; subMode = false; nz = false
-    }
-  }
-  if (subMode) {
-    Button("=", variant: "primary", p: 10, rounded: 12, margin: 2, shadow: 2, fontScale: 1.1, animate: spring) {
-      acc -= cur; out = acc; cur = acc; addMode = false; subMode = false; nz = false
-    }
-  }
-  if (mulMode) {
-    Button("=", variant: "primary", p: 10, rounded: 12, margin: 2, shadow: 2, fontScale: 1.1, animate: spring) {
-      err = true; out = 0; mulMode = false; nz = false
-    }
-  }
-  if (divMode) {
-    Button("=", variant: "primary", p: 10, rounded: 12, margin: 2, shadow: 2, fontScale: 1.1, animate: spring) {
-      err = true; out = 0; divMode = false; nz = false
-    }
+  Button("=", variant: "primary", p: 10, rounded: 12, margin: 2, shadow: 2, fontPx: 26, animate: spring) {
+    acc += cur; out = acc; cur = acc; addMode = false; subMode = false; mulMode = false; divMode = false; nz = false
   }
 }
 
@@ -102,16 +85,19 @@ app Calculator {
   Column(p: 8, gap: 8) {
     Container(p: 6, glass: true, variant: "ghost", rounded: 12) {
       Icon(name: "calculator")
-      Text("Opurom Calculator")
+      Text("Opurom Calculator", fontPx: 26)
     }
+    Container(p: 12, glass: true, variant: "secondary", rounded: 12, shadow: 2, flex: 1) {
     // Three tiers from theme variants: glass accent panel, primary+shadow
     // operators, secondary digits, ghost functions. No hardcoded hex.
-    Column(p: 16, align: end, glass: true, variant: "secondary", rounded: 12, shadow: 2, gap: 8) {
-      Text("{out}", size: 48)
-      Text("Direct +/- arithmetic", size: 11)
+    Column(align: end, gap: 4) {
+      Text("{out}", size: 48, fontPx: 60)
+      Text("Direct +/- arithmetic", size: 11, fontPx: 16)
       if (err) { Text("Mul/div: kernel gap", size: 11) }
     }
-    Grid(columns: 4, compactColumns: 4, fillHeight: true) {
+    }
+    Container(p: 0, flex: 2) {
+      Grid(columns: 4, compactColumns: 4, fillHeight: true) {
       ClearKey(0)
       DelKey(0)
       GapKey("%")
@@ -131,6 +117,7 @@ app Calculator {
       DigitKey(0, 2, false)
       Spacer(height: 1)
       EqualsKey(0)
+      }
     }
   }
 }
